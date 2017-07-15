@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+
+		<link rel="stylesheet" href="../../dist/mescroll.css">
+		<style type="text/css">
+			* {
+				margin: 0;
+				padding: 0;
+				-webkit-touch-callout:none;
+				-webkit-user-select:none;
+				-webkit-tap-highlight-color:transparent;
+			}
+			body{background-color: white}
+			ul{list-style-type: none}
+			a {text-decoration: none;color: #18B4FE;}
+			
+			/*模拟的标题*/
+			.header{
+				z-index: 9990;
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 44px;
+				line-height: 44px;
+				text-align: center;
+				border-bottom: 1px solid #eee;
+				background-color: white;
+			}
+			.header .btn-left{
+				position: absolute;
+				top: 0;
+				left: 0;
+				line-height: 22px;
+				padding:12px;
+			}
+			/*模拟的轮播*/
+			.swiper{
+				width: 100%;
+				vertical-align: bottom;
+			}
+			/*菜单*/
+			.nav{
+				text-align: center;
+				border-bottom: 1px solid #ddd;
+			}
+			.nav p{
+				display: inline-block;
+				width: 30%;
+				padding: 10px 0;
+			}
+			.nav .active{
+				border-bottom: 1px solid #FF6990;
+				color: #FF6990;
+			}
+			/*列表*/
+			.mescroll{
+				position: fixed;
+				top: 44px;
+				bottom: 0;
+				height: auto;
+			}
+			/*展示上拉加载的数据列表*/
+			.data-list li{
+				position: relative;
+				padding: 10px 8px 10px 120px;
+				border-bottom: 1px solid #eee;
+			}
+			.data-list .pd-img{
+				position: absolute;
+				left: 18px;
+				top: 18px;
+				width: 80px;
+				height: 80px;
+			}
+			.data-list .pd-name{
+				font-size: 16px;
+				line-height: 20px;
+				height: 40px;
+				overflow: hidden;
+			}
+			.data-list .pd-price{
+				margin-top: 8px;
+				color: red;
+			}
+			.data-list .pd-sold{
+				font-size: 12px;
+				margin-top: 8px;
+				color: gray;
+			}
+		</style>
+	</head>
+
+	<body>
+		<!--标题-->
+		<p class="header"><a class="btn-left" href="../index.html">main</a> MeScroll所有配置项 (详见代码)</p>
+		<!--滑动区域-->
+		<div id="mescroll" class="mescroll">
+			<!--模拟的轮播,菜单 可在down.callback中配置刷新轮播数据-->
+			<img class="swiper" src="../res/img/swiper.jpg"/>
+			<!--筛选条件; 模拟列表的重置和演示空布局的使用-->
+			<div class="nav">
+				<p class="active" i="0">全部</p>
+				<p i="1">奶粉</p>
+				<p i="2">图书</p>
+			</div>
+			<!--展示上拉加载的数据列表-->
+			<ul id="dataList" class="data-list">
+				<!--<li>
+					<img class="pd-img" src="../res/img/pd1.jpg"/>
+					<p class="pd-name">商品标题商品标题商品标题商品标题商品标题商品</p>
+					<p class="pd-price">200.00 元</p>
+					<p class="pd-sold">已售50件</p>
+				</li>-->
+			</ul>
+		</div>
+	</body>
+	
+	<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../../dist/mescroll.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" charset="utf-8">
+		$(function(){
+			//是否为ios设备;
+			var isIOS = !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+
+			//创建MeScroll对象,内部已默认开启下拉刷新,自动执行up.callback,刷新列表数据;
+			var mescroll = new MeScroll("mescroll", {
+				//下拉刷新的所有配置项
+				down:{
+					use: true, //是否初始化下拉刷新; 默认true
+					auto: true, //是否在初始化完毕之后自动执行下拉回调callback; 默认true
+					autoShowLoading: false, //如果在初始化完毕之后自动执行下拉回调,是否显示下拉刷新进度; 默认false
+					isLock: false, //是否锁定下拉,默认false;
+					isBoth: false, //下拉刷新时,如果滑动到列表底部是否可以同时触发上拉加载;默认false,两者不可同时触发;
+					callback: function(mescroll) {
+						//加载轮播数据
+						//loadSwiper();
+						//下拉刷新的回调,默认重置上拉加载列表为第一页
+						mescroll.resetUpScroll();
+					},
+					offset: 60, //触发刷新的距离,默认80
+					outOffsetRate: 0.2, //超过指定距离范围外时,改变下拉区域高度比例;小于1,越往下拉高度变化越小;
+					mustToTop: !isIOS, //是否列表必须滑动到顶部才能下拉;因为列表回弹效果(-webkit-overflow-scrolling:touch)是iOS专属样式,所以iOS默认false,其他为true;
+					hardwareClass: "mescroll-hardware", //硬件加速样式;解决iOS下拉因隐藏进度条而闪屏的问题,参见mescroll.css
+					warpClass: "mescroll-downwarp", //容器,装载布局内容,参见mescroll.css
+					resetClass: "mescroll-downwarp-reset", //高度重置的动画,参见mescroll.css
+					htmlContent: '<p class="downwarp-progress"></p><p class="downwarp-tip">下拉刷新 </p>', //布局内容
+					inited: function(mescroll, downwarp) {
+						//初始化完毕的回调,可缓存dom
+						mescroll.downTipDom = downwarp.getElementsByClassName("downwarp-tip")[0];
+						mescroll.downProgressDom = downwarp.getElementsByClassName("downwarp-progress")[0];
+					},
+					inOffset: function(mescroll) {
+						//进入指定距离范围内那一刻的回调
+						if(mescroll.downTipDom) mescroll.downTipDom.innerHTML = "下拉刷新";
+						if(mescroll.downProgressDom) mescroll.downProgressDom.classList.remove("mescroll-rotate");
+					},
+					outOffset: function(mescroll) {
+						//下拉超过指定距离那一刻的回调
+						if(mescroll.downTipDom) mescroll.downTipDom.innerHTML = "释放更新";
+					},
+					onMoving: function(mescroll, rate, downHight) {
+						//下拉过程中的回调,滑动过程一直在执行; rate下拉区域当前高度与指定距离的比值(inOffset: rate<1; outOffset: rate>=1); downHight当前下拉区域的高度
+						if(mescroll.downProgressDom) {
+							var progress = 360 * rate;
+							mescroll.downProgressDom.style.webkitTransform = "rotate(" + progress + "deg)";
+							mescroll.downProgressDom.style.transform = "rotate(" + progress + "deg)";
+						}
+					},
+					beforeLoading: function(mescroll, downwarp) {
+						//准备触发下拉刷新的回调
+						return false; //如果要完全自定义下拉刷新,那么return true,此时将不再执行showLoading(),callback();
+					},
+					showLoading: function(mescroll) {
+						//触发下拉刷新的回调
+						if(mescroll.downTipDom) mescroll.downTipDom.innerHTML = "加载中 ...";
+						if(mescroll.downProgressDom) mescroll.downProgressDom.classList.add("mescroll-rotate");
+					}
+				},
+				//上拉加载的所有配置项
+				up: {
+					use: true, //是否初始化上拉加载; 默认true
+					auto: false, //是否在初始化时以上拉加载的方式自动加载第一页数据; 默认false
+					isLock: false, //是否锁定上拉,默认false;当列表没有更多数据时会自动锁定不可上拉;在endSuccess如果检查到有下一页数据,则会自动解锁true
+					isBoth: true, //上拉加载时,如果滑动到列表顶部是否可以同时触发下拉刷新;默认false,两者不可同时触发; 这里为了演示改为true,不必等列表加载完毕才可下拉;
+					callback: getListData, //上拉回调,此处可简写; 相当于 callback: function (page, mescroll) { getListData(page); }
+					page: {
+						num: 0, //当前页 默认0,回调之前会加1; 即callback(page)会从1开始
+						size: 10, //每页数据条数
+						time: null //加载第一页数据服务器返回的时间; 防止用户翻页时,后台新增了数据从而导致下一页数据重复;
+					},
+					noMoreSize: 5, //如果列表已无数据,可设置列表的总数量要大于半页才显示无更多数据;避免列表数据过少(比如只有一条数据),显示无更多数据会不好看
+					offset: 100, //离底部的距离
+					resetShowDownScroll: false, //重置上拉加载数据,是否显示下拉的进度布局;默认false,默认显示上拉加载的进度布局;
+					toTop: {
+						//回到顶部按钮,需配置src才显示
+						src: "../res/img/mescroll-totop.png", //图片路径,默认null;
+						offset: 1000, //列表滚动多少距离才显示回到顶部按钮,默认1000
+						warpClass: "mescroll-totop", //按钮样式,参见mescroll.css
+						showClass: "mescroll-fade-in", //显示样式,参见mescroll.css
+						hideClass: "mescroll-fade-out", //隐藏样式,参见mescroll.css
+						duration: 300 //回到顶部的动画时长,默认300ms
+					},
+					loadFull: {
+						use: false, //列表数据过少,不足以滑动触发上拉加载,是否自动加载下一页,直到满屏或者无更多数据为止;默认false,因为可通过调高page.size避免这个情况
+						delay: 500 //延时执行的毫秒数; 延时是为了保证列表数据或占位的图片都已初始化完成,且下拉刷新上拉加载中区域动画已执行完毕;
+					},
+					empty: {
+						//列表第一页无任何数据时,显示的空提示布局; 需配置warpId或clearEmptyId才生效;
+						warpId:null, //父布局的id; 如果此项有值,将不使用clearEmptyId的值;
+						icon: "../res/img/mescroll-empty.png", //图标,默认null
+						tip: "暂无相关数据~", //提示
+						btntext: "去逛逛 >", //按钮,默认""
+						btnClick: function(){//点击按钮的回调,默认null
+							alert("点击了按钮,具体逻辑自行实现");
+						} 
+					},
+					clearId: null, //加载第一页时需清空数据的列表id; 如果此项有值,将不使用clearEmptyId的值;
+					clearEmptyId: "dataList", //相当于同时设置了clearId和empty.warpId; 简化写法;
+					hardwareClass: "mescroll-hardware", //硬件加速样式,动画更流畅,参见mescroll.css
+					warpClass: "mescroll-upwarp", //容器,装载布局内容,参见mescroll.css
+					htmlLoading: '<p class="upwarp-progress mescroll-rotate"></p><p class="upwarp-tip">加载中..</p>', //上拉加载中的布局
+					htmlNodata: '<p class="upwarp-nodata">-- END --</p>', //无数据的布局
+					inited: function(mescroll, upwarp) {
+						//初始化完毕的回调,可缓存dom 比如 mescroll.upProgressDom = upwarp.getElementsByClassName("upwarp-progress")[0];
+					},
+					showLoading: function(mescroll, upwarp) {
+						//上拉加载中.. mescroll.upProgressDom.style.display = "block" 不通过此方式显示,因为ios快速滑动到底部,进度条会无法及时渲染
+						upwarp.innerHTML = mescroll.optUp.htmlLoading;
+					},
+					showNoMore: function(mescroll, upwarp) {
+						//无更多数据
+						upwarp.innerHTML = mescroll.optUp.htmlNodata;
+					},
+					onScroll: function(mescroll, y){ //列表滑动监听,默认onScroll: null;
+						//y为列表当前滚动条的位置
+						console.log( "列表当前滚动的距离 y = " + y );
+					}
+				}
+			});
+			
+			/*初始化菜单*/
+			var pdType=0;//全部商品0; 奶粉1; 图书2;
+			$(".nav p").click(function(){
+				var i=$(this).attr("i");
+				if(pdType!=i) {
+					//更改列表条件
+					pdType=i;
+					$(".nav .active").removeClass("active");
+					$(this).addClass("active");
+					//重置列表数据
+					mescroll.resetUpScroll();
+				}
+			})
+			
+			/*联网加载列表数据  page = {num:1, size:10}; num:当前页 从1开始, size:每页数据条数 */
+			function getListData(page){
+				//联网加载数据
+				console.log("pdType="+pdType+", page.num="+page.num);
+				getListDataFromNet(pdType, page.num, page.size, function(data){
+					//联网成功的回调,隐藏下拉刷新和上拉加载的状态;
+					console.log("data.length="+data.length);
+					mescroll.endSuccess(data.length);//传参:数据的总数; mescroll会自动判断列表如果无任何数据,则提示空;列表无下一页数据,则提示无更多数据;
+					//设置列表数据
+					setListData(data);
+				}, function(){
+					//联网失败的回调,隐藏下拉刷新和上拉加载的状态;
+	                mescroll.endErr();
+				});
+			}
+			
+			/*设置列表数据*/
+			function setListData(data){
+				var listDom=document.getElementById("dataList");
+				for (var i = 0; i < data.length; i++) {
+					var pd=data[i];
+					
+					var str='<img class="pd-img" src="'+pd.pdImg+'"/>';
+					str+='<p class="pd-name">'+pd.pdName+'</p>';
+					str+='<p class="pd-price">'+pd.pdPrice+' 元</p>';
+					str+='<p class="pd-sold">已售'+pd.pdSold+'件</p>';
+					
+					var liDom=document.createElement("li");
+					liDom.innerHTML=str;
+					listDom.appendChild(liDom);
+				}
+			}
+			
+			/*联网加载列表数据*/
+			function getListDataFromNet(pdType,pageNum,pageSize,successCallback,errorCallback) {
+				//延时一秒,模拟联网
+                setTimeout(function () {
+                	$.ajax({
+		                type: 'GET',
+		                url: '../res/pdlist1.json',
+//		                url: '../res/pdlist1.json?pdType='+pdType+'&num='+pageNum+'&size='+pageSize,
+		                dataType: 'json',
+		                success: function(data){
+		                	var listData=[];
+		                	
+		                	//pdType 全部商品0; 奶粉1; 图书2;
+		                	if(pdType==0){
+		                		//全部商品 (模拟分页数据)
+								for (var i = (pageNum-1)*pageSize; i < pageNum*pageSize; i++) {
+				            		if(i==data.length) break;
+				            		listData.push(data[i]);
+				            	}
+								
+		                	}else if(pdType==1){
+		                		//奶粉
+		                		for (var i = 0; i < data.length; i++) {
+		                			if (data[i].pdName.indexOf("奶")!=-1) {
+		                				listData.push(data[i]);
+		                			}
+		                		}
+		                		
+		                	}else if(pdType==2){
+		                		//图书
+		                		for (var i = 0; i < data.length; i++) {
+		                			if (data[i].pdName.indexOf("图书")!=-1) {
+		                				listData.push(data[i]);
+		                			}
+		                		}
+		                	}
+		                	
+		                	//回调
+		                	successCallback(listData);
+		                },
+		                error: errorCallback
+		            });
+                },1000)
+			}
+			
+			//禁止PC浏览器拖拽图片,避免与下拉刷新冲突;如果仅在移动端使用,可删除此代码
+			document.ondragstart=function() {return false;}
+		});
+	</script>
+
+</html>

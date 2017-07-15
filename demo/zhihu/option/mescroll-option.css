@@ -1,0 +1,45 @@
+/*
+ * 自定义下拉刷新和上拉加载的结构
+ * 
+	//下拉刷新区域
+	<div class="mescroll-downwarp">
+		<div class="downwarp-content">
+			<p class="downwarp-progress"></p>
+		</div>
+	</div>
+
+	//上拉加载区域
+	<div class="mescroll-upwarp">
+		//加载中..
+		<p class="upwarp-progress mescroll-rotate"></p>
+		//无数据
+		<p class="upwarp-nodata">-- END --</p>
+	</div>
+ */
+
+/*旋转进度条*/
+.mescroll-downwarp .downwarp-progress,
+.mescroll-upwarp .upwarp-progress {
+	width: 24px;
+	height: 24px;
+	border: none;
+	margin: auto;
+	background-image: url(mescroll-progress.jpg);
+    background-size: contain;
+}
+
+/*放大旋转动画*/
+.mescroll-rotate{
+	-webkit-animation: animScale 0.6s linear, mescrollRotate 0.6s linear infinite;
+	animation: animScale 0.6s linear, mescrollRotate 0.6s linear infinite;
+}
+@-webkit-keyframes animScale {
+	0% { -webkit-transform: scale(1,1) rotate(0deg) }
+	50% { -webkit-transform: scale(1.2,1.2) rotate(180deg) }
+	100% { -webkit-transform: scale(1,1) rotate(360deg) }
+}
+@keyframes animScale {
+	0% { transform: scale(1,1) rotate(0deg) }
+	50% { transform: scale(1.2,1.2) rotate(180deg) }
+	100% { transform: scale(1,1) rotate(360deg) }
+}
