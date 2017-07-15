@@ -1,0 +1,60 @@
+/*--------无任何数据的空布局--------*/
+MeScroll.prototype.showEmpty = function() {
+	var me = this;
+	var optEmpty = me.optUp.empty; //空布局的配置
+	var warpId = optEmpty.warpId || me.optUp.clearEmptyId; //优先使用warpId
+	if(warpId == null) return;
+	var emptyWarp = document.getElementById(warpId) //要显示空布局的位置
+	console.log(optEmpty)
+	console.log(warpId)
+	console.log(emptyWarp)
+	if(emptyWarp) {
+		me.removeEmpty(); //先移除,避免重复加入
+		//初始化无任何数据的空布局
+		var str = '';
+		if(optEmpty.icon) str += '<img class="empty-icon" src="' + optEmpty.icon + '"/>'; //图标
+		if(optEmpty.tip) str += '<p class="empty-tip">' + optEmpty.tip + '</p>'; //提示
+		if(optEmpty.btntext) str += '<p class="empty-btn">' + optEmpty.btntext + '</p>'; //按钮
+		me.emptyDom = document.createElement("div");
+		me.emptyDom.className = 'mescroll-empty';
+		me.emptyDom.innerHTML = str;
+		emptyWarp.appendChild(me.emptyDom);
+		if(optEmpty.btnClick) { //点击按钮的回调
+			var emptyBtn = me.emptyDom.getElementsByClassName("empty-btn")[0];
+			emptyBtn.onclick = function() {
+				optEmpty.btnClick();
+			}
+		}
+	}
+}
+
+
+-------------------------------------
+API:
+empty
+{ 
+warpId: null, 
+icon: null, 
+tip: "暂无相关数据~", 
+btntext: "", 
+btnClick: null 
+}
+------------------------
+列表第一页无任何数据时,显示的空提示布局; 需配置warpId或clearEmptyId才生效 
+warpId: 父布局的id; 如果此项有值,将不使用clearEmptyId的值; 
+icon: 空布局的图标路径 
+tip: 提示文本 
+btntext: 按钮文本 
+btnClick: 点击按钮的回调 
+---------------------------
+描述：首先清允许我向你致敬，深夜叨扰，敬请见谅。
+      1、问题描述如下，icon(其实全局的资源文件引入配置，望请解释一下，如何修改你默认的配置路径，本人尝试了三种方法皆无法成功引入。 
+      
+      console.log(mescroll.downProgressDom);
+
+      <img class="downwarp-progress" src="option/mescroll-progress.png">
+      ，其实title和标题都是动态添加生成，很不错呢。看了一个小时你的源码。2017年7月16日04:44:21
+      
+      怎么联系你，见谅我没有仔细看你的解释。主要看你的代码和demo去了，因为最近项目中确实需要这块。很不错
+
+
