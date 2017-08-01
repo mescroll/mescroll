@@ -1,10 +1,10 @@
 /*
  * mescroll -- 精致的下拉刷新和上拉加载js框架  ( a great JS framework for pull-refresh and pull-up-loading )
- * version 1.1.1
- * 2017-07-15
+ * version 1.1.2
+ * 2017-08-01
  * https://github.com/mescroll/mescroll.git
  * http://www.mescroll.com
- * author: wenju < mescroll@qq.com >
+ * author: wenju < mescroll@qq.com > 文举
  */
 
 function MeScroll(mescrollId, options) {
@@ -256,12 +256,12 @@ MeScroll.prototype.initDownScroll = function() {
 	function touchendEvent(e) {
 		//如果下拉区域高度已改变,则需重置回来
 		if(me.isMoveDown) {
-			me.downwarp.classList.add(me.optDown.resetClass); //加入高度重置的动画,过渡平滑
 			if(me.downHight >= me.optDown.offset) {
 				//符合触发刷新的条件
 				me.triggerDownScroll();
 			} else {
 				//不符合的话 则重置
+				me.downwarp.classList.add(me.optDown.resetClass); //加入高度重置的动画,过渡平滑
 				me.downHight = 0;
 				me.downwarp.style.height = 0;
 			}
@@ -294,6 +294,7 @@ MeScroll.prototype.showDownScroll = function() {
 	this.isDownScrolling = true; //标记下拉中
 	this.optDown.showLoading(this); //下拉刷新中...
 	this.downHight = this.optDown.offset; //更新下拉区域高度
+	this.downwarp.classList.add(this.optDown.resetClass); //加入高度重置的动画,过渡平滑
 	this.downwarp.style.height = this.optDown.offset + "px"; //调整下拉区域高度
 }
 
@@ -403,15 +404,17 @@ MeScroll.prototype.endUpScroll = function(isShowNoMore) {
 	this.isUpScrolling = false; //标记结束上拉加载
 }
 
-/*重置上拉加载列表为第一页*/
-MeScroll.prototype.resetUpScroll = function() {
+/*重置上拉加载列表为第一页
+ *isShowLoading 是否显示下拉或者上拉的进度布局; 1.不传参或true,则显示进度布局; 2.false则不显示(常用于切换菜单时静默更新列表数据);
+ */
+MeScroll.prototype.resetUpScroll = function(isShowLoading) {
 	if(this.optUp && this.optUp.use) {
 		var page = this.optUp.page;
 		this.prePageNum = page.num; //缓存重置前的页码,加载失败可退回
 		this.prePageTime = page.time; //缓存重置前的时间,加载失败可退回
 		page.num = 1; //重置为第一页
 		page.time = ""; //重置时间为空串
-		if(!this.isDownScrolling) { //如果是下拉刷新触发的重置,则不清空列表,不配置上拉进度
+		if(!this.isDownScrolling&&isShowLoading!=false) {//如果不是下拉刷新并且isShowLoading不为false,则显示进度
 			this.clearDataList();
 			if(this.optUp.resetShowDownScroll && this.optDown.use) {
 				this.showDownScroll(); //可配置显示上拉进度布局
