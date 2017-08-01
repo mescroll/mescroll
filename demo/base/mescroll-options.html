@@ -121,13 +121,16 @@
 		</div>
 	</body>
 	
-	<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js" type="text/javascript" charset="utf-8"></script>
 	<script src="../../dist/mescroll.js" type="text/javascript" charset="utf-8"></script>
+	<!--mescroll本身不依赖jq,这里为了模拟发送ajax请求-->
+	<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js" type="text/javascript" charset="utf-8"></script>
 	<script type="text/javascript" charset="utf-8">
 		$(function(){
 			//是否为ios设备;
 			var isIOS = !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
-
+			//是否为PC端,如果是scrollbar端,默认自定义滚动条
+			var isPC = typeof window.orientation == 'undefined' ;
+			
 			//创建MeScroll对象,内部已默认开启下拉刷新,自动执行up.callback,刷新列表数据;
 			var mescroll = new MeScroll("mescroll", {
 				//下拉刷新的所有配置项
@@ -151,21 +154,25 @@
 					resetClass: "mescroll-downwarp-reset", //高度重置的动画,参见mescroll.css
 					htmlContent: '<p class="downwarp-progress"></p><p class="downwarp-tip">下拉刷新 </p>', //布局内容
 					inited: function(mescroll, downwarp) {
+						console.log("down --> inited");
 						//初始化完毕的回调,可缓存dom
 						mescroll.downTipDom = downwarp.getElementsByClassName("downwarp-tip")[0];
 						mescroll.downProgressDom = downwarp.getElementsByClassName("downwarp-progress")[0];
 					},
 					inOffset: function(mescroll) {
-						//进入指定距离范围内那一刻的回调
+						console.log("down --> inOffset");
+						//进入指定距离offset范围内那一刻的回调
 						if(mescroll.downTipDom) mescroll.downTipDom.innerHTML = "下拉刷新";
 						if(mescroll.downProgressDom) mescroll.downProgressDom.classList.remove("mescroll-rotate");
 					},
 					outOffset: function(mescroll) {
-						//下拉超过指定距离那一刻的回调
+						console.log("down --> outOffset");
+						//下拉超过指定距离offset那一刻的回调
 						if(mescroll.downTipDom) mescroll.downTipDom.innerHTML = "释放更新";
 					},
 					onMoving: function(mescroll, rate, downHight) {
-						//下拉过程中的回调,滑动过程一直在执行; rate下拉区域当前高度与指定距离的比值(inOffset: rate<1; outOffset: rate>=1); downHight当前下拉区域的高度
+						//下拉过程中的回调,滑动过程一直在执行; rate下拉区域当前高度与指定距离offset的比值(inOffset: rate<1; outOffset: rate>=1); downHight当前下拉区域的高度
+						console.log("down --> onMoving --> mescroll.optDown.offset="+mescroll.optDown.offset+", downHight="+downHight+", rate="+rate);
 						if(mescroll.downProgressDom) {
 							var progress = 360 * rate;
 							mescroll.downProgressDom.style.webkitTransform = "rotate(" + progress + "deg)";
@@ -173,10 +180,12 @@
 						}
 					},
 					beforeLoading: function(mescroll, downwarp) {
+						console.log("down --> beforeLoading");
 						//准备触发下拉刷新的回调
 						return false; //如果要完全自定义下拉刷新,那么return true,此时将不再执行showLoading(),callback();
 					},
 					showLoading: function(mescroll) {
+						console.log("down --> showLoading");
 						//触发下拉刷新的回调
 						if(mescroll.downTipDom) mescroll.downTipDom.innerHTML = "加载中 ...";
 						if(mescroll.downProgressDom) mescroll.downProgressDom.classList.add("mescroll-rotate");
@@ -227,19 +236,26 @@
 					htmlLoading: '<p class="upwarp-progress mescroll-rotate"></p><p class="upwarp-tip">加载中..</p>', //上拉加载中的布局
 					htmlNodata: '<p class="upwarp-nodata">-- END --</p>', //无数据的布局
 					inited: function(mescroll, upwarp) {
+						console.log("up --> inited");
 						//初始化完毕的回调,可缓存dom 比如 mescroll.upProgressDom = upwarp.getElementsByClassName("upwarp-progress")[0];
 					},
 					showLoading: function(mescroll, upwarp) {
+						console.log("up --> showLoading");
 						//上拉加载中.. mescroll.upProgressDom.style.display = "block" 不通过此方式显示,因为ios快速滑动到底部,进度条会无法及时渲染
 						upwarp.innerHTML = mescroll.optUp.htmlLoading;
 					},
 					showNoMore: function(mescroll, upwarp) {
+						console.log("up --> showNoMore");
 						//无更多数据
 						upwarp.innerHTML = mescroll.optUp.htmlNodata;
 					},
 					onScroll: function(mescroll, y){ //列表滑动监听,默认onScroll: null;
 						//y为列表当前滚动条的位置
-						console.log( "列表当前滚动的距离 y = " + y );
+						console.log("up --> onScroll 列表当前滚动的距离 y = " + y);
+					},
+					scrollbar: {
+						use: isPC, //默认只在PC端自定义滚动条样式
+						barClass: "mescroll-bar"
 					}
 				}
 			});

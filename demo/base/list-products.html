@@ -126,8 +126,9 @@
 		</div>
 	</body>
 	
-	<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js" type="text/javascript" charset="utf-8"></script>
 	<script src="../../dist/mescroll.js" type="text/javascript" charset="utf-8"></script>
+	<!--mescroll本身不依赖jq,这里为了模拟发送ajax请求-->
+	<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js" type="text/javascript" charset="utf-8"></script>
 	<script type="text/javascript" charset="utf-8">
 		$(function(){
 			//创建MeScroll对象,内部已默认开启下拉刷新,自动执行up.callback,重置列表数据;

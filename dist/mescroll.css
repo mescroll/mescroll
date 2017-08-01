@@ -196,3 +196,21 @@
 	0% { opacity: 1; }
 	100% { opacity: 0; }
 }
+
+/*滚动条轨道背景(默认在PC端设置)*/
+.mescroll-bar::-webkit-scrollbar-track{
+	background-color: transparent;
+}
+/*滚动条轨道宽度 (默认在PC端设置)*/
+.mescroll-bar::-webkit-scrollbar{
+	width: 6px;
+}
+/*滚动条游标 (默认在PC端设置)*/
+.mescroll-bar::-webkit-scrollbar-thumb{
+	border-radius: 6px;
+	background-color: #ccc;
+}
+/*滚动条游标鼠标经过的颜色变化 (默认在PC端设置)*/
+.mescroll-bar::-webkit-scrollbar-thumb:hover{
+	background-color: #aaa;
+}

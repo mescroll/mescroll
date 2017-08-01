@@ -6,7 +6,6 @@
  * http://www.mescroll.com
  * author: wenju < mescroll@qq.com > 文举
  */
-
 function MeScroll(mescrollId, options) {
 	this.scrollDom = document.getElementById(mescrollId); //MeScroll的滑动区域
 	this.options = options || {}; //配置
@@ -92,6 +91,8 @@ MeScroll.prototype.extendDownScroll = function(optDown) {
 
 /*配置参数:上拉加载*/
 MeScroll.prototype.extendUpScroll = function(optUp) {
+	//是否为PC端,如果是scrollbar端,默认自定义滚动条
+	var isPC = typeof window.orientation == 'undefined' ;
 	//上拉加载的配置
 	MeScroll.extend(optUp, {
 		use: true, //是否启用上拉加载; 默认true
@@ -145,7 +146,11 @@ MeScroll.prototype.extendUpScroll = function(optUp) {
 			//无更多数据
 			upwarp.innerHTML = mescroll.optUp.htmlNodata;
 		},
-		onScroll: null //列表滑动监听,默认null; 例如 onScroll: function(mescroll, y){ }; //y为列表当前滚动条的位置
+		onScroll: null, //列表滑动监听,默认null; 例如 onScroll: function(mescroll, y){ }; //y为列表当前滚动条的位置
+		scrollbar: {
+			use: isPC, //默认只在PC端自定义滚动条样式
+			barClass: "mescroll-bar"
+		}
 	})
 }
 
@@ -321,7 +326,10 @@ MeScroll.prototype.initUpScroll = function() {
 	if(me.optUp.use == false) return;
 	//具体参数配置
 	me.extendUpScroll(me.optUp);
-
+	
+	//自定义滚动条 (默认只在PC端设置)
+	if(me.optUp.scrollbar.use) me.scrollDom.classList.add(me.optUp.scrollbar.barClass);
+	
 	//在页面中加入下拉布局
 	me.upwarp = document.createElement("div");
 	me.upwarp.className = me.optUp.warpClass;
@@ -355,7 +363,7 @@ MeScroll.prototype.initUpScroll = function() {
 		}
 		
 		//滑动监听
-		me.optDown.onScroll&&me.optDown.onScroll(me, scrollTop);
+		me.optUp.onScroll&&me.optUp.onScroll(me, scrollTop);
 	});
 
 	//初始化完毕的回调
