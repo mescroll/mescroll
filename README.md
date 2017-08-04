@@ -18,12 +18,14 @@
 * <a href="#api文档-">API文档 </a> <br/>
 * <a href="#常用方法-">常用方法 </a> <br/>
 * <a href="#其他方法-">其他方法 </a> <br/>
+* <a href="https://github.com/mescroll/mescroll-versions" target="_blank">历史版本 </a> <br/>
+* <a href="http://www.mescroll.com/qa.html">常见问题 </a> <br/>
 * <a href="#基础案例-base-demos-">基础案例 base demos </a> <br/>
 * <a href="#中级案例-intermediate-demos-">中级案例 intermediate demos </a> <br/>
 * <a href="#高级案例-senior-demos-">高级案例 senior demos </a> <br/>
 * <a href="#下载基础中级案例源码-">下载基础中级案例源码 </a> <br/>
 * <a href="#获取高级案例源码-">获取高级案例源码 </a> <br/>
-* <a href="#打赏排行榜-">打赏排行榜 </a> <br/>
+* <a href="http://www.mescroll.com/reward.html#tagRank">打赏排行榜 </a> <br/>
 
 ## 功能亮点 :
 
@@ -103,6 +105,12 @@
         }
 ```  
 
+--- 以上为mescroll最基本的用法,强烈建议您下载并查看 <a href="#基础案例-base-demos-">mescroll基础案例</a> , 发现mescroll更强大的功能 ~<br/>
+--- 基础案例一共5个, 每个案例3分钟, 一共花您15分钟; 这15分钟您将了解mescroll在不同情况下应如何快速配置 ~<br/>
+--- 磨刀不误砍柴工,心急吃不了热豆腐. 请静下心来体验与理解mescroll, 一定会让您事半功倍 ~<br/>
+--- 如使用中有疑问, 请先查看  <a href="http://www.mescroll.com/qa.html">常见问题专区</a> ~<br/>
+
+
 ## API文档 :   
 #### <a href="http://www.mescroll.com/api.html#options" target="_blank">前往官网查看 >> </a>
 
@@ -112,7 +120,7 @@ var mescroll = new MeScroll("mescroll", { down: {下拉刷新的配置参数}, u
 ```  
 
 <table border="1" cellspacing="0">
-	<tr align="center"><td colspan="3"><b>down 下拉刷新的配置参数</b> 可参考案例mescroll-options.html</td></tr>
+	<tr align="center"><td colspan="3"><b>down 下拉刷新的配置参数</b></td></tr>
 	<tr align="center">
 		<td>参数名</td>
 		<td>默认值</td>
@@ -218,7 +226,7 @@ var mescroll = new MeScroll("mescroll", { down: {下拉刷新的配置参数}, u
 <br/>
 
 <table border="1" cellspacing="0">
-	<tr align="center"><td colspan="3"><b>up 上拉加载的配置参数</b> 可参考案例mescroll-options.html</td></tr>
+	<tr align="center"><td colspan="3"><b>up 上拉加载的配置参数</b></td></tr>
 	<tr align="center">
 		<td>参数名</td>
 		<td>默认值</td>
@@ -366,6 +374,11 @@ var mescroll = new MeScroll("mescroll", { down: {下拉刷新的配置参数}, u
 		<td align="left">{ <br/>num:0, <br/> size:10, <br/> time:null <br/>}</td>
 		<td align="left">num: 当前页码,默认0,回调之前会加1,即callback(page)会从1开始; <br/>size: 每页数据的数量; <br/>time: 加载第一页数据服务器返回的时间;防止用户翻页时,后台新增了数据从而导致下一页数据重复;</td>
 	</tr>
+	<tr>
+		<td align="center">scrollbar</td>
+		<td>{<br/>&nbsp; use : ... , <br/>&nbsp; barClass : "mescroll-bar" <br/>}</td>
+		<td>use : 是否开启自定义滚动条; PC端默认true开启自定义滚动条; 移动端默认false不使用 <br/>barClass : 自定义滚动条的样式; 参见mescroll.css</td>
+	</tr>
 </table>  
 
 ## 常用方法 :   
@@ -394,16 +407,16 @@ var mescroll = new MeScroll("mescroll", { down: {下拉刷新的配置参数}, u
 		<td>隐藏下拉刷新和上拉加载的状态, 在联网获取数据失败后调用;<br/>mescroll内部会自动恢复原来的页码,时间等变量;</td>
 	</tr>
 	<tr align="center">
+		<td>mescroll.resetUpScroll( isShowLoading );</td>
+		<td>重置列表 (常用于列表筛选条件变化或切换菜单时重新刷新列表数据)<br />isShowLoading 是否显示下拉或者上拉的进度布局; <br />1. 不传参或传true,则显示进度布局,默认不传参; <br />2. 传false则不显示进度布局 (常用于静默更新列表数据);</td>
+	</tr>
+	<tr align="center">
 		<td>mescroll.triggerDownScroll();</td>
 		<td>主动触发下拉刷新</td>
 	</tr>
 	<tr align="center">
 		<td>mescroll.triggerUpScroll();</td>
 		<td>主动触发上拉加载</td>
-	</tr>
-	<tr align="center">
-		<td>mescroll.resetUpScroll();</td>
-		<td>重置列表</td>
 	</tr>
 	<tr align="center">
 		<td>mescroll.scrollTo( y );</td>
@@ -611,7 +624,7 @@ var mescroll = new MeScroll("mescroll", { down: {下拉刷新的配置参数}, u
 		【 获取方法三 】<br/>
 		我不做伸手党, 打赏任意金额<br/>
 		联系 QQ 2260429223 获取高级案例源码<br/>
-		打赏排行 榜上有名
+		<a href="http://www.mescroll.com/reward.html#tagRank">打赏排行 榜上有名</a>
 		</td>
 	</tr>
 </table>  
@@ -620,16 +633,5 @@ var mescroll = new MeScroll("mescroll", { down: {下拉刷新的配置参数}, u
 
 ![](https://github.com/mescroll/mescroll/raw/master/demo/res/pay-zfb.jpg)  
 
-
-## 打赏排行榜 :  
-
-<table border="1" cellspacing="0" width="100%">
-	<tr>
-		<td>用户昵称</td>
-		<td>打赏金额</td>
-		<td>留言备注</td>
-		<td>友情链接</td>
-	</tr>
-</table>
 
 <br/><br/><br/><br/><br/><br/>
