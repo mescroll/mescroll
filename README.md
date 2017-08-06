@@ -634,4 +634,4 @@ var mescroll = new MeScroll("mescroll", { down: {下拉刷新的配置参数}, u
 ![](https://github.com/mescroll/mescroll/raw/master/demo/res/pay-zfb.jpg)  
 
 
-<br/><br/><br/><br/><br/><br/>
+<br/><br/><br/>

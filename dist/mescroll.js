@@ -1,7 +1,7 @@
 /*
  * mescroll -- 精致的下拉刷新和上拉加载js框架  ( a great JS framework for pull-refresh and pull-up-loading )
- * version 1.1.2
- * 2017-08-01
+ * version 1.1.3
+ * 2017-08-06
  * https://github.com/mescroll/mescroll.git
  * http://www.mescroll.com
  * author: wenju < mescroll@qq.com > 文举
@@ -402,11 +402,11 @@ MeScroll.prototype.hideUpScroll = function() {
 
 /*结束上拉加载*/
 MeScroll.prototype.endUpScroll = function(isShowNoMore) {
-	if(isShowNoMore != null) { //传null,不处理下拉状态
+	if(isShowNoMore != null) { //isShowNoMore=null,不处理下拉状态
 		if(isShowNoMore) {
-			this.showNoMore(); //显示无更多数据
+			this.showNoMore(); //isShowNoMore=true,显示无更多数据
 		} else {
-			this.hideUpScroll(); //隐藏上拉加载
+			this.hideUpScroll(); //isShowNoMore=false,隐藏上拉加载
 		}
 	}
 	this.isUpScrolling = false; //标记结束上拉加载
@@ -510,7 +510,7 @@ MeScroll.prototype.endErr = function() {
 	//结束上拉,回调失败重置回原来的页码
 	if(this.isUpScrolling) {
 		this.optUp.page.num--;
-		this.endUpScroll();
+		this.endUpScroll(false);
 	}
 }
 
