@@ -421,7 +421,7 @@ MeScroll.prototype.resetUpScroll = function(isShowLoading) {
 		this.prePageNum = page.num; //缓存重置前的页码,加载失败可退回
 		this.prePageTime = page.time; //缓存重置前的时间,加载失败可退回
 		page.num = 1; //重置为第一页
-		page.time = ""; //重置时间为空串
+		page.time = null; //重置时间为空
 		if(!this.isDownScrolling&&isShowLoading!=false) {//如果不是下拉刷新并且isShowLoading不为false,则显示进度
 			this.clearDataList();
 			if(this.optUp.resetShowDownScroll && this.optDown.use) {
