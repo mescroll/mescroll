@@ -18,7 +18,7 @@
 * <a href="#api文档-">API文档 </a> <br/>
 * <a href="#常用方法-">常用方法 </a> <br/>
 * <a href="#其他方法-">其他方法 </a> <br/>
-* <a href="https://github.com/mescroll/mescroll-versions" target="_blank">历史版本 </a> <br/>
+* <a href="https://github.com/mescroll/mescroll-versions" target="_blank">更新动态 </a> <br/>
 * <a href="http://www.mescroll.com/qa.html">常见问题 </a> <br/>
 * <a href="#基础案例-base-demos-">基础案例 base demos </a> <br/>
 * <a href="#中级案例-intermediate-demos-">中级案例 intermediate demos </a> <br/>
