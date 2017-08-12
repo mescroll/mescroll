@@ -127,8 +127,10 @@
 	</body>
 	
 	<script src="../../mescroll.js" type="text/javascript" charset="utf-8"></script>
-	<!--mescroll本身不依赖jq,这里为了模拟发送ajax请求-->
+	<!--mescroll本身不依赖jq,这里为了模拟发送ajax请求,获取模拟数据-->
 	<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../res/pdlist1.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../res/pdlist2.js" type="text/javascript" charset="utf-8"></script>
 	<script type="text/javascript" charset="utf-8">
 		$(function(){
 			//创建MeScroll对象,内部已默认开启下拉刷新,自动执行up.callback,重置列表数据;
@@ -186,12 +188,14 @@
 			function getListDataFromNet(pageNum,pageSize,successCallback,errorCallback) {
 				//延时一秒,模拟联网
                 setTimeout(function () {
-                	$.ajax({
-		                type: 'GET',
-		                url: '../res/pdlist'+dataTag+'.json',
-//		                url: '../res/pdlist1.json?num='+pageNum+"&size="+pageSize,
-		                dataType: 'json',
-		                success: function(data){
+//              	$.ajax({
+//		                type: 'GET',
+//		                url: 'xxx',
+//		                url: 'xxx?num='+pageNum+"&size="+pageSize,
+//		                dataType: 'json',
+//		                success: function(data){
+		                	var data=pdlist1; // 模拟数据: ../res/pdlist1.js
+		                	if(dataTag==2) data=pdlist2; // 模拟数据: ../res/pdlist2.js
 		                	//模拟分页数据
 		                	var listData=[];
 							for (var i = (pageNum-1)*pageSize; i < pageNum*pageSize; i++) {
@@ -199,9 +203,9 @@
 			            		listData.push(data[i]);
 			            	}
 		                	successCallback(listData);
-		                },
-		                error: errorCallback
-		            });
+//		                },
+//		                error: errorCallback
+//		            });
                 },1000)
 			}
 			

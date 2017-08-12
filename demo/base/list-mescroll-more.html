@@ -150,8 +150,9 @@
 	</body>
 	
 	<script src="../../mescroll.js" type="text/javascript" charset="utf-8"></script>
-	<!--mescroll本身不依赖jq,这里为了模拟发送ajax请求-->
+	<!--mescroll本身不依赖jq,这里为了模拟发送ajax请求,获取模拟数据-->
 	<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../res/pdlist1.js" type="text/javascript" charset="utf-8"></script>
 	<script type="text/javascript" charset="utf-8">
 		$(function(){
 			var curNavIndex=0;//首页0; 奶粉1; 面膜2; 图书3;
@@ -235,12 +236,13 @@
 			function getListDataFromNet(curNavIndex,pageNum,pageSize,successCallback,errorCallback) {
 				//延时一秒,模拟联网
                 setTimeout(function () {
-                	$.ajax({
-		                type: 'GET',
-		                url: '../res/pdlist1.json',
-//		                url: '../res/pdlist1.json?curNavIndex='+curNavIndex+'&num='+pageNum+'&size='+pageSize,
-		                dataType: 'json',
-		                success: function(data){
+//              	$.ajax({
+//		                type: 'GET',
+//		                url: 'xxx',
+//		                url: 'xxx?curNavIndex='+curNavIndex+'&num='+pageNum+'&size='+pageSize,
+//		                dataType: 'json',
+//		                success: function(data){
+		                	var data=pdlist1; // 模拟数据: ../res/pdlist1.js
 		                	var listData=[];
 		                	
 		                	//curNavIndex 首页0; 奶粉1; 面膜2; 图书3;
@@ -278,9 +280,9 @@
 		                	
 		                	//回调
 		                	successCallback(listData);
-		                },
-		                error: errorCallback
-		            });
+//		                },
+//		                error: errorCallback
+//		            });
                 },400)
 			}
 			

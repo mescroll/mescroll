@@ -14,17 +14,17 @@
 ## 目录:  
 
 * <a href="#功能亮点-">功能亮点 </a> <br/>
-* <a href="#快速入门-">快速入门 </a> <br/>
+* <a href="#快速入门-">快速入门 </a> <br/><br/>
+* <a href="#基础案例-base-demos-"><b>基础案例 base demos</b></a> <br/>
+* <a href="#中级案例-intermediate-demos-"><b>中级案例 intermediate demos</b></a> <br/>
+* <a href="#高级案例-senior-demos-"><b>高级案例 senior demos</b></a> <br/><br/>
+* <a href="#下载基础中级案例源码-">下载基础中级案例源码 </a> <br/>
+* <a href="#获取高级案例源码-">获取高级案例源码 </a> <br/><br/>
 * <a href="#api文档-">API文档 </a> <br/>
 * <a href="#常用方法-">常用方法 </a> <br/>
-* <a href="#其他方法-">其他方法 </a> <br/>
-* <a href="https://github.com/mescroll/mescroll-versions" target="_blank">更新动态 </a> <br/>
+* <a href="#其他方法-">其他方法 </a> <br/><br/>
 * <a href="http://www.mescroll.com/qa.html">常见问题 </a> <br/>
-* <a href="#基础案例-base-demos-">基础案例 base demos </a> <br/>
-* <a href="#中级案例-intermediate-demos-">中级案例 intermediate demos </a> <br/>
-* <a href="#高级案例-senior-demos-">高级案例 senior demos </a> <br/>
-* <a href="#下载基础中级案例源码-">下载基础中级案例源码 </a> <br/>
-* <a href="#获取高级案例源码-">获取高级案例源码 </a> <br/>
+* <a href="https://github.com/mescroll/mescroll-versions" target="_blank">更新动态 </a> <br/>
 * <a href="http://www.mescroll.com/reward.html#tagRank">打赏排行榜 </a> <br/>
 
 ## 功能亮点 :
@@ -631,7 +631,4 @@ var mescroll = new MeScroll("mescroll", { down: {下拉刷新的配置参数}, u
 
 ![](https://github.com/mescroll/mescroll/raw/master/demo/res/pay-wx.jpg)  
 
-![](https://github.com/mescroll/mescroll/raw/master/demo/res/pay-zfb.jpg)  
-
-
-<br/><br/><br/>
+![](https://github.com/mescroll/mescroll/raw/master/demo/res/pay-zfb.jpg) 
