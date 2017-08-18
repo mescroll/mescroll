@@ -43,16 +43,16 @@
 
 ## 快速入门 :
 
-1. 引用 **mescroll.min.css** , **mescroll.min.js**
+#### 1. 引用 **mescroll.min.css** , **mescroll.min.js**
 
-2. 拷贝以下布局结构:  
+#### 2. 拷贝以下布局结构:  
 ```
         <div id="mescroll" class="mescroll">
             //列表内容,如:<ul>列表数据</ul> ...
         </div>  
 ```  
 
-3. 创建MeScroll对象:  
+#### 3. 创建MeScroll对象:  
 ```
         var mescroll = new MeScroll("mescroll", {
     		down: {
@@ -63,8 +63,11 @@
 		}
 	});
 ```  
+###### 温馨提示:
+###### 如果您的下拉刷新是重置列表数据,那么down完全可以不用配置,具体用法参考<a class="blue" href="http://www.mescroll.com/demo.html">第一个基础案例</a>
+###### 解析: down内部默认调用的是mescroll.resetUpScroll(),而resetUpScroll会将page.num=1,再触发up.callback
 
-4. 处理回调:
+#### 4. 处理回调:
 ```
         //下拉刷新的回调
         function downCallback(){
@@ -504,14 +507,14 @@ var mescroll = new MeScroll("mescroll", { down: {下拉刷新的配置参数}, u
 ## 基础案例 base demos :  
 #### <a href="http://www.mescroll.com/demo.html" target="_blank">前往官网查看 >> </a>  
 
-#### 1. 【新闻列表】演示下拉刷新添加新数据到列表顶部
-#### ---------- <a href="http://www.mescroll.com/preview.html?name=list-news" target="_blank">在线体验 </a> ---------- [查看源码](https://github.com/mescroll/mescroll/blob/master/demo/base/list-news.html) ---------- 
-![](https://github.com/mescroll/mescroll/raw/master/demo/base/list-news.gif) 
-<br/><br/>  
-
-#### 2. 【商品列表】演示下拉刷新重置列表数据
+#### 1. 【商品列表】演示下拉刷新重置列表数据
 #### ---------- <a href="http://www.mescroll.com/preview.html?name=list-products" target="_blank">在线体验 </a> ---------- [查看源码](https://github.com/mescroll/mescroll/blob/master/demo/base/list-products.html) ---------- 
 ![](https://github.com/mescroll/mescroll/raw/master/demo/base/list-products.gif) 
+<br/><br/>  
+
+#### 2. 【新闻列表】演示下拉刷新添加新数据到列表顶部
+#### ---------- <a href="http://www.mescroll.com/preview.html?name=list-news" target="_blank">在线体验 </a> ---------- [查看源码](https://github.com/mescroll/mescroll/blob/master/demo/base/list-news.html) ---------- 
+![](https://github.com/mescroll/mescroll/raw/master/demo/base/list-news.gif) 
 <br/><br/>  
 
 #### 3. 【单mescroll】演示每次切换菜单都重置列表,不缓存数据
