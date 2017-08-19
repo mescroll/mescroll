@@ -118,7 +118,7 @@
 					up: {
 						callback: self.upCallback, //上拉回调
 						//以下参数可删除,不配置
-						page:{size:8}, //配置每页8条数据,默认10
+						//page:{size:8}, //可配置每页8条数据,默认10
 						toTop:{ //配置回到顶部按钮
 							src : "../res/img/mescroll-totop.png", //默认滚动到1000px显示,可配置offset修改
 							//offset : 1000
@@ -141,7 +141,7 @@
 			methods: {
 				//上拉回调 page = {num:1, size:10}; num:当前页 ,默认从1开始; size:每页数据条数,默认10
 				upCallback: function(page) {
-					console.log("page.num==" + page.num);
+					console.log("page.num=="+page.num+", page.size=="+page.size);
 					//联网加载数据
 					var self = this;
 					getListDataFromNet(page.num, page.size, function(data) {
@@ -188,7 +188,7 @@
 //				.catch(function(error) {
 //					errorCallback&&errorCallback()//失败回调
 //				});
-            },1000)
+            },500)
 		}
 		
 		//禁止PC浏览器拖拽图片,避免与下拉刷新冲突;如果仅在移动端使用,可删除此代码

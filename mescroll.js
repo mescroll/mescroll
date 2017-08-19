@@ -1,7 +1,7 @@
 /*
  * mescroll -- 精致的下拉刷新和上拉加载js框架  ( a great JS framework for pull-refresh and pull-up-loading )
- * version 1.1.3
- * 2017-08-06
+ * version 1.1.5
+ * 2017-08-15
  * https://github.com/mescroll/mescroll.git
  * http://www.mescroll.com
  * author: wenju < mescroll@qq.com > 文举
@@ -107,7 +107,6 @@ MeScroll.prototype.extendUpScroll = function(optUp) {
 		},
 		noMoreSize: 5, //如果列表已无数据,可设置列表的总数量要大于5条才显示无更多数据;避免列表数据过少(比如只有一条数据),显示无更多数据会不好看
 		offset: 100, //列表滚动到距离底部小于100px,即可触发上拉加载的回调
-		resetShowDownScroll: false, //重置上拉加载数据,是否显示下拉的进度布局;默认false,默认显示上拉加载的进度布局;
 		toTop: {
 			//回到顶部按钮,需配置src才显示
 			src: null, //图片路径,默认null;
@@ -413,7 +412,10 @@ MeScroll.prototype.endUpScroll = function(isShowNoMore) {
 }
 
 /*重置上拉加载列表为第一页
- *isShowLoading 是否显示下拉或者上拉的进度布局; 1.不传参或true,则显示进度布局; 2.false则不显示(常用于切换菜单时静默更新列表数据);
+ *isShowLoading 是否显示进度布局;
+ * 1.默认null,不传参,则显示上拉加载的进度布局
+ * 2.传参true, 则显示下拉刷新的进度布局
+ * 3.传参false,则不显示上拉和下拉的进度 (常用于静默更新列表数据)
  */
 MeScroll.prototype.resetUpScroll = function(isShowLoading) {
 	if(this.optUp && this.optUp.use) {
@@ -422,12 +424,12 @@ MeScroll.prototype.resetUpScroll = function(isShowLoading) {
 		this.prePageTime = page.time; //缓存重置前的时间,加载失败可退回
 		page.num = 1; //重置为第一页
 		page.time = null; //重置时间为空
-		if(!this.isDownScrolling&&isShowLoading!=false) {//如果不是下拉刷新并且isShowLoading不为false,则显示进度
-			this.clearDataList();
-			if(this.optUp.resetShowDownScroll && this.optDown.use) {
-				this.showDownScroll(); //可配置显示上拉进度布局
+		if(!this.isDownScrolling&&isShowLoading!=false) {//如果不是下拉刷新触发的resetUpScroll并且不配置列表静默更新,则显示进度;
+			if(isShowLoading==null) {
+				this.clearDataList();//先清空列表数据,才能显示到上拉加载的布局
+				this.showUpScroll(); //不传参,默认显示上拉加载的进度布局
 			} else {
-				this.showUpScroll(); //默认显示下拉进度布局
+				this.showDownScroll(); //传true,显示下拉刷新的进度布局,不清空列表
 			}
 		}
 		this.optUp.callback && this.optUp.callback(page, this); //执行上拉回调

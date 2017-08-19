@@ -108,6 +108,8 @@
         }
 ```  
 
+### mescroll在vue中的使用案例---------- <a href="http://www.mescroll.com/preview.html?name=list-products-vue" target="_blank">点此在线体验 </a> ---------- [点此查看源码](https://github.com/mescroll/mescroll/blob/master/demo/base/list-products-vue.html) ---------- 
+
 --- 以上为mescroll最基本的用法,强烈建议您下载并查看 <a href="#基础案例-base-demos-">mescroll基础案例</a> , 发现mescroll更强大的功能 ~<br/>
 --- 基础案例一共5个, 每个案例3分钟, 一共花您15分钟; 这15分钟您将了解mescroll在不同情况下应如何快速配置 ~<br/>
 --- 磨刀不误砍柴工,心急吃不了热豆腐. 请静下心来体验与理解mescroll, 一定会让您事半功倍 ~<br/>
@@ -264,11 +266,6 @@ var mescroll = new MeScroll("mescroll", { down: {下拉刷新的配置参数}, u
 		<td>noMoreSize</td>
 		<td>5</td>
 		<td>如果列表已无数据,可设置列表的总数量要大于5条才显示无更多数据;避免列表数据过少(比如只有一条数据),显示无更多数据会不好看</td>
-	</tr>
-	<tr align="center">
-		<td>resetShowDownScroll</td>
-		<td>false</td>
-		<td>重置上拉加载数据,是否显示下拉刷新的进度布局</td>
 	</tr>
 	<tr align="center">
 		<td>toTop</td>
