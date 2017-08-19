@@ -200,7 +200,7 @@
 					isBoth: true, //上拉加载时,如果滑动到列表顶部是否可以同时触发下拉刷新;默认false,两者不可同时触发; 这里为了演示改为true,不必等列表加载完毕才可下拉;
 					callback: getListData, //上拉回调,此处可简写; 相当于 callback: function (page, mescroll) { getListData(page); }
 					page: {
-						num: 0, //当前页 默认0,回调之前会加1; 即callback(page)会从1开始
+						//num: 0, //当前页 默认0,回调之前会加1; 即callback(page)会从1开始, 此项不可配置 http://www.mescroll.com/qa.html#q7
 						size: 10, //每页数据条数
 						time: null //加载第一页数据服务器返回的时间; 防止用户翻页时,后台新增了数据从而导致下一页数据重复;
 					},
@@ -277,6 +277,7 @@
 			
 			/*联网加载列表数据  page = {num:1, size:10}; num:当前页 从1开始, size:每页数据条数 */
 			function getListData(page){
+				//如需改为num从0开始;则声明变量 var pageIndex = page.num-1; 不可直接 page.num--; 这样会改变mescroll.page.num对象的值,导致mescroll.endSuccess 无法正确判断是否还有下一页
 				//联网加载数据
 				console.log("pdType="+pdType+", page.num="+page.num);
 				getListDataFromNet(pdType, page.num, page.size, function(data){
