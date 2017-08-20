@@ -48,14 +48,14 @@
 
 #### 2. 拷贝以下布局结构:  
 ```
-        <div id="mescroll" class="mescroll">
+        <div id="mescroll" class="mescroll"> //id可以改,而"mescroll"的class不能删
             //列表内容,如:<ul>列表数据</ul> ...
         </div>  
 ```  
 
 #### 3. 创建MeScroll对象:  
 ```
-        var mescroll = new MeScroll("mescroll", {
+        var mescroll = new MeScroll("mescroll", { //第一个参数"mescroll"对应上面布局结构div的id
     		down: {
 			callback: downCallback //下拉刷新的回调
 		},
