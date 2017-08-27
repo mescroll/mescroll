@@ -6,7 +6,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
 		<meta name="apple-mobile-web-app-capable" content="yes">
 
-		<link rel="stylesheet" href="../../mescroll.css">
+		<link rel="stylesheet" href="../../dist/mescroll.css">
 		<style type="text/css">
 			* {
 				margin: 0;
@@ -121,10 +121,9 @@
 		</div>
 	</body>
 	
-	<script src="../../mescroll.js" type="text/javascript" charset="utf-8"></script>
-	<!--mescroll本身不依赖jq,这里为了模拟发送ajax请求,获取模拟数据-->
+	<script src="../../dist/mescroll.js" type="text/javascript" charset="utf-8"></script>
+	<!--mescroll本身不依赖jq,这里为了模拟发送ajax请求-->
 	<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js" type="text/javascript" charset="utf-8"></script>
-	<script src="../res/pdlist1.js" type="text/javascript" charset="utf-8"></script>
 	<script type="text/javascript" charset="utf-8">
 		$(function(){
 			//是否为ios设备;
@@ -148,6 +147,7 @@
 						mescroll.resetUpScroll();
 					},
 					offset: 60, //触发刷新的距离,默认80
+					minAngle: 45, //向下滑动最少偏移的角度,取值区间  [0,90];默认45度,即向下滑动的角度大于45度则触发下拉;而小于45度,将不触发下拉,避免与左右滑动的轮播等组件冲突;
 					outOffsetRate: 0.2, //超过指定距离范围外时,改变下拉区域高度比例;小于1,越往下拉高度变化越小;
 					mustToTop: !isIOS, //是否列表必须滑动到顶部才能下拉;因为列表回弹效果(-webkit-overflow-scrolling:touch)是iOS专属样式,所以iOS默认false,其他为true;
 					hardwareClass: "mescroll-hardware", //硬件加速样式;解决iOS下拉因隐藏进度条而闪屏的问题,参见mescroll.css
@@ -200,7 +200,7 @@
 					isBoth: true, //上拉加载时,如果滑动到列表顶部是否可以同时触发下拉刷新;默认false,两者不可同时触发; 这里为了演示改为true,不必等列表加载完毕才可下拉;
 					callback: getListData, //上拉回调,此处可简写; 相当于 callback: function (page, mescroll) { getListData(page); }
 					page: {
-						//num: 0, //当前页 默认0,回调之前会加1; 即callback(page)会从1开始, 此项不可配置 http://www.mescroll.com/qa.html#q7
+						num: 0, //当前页 默认0,回调之前会加1; 即callback(page)会从1开始
 						size: 10, //每页数据条数
 						time: null //加载第一页数据服务器返回的时间; 防止用户翻页时,后台新增了数据从而导致下一页数据重复;
 					},
@@ -276,7 +276,6 @@
 			
 			/*联网加载列表数据  page = {num:1, size:10}; num:当前页 从1开始, size:每页数据条数 */
 			function getListData(page){
-				//如需改为num从0开始;则声明变量 var pageIndex = page.num-1; 不可直接 page.num--; 这样会改变mescroll.page.num对象的值,导致mescroll.endSuccess 无法正确判断是否还有下一页
 				//联网加载数据
 				console.log("pdType="+pdType+", page.num="+page.num);
 				getListDataFromNet(pdType, page.num, page.size, function(data){
@@ -312,13 +311,12 @@
 			function getListDataFromNet(pdType,pageNum,pageSize,successCallback,errorCallback) {
 				//延时一秒,模拟联网
                 setTimeout(function () {
-//              	$.ajax({
-//		                type: 'GET',
-//		                url: 'xxx',
-//		                url: 'xxx?pdType='+pdType+'&num='+pageNum+'&size='+pageSize,
-//		                dataType: 'json',
-//		                success: function(data){
-		                	var data=pdlist1; // 模拟数据: ../res/pdlist1.js
+                	$.ajax({
+		                type: 'GET',
+		                url: '../res/pdlist1.json',
+//		                url: '../res/pdlist1.json?pdType='+pdType+'&num='+pageNum+'&size='+pageSize,
+		                dataType: 'json',
+		                success: function(data){
 		                	var listData=[];
 		                	
 		                	//pdType 全部商品0; 奶粉1; 图书2;
@@ -348,9 +346,9 @@
 		                	
 		                	//回调
 		                	successCallback(listData);
-//		                },
-//		                error: errorCallback
-//		            });
+		                },
+		                error: errorCallback
+		            });
                 },1000)
 			}
 			

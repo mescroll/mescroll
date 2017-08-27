@@ -1,7 +1,7 @@
 /*
  * mescroll -- 精致的下拉刷新和上拉加载js框架  ( a great JS framework for pull-refresh and pull-up-loading )
- * version 1.1.5
- * 2017-08-15
+ * version 1.1.6
+ * 2017-08-27
  * https://github.com/mescroll/mescroll.git
  * http://www.mescroll.com
  * author: wenju < mescroll@qq.com > 文举
@@ -45,6 +45,7 @@ MeScroll.prototype.extendDownScroll = function(optDown) {
 		isLock: false, //是否锁定下拉刷新,默认false;
 		isBoth: false, //下拉刷新时,如果滑动到列表底部是否可以同时触发上拉加载;默认false,两者不可同时触发;
 		offset: 80, //在列表顶部,下拉大于80px,松手即可触发下拉刷新的回调
+		minAngle: 45, //向下滑动最少偏移的角度,取值区间  [0,90];默认45度,即向下滑动的角度大于45度则触发下拉;而小于45度,将不触发下拉,避免与左右滑动的轮播等组件冲突;
 		outOffsetRate: 0.2, //在列表顶部,下拉的距离大于offset时,改变下拉区域高度比例;值越接近0,高度变化越小,表现为越往下越难拉
 		mustToTop: !isIOS, //是否必须滑动到顶部才能下拉;因为列表回弹效果(-webkit-overflow-scrolling:touch)是iOS专属样式,所以iOS默认false,其他为true;
 		hardwareClass: "mescroll-hardware", //硬件加速样式;解决iOS下拉因隐藏进度条而闪屏的问题,参见mescroll.css
@@ -204,11 +205,25 @@ MeScroll.prototype.initDownScroll = function() {
 			//是否列表必须滑动到顶部才能下拉
 			if(me.optDown.mustToTop && me.startTop > 0) return;
 
-			var curY = e.touches ? e.touches[0].pageY : e.clientY; //当前第一个手指距离列表顶部的距离
+			var curX = e.touches ? e.touches[0].pageX : e.clientX; //当前第一个手指距离列表顶部的距离x
+			var curY = e.touches ? e.touches[0].pageY : e.clientY; //当前第一个手指距离列表顶部的距离y
 
-			if(!me.preY) me.preY = curY; //设置上次移动的距离
-			var diff = curY - me.preY; //和上次比,移动的距离 (大于0向下,小于0向上)
+			if(!me.preX) me.preX = curX; //设置上次移动的距离x
+			if(!me.preY) me.preY = curY; //设置上次移动的距离y
+			
+			//计算两点之间的角度
+			var x = Math.abs(me.preX - curX);
+	       	var y = Math.abs(me.preY - curY);
+	       	var z = Math.sqrt(x*x + y*y);
+	       	
+	       	var diff = curY - me.preY; //和上次比,移动的距离 (大于0向下,小于0向上)
+			me.preX = curX; //记录本次curX的值
 			me.preY = curY; //记录本次curY的值
+			
+	       	if(z!=0){
+	       		var angle=Math.asin(y / z) / Math.PI*180; //角度区间 [0,90]
+	       		if(angle < me.optDown.minAngle) return; //如果小于配置的角度,则不往下执行 -- 1.1.6版本加入的配置
+	       	}
 
 			if(!me.startY && !me.optDown.mustToTop) me.startY = curY; //记住列表滚动到0的位置时,手指距离顶部的距离,在touchend重置
 			var moveY = curY - me.startY; //和起点比,移动的距离,大于0向下拉
@@ -275,6 +290,7 @@ MeScroll.prototype.initDownScroll = function() {
 			me.isMoveDown = false;
 		}
 		me.startY = 0;
+		me.preX = 0;
 		me.preY = 0;
 		me.startTop = null;
 	}
