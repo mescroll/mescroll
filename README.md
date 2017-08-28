@@ -168,6 +168,11 @@ var mescroll = new MeScroll("mescroll", { down: {下拉刷新的配置参数}, u
 		<td>在列表顶部,下拉的距离大于offset时,改变下拉区域高度比例;值越接近0,高度变化越小,表现为越往下越难拉</td>
 	</tr>
 	<tr align="center">
+		<td>minAngle</td>
+		<td>45</td>
+		<td>触发下拉最少要偏移的角度(滑动的轨迹与水平线的锐角值),取值区间  [0,90];默认45度,即向下滑动的角度大于45度(方位角为45°~145°及225°~315°)则触发下拉;而小于45度,将不触发下拉,避免与左右滑动的轮播等组件冲突;<br/>注意:没有必要配置超出[0,90]区间的值,否则角度限制无效; 因为假设配置30, 生效的方位角就是30°到160° 和 210°到330°的范围;</td>
+	</tr>
+	<tr align="center">
 		<td>mustToTop</td>
 		<td>iOS默认值为false<br/>其他默认为true</td>
 		<td>是否必须滑动到顶部才能下拉;因为列表回弹效果(-webkit-overflow-scrolling:touch)是iOS专属样式,所以iOS默认false,其他默认为true</td>
