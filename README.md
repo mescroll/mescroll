@@ -403,7 +403,7 @@ var mescroll = new MeScroll("mescroll", { down: {下拉刷新的配置参数}, u
 		如果传了dataSize, 那么mescroll会自动判断: <br/>
 		列表若无任何数据,则提示空,显示empty配置的内容(需配置empty或clearEmptyId)<br/>
 		列表若无下一页数据,则提示无更多数据,显示htmlNodata配置的内容;<br/>
-		如果不传dataSize, 则仅隐藏下拉刷新和上拉加载的状态<br/>
+		如果不传dataSize, 则仅隐藏下拉刷新<br/>
 		systime : 加载第一页数据的服务器时间 (可空);<br/>
 		防止用户翻页时,后台新增了数据从而导致下一页数据重复;
 		</td>
