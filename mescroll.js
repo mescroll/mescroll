@@ -1,7 +1,7 @@
 /*
  * mescroll -- 精致的下拉刷新和上拉加载js框架  ( a great JS framework for pull-refresh and pull-up-loading )
- * version 1.1.6
- * 2017-08-27
+ * version 1.1.7
+ * 2017-08-31
  * https://github.com/mescroll/mescroll.git
  * http://www.mescroll.com
  * author: wenju < mescroll@qq.com > 文举
@@ -442,6 +442,7 @@ MeScroll.prototype.resetUpScroll = function(isShowLoading) {
 		page.time = null; //重置时间为空
 		if(!this.isDownScrolling&&isShowLoading!=false) {//如果不是下拉刷新触发的resetUpScroll并且不配置列表静默更新,则显示进度;
 			if(isShowLoading==null) {
+				this.removeEmpty(); //移除空布局
 				this.clearDataList();//先清空列表数据,才能显示到上拉加载的布局
 				this.showUpScroll(); //不传参,默认显示上拉加载的进度布局
 			} else {
@@ -476,28 +477,22 @@ MeScroll.prototype.endSuccess = function(dataSize, systime) {
 
 		if(pageNum == 1) this.clearDataList(); //如果是第一页,自动清空第一页列表数据
 
-		var isShowNoMore; //是否已无更多数据
+		var isShowNoMore=false; //是否已无更多数据
 		if(dataSize != null) {
 			if(dataSize < pageSize) {
 				//返回的数据不满一页时,则说明已无更多数据
 				this.optUp.isLock = true;
 				if(dataSize == 0 && pageNum == 1) {
 					//如果第一页无任何数据且配置了空布局
-					isShowNoMore = false;
 					this.showEmpty();
 				} else {
 					//总列表数少于配置的数量,则不显示无更多数据
 					var allDataSize = (pageNum - 1) * pageSize + dataSize;
-					if(allDataSize < this.optUp.noMoreSize) {
-						isShowNoMore = false;
-					} else {
-						isShowNoMore = true;
-					}
+					if(allDataSize >= this.optUp.noMoreSize) isShowNoMore = true;
 					this.removeEmpty(); //移除空布局
 				}
 			} else {
 				//还有下一页
-				isShowNoMore = false;
 				this.optUp.isLock = false;
 				this.removeEmpty(); //移除空布局
 			}
