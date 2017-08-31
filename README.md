@@ -96,7 +96,7 @@
 			//参数data.length:当前页的数据总数
 			//mescroll会根据data.length自动判断列表如果无任何数据,则提示空,显示empty配置的内容;
 			//列表如果无下一页数据,则提示无更多数据;
-			//如果不传data.length,则仅隐藏下拉刷新和上拉加载的状态.例如downCallback
+			//如果不传data.length,则仅隐藏下拉刷新
                 	mescroll.endSuccess(data.length);
 		        //设置列表数据
 		        //setListData(data);//自行实现 TODO
