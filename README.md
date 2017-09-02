@@ -115,6 +115,8 @@
 --- 基础案例一共5个, 每个案例3分钟, 一共花您15分钟; 这15分钟您将了解mescroll在不同情况下应如何快速配置 ~<br/>
 --- 磨刀不误砍柴工,心急吃不了热豆腐. 请静下心来体验与理解mescroll, 一定会让您事半功倍 ~<br/>
 --- 如使用中有疑问, 请先查看  <a href="http://www.mescroll.com/qa.html">常见问题专区</a> ~<br/>
+<br/>
+--- <a href="https://github.com/mescroll/mescroll-versions" target="_blank">这阵子还会持续更新版本, 点一下star, 及时查看最新动态哦</a> <br/>
 
 
 ## API文档 :   
