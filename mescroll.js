@@ -7,8 +7,7 @@
  * author: wenju < mescroll@qq.com > 文举
  */
 
-;(function (name, definition, setPrototype) {
-  setPrototype(definition)
+;(function (name, definition) {
   // 检测上下文环境是否为AMD或CMD
   var hasDefine = typeof define === 'function',
   // 检查上下文环境是否为Node
@@ -22,35 +21,37 @@
     module.exports = definition();
   } else {
     // 将模块的执行结果挂在window变量中，在浏览器中this指向window对象
-    this[name] = definition;
+    this[name] = definition();
   }
-})('MeScroll', function (mescrollId, options) {
-  this.scrollDom = document.getElementById(mescrollId); //MeScroll的滑动区域
-  this.options = options || {}; //配置
+})('MeScroll', function () {
+  function MeScroll(mescrollId, options) {
+    this.scrollDom = document.getElementById(mescrollId); //MeScroll的滑动区域
+    this.options = options || {}; //配置
 
-  this.isDownScrolling = false; //是否在执行下拉刷新的回调
-  this.isUpScrolling = false; //是否在执行上拉加载的回调
+    this.isDownScrolling = false; //是否在执行下拉刷新的回调
+    this.isUpScrolling = false; //是否在执行上拉加载的回调
 
-  //初始化下拉刷新
-  this.initDownScroll();
-  //初始化上拉加载,则初始化
-  this.initUpScroll();
+    //初始化下拉刷新
+    this.initDownScroll();
+    //初始化上拉加载,则初始化
+    this.initUpScroll();
 
-  //自动加载
-  var me = this;
-  setTimeout(function() { //待主线程执行完毕再执行,避免new MeScroll未初始化,在回调获取不到mescroll的实例
-    if(me.optDown.auto) { //默认true 以下拉刷新的方式自动加载第一页数据
-      if(me.optDown.autoShowLoading) {
-        me.triggerDownScroll(); //显示下拉进度,执行下拉回调
-      } else {
-        me.optDown.callback && me.optDown.callback(me); //不显示下拉进度,直接执行下拉回调
+    //自动加载
+    var me = this;
+    setTimeout(function() { //待主线程执行完毕再执行,避免new MeScroll未初始化,在回调获取不到mescroll的实例
+      if(me.optDown.auto) { //默认true 以下拉刷新的方式自动加载第一页数据
+        if(me.optDown.autoShowLoading) {
+          me.triggerDownScroll(); //显示下拉进度,执行下拉回调
+        } else {
+          me.optDown.callback && me.optDown.callback(me); //不显示下拉进度,直接执行下拉回调
+        }
       }
-    }
 
-    me.optUp.auto && me.triggerUpScroll(); //默认false
-  }, 30); //需让me.optDown.inited和me.optUp.inited先执行
-},function (MeScroll){
-    MeScroll.prototype.extendDownScroll = function(optDown) {
+      me.optUp.auto && me.triggerUpScroll(); //默认false
+    }, 30); //需让me.optDown.inited和me.optUp.inited先执行
+  }
+  /*配置参数:下拉刷新*/
+  MeScroll.prototype.extendDownScroll = function(optDown) {
     //是否为ios设备;
     var isIOS = !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
     //下拉刷新的配置
@@ -105,7 +106,6 @@
       }
     })
   }
-  /*配置参数:下拉刷新*/
 
   /*配置参数:上拉加载*/
   MeScroll.prototype.extendUpScroll = function(optUp) {
@@ -661,5 +661,7 @@
       }
     }, rate);
   }
+
+  return MeScroll
 });
 
