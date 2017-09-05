@@ -4,16 +4,15 @@
   "description": "1. 原生js, 支持vue, 不依赖jquery,zepto",
   "main": "mescroll.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/channg/mescroll.git"
+    "url": "git+https://github.com/mescroll/mescroll.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/channg/mescroll/issues"
+    "url": "https://github.com/mescroll/mescroll/issues"
   },
-  "homepage": "https://github.com/channg/mescroll#readme"
+  "homepage": "https://github.com/mescroll/mescroll#readme"
 }
