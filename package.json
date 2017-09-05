@@ -8,12 +8,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mescroll/mescroll.git"
+    "url": "git+https://github.com/channg/mescroll.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/mescroll/mescroll/issues"
+    "url": "https://github.com/channg/mescroll/issues"
   },
-  "homepage": "https://github.com/mescroll/mescroll#readme"
+  "homepage": "https://github.com/channg/mescroll#readme"
 }
