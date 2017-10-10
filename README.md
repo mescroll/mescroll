@@ -99,17 +99,27 @@ NPM 安装命令:
         function upCallback(page){
             $.ajax({
                 url: 'xxxxxx?num='+ page.num +"&size="+ page.size,
-                success: function(data){
-			//联网成功的回调,隐藏下拉刷新和上拉加载的状态;
-			//参数data.length:当前页的数据总数
-			//mescroll会根据data.length自动判断列表如果无任何数据,则提示空,显示empty配置的内容;
-			//列表如果无下一页数据,则提示无更多数据;
-			//如果不传data.length,则仅隐藏下拉刷新
-                	mescroll.endSuccess(data.length);
-		        //设置列表数据
-		        //setListData(data);//自行实现 TODO
+                success: function(curPageData){
+					//联网成功的回调,隐藏下拉刷新和上拉加载的状态;
+					//mescroll会根据传的参数,自动判断列表如果无任何数据,则提示空;列表无下一页数据,则提示无更多数据;
+					
+					//方法一(推荐): 后台接口有返回列表的总页数 totalPage
+					//mescroll.endByPage(curPageData.length, totalPage); //必传参数(当前页的数据个数, 总页数)
+					
+					//方法二(推荐): 后台接口有返回列表的总数据量 totalSize
+					//mescroll.endBySize(curPageData.length, totalSize); //必传参数(当前页的数据个数, 总数据量)
+					
+					//方法三(推荐): 您有其他方式知道是否有下一页 hasNext
+					//mescroll.endSuccess(curPageData.length, hasNext); //必传参数(当前页的数据个数, 是否有下一页true/false)
+					
+					//方法四 (不推荐),会存在一个小问题:比如列表共有20条数据,每页加载10条,共2页.
+					//如果只根据当前页的数据个数判断,则需翻到第三页才会知道无更多数据,如果传了hasNext,则翻到第二页即可显示无更多数据.
+					mescroll.endSuccess(curPageData.length);
+					
+			        //设置列表数据
+			        //setListData(curPageData);//自行实现 TODO
                 },
-                error: function(data){
+                error: function(){
                 	//联网失败的回调,隐藏下拉刷新和上拉加载的状态
 	                mescroll.endErr();
                 }
@@ -404,7 +414,7 @@ var mescroll = new MeScroll("mescroll", { down: {下拉刷新的配置参数}, u
 		<td>说明</td>
 	</tr>
 	<tr>
-		<td>mescroll.endSuccess( dataSize, systime );</td>
+		<td>mescroll.endSuccess( dataSize, hasNext, systime );</td>
 		<td>
 		隐藏下拉刷新和上拉加载的状态, 在联网获取数据成功后调用<br/>
 		dataSize : 当前页获取的数据总数<br/>
@@ -412,6 +422,7 @@ var mescroll = new MeScroll("mescroll", { down: {下拉刷新的配置参数}, u
 		列表若无任何数据,则提示空,显示empty配置的内容(需配置empty或clearEmptyId)<br/>
 		列表若无下一页数据,则提示无更多数据,显示htmlNodata配置的内容;<br/>
 		如果不传dataSize, 则仅隐藏下拉刷新<br/>
+		hasNext : 是否有下一页数据true/false<br/>
 		systime : 加载第一页数据的服务器时间 (可空);<br/>
 		防止用户翻页时,后台新增了数据从而导致下一页数据重复;
 		</td>
