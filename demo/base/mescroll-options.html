@@ -6,7 +6,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
 		<meta name="apple-mobile-web-app-capable" content="yes">
 
-		<link rel="stylesheet" href="../../dist/mescroll.css">
+		<link rel="stylesheet" href="../../dist/mescroll.min.css">
 		<style type="text/css">
 			* {
 				margin: 0;
@@ -121,7 +121,7 @@
 		</div>
 	</body>
 	
-	<script src="../../dist/mescroll.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../../dist/mescroll.min.js" type="text/javascript" charset="utf-8"></script>
 	<!--mescroll本身不依赖jq,这里为了模拟发送ajax请求-->
 	<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js" type="text/javascript" charset="utf-8"></script>
 	<script type="text/javascript" charset="utf-8">
@@ -147,10 +147,12 @@
 						mescroll.resetUpScroll();
 					},
 					offset: 60, //触发刷新的距离,默认80
-					outOffsetRate: 0.2, //超过指定距离范围外时,改变下拉区域高度比例;小于1,越往下拉高度变化越小;
-					minAngle: 45, //触发下拉最少要偏移的角度(滑动的轨迹与水平线的锐角值),取值区间  [0,90];默认45度,即向下滑动的角度大于45度(方位角为45°~145°及225°~315°)则触发下拉;而小于45度,将不触发下拉,避免与左右滑动的轮播等组件冲突;<br/>注意:没有必要配置超出[0,90]区间的值,否则角度限制无效; 因为假设配置60, 生效的方位角就是60°到120° 和 240°到300°的范围;
+					outOffsetRate: 0.2, //超过指定距离范围外时,改变下拉区域高度比例;值小于1且越接近0,越往下拉高度变化越小;
+					bottomOffset: 20, //当手指touchmove位置在距离body底部20px范围内的时候结束上拉刷新,避免Webview嵌套导致touchend事件不执行
+					minAngle: 45, //向下滑动最少偏移的角度,取值区间  [0,90];默认45度,即向下滑动的角度大于45度则触发下拉;而小于45度,将不触发下拉,避免与左右滑动的轮播等组件冲突;
 					mustToTop: !isIOS, //是否列表必须滑动到顶部才能下拉;因为列表回弹效果(-webkit-overflow-scrolling:touch)是iOS专属样式,所以iOS默认false,其他为true;
 					hardwareClass: "mescroll-hardware", //硬件加速样式;解决iOS下拉因隐藏进度条而闪屏的问题,参见mescroll.css
+					warpId: null, //可配置下拉刷新的布局添加到指定id的div;默认不配置,默认添加到mescrollId
 					warpClass: "mescroll-downwarp", //容器,装载布局内容,参见mescroll.css
 					resetClass: "mescroll-downwarp-reset", //高度重置的动画,参见mescroll.css
 					htmlContent: '<p class="downwarp-progress"></p><p class="downwarp-tip">下拉刷新 </p>', //布局内容
@@ -232,6 +234,7 @@
 					clearId: null, //加载第一页时需清空数据的列表id; 如果此项有值,将不使用clearEmptyId的值;
 					clearEmptyId: "dataList", //相当于同时设置了clearId和empty.warpId; 简化写法;
 					hardwareClass: "mescroll-hardware", //硬件加速样式,动画更流畅,参见mescroll.css
+					warpId: null, //可配置上拉加载的布局添加到指定id的div;默认不配置,默认添加到mescrollId
 					warpClass: "mescroll-upwarp", //容器,装载布局内容,参见mescroll.css
 					htmlLoading: '<p class="upwarp-progress mescroll-rotate"></p><p class="upwarp-tip">加载中..</p>', //上拉加载中的布局
 					htmlNodata: '<p class="upwarp-nodata">-- END --</p>', //无数据的布局
@@ -249,9 +252,9 @@
 						//无更多数据
 						upwarp.innerHTML = mescroll.optUp.htmlNodata;
 					},
-					onScroll: function(mescroll, y){ //列表滑动监听,默认onScroll: null;
+					onScroll: function(mescroll, y, isUp){ //列表滑动监听,默认onScroll: null;
 						//y为列表当前滚动条的位置
-						console.log("up --> onScroll 列表当前滚动的距离 y = " + y);
+						console.log("up --> onScroll 列表当前滚动的距离 y = " + y + ", 是否向上滑动 isUp = " + isUp);
 					},
 					scrollbar: {
 						use: isPC, //默认只在PC端自定义滚动条样式
@@ -277,13 +280,25 @@
 			/*联网加载列表数据  page = {num:1, size:10}; num:当前页 从1开始, size:每页数据条数 */
 			function getListData(page){
 				//联网加载数据
-				console.log("pdType="+pdType+", page.num="+page.num);
-				getListDataFromNet(pdType, page.num, page.size, function(data){
+				getListDataFromNet(pdType, page.num, page.size, function(curPageData){
 					//联网成功的回调,隐藏下拉刷新和上拉加载的状态;
-					console.log("data.length="+data.length);
-					mescroll.endSuccess(data.length);//传参:数据的总数; mescroll会自动判断列表如果无任何数据,则提示空;列表无下一页数据,则提示无更多数据;
+					//mescroll会根据传的参数,自动判断列表如果无任何数据,则提示空;列表无下一页数据,则提示无更多数据;
+					console.log("pdType="+pdType+", page.num="+page.num+", page.size="+page.size+", curPageData.length="+curPageData.length);
+					
+					//方法一(推荐): 后台接口有返回列表的总页数 totalPage
+					//mescroll.endByPage(curPageData.length, totalPage); //必传参数(当前页的数据个数, 总页数)
+					
+					//方法二(推荐): 后台接口有返回列表的总数据量 totalSize
+					//mescroll.endBySize(curPageData.length, totalSize); //必传参数(当前页的数据个数, 总数据量)
+					
+					//方法三(推荐): 您有其他方式知道是否有下一页 hasNext
+					//mescroll.endSuccess(curPageData.length, hasNext); //必传参数(当前页的数据个数, 是否有下一页true/false)
+					
+					//方法四 (不推荐),会存在一个小问题:比如列表共有20条数据,每页加载10条,共2页.如果只根据当前页的数据个数判断,则需翻到第三页才会知道无更多数据,如果传了hasNext,则翻到第二页即可显示无更多数据.
+					mescroll.endSuccess(curPageData.length);
+					
 					//设置列表数据
-					setListData(data);
+					setListData(curPageData);
 				}, function(){
 					//联网失败的回调,隐藏下拉刷新和上拉加载的状态;
 	                mescroll.endErr();
@@ -291,10 +306,10 @@
 			}
 			
 			/*设置列表数据*/
-			function setListData(data){
+			function setListData(curPageData){
 				var listDom=document.getElementById("dataList");
-				for (var i = 0; i < data.length; i++) {
-					var pd=data[i];
+				for (var i = 0; i < curPageData.length; i++) {
+					var pd=curPageData[i];
 					
 					var str='<img class="pd-img" src="'+pd.pdImg+'"/>';
 					str+='<p class="pd-name">'+pd.pdName+'</p>';

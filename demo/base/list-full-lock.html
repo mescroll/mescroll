@@ -6,7 +6,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
 		<meta name="apple-mobile-web-app-capable" content="yes">
 
-		<link rel="stylesheet" href="../../mescroll.css">
+		<link rel="stylesheet" href="../../dist/mescroll.min.css">
 		<style type="text/css">
 			* {
 				margin: 0;
@@ -113,10 +113,9 @@
 		</div>
 	</body>
 	
-	<script src="../../mescroll.js" type="text/javascript" charset="utf-8"></script>
-	<!--mescroll本身不依赖jq,这里为了模拟发送ajax请求,获取模拟数据-->
+	<script src="../../dist/mescroll.min.js" type="text/javascript" charset="utf-8"></script>
+	<!--mescroll本身不依赖jq,这里为了模拟发送ajax请求-->
 	<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js" type="text/javascript" charset="utf-8"></script>
-	<script src="../res/pdlist1.js" type="text/javascript" charset="utf-8"></script>
 	<script type="text/javascript" charset="utf-8">
 		$(function(){
 			//创建MeScroll对象,内部已默认开启下拉刷新,自动执行up.callback,重置列表数据;
@@ -135,12 +134,25 @@
 			/*联网加载列表数据  page = {num:1, size:10}; num:当前页 从1开始, size:每页数据条数 */
 			function getListData(page){
 				//联网加载数据
-				console.log("page.num=="+page.num);
-				getListDataFromNet(page.num, page.size, function(data){
+				getListDataFromNet(page.num, page.size, function(curPageData){
 					//联网成功的回调,隐藏下拉刷新和上拉加载的状态;
-					mescroll.endSuccess(data.length);//传参:数据的总数; mescroll会自动判断列表如果无任何数据,则提示空;列表无下一页数据,则提示无更多数据;
+					//mescroll会根据传的参数,自动判断列表如果无任何数据,则提示空;列表无下一页数据,则提示无更多数据;
+					console.log("page.num="+page.num+", page.size="+page.size+", curPageData.length="+curPageData.length);
+					
+					//方法一(推荐): 后台接口有返回列表的总页数 totalPage
+					//mescroll.endByPage(curPageData.length, totalPage); //必传参数(当前页的数据个数, 总页数)
+					
+					//方法二(推荐): 后台接口有返回列表的总数据量 totalSize
+					//mescroll.endBySize(curPageData.length, totalSize); //必传参数(当前页的数据个数, 总数据量)
+					
+					//方法三(推荐): 您有其他方式知道是否有下一页 hasNext
+					//mescroll.endSuccess(curPageData.length, hasNext); //必传参数(当前页的数据个数, 是否有下一页true/false)
+					
+					//方法四 (不推荐),会存在一个小问题:比如列表共有20条数据,每页加载10条,共2页.如果只根据当前页的数据个数判断,则需翻到第三页才会知道无更多数据,如果传了hasNext,则翻到第二页即可显示无更多数据.
+					mescroll.endSuccess(curPageData.length);
+					
 					//设置列表数据,因为配置了emptyClearId,第一页会清空dataList的数据,所以setListData应该写在最后;
-					setListData(data);
+					setListData(curPageData);
 				}, function(){
 					//联网失败的回调,隐藏下拉刷新和上拉加载的状态;
 	                mescroll.endErr();
@@ -148,10 +160,10 @@
 			}
 			
 			/*设置列表数据*/
-			function setListData(data){
+			function setListData(curPageData){
 				var listDom=document.getElementById("dataList");
-				for (var i = 0; i < data.length; i++) {
-					var pd=data[i];
+				for (var i = 0; i < curPageData.length; i++) {
+					var pd=curPageData[i];
 					
 					var str='<img class="pd-img" src="'+pd.pdImg+'"/>';
 					str+='<p class="pd-name">'+pd.pdName+'</p>';
@@ -195,13 +207,12 @@
 			function getListDataFromNet(pageNum,pageSize,successCallback,errorCallback) {
 				//延时一秒,模拟联网
                 setTimeout(function () {
-//              	$.ajax({
-//		                type: 'GET',
-//		                url: 'xxx',
-//		                url: 'xxx?num='+pageNum+"&size="+pageSize,
-//		                dataType: 'json',
-//		                success: function(data){
-							var data=pdlist1; // 模拟数据: ../res/pdlist1.js
+                	$.ajax({
+		                type: 'GET',
+		                url: '../res/pdlist1.json',
+//		                url: '../res/pdlist1.json?num='+pageNum+"&size="+pageSize,
+		                dataType: 'json',
+		                success: function(data){
 		                	//模拟分页数据
 		                	var listData=[];
 							for (var i = (pageNum-1)*pageSize; i < pageNum*pageSize; i++) {
@@ -209,9 +220,9 @@
 			            		listData.push(data[i]);
 			            	}
 		                	successCallback(listData);
-//		                },
-//		                error: errorCallback
-//		            });
+		                },
+		                error: errorCallback
+		            });
                 },500)
 			}
 			

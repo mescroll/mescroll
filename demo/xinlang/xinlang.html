@@ -8,7 +8,7 @@
 		
 		<!--在您实际的项目中,请留意mescroll-option.css的图片路径是否引用正确,可写成绝对路径或网络地址-->
 		<!--可把mescroll-option.css代码拷贝到mescroll.min.css中,合为一个css文件,方便引用-->
-		<link rel="stylesheet" href="../../mescroll.css">
+		<link rel="stylesheet" href="../../dist/mescroll.min.css">
 		<link rel="stylesheet" href="option/mescroll-option.css">
 		<style type="text/css">
 			* {
@@ -122,7 +122,7 @@
 	
 	<!--在您实际的项目中,请留意mescroll-option.js的图片路径是否引用正确,可写成绝对路径或网络地址-->
 	<!--可把mescroll-option.js代码拷贝到mescroll.min.js中,合为一个js文件,方便引用-->
-	<script src="../../mescroll.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../../dist/mescroll.min.js" type="text/javascript" charset="utf-8"></script>
 	<script src="option/mescroll-option.js" type="text/javascript" charset="utf-8"></script>
 	<!--mescroll本身不依赖jq,这里为了模拟发送ajax请求-->
 	<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js" type="text/javascript" charset="utf-8"></script>
@@ -165,12 +165,25 @@
 			/*上拉加载的回调 page = {num:1, size:10}; num:当前页 从1开始, size:每页数据条数 */
 			function upCallback(page){
 				//联网加载数据
-				console.log("page.num="+page.num);
-				getListDataFromNet(page.num, page.size, function(data){
-					//联网成功的回调,隐藏上拉加载的状态
-					mescroll.endSuccess(data.length);//传参:数据的总数; mescroll会自动判断列表如果无任何数据,则提示空;列表无下一页数据,则提示无更多数据;
+				getListDataFromNet(page.num, page.size, function(curPageData){
+					//联网成功的回调,隐藏下拉刷新和上拉加载的状态;
+					//mescroll会根据传的参数,自动判断列表如果无任何数据,则提示空;列表无下一页数据,则提示无更多数据;
+					console.log("page.num="+page.num+", page.size="+page.size+", curPageData.length="+curPageData.length);
+					
+					//方法一(推荐): 后台接口有返回列表的总页数 totalPage
+					//mescroll.endByPage(curPageData.length, totalPage); //必传参数(当前页的数据个数, 总页数)
+					
+					//方法二(推荐): 后台接口有返回列表的总数据量 totalSize
+					//mescroll.endBySize(curPageData.length, totalSize); //必传参数(当前页的数据个数, 总数据量)
+					
+					//方法三(推荐): 您有其他方式知道是否有下一页 hasNext
+					//mescroll.endSuccess(curPageData.length, hasNext); //必传参数(当前页的数据个数, 是否有下一页true/false)
+					
+					//方法四 (不推荐),会存在一个小问题:比如列表共有20条数据,每页加载10条,共2页.如果只根据当前页的数据个数判断,则需翻到第三页才会知道无更多数据,如果传了hasNext,则翻到第二页即可显示无更多数据.
+					mescroll.endSuccess(curPageData.length);
+					
 					//设置列表数据
-					setListData(data, true);
+					setListData(curPageData, true);
 				}, function(){
 					//联网失败的回调,隐藏上拉加载的状态
 	                mescroll.endErr();
@@ -178,10 +191,10 @@
 			}
 			
 			/*设置列表数据*/
-			function setListData(data, isAppend) {
+			function setListData(curPageData, isAppend) {
 				var listDom=document.getElementById("newsList");
-				for (var i = 0; i < data.length; i++) {
-					var newObj=data[i];
+				for (var i = 0; i < curPageData.length; i++) {
+					var newObj=curPageData[i];
 					
 					var str='<p>'+newObj.title+'</p>';
 					str+='<p class="new-content">'+newObj.content+'</p>';

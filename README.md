@@ -42,6 +42,14 @@
 
 6. 可临时锁定下拉刷新和上拉加载  
 
+## NPM
+#### 特别感谢 @<a href="https://github.com/channg">channg</a> 帮忙整理发布NPM
+<a href="https://www.npmjs.com/package/mescroll.js">https://www.npmjs.com/package/mescroll.js</a>
+NPM 安装命令:
+```
+    npm install mescroll.js
+```  
+
 ## 快速入门 :
 
 #### 1. 引用 **mescroll.min.css** , **mescroll.min.js**
