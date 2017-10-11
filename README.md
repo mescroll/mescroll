@@ -7,9 +7,7 @@
 
 3. 参数自由搭配, 随心定制, 轻松拓展
 
-4. 超详细注释,读懂源码 so easy
-
-5. 主流APP案例, 丰富经典
+4. 主流APP案例, 丰富经典
 
 ## 目录:  
 
@@ -100,24 +98,24 @@ NPM 安装命令:
             $.ajax({
                 url: 'xxxxxx?num='+ page.num +"&size="+ page.size,
                 success: function(curPageData){
-					//联网成功的回调,隐藏下拉刷新和上拉加载的状态;
-					//mescroll会根据传的参数,自动判断列表如果无任何数据,则提示空;列表无下一页数据,则提示无更多数据;
+			//联网成功的回调,隐藏下拉刷新和上拉加载的状态;
+			//mescroll会根据传的参数,自动判断列表如果无任何数据,则提示空;列表无下一页数据,则提示无更多数据;
 					
-					//方法一(推荐): 后台接口有返回列表的总页数 totalPage
-					//mescroll.endByPage(curPageData.length, totalPage); //必传参数(当前页的数据个数, 总页数)
+			//方法一(推荐): 后台接口有返回列表的总页数 totalPage
+			//mescroll.endByPage(curPageData.length, totalPage); //必传参数(当前页的数据个数, 总页数)
 					
-					//方法二(推荐): 后台接口有返回列表的总数据量 totalSize
-					//mescroll.endBySize(curPageData.length, totalSize); //必传参数(当前页的数据个数, 总数据量)
+			//方法二(推荐): 后台接口有返回列表的总数据量 totalSize
+			//mescroll.endBySize(curPageData.length, totalSize); //必传参数(当前页的数据个数, 总数据量)
 					
-					//方法三(推荐): 您有其他方式知道是否有下一页 hasNext
-					//mescroll.endSuccess(curPageData.length, hasNext); //必传参数(当前页的数据个数, 是否有下一页true/false)
+			//方法三(推荐): 您有其他方式知道是否有下一页 hasNext
+			//mescroll.endSuccess(curPageData.length, hasNext); //必传参数(当前页的数据个数, 是否有下一页true/false)
 					
-					//方法四 (不推荐),会存在一个小问题:比如列表共有20条数据,每页加载10条,共2页.
-					//如果只根据当前页的数据个数判断,则需翻到第三页才会知道无更多数据,如果传了hasNext,则翻到第二页即可显示无更多数据.
-					mescroll.endSuccess(curPageData.length);
+			//方法四 (不推荐),会存在一个小问题:比如列表共有20条数据,每页加载10条,共2页.
+			//如果只根据当前页的数据个数判断,则需翻到第三页才会知道无更多数据,如果传了hasNext,则翻到第二页即可显示无更多数据.
+			mescroll.endSuccess(curPageData.length);
 					
-			        //设置列表数据
-			        //setListData(curPageData);//自行实现 TODO
+			//设置列表数据
+			//setListData(curPageData);//自行实现 TODO
                 },
                 error: function(){
                 	//联网失败的回调,隐藏下拉刷新和上拉加载的状态
@@ -130,7 +128,7 @@ NPM 安装命令:
 --- mescroll在vue中的使用案例---------- <a href="http://www.mescroll.com/preview.html?name=list-products-vue">点此在线体验 </a> ---------- [点此查看源码](https://github.com/mescroll/mescroll/blob/master/demo/base/list-products-vue.html) ---------- <br/>
 
 --- 以上为mescroll最基本的用法,强烈建议您下载并查看 <a href="#基础案例-base-demos-">mescroll基础案例</a> , 发现mescroll更强大的功能 ~<br/>
---- 基础案例一共5个, 每个案例3分钟, 一共花您15分钟; 这15分钟您将了解mescroll在不同情况下应如何快速配置 ~<br/>
+--- 基础案例一共6个, 每个案例3分钟, 一共花您18分钟; 这18分钟您将了解mescroll在不同情况下应如何快速配置 ~<br/>
 --- 磨刀不误砍柴工,心急吃不了热豆腐. 请静下心来体验与理解mescroll, 一定会让您事半功倍 ~<br/>
 --- 如使用中有疑问, 请先查看  <a href="http://www.mescroll.com/qa.html">常见问题专区</a> ~<br/>
 
@@ -184,6 +182,11 @@ var mescroll = new MeScroll("mescroll", { down: {下拉刷新的配置参数}, u
 		<td>outOffsetRate</td>
 		<td>0.2</td>
 		<td>在列表顶部,下拉的距离大于offset时,改变下拉区域高度比例;值越接近0,高度变化越小,表现为越往下越难拉</td>
+	</tr>
+	<tr align="center">
+		<td>bottomOffset</td>
+		<td>20</td>
+		<td>当手指touchmove位置在距离body底部20px范围内的时候结束上拉刷新,避免Webview嵌套导致touchend事件不执行</td>
 	</tr>
 	<tr align="center">
 		<td>minAngle</td>
@@ -386,7 +389,7 @@ var mescroll = new MeScroll("mescroll", { down: {下拉刷新的配置参数}, u
 	<tr align="center">
 		<td>onScroll</td>
 		<td>null</td>
-		<td>列表滑动监听, 默认null<br/>例 onScroll : function(mescroll, y){ ... };  y为列表当前滚动条的位置)</td>
+		<td>列表滑动监听, 默认null<br/>例 onScroll : function(mescroll, y, isUp){ ... };  y为列表当前滚动条的位置;isUp=true向上滑,isUp=false向下滑)</td>
 	</tr>
 	<tr align="center">
 		<td>callback</td>
@@ -469,7 +472,7 @@ var mescroll = new MeScroll("mescroll", { down: {下拉刷新的配置参数}, u
 #### <a href="http://www.mescroll.com/api.html#others" target="_blank">前往官网查看 >> </a>  
 
 <table border="1" cellspacing="0">
-	<tr align="center"><td colspan="2">如果您已通读并理解 mescroll源码, 以下方法可灵活运用于更复杂的场景<br/>知其然, 知其所以然, 源码注释超详细, 读懂源码so easy~</tr>
+	<tr align="center"><td colspan="2">以下方法不常用,您可灵活运用于更复杂的场景</tr>
 	<tr align="center">
 		<td width="288px">mescroll.showDownScroll();</td>
 		<td width="600px">显示下拉刷新的进度布局<br/>
@@ -605,8 +608,8 @@ var mescroll = new MeScroll("mescroll", { down: {下拉刷新的配置参数}, u
 
 <table border="1" cellspacing="0" width="100%">
 	<tr align="center" height="80px">
-		<td>mescroll.css , mescroll.min.css</td>
-		<td>mescroll.js , mescroll.min.js</td>
+		<td>mescroll.min.css</td>
+		<td>mescroll.min.js</td>
 		<td>mescroll所有基础案例源码</td>
 		<td>mescroll所有中级案例源码</td>
 	</tr>
