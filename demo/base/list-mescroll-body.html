@@ -19,7 +19,7 @@
 			ul{list-style-type: none}
 			a {text-decoration: none;color: #18B4FE;}
 			
-			/*body为滚动区域,因为本演示案例有标题,则需padding-top显示出下拉区域,而此时滚动条会穿过标题,所以body为滚动区域适用于没有标题的界面*/
+			/*body为滚动区域,本案例特意演示有标题的界面,需padding-top显示出下拉区域,此时滚动条会穿过标题,从而说明body为滚动区域适用于没有标题的界面*/
 			body{padding-top: 84px;box-sizing: border-box;-webkit-box-sizing: border-box;}
 			
 			/*模拟的标题*/
@@ -143,7 +143,11 @@
 							alert("点击了按钮,具体逻辑自行实现");
 						} 
 					},
-					clearEmptyId: "dataList" //相当于同时设置了clearId和empty.warpId; 简化写法;默认null
+					clearEmptyId: "dataList", //相当于同时设置了clearId和empty.warpId; 简化写法;默认null
+					toTop:{ //配置回到顶部按钮
+						src : "../res/img/mescroll-totop.png", //默认滚动到1000px显示,可配置offset修改
+						//offset : 1000
+					}
 				}
 			});
 			

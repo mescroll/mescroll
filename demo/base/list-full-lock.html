@@ -128,6 +128,10 @@
 					},
 					clearEmptyId: "dataList", //1.下拉刷新时会自动先清空此列表,再加入数据; 2.无任何数据时会在此列表自动提示空
 					callback: getListData, //上拉回调,此处可简写; 相当于 callback: function (page) { getListData(page); }
+					toTop:{ //配置回到顶部按钮
+						src : "../res/img/mescroll-totop.png", //默认滚动到1000px显示,可配置offset修改
+						//offset : 1000
+					}
 				}
 			});
 			
