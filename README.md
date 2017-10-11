@@ -74,7 +74,7 @@ NPM 安装命令:
 ```  
 ###### 温馨提示:
 ###### 如果您的下拉刷新是重置列表数据,那么down完全可以不用配置,具体用法参考<a class="blue" href="http://www.mescroll.com/demo.html">第一个基础案例</a>
-###### 解析: down内部默认调用的是mescroll.resetUpScroll(),而resetUpScroll会将page.num=1,再触发up.callback,从而实现刷新列表第一页数据
+###### 解析: down内部默认调用的是mescroll.resetUpScroll(),而resetUpScroll会将page.num=1,再触发up.callback,从而实现刷新列表数据
 
 #### 4. 处理回调:
 ```
@@ -104,16 +104,20 @@ NPM 安装命令:
 			//mescroll会根据传的参数,自动判断列表如果无任何数据,则提示空;列表无下一页数据,则提示无更多数据;
 					
 			//方法一(推荐): 后台接口有返回列表的总页数 totalPage
-			//mescroll.endByPage(curPageData.length, totalPage); //必传参数(当前页的数据个数, 总页数)
+			//必传参数(当前页的数据个数, 总页数)
+			//mescroll.endByPage(curPageData.length, totalPage);
 					
 			//方法二(推荐): 后台接口有返回列表的总数据量 totalSize
-			//mescroll.endBySize(curPageData.length, totalSize); //必传参数(当前页的数据个数, 总数据量)
+			//必传参数(当前页的数据个数, 总数据量)
+			//mescroll.endBySize(curPageData.length, totalSize);
 					
 			//方法三(推荐): 您有其他方式知道是否有下一页 hasNext
-			//mescroll.endSuccess(curPageData.length, hasNext); //必传参数(当前页的数据个数, 是否有下一页true/false)
+			//必传参数(当前页的数据个数, 是否有下一页true/false)
+			//mescroll.endSuccess(curPageData.length, hasNext);
 					
 			//方法四 (不推荐),会存在一个小问题:比如列表共有20条数据,每页加载10条,共2页.
-			//如果只根据当前页的数据个数判断,则需翻到第三页才会知道无更多数据,如果传了hasNext,则翻到第二页即可显示无更多数据.
+			//如果只根据当前页的数据个数判断,则需翻到第三页才会知道无更多数据
+			//如果传了hasNext,则翻到第二页即可显示无更多数据.
 			//mescroll.endSuccess(curPageData.length);
 					
 			//设置列表数据
@@ -127,7 +131,7 @@ NPM 安装命令:
         }
 ```  
 
---- <a href="https://github.com/mescroll/mescroll-versions" target="_blank">upCallback推荐的三个方法mescroll.endByPage(), mescroll.endBySize(), mescroll.endSuccess()是mescroll 1.2.1新增的, 请检查更新</a> ~<br/>
+--- <a href="https://github.com/mescroll/mescroll-versions" target="_blank">upCallback推荐的三个方法mescroll.endByPage(), mescroll.endBySize(), mescroll.endSuccess()是mescroll 1.2.1新增的, 请检查更新~ 1.2.1还更新了许多内容哦,点此查看~ 请保持star,这阵子都会有新功能加入~</a><br/>
 
 --- mescroll在vue中的使用案例---------- <a href="http://www.mescroll.com/preview.html?name=list-products-vue">点此在线体验 </a> ---------- [点此查看源码](https://github.com/mescroll/mescroll/blob/master/demo/base/list-products-vue.html) ---------- <br/>
 
