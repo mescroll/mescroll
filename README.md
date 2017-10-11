@@ -425,18 +425,28 @@ var mescroll = new MeScroll("mescroll", { down: {下拉刷新的配置参数}, u
 		<td>方法名</td>
 		<td>说明</td>
 	</tr>
-	<tr>
-		<td>mescroll.endSuccess( dataSize, hasNext, systime );</td>
-		<td>
-		隐藏下拉刷新和上拉加载的状态, 在联网获取数据成功后调用<br/>
-		dataSize : 当前页获取的数据总数<br/>
-		如果传了dataSize, 那么mescroll会自动判断: <br/>
-		列表若无任何数据,则提示空,显示empty配置的内容(需配置empty或clearEmptyId)<br/>
-		列表若无下一页数据,则提示无更多数据,显示htmlNodata配置的内容;<br/>
-		如果不传dataSize, 则仅隐藏下拉刷新<br/>
+	<tr align="center">
+		<td align="left">mescroll.endByPage(dataSize, totalPage, systime);</td>
+		<td align="left">隐藏下拉刷新和上拉加载的状态, 在联网获取数据成功后调用<br />
+		dataSize : 当前页获取的数据总数(注意是当前页)<br />
+		totalPage : 列表的总页数<br/>
+		systime : 加载第一页数据的服务器时间 (可空);
+		</td>
+	</tr>
+	<tr align="center">
+		<td align="left">mescroll.endBySize(dataSize, totalSize, systime);</td>
+		<td align="left">隐藏下拉刷新和上拉加载的状态, 在联网获取数据成功后调用<br />
+		dataSize : 当前页获取的数据总数(注意是当前页)<br />
+		totalSize : 列表的总数据量<br/>
+		systime : 加载第一页数据的服务器时间 (可空);
+		</td>
+	</tr>
+	<tr align="center">
+		<td align="left">mescroll.endSuccess(dataSize, hasNext, systime);</td>
+		<td align="left">隐藏下拉刷新和上拉加载的状态, 在联网获取数据成功后调用<br />
+		dataSize : 当前页获取的数据量(注意是当前页)<br />
 		hasNext : 是否有下一页数据true/false<br/>
-		systime : 加载第一页数据的服务器时间 (可空);<br/>
-		防止用户翻页时,后台新增了数据从而导致下一页数据重复;
+		systime : 加载第一页数据的服务器时间 (可空);
 		</td>
 	</tr>
 	<tr align="center">
@@ -456,8 +466,8 @@ var mescroll = new MeScroll("mescroll", { down: {下拉刷新的配置参数}, u
 		<td>主动触发上拉加载</td>
 	</tr>
 	<tr align="center">
-		<td>mescroll.scrollTo( y );</td>
-		<td>滚动列表到指定位置 ( y=0回到列表顶部; 如需滚动到列表底部,可设置y很大的值,比如y=99999 )</td>
+		<td>mescroll.scrollTo( y, t );</td>
+		<td>滚动列表到指定位置 ( y=0回到列表顶部; 如需滚动到列表底部,可设置y很大的值,比如y=99999 ); t时长,单位ms,默认300</td>
 	</tr>
 	<tr align="center">
 		<td>mescroll.optDown;</td>
