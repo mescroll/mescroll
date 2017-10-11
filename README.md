@@ -9,6 +9,8 @@
 
 4. 主流APP案例, 丰富经典
 
+5. 免费商用
+
 ## 目录:  
 
 * <a href="#功能亮点-">功能亮点 </a> <br/>
@@ -112,7 +114,7 @@ NPM 安装命令:
 					
 			//方法四 (不推荐),会存在一个小问题:比如列表共有20条数据,每页加载10条,共2页.
 			//如果只根据当前页的数据个数判断,则需翻到第三页才会知道无更多数据,如果传了hasNext,则翻到第二页即可显示无更多数据.
-			mescroll.endSuccess(curPageData.length);
+			//mescroll.endSuccess(curPageData.length);
 					
 			//设置列表数据
 			//setListData(curPageData);//自行实现 TODO
@@ -125,12 +127,15 @@ NPM 安装命令:
         }
 ```  
 
+--- <a href="https://github.com/mescroll/mescroll-versions" target="_blank">upCallback推荐的三个方法mescroll.endByPage(), mescroll.endBySize(), mescroll.endSuccess()是mescroll 1.2.1新增的, 请检查更新</a> ~<br/>
+
 --- mescroll在vue中的使用案例---------- <a href="http://www.mescroll.com/preview.html?name=list-products-vue">点此在线体验 </a> ---------- [点此查看源码](https://github.com/mescroll/mescroll/blob/master/demo/base/list-products-vue.html) ---------- <br/>
 
 --- 以上为mescroll最基本的用法,强烈建议您下载并查看 <a href="#基础案例-base-demos-">mescroll基础案例</a> , 发现mescroll更强大的功能 ~<br/>
 --- 基础案例一共6个, 每个案例3分钟, 一共花您18分钟; 这18分钟您将了解mescroll在不同情况下应如何快速配置 ~<br/>
 --- 磨刀不误砍柴工,心急吃不了热豆腐. 请静下心来体验与理解mescroll, 一定会让您事半功倍 ~<br/>
---- 如使用中有疑问, 请先查看  <a href="http://www.mescroll.com/qa.html">常见问题专区</a> ~<br/>
+--- 如使用中有疑问, 请先查看  <a href="http://www.mescroll.com/qa.html">常见问题专区</a> ~<br/><br/>
+
 
 
 ## API文档 :   
@@ -161,7 +166,7 @@ var mescroll = new MeScroll("mescroll", { down: {下拉刷新的配置参数}, u
 	<tr align="center">
 		<td>autoShowLoading</td>
 		<td>false</td>
-		<td>如果设置auto=true(在初始化完毕之后自动执行下拉刷新的回调),那么是否显示下拉刷新的进度</td>
+		<td>当设置auto=true时(在初始化完毕之后自动执行下拉刷新的回调)<br/>是否显示下拉刷新的进度</td>
 	</tr>
 	<tr align="center">
 		<td>isLock</td>
@@ -186,7 +191,7 @@ var mescroll = new MeScroll("mescroll", { down: {下拉刷新的配置参数}, u
 	<tr align="center">
 		<td>bottomOffset</td>
 		<td>20</td>
-		<td>当手指touchmove位置在距离body底部20px范围内的时候结束上拉刷新,避免Webview嵌套导致touchend事件不执行</td>
+		<td>当手指touchmove位置在距离body底部20px范围内的时候结束上拉刷新,避免Webview嵌套导致touchend事件不执行<br/>这是1.2.1版本新增的配置,请检查最新版~</td>
 	</tr>
 	<tr align="center">
 		<td>minAngle</td>
@@ -389,7 +394,7 @@ var mescroll = new MeScroll("mescroll", { down: {下拉刷新的配置参数}, u
 	<tr align="center">
 		<td>onScroll</td>
 		<td>null</td>
-		<td>列表滑动监听, 默认null<br/>例 onScroll : function(mescroll, y, isUp){ ... };  y为列表当前滚动条的位置;isUp=true向上滑,isUp=false向下滑)</td>
+		<td>列表滑动监听, 默认null<br/>例 onScroll : function(mescroll, y, isUp){ ... };<br/>y为列表当前滚动条的位置;<br/>isUp=true向上滑,isUp=false向下滑)<br/>isUp是1.2.1版本新增的配置,请检查最新版~</td>
 	</tr>
 	<tr align="center">
 		<td>callback</td>
@@ -436,7 +441,7 @@ var mescroll = new MeScroll("mescroll", { down: {下拉刷新的配置参数}, u
 	</tr>
 	<tr align="center">
 		<td>mescroll.resetUpScroll( isShowLoading );</td>
-		<td>重置列表为第一页 (常用于列表筛选条件变化或切换菜单时重新刷新列表数据)<br />内部实现: 把page.num=1,再主动触发up.callback <a href="code.html#tagResetUpScroll">参见源码</a><br />isShowLoading 是否显示进度布局; <br />1.默认null,不传参,则显示上拉加载的进度布局 <br />2.传参true, 则显示下拉刷新的进度布局<br />3.传参false,则不显示上拉和下拉的进度 (常用于静默更新列表数据)</td>
+		<td>重置列表为第一页 (常用于列表筛选条件变化或切换菜单时重新刷新列表数据)<br />内部实现: 把page.num=1,再主动触发up.callback<br />isShowLoading 是否显示进度布局; <br />1.默认null,不传参,则显示上拉加载的进度布局 <br />2.传参true, 则显示下拉刷新的进度布局<br />3.传参false,则不显示上拉和下拉的进度 (常用于静默更新列表数据)</td>
 	</tr>
 	<tr align="center">
 		<td>mescroll.triggerDownScroll();</td>
