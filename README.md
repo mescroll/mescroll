@@ -134,6 +134,7 @@ NPM 安装命令:
 --- <a href="https://github.com/mescroll/mescroll-versions" target="_blank">upCallback推荐的三个方法mescroll.endByPage(), mescroll.endBySize(), mescroll.endSuccess()是mescroll 1.2.1新增的, 请检查更新~ 1.2.1还更新了许多内容哦,点此查看~ 请保持star,这阵子都会有新功能加入~</a><br/>
 
 --- mescroll在vue中的使用案例---------- <a href="http://www.mescroll.com/preview.html?name=list-products-vue">点此在线体验 </a> ---------- [点此查看源码](https://github.com/mescroll/mescroll/blob/master/demo/base/list-products-vue.html) ---------- <br/>
+--- body为滚动区域的使用案例---------- <a href="http://www.mescroll.com/preview.html?name=list-mescroll-body">点此在线体验 </a> ---------- [点此查看源码](https://github.com/mescroll/mescroll/blob/master/demo/base/list-mescroll-body.html) ---------- <br/>
 
 --- 以上为mescroll最基本的用法,强烈建议您下载并查看 <a href="#基础案例-base-demos-">mescroll基础案例</a> , 发现mescroll更强大的功能 ~<br/>
 --- 基础案例一共6个, 每个案例3分钟, 一共花您18分钟; 这18分钟您将了解mescroll在不同情况下应如何快速配置 ~<br/>
@@ -546,6 +547,26 @@ var mescroll = new MeScroll("mescroll", { down: {下拉刷新的配置参数}, u
 		<td>mescroll.hideTopBtn();</td>
 		<td>隐藏回到顶部的按钮</td>
 	</tr>
+	<tr align="center">
+		<td>mescroll.getScrollTop();</td>
+		<td>获取滚动条的位置y; 也可以在up配置onScroll监听滚动条的位置</td>
+	</tr>
+	<tr align="center">
+		<td>mescroll.getBodyHeight();</td>
+		<td>获取body的高度 </td>
+	</tr>
+	<tr align="center">
+		<td>mescroll.getClientHeight();</td>
+		<td>获取滚动容器的高度 </td>
+	</tr>
+	<tr align="center">
+		<td>mescroll.getScrollHeight();</td>
+		<td>获取滚动内容的高度 </td>
+	</tr>
+	<tr align="center">
+		<td>mescroll.destroy();</td>
+		<td>销毁mescroll</td>
+	</tr>
 </table>
 
 ## 基础案例 base demos :  
@@ -553,32 +574,32 @@ var mescroll = new MeScroll("mescroll", { down: {下拉刷新的配置参数}, u
 
 #### 1. 【商品列表】演示下拉刷新重置列表数据
 #### ---------- <a href="http://www.mescroll.com/preview.html?name=list-products" target="_blank">在线体验 </a> ---------- [查看源码](https://github.com/mescroll/mescroll/blob/master/demo/base/list-products.html) ---------- 
-![](https://github.com/mescroll/mescroll/raw/master/demo/base/list-products.gif) 
+![](http://oux5x2xxe.bkt.clouddn.com/1508205320970list-products.gif) 
 <br/><br/>  
 
 #### 2. 【新闻列表】演示下拉刷新添加新数据到列表顶部
 #### ---------- <a href="http://www.mescroll.com/preview.html?name=list-news" target="_blank">在线体验 </a> ---------- [查看源码](https://github.com/mescroll/mescroll/blob/master/demo/base/list-news.html) ---------- 
-![](https://github.com/mescroll/mescroll/raw/master/demo/base/list-news.gif) 
+![](http://oux5x2xxe.bkt.clouddn.com/1508205314004list-news.gif) 
 <br/><br/>  
 
 #### 3. 【单mescroll】演示每次切换菜单都重置列表,不缓存数据
 #### ---------- <a href="http://www.mescroll.com/preview.html?name=list-mescroll-one" target="_blank">在线体验 </a> ---------- [查看源码](https://github.com/mescroll/mescroll/blob/master/demo/base/list-mescroll-one.html) ---------- 
-![](https://github.com/mescroll/mescroll/raw/master/demo/base/list-mescroll-one.gif) 
+![](http://oux5x2xxe.bkt.clouddn.com/1508205310491list-mescroll-one.gif) 
 <br/><br/>  
 
 #### 4. 【多mescroll】演示每个菜单列表仅初始化一次,切换菜单缓存数据
 #### ---------- <a href="http://www.mescroll.com/preview.html?name=list-mescroll-more" target="_blank">在线体验 </a> ---------- [查看源码](https://github.com/mescroll/mescroll/blob/master/demo/base/list-mescroll-more.html) ---------- 
-![](https://github.com/mescroll/mescroll/raw/master/demo/base/list-mescroll-more.gif) 
+![](http://oux5x2xxe.bkt.clouddn.com/1508205306072list-mescroll-more.gif) 
 <br/><br/>  
 
 #### 5. 【满屏加载与锁定滑动】演示自动满屏加载,可临时锁定上拉刷新和下拉加载
 #### ---------- <a href="http://www.mescroll.com/preview.html?name=list-full-lock" target="_blank">在线体验 </a> ---------- [查看源码](https://github.com/mescroll/mescroll/blob/master/demo/base/list-full-lock.html) ---------- 
-![](https://github.com/mescroll/mescroll/raw/master/demo/base/list-full-lock.gif) 
+![](http://oux5x2xxe.bkt.clouddn.com/1508205101076list-full-lock.gif) 
 <br/><br/>  
 
 #### 6. 【mescroll所有配置项】源码展示mescroll所有配置项, 快速理解与调试mescroll
 #### ---------- <a href="http://www.mescroll.com/preview.html?name=mescroll-options" target="_blank">在线体验 </a> ---------- [查看源码](https://github.com/mescroll/mescroll/blob/master/demo/base/mescroll-options.html) ---------- 
-![](https://github.com/mescroll/mescroll/raw/master/demo/base/mescroll-options.gif) 
+![](http://oux5x2xxe.bkt.clouddn.com/1508205347926mescroll-options.gif) 
 <br/><br/>  
 
 ## 中级案例 intermediate demos :  
@@ -586,41 +607,41 @@ var mescroll = new MeScroll("mescroll", { down: {下拉刷新的配置参数}, u
 
 #### 1. 【知乎 v3.53.0】APP的下拉刷新上拉加载
 #### ---------- <a href="http://www.mescroll.com/preview.html?name=zhihu" target="_blank">在线体验 </a> ---------- [查看源码](https://github.com/mescroll/mescroll/blob/master/demo/zhihu/zhihu.html) ---------- 
-![](https://github.com/mescroll/mescroll/raw/master/demo/zhihu/zhihu.gif) 
+![](http://oux5x2xxe.bkt.clouddn.com/1508204842656zhihu.gif) 
 <br/><br/>  
 
 #### 2. 【新浪微博 v7.6.1】APP的下拉刷新上拉加载
 #### ---------- <a href="http://www.mescroll.com/preview.html?name=xinlang" target="_blank">在线体验 </a> ---------- [查看源码](https://github.com/mescroll/mescroll/blob/master/demo/xinlang/xinlang.html) ---------- 
-![](https://github.com/mescroll/mescroll/raw/master/demo/xinlang/xinlang.gif) 
+![](http://oux5x2xxe.bkt.clouddn.com/1508205006290xinlang.gif) 
 <br/><br/>  
 
 #### 3. 【贝贝 v6.0.0】APP的下拉刷新上拉加载
 #### ---------- <a href="http://www.mescroll.com/preview.html?name=beibei" target="_blank">在线体验 </a> ---------- [查看源码](https://github.com/mescroll/mescroll/blob/master/demo/beibei/beibei.html) ---------- 
-![](https://github.com/mescroll/mescroll/raw/master/demo/beibei/beibei.gif) 
+![](http://oux5x2xxe.bkt.clouddn.com/1508205298057beibei.gif) 
 <br/><br/>  
 
 #### 4. 【雅布力 v2.4.0】APP的下拉刷新上拉加载
 #### ---------- <a href="http://www.mescroll.com/preview.html?name=yabuli" target="_blank">在线体验 </a> ---------- [查看源码](https://github.com/mescroll/mescroll/blob/master/demo/yabuli/yabuli.html) ---------- 
-![](https://github.com/mescroll/mescroll/raw/master/demo/yabuli/yabuli.gif) 
+![](http://oux5x2xxe.bkt.clouddn.com/1508204995995yabuli.gif) 
 <br/><br/>  
 
 ## 高级案例 senior demos :  
 #### <a href="http://www.mescroll.com/demo.html#hight" target="_blank">前往官网查看 >> </a>  
 
 #### 1. 【淘宝 v6.8.0】APP的下拉刷新上拉加载
-![](https://github.com/mescroll/mescroll/raw/master/demo/taobao/taobao.gif) 
+![](http://oux5x2xxe.bkt.clouddn.com/1508205033359taobao.gif) 
 <br/><br/>  
 
 #### 2. 【京东 v6.1.0】APP的下拉刷新上拉加载
-![](https://github.com/mescroll/mescroll/raw/master/demo/jingdong/jingdong.gif) 
+![](http://oux5x2xxe.bkt.clouddn.com/1508205090739jingdong.gif) 
 <br/><br/>  
 
 #### 3. 【美团 v8.2.3】APP的下拉刷新上拉加载
-![](https://github.com/mescroll/mescroll/raw/master/demo/meituan/meituan.gif) 
+![](http://oux5x2xxe.bkt.clouddn.com/1508205067956meituan.gif) 
 <br/><br/>  
 
 #### 4. 【美囤妈妈 v2.0.5】APP的下拉刷新上拉加载
-![](https://github.com/mescroll/mescroll/raw/master/demo/meitunmama/meitunmama.gif) 
+![](http://oux5x2xxe.bkt.clouddn.com/1508205054953meitunmama.gif) 
 <br/><br/>  
 
 ## 下载基础中级案例源码 :  
@@ -676,6 +697,6 @@ var mescroll = new MeScroll("mescroll", { down: {下拉刷新的配置参数}, u
 	</tr>
 </table>  
 
-![](https://github.com/mescroll/mescroll/raw/master/demo/res/pay-wx.jpg)  
+![](http://oux5x2xxe.bkt.clouddn.com/1508204975143pay-wx.jpg)  
 
-![](https://github.com/mescroll/mescroll/raw/master/demo/res/pay-zfb.jpg) 
+![](http://oux5x2xxe.bkt.clouddn.com/1508204974529pay-zfb.jpg) 
