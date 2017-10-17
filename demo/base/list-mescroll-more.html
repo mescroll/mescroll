@@ -205,36 +205,39 @@
 			/*联网加载列表数据  page = {num:1, size:10}; num:当前页 从1开始, size:每页数据条数 */
 			function getListData(page){
 				//联网加载数据
-				getListDataFromNet(curNavIndex, page.num, page.size, function(curPageData){
+				var dataIndex=curNavIndex; //记录当前联网的nav下标,防止快速切换时,联网回来curNavIndex已经改变的情况;
+				getListDataFromNet(dataIndex, page.num, page.size, function(pageData){
 					//联网成功的回调,隐藏下拉刷新和上拉加载的状态;
 					//mescroll会根据传的参数,自动判断列表如果无任何数据,则提示空;列表无下一页数据,则提示无更多数据;
-					console.log("curNavIndex="+curNavIndex+", page.num="+page.num+", page.size="+page.size+", curPageData.length="+curPageData.length);
+					console.log("dataIndex="+dataIndex+", curNavIndex="+curNavIndex+", page.num="+page.num+", page.size="+page.size+", pageData.length="+pageData.length);
 					
 					//方法一(推荐): 后台接口有返回列表的总页数 totalPage
-					//mescrollArr[curNavIndex].endByPage(curPageData.length, totalPage); //必传参数(当前页的数据个数, 总页数)
+					//mescrollArr[dataIndex].endByPage(pageData.length, totalPage); //必传参数(当前页的数据个数, 总页数)
 					
 					//方法二(推荐): 后台接口有返回列表的总数据量 totalSize
-					//mescrollArr[curNavIndex].endBySize(curPageData.length, totalSize); //必传参数(当前页的数据个数, 总数据量)
+					//mescrollArr[dataIndex].endBySize(pageData.length, totalSize); //必传参数(当前页的数据个数, 总数据量)
 					
 					//方法三(推荐): 您有其他方式知道是否有下一页 hasNext
-					//mescrollArr[curNavIndex].endSuccess(curPageData.length, hasNext); //必传参数(当前页的数据个数, 是否有下一页true/false)
+					//mescrollArr[dataIndex].endSuccess(pageData.length, hasNext); //必传参数(当前页的数据个数, 是否有下一页true/false)
 					
 					//方法四 (不推荐),会存在一个小问题:比如列表共有20条数据,每页加载10条,共2页.如果只根据当前页的数据个数判断,则需翻到第三页才会知道无更多数据,如果传了hasNext,则翻到第二页即可显示无更多数据.
-					mescrollArr[curNavIndex].endSuccess(curPageData.length);
+					mescrollArr[dataIndex].endSuccess(pageData.length);
 					
 					//设置列表数据
-					setListData(curPageData);
+					setListData(pageData,dataIndex);
 				}, function(){
 					//联网失败的回调,隐藏下拉刷新和上拉加载的状态;
-	                mescrollArr[curNavIndex].endErr();
+	                mescrollArr[dataIndex].endErr();
 				});
 			}
 			
-			/*设置列表数据*/
-			function setListData(curPageData){
-				var listDom=document.getElementById("dataList"+curNavIndex);
-				for (var i = 0; i < curPageData.length; i++) {
-					var pd=curPageData[i];
+			/*设置列表数据
+			 * pageData 当前页的数据
+			 * dataIndex 数据属于哪个nav */
+			function setListData(pageData,dataIndex){
+				var listDom=document.getElementById("dataList"+dataIndex);
+				for (var i = 0; i < pageData.length; i++) {
+					var pd=pageData[i];
 					
 					var str='<img class="pd-img" src="'+pd.pdImg+'"/>';
 					str+='<p class="pd-name">'+pd.pdName+'</p>';
@@ -297,7 +300,7 @@
 		                },
 		                error: errorCallback
 		            });
-                },400)
+                },2000)
 			}
 			
 			//禁止PC浏览器拖拽图片,避免与下拉刷新冲突;如果仅在移动端使用,可删除此代码
