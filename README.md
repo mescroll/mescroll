@@ -141,7 +141,32 @@ NPM 安装命令:
 --- 磨刀不误砍柴工,心急吃不了热豆腐. 请静下心来体验与理解mescroll, 一定会让您事半功倍 ~<br/>
 --- 如使用中有疑问, 请先查看  <a href="http://www.mescroll.com/qa.html">常见问题专区</a> ~<br/><br/>
 
+## mescroll.m.js和mescroll.min.js
+您如果在vue,angular等环境中,因作用域的问题未能正常引入或初始化Mescroll对象,则引用mescroll.m.js;<br/>
+mescroll.m.js只是去掉了mescroll.min.js套的一层模块规范的代码:
+```
+;(function(name,definition){
+    //检测上下文环境是否为AMD或CMD
+    var hasDefine = typeof define === 'function',
+        // 检测上下文环境是否为Node
+        hasExports = typeof module !== 'function' && module.exports;
+    if(hasDefine){
+        //AMD环境或CMD环境
+        define(definition);
+    }else if(hasExports){
+        //定义为普通Node模块
+        module.exports = definition();
+    }else{
+        //将模块的执行结果挂在window变量中，在浏览器中this指向window对象
+        this[name] = definition();
+    }
 
+})('Mescroll',function(){
+    function Mescroll(){}
+    return Mescroll
+})
+```
+###### mescroll.m.js因为没有闭包限制作用域,所以能解决某些情况下引用mescroll.min.js报'Mescroll' undefined的问题
 
 ## API文档 :   
 #### <a href="http://www.mescroll.com/api.html#options" target="_blank">前往官网查看 >> </a>
