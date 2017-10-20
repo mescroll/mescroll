@@ -15,7 +15,8 @@
 
 * <a href="#功能亮点-">功能亮点 </a> <br/>
 * <a href="#快速入门-">快速入门 </a> <br/>
-* <a href="http://www.mescroll.com/preview.html?name=list-products-vue">vue的示例 </a> <br/><br/>
+* <a href="http://www.mescroll.com/preview.html?name=list-products-vue">vue的示例 </a> <br/>
+* <a href="#mescrollmjs和mescrollminjs">mescroll.m.js和mescroll.min.js </a> <br/><br/>
 * <a href="#基础案例-base-demos-"><b>基础案例 base demos</b></a> <br/>
 * <a href="#中级案例-intermediate-demos-"><b>中级案例 intermediate demos</b></a> <br/>
 * <a href="#高级案例-senior-demos-"><b>高级案例 senior demos</b></a> <br/><br/>
