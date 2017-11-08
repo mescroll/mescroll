@@ -11,6 +11,9 @@
 
 5. 免费商用
 
+6. <a target="_blank" href="//shang.qq.com/wpa/qunwpa?idkey=1067896895dabdf6cf11f4decb0be8bfd3687d3d208730bf2757238ba1948469">mescroll交流群</a>
+		
+
 ## 目录:  
 
 * <a href="#功能亮点-">功能亮点 </a> <br/>
