@@ -383,12 +383,12 @@ var mescroll = new MeScroll("mescroll", { down: {下拉刷新的配置参数}, u
 	<tr align="center">
 		<td>clearId</td>
 		<td>null</td>
-		<td>加载第一页时需清空数据的列表id; 如果此项有值,将不使用clearEmptyId的值</td>
+		<td>加载第一页时需清空数据的列表id; 如果此项有值,将不使用clearEmptyId的值; 在vue中使用,则无需配置此项</td>
 	</tr>
 	<tr align="center">
 		<td>clearEmptyId</td>
 		<td>null</td>
-		<td>相当于同时设置了clearId和empty.warpId; 简化写法</td>
+		<td>相当于同时设置了clearId和empty.warpId; 简化写法; 在vue中使用,则无需配置此项</td>
 	</tr>
 	<tr align="center">
 		<td>hardwareClass</td>
