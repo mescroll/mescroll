@@ -61,7 +61,7 @@ NPM 安装命令:
 #### 2. 拷贝以下布局结构:  
 ```
         <div id="mescroll" class="mescroll"> //id可以改,而"mescroll"的class不能删
-        	<div class="mescroll-bounce"> 
+            <div class="mescroll-bounce"> 
             	//列表内容,如:<ul>列表数据</ul> ...
             </div>  
         </div>  
