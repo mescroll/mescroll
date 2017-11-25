@@ -16,6 +16,7 @@
 
 ## 目录:  
 
+* <a href="https://github.com/mescroll/mescroll-versions" target="_blank">最新版本:1.2.5 (2017-11-25) </a> <br/><br/>
 * <a href="#功能亮点-">功能亮点 </a> <br/>
 * <a href="#快速入门-">快速入门 </a> <br/>
 * <a href="http://www.mescroll.com/preview.html?name=list-products-vue">vue的示例 </a> <br/>
@@ -29,7 +30,6 @@
 * <a href="#常用方法-">常用方法 </a> <br/>
 * <a href="#其他方法-">其他方法 </a> <br/><br/>
 * <a href="http://www.mescroll.com/qa.html">常见问题 </a> <br/>
-* <a href="https://github.com/mescroll/mescroll-versions" target="_blank">最新版本:1.2.5 (2017-11-25) </a> <br/>
 * <a href="http://www.mescroll.com/reward.html#tagRank">打赏排行榜 </a> <br/>
 
 ## 功能亮点 :
@@ -166,12 +166,12 @@ mescroll.m.js只是去掉了mescroll.min.js套的一层模块规范的代码:
     }
 
 })('Mescroll',function(){
-    function Mescroll(){}
+    var Mescroll = function(){}
     return Mescroll
 })
 ```
 ##### mescroll.m.js因为没有闭包限制作用域,所以能解决某些情况下引用mescroll.min.js报'Mescroll' undefined的问题
-##### 如果还有问题请参考 <a href="https://github.com/mescroll/mescroll/issues/56">https://github.com/mescroll/mescroll/issues/56</a>
+##### 具体请参考 <a href="https://github.com/mescroll/mescroll/issues/56">https://github.com/mescroll/mescroll/issues/56</a>
 
 ## API文档 :   
 #### <a href="http://www.mescroll.com/api.html#options" target="_blank">前往官网查看 >> </a>
@@ -232,11 +232,6 @@ var mescroll = new MeScroll("mescroll", { down: {下拉刷新的配置参数}, u
 		<td>minAngle</td>
 		<td>45</td>
 		<td>触发下拉最少要偏移的角度(滑动的轨迹与水平线的锐角值),取值区间  [0,90];默认45度,即向下滑动的角度大于45度(方位角为45°~145°及225°~315°)则触发下拉;而小于45度,将不触发下拉,避免与左右滑动的轮播等组件冲突;<br/>注意:没有必要配置超出[0,90]区间的值,否则角度限制无效; 因为假设配置60, 生效的方位角就已经是60°到120° 和 240°到300°的范围了;<br/>这是1.1.6版本新增的配置,请检查最新版~</td>
-	</tr>
-	<tr align="center">
-		<td>mustToTop</td>
-		<td>iOS默认值为false<br/>其他默认为true</td>
-		<td>是否必须滑动到顶部才能下拉;因为列表回弹效果(-webkit-overflow-scrolling:touch)是iOS专属样式,所以iOS默认false,其他默认为true</td>
 	</tr>
 	<tr align="center">
 		<td>hardwareClass</td>
@@ -497,6 +492,14 @@ var mescroll = new MeScroll("mescroll", { down: {下拉刷新的配置参数}, u
 		<td>主动触发上拉加载</td>
 	</tr>
 	<tr align="center">
+		<td>mescroll.setPageNum(num);</td>
+		<td>设置当前page.num的值</td>
+	</tr>
+	<tr align="center">
+		<td>mescroll.setPageSize(size);</td>
+		<td>设置当前page.size的值</td>
+	</tr>
+	<tr align="center">
 		<td>mescroll.scrollTo( y, t );</td>
 		<td>滚动列表到指定位置 ( y=0回到列表顶部; 如需滚动到列表底部,可设置y很大的值,比如y=99999 ); t时长,单位ms,默认300</td>
 	</tr>
@@ -515,6 +518,14 @@ var mescroll = new MeScroll("mescroll", { down: {下拉刷新的配置参数}, u
 	<tr align="center">
 		<td>mescroll.lockUpScroll( isLock );</td>
 		<td>锁定上拉加载 ( isLock=ture,null 锁定 ; isLock=false 解锁 )</td>
+	</tr>
+	<tr align="center">
+		<td>mescroll.os</td>
+		<td>
+			mescroll.os.ios</b> 为true, 则是ios设备;<br/>
+			mescroll.os.android</b> 为true, 则是android设备;<br/>
+			mescroll.os.pc</b> 为true, 则是PC端;
+		</td>
 	</tr>
 </table>
 
