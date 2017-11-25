@@ -1,0 +1,60 @@
+/*
+ * 自定义下拉刷新和上拉加载的结构
+ * 
+	//下拉刷新区域
+	<div class="mescroll-downwarp">
+		<div class="downwarp-onload"><p class="downwarp-progress"></p><p class="downwarp-tip">加载中..</p></div>
+		<div class="downwarp-unload"><p class="downwarp-arrow"></p><p class="downwarp-tip">下拉刷新</p></div>
+	</div>
+
+	//上拉加载区域
+	<div class="mescroll-upwarp">
+		//加载中..
+		<p class="upwarp-progress mescroll-rotate"></p><p class="upwarp-tip">加载中..</p>
+		//无数据
+		<p class="upwarp-nodata">-- END --</p>
+	</div>
+ */
+
+/*下拉刷新--上下箭头*/
+.mescroll-downwarp .downwarp-arrow{
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+	margin: 10px;
+	background-image: url(mescroll-arrow.png);
+	background-size: contain;
+	vertical-align: middle;
+	-webkit-transition: all 300ms;
+	transition: all 300ms;
+}
+
+/*下拉刷新,上拉加载--旋转进度条*/
+.mescroll-downwarp .downwarp-progress,
+.mescroll-upwarp .upwarp-progress{
+	width: 36px;
+	height: 36px;
+	border: none;
+	margin: auto;
+    background-size: contain;
+	-webkit-animation: progressRotate .6s steps(6,start) infinite;
+	animation: progressRotate .6s steps(6,start) infinite;
+}
+@-webkit-keyframes progressRotate {
+	0% {background-image: url(mescroll-progress1.png)}
+	16% {background-image: url(mescroll-progress2.png)}
+	32% {background-image: url(mescroll-progress3.png)}
+	48% {background-image: url(mescroll-progress4.png)}
+	64% {background-image: url(mescroll-progress5.png)}
+	80% {background-image: url(mescroll-progress6.png)}
+	100% {background-image: url(mescroll-progress1.png)}
+}
+@keyframes progressRotate {
+	0% {background-image: url(mescroll-progress1.png)}
+	16% {background-image: url(mescroll-progress2.png)}
+	32% {background-image: url(mescroll-progress3.png)}
+	48% {background-image: url(mescroll-progress4.png)}
+	64% {background-image: url(mescroll-progress5.png)}
+	80% {background-image: url(mescroll-progress6.png)}
+	100% {background-image: url(mescroll-progress1.png)}
+}

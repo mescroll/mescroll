@@ -1,0 +1,49 @@
+/*
+ * 自定义下拉刷新和上拉加载的结构
+ * 
+	//下拉刷新区域
+	<div class="mescroll-downwarp">
+		//可自定义内容
+		<p class="downwarp-tip">↓ 下拉刷新 ↓</p>
+		<img class="downwarp-progress" src="mescroll-progress.png"/>
+		<img class="downwarp-slogan" src="mescroll-slogan.png"/>
+	</div>
+
+	//上拉加载区域
+	<div class="mescroll-upwarp">
+		//加载中..
+		<img class="upwarp-progress mescroll-rotate" src="mescroll-progress.png"/>
+		<img class="upwarp-slogan" src="mescroll-slogan.png"/>
+		//无数据
+		<img class="upwarp-nodata" src="mescroll-nodata.png"/>
+	</div>
+ */
+
+/*下拉刷新--提示文本*/
+.mescroll-downwarp .downwarp-tip {
+	display: block;
+	margin-bottom: 6px;
+}
+
+/*上拉加载区域*/
+.mescroll-upwarp .upwarp-nodata {
+	width: auto;
+	height: 30px;
+	margin: auto;
+}
+
+/*下拉刷新,上拉加载--标语图片*/
+.mescroll-downwarp .downwarp-slogan,
+.mescroll-upwarp .upwarp-slogan {
+	width: auto;
+	height: 26px;
+	vertical-align: middle;
+}
+/*下拉刷新,上拉加载--旋转进度条*/
+.mescroll-downwarp .downwarp-progress,
+.mescroll-upwarp .upwarp-progress {
+	width: 36px;
+	height: 36px;
+	border: none;
+	margin: auto;
+}
