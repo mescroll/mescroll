@@ -16,7 +16,7 @@
 
 ## 目录:  
 
-* <a href="https://github.com/mescroll/mescroll-versions" target="_blank">最新版本:1.2.5 (2017-11-25) </a> <br/><br/>
+* <a href="https://github.com/mescroll/mescroll-versions" target="_blank">最新版本:1.2.5 (2017-11-25) 很重要更新哦</a> <br/><br/>
 * <a href="#功能亮点-">功能亮点 </a> <br/>
 * <a href="#快速入门-">快速入门 </a> <br/>
 * <a href="http://www.mescroll.com/preview.html?name=list-products-vue">vue的示例 </a> <br/>
@@ -61,9 +61,12 @@ NPM 安装命令:
 #### 2. 拷贝以下布局结构:  
 ```
         <div id="mescroll" class="mescroll"> //id可以改,而"mescroll"的class不能删
-            //列表内容,如:<ul>列表数据</ul> ...
+        	<div class="mescroll-bounce"> 
+            	//列表内容,如:<ul>列表数据</ul> ...
+            </div>  
         </div>  
 ```  
+###### 在iOS的微信,QQ,Safari等浏览器访问的项目建议加class="mescroll-bounce"的div <a class="blue" href="http://www.mescroll.com/qa.html#q10">解析</a>
 
 #### 3. 创建MeScroll对象:  
 ```
@@ -452,7 +455,7 @@ var mescroll = new MeScroll("mescroll", { down: {下拉刷新的配置参数}, u
 		<td>说明</td>
 	</tr>
 	<tr align="center">
-		<td align="left">mescroll.endByPage(dataSize, totalPage, systime);</td>
+		<td align="left">mescroll.endByPage(dataSize, totalPage, systime);<br/>(v 1.2.1 新增)</td>
 		<td align="left">隐藏下拉刷新和上拉加载的状态, 在联网获取数据成功后调用<br />
 		dataSize : 当前页获取的数据总数(注意是当前页)<br />
 		totalPage : 列表的总页数<br/>
@@ -460,7 +463,7 @@ var mescroll = new MeScroll("mescroll", { down: {下拉刷新的配置参数}, u
 		</td>
 	</tr>
 	<tr align="center">
-		<td align="left">mescroll.endBySize(dataSize, totalSize, systime);</td>
+		<td align="left">mescroll.endBySize(dataSize, totalSize, systime);<br/>(v 1.2.1 新增)</td>
 		<td align="left">隐藏下拉刷新和上拉加载的状态, 在联网获取数据成功后调用<br />
 		dataSize : 当前页获取的数据总数(注意是当前页)<br />
 		totalSize : 列表的总数据量<br/>
@@ -468,7 +471,7 @@ var mescroll = new MeScroll("mescroll", { down: {下拉刷新的配置参数}, u
 		</td>
 	</tr>
 	<tr align="center">
-		<td align="left">mescroll.endSuccess(dataSize, hasNext, systime);</td>
+		<td align="left">mescroll.endSuccess(dataSize, hasNext, systime);<br/>(v 1.2.1 调整)</td>
 		<td align="left">隐藏下拉刷新和上拉加载的状态, 在联网获取数据成功后调用<br />
 		dataSize : 当前页获取的数据量(注意是当前页)<br />
 		hasNext : 是否有下一页数据true/false<br/>
@@ -492,11 +495,11 @@ var mescroll = new MeScroll("mescroll", { down: {下拉刷新的配置参数}, u
 		<td>主动触发上拉加载</td>
 	</tr>
 	<tr align="center">
-		<td>mescroll.setPageNum(num);</td>
+		<td>mescroll.setPageNum(num);<br/>(v 1.2.5 新增)</td>
 		<td>设置当前page.num的值</td>
 	</tr>
 	<tr align="center">
-		<td>mescroll.setPageSize(size);</td>
+		<td>mescroll.setPageSize(size);<br/>(v 1.2.5 新增)</td>
 		<td>设置当前page.size的值</td>
 	</tr>
 	<tr align="center">
@@ -520,7 +523,7 @@ var mescroll = new MeScroll("mescroll", { down: {下拉刷新的配置参数}, u
 		<td>锁定上拉加载 ( isLock=ture,null 锁定 ; isLock=false 解锁 )</td>
 	</tr>
 	<tr align="center">
-		<td>mescroll.os</td>
+		<td>mescroll.os<br/>(v 1.2.5 新增)</td>
 		<td>
 			mescroll.os.ios</b> 为true, 则是ios设备;<br/>
 			mescroll.os.android</b> 为true, 则是android设备;<br/>
