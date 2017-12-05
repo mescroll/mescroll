@@ -9,7 +9,7 @@
 
 4. 主流APP案例, 丰富经典
 
-5. MIT协议, 免费商用
+5. 免费商用
 
 6. <a target="_blank" href="//shang.qq.com/wpa/qunwpa?idkey=1067896895dabdf6cf11f4decb0be8bfd3687d3d208730bf2757238ba1948469">mescroll交流群</a>
 		
@@ -66,7 +66,7 @@ NPM 安装命令:
             </div>  
         </div>  
 ```  
-###### 在iOS的微信,QQ,Safari等浏览器访问的项目建议加class="mescroll-bounce"的div <a class="blue" href="http://www.mescroll.com/qa.html#q10">解析</a>
+###### 在iOS的微信,QQ,Safari等浏览器访问的项目建议加class="mescroll-bounce"的div <a class="blue" href="http://www.mescroll.com/qa.html#q10">解析(必读)</a>
 
 #### 3. 创建MeScroll对象:  
 ```
@@ -667,6 +667,18 @@ var mescroll = new MeScroll("mescroll", { down: {下拉刷新的配置参数}, u
 #### 4. 【雅布力 v2.4.0】APP的下拉刷新上拉加载
 #### ---------- <a href="http://www.mescroll.com/preview.html?name=yabuli" target="_blank">在线体验 </a> ---------- [查看源码](https://github.com/mescroll/mescroll/blob/master/demo/yabuli/yabuli.html) ---------- 
 ![](http://oux5x2xxe.bkt.clouddn.com/1508204995995yabuli.gif) 
+<br/><br/>  
+
+
+#### 5. 【吸顶悬浮效果】
+#### ---------- <a href="http://www.mescroll.com/preview.html?name=sticky" target="_blank">在线体验 </a> ---------- [查看源码](https://github.com/mescroll/mescroll/blob/master/demo/sticky/mescroll-sticky.html) ---------- 
+![](http://oux5x2xxe.bkt.clouddn.com/1512487870668IMG_4195.GIF) 
+<br/><br/>  
+
+
+#### 6. 【轮播切换效果】
+#### ---------- <a href="http://www.mescroll.com/preview.html?name=swiper-tap" target="_blank">在线体验 </a> ---------- [查看源码](https://github.com/mescroll/mescroll/blob/master/demo/swiper/mescroll-swiper-tap.html) ---------- 
+![](http://oux5x2xxe.bkt.clouddn.com/1512487862014IMG_4194.GIF) 
 <br/><br/>  
 
 ## 高级案例 senior demos :  

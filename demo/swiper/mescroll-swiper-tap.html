@@ -7,6 +7,7 @@
 		<meta name="apple-mobile-web-app-capable" content="yes">
 
 		<link rel="stylesheet" href="../../dist/mescroll.min.css">
+		<link rel="stylesheet" href="swiper-3.3.1.min.css">
 		<style type="text/css">
 			* {
 				margin: 0;
@@ -63,11 +64,12 @@
 				color: #FF6990;
 			}
 			/*列表*/
-			.mescroll{
+			.swiper-container{
 				position: fixed;
-				top: 84px;
+				top: 64px;
+				left: 0;
+				right: 0;
 				bottom: 0;
-				height: auto;
 			}
 			/*展示上拉加载的数据列表*/
 			.data-list li{
@@ -106,83 +108,100 @@
 		<!--标题-->
 		<div class="header">
 			<a class="btn-left" href="../index.html">main</a>
-			<p>多mescroll</p>
-			<a class="btn-right" href="list-mescroll-one.html">mescroll-one</a>
-			<p class="tip">每个菜单列表仅初始化一次,切换菜单缓存数据</p>
+			<p>轮播切换效果</p>
 			<!--菜单-->
-			<div class="nav">
+			<div id="nav" class="nav">
 				<p class="active" i="0">首页</p>
-				<p i="1">奶粉专区</p>
-				<p i="2">面膜专区</p>
-				<p i="3">图书专区</p>
+				<p i="1">奶粉</p>
+				<p i="2">面膜</p>
+				<p i="3">图书</p>
 			</div>
 		</div>
 		
-		<!--首页-->
-		<div id="mescroll0" class="mescroll">
-			<!--您的项目如果是在微信,QQ,Safari等等iOS浏览器访问的,则需再嵌套<div class="mescroll-bounce"><div>,可解决列表顶部下拉和底部上拉露出浏览器灰色背景和卡顿2秒的问题,可避免数据不满屏下拉刷新dom元素可能不渲染的问题-->
-			<div class="mescroll-bounce">
-				<ul id="dataList0" class="data-list">
-					<!--<li>
-						<img class="pd-img" src="../res/img/pd1.jpg"/>
-						<p class="pd-name">商品标题商品标题商品标题商品标题商品标题商品</p>
-						<p class="pd-price">200.00 元</p>
-						<p class="pd-sold">已售50件</p>
-					</li>-->
-				</ul>
-			</div>
+		<!--轮播-->
+		<div id="swiper" class="swiper-container">
+		    <div class="swiper-wrapper">
+		    	
+	        	<!--首页-->
+		        <div id="mescroll0" class="swiper-slide mescroll">
+		        	<!--您的项目如果是在微信,QQ,Safari等等iOS浏览器访问的,则需再嵌套<div class="mescroll-bounce"><div>,可解决列表顶部下拉和底部上拉露出浏览器灰色背景和卡顿2秒的问题,可避免数据不满屏下拉刷新dom元素可能不渲染的问题-->
+					<div class="mescroll-bounce">
+						<ul id="dataList0" class="data-list">
+							<!--<li>
+								<img class="pd-img" src="../res/img/pd1.jpg"/>
+								<p class="pd-name">商品标题商品标题商品标题商品标题商品标题商品</p>
+								<p class="pd-price">200.00 元</p>
+								<p class="pd-sold">已售50件</p>
+							</li>-->
+						</ul>
+			        </div>
+		        </div>
+		    	
+	        	<!--奶粉-->
+		        <div id="mescroll1" class="swiper-slide mescroll">
+		        	<div class="mescroll-bounce">
+						<ul id="dataList1" class="data-list"></ul>
+			        </div>
+		        </div>
+		    	
+	        	<!--面膜-->
+		        <div id="mescroll2" class="swiper-slide mescroll">
+		        	<div class="mescroll-bounce">
+						<ul id="dataList2" class="data-list"></ul>
+			        </div>
+		        </div>
+		    	
+	        	<!--图书-->
+		        <div id="mescroll3" class="swiper-slide mescroll">
+		        	<div class="mescroll-bounce">
+						<ul id="dataList3" class="data-list"></ul>
+			        </div>
+		        </div>
+		        
+		    </div>
 		</div>
-		
-		<!--奶粉专区 (如果是vue的话 这里写v-show不是v-if)-->
-		<div id="mescroll1" class="mescroll hide">
-			<!--您的项目如果是在微信,QQ,Safari等等iOS浏览器访问的,则需再嵌套<div class="mescroll-bounce"><div>,可解决列表顶部下拉和底部上拉露出浏览器灰色背景和卡顿2秒的问题,可避免数据不满屏下拉刷新dom元素可能不渲染的问题-->
-			<div class="mescroll-bounce">
-				<ul id="dataList1" class="data-list">
-				</ul>
-			</div>
-		</div>
-		
-		<!--面膜专区 (如果是vue的话 这里写v-show不是v-if)-->
-		<div id="mescroll2" class="mescroll hide">
-			<!--您的项目如果是在微信,QQ,Safari等等iOS浏览器访问的,则需再嵌套<div class="mescroll-bounce"><div>,可解决列表顶部下拉和底部上拉露出浏览器灰色背景和卡顿2秒的问题,可避免数据不满屏下拉刷新dom元素可能不渲染的问题-->
-			<div class="mescroll-bounce">
-				<ul id="dataList2" class="data-list">
-				</ul>
-			</div>
-		</div>
-		
-		<!--图书专区 (如果是vue的话 这里写v-show不是v-if)-->
-		<div id="mescroll3" class="mescroll hide">
-			<!--您的项目如果是在微信,QQ,Safari等等iOS浏览器访问的,则需再嵌套<div class="mescroll-bounce"><div>,可解决列表顶部下拉和底部上拉露出浏览器灰色背景和卡顿2秒的问题,可避免数据不满屏下拉刷新dom元素可能不渲染的问题-->
-			<div class="mescroll-bounce">
-				<ul id="dataList3" class="data-list">
-				</ul>
-			</div>
-		</div>
+			
 	</body>
 	
 	<script src="../../dist/mescroll.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="swiper-3.3.1.min.js" type="text/javascript" charset="utf-8"></script>
 	<!--mescroll本身不依赖jq,这里为了模拟发送ajax请求-->
 	<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js" type="text/javascript" charset="utf-8"></script>
 	<script type="text/javascript" charset="utf-8">
 		$(function(){
 			var curNavIndex=0;//首页0; 奶粉1; 面膜2; 图书3;
 			var mescrollArr=new Array(4);//4个菜单所对应的4个mescroll对象
+			
 			//初始化首页
 			mescrollArr[0]=initMescroll("mescroll0", "dataList0");
 			
-			/*初始化菜单*/
-			$(".nav p").click(function(){
+			/*初始化轮播*/
+			var swiper=new Swiper('#swiper', {
+		        onTransitionEnd: function(swiper){
+		        	var i=swiper.activeIndex;//轮播切换完毕的事件
+		        	changePage(i);
+			    }
+		    });
+		    
+		    /*初始化菜单*/
+			$("#nav p").click(function(){
 				var i=Number($(this).attr("i"));
+				swiper.slideTo(i);//以轮播的方式切换列表
+			})
+			
+			/*切换列表*/
+			function changePage(i) {
 				if(curNavIndex!=i) {
 					//更改列表条件
-					$(".nav .active").removeClass("active");
-					$(this).addClass("active");
-					//隐藏当前列表和回到顶部按钮
-					$("#mescroll"+curNavIndex).hide();
+					$("#nav p").each(function(n,dom){
+						if (dom.getAttribute("i")==i) {
+							dom.classList.add("active");
+						} else{
+							dom.classList.remove("active");
+						}
+					})
+					//隐藏当前回到顶部按钮
 					mescrollArr[curNavIndex].hideTopBtn();
-					//显示对应的列表
-					$("#mescroll"+i).show();
 					//取出菜单所对应的mescroll对象,如果未初始化则初始化
 					if(mescrollArr[i]==null){
 						mescrollArr[i]=initMescroll("mescroll"+i, "dataList"+i);
@@ -199,7 +218,7 @@
 					//更新标记
 					curNavIndex=i;
 				}
-			})
+			}
 			
 			/*创建MeScroll对象*/
 			function initMescroll(mescrollId,clearEmptyId){
