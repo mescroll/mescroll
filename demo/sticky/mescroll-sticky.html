@@ -60,15 +60,14 @@
 				color: #FF6990;
 			}
 			/*ios使用sticky样式实现*/
-			.ios-sticky{
+			.nav-sticky{
 				z-index: 9999;/*需设置zIndex,避免在悬停时,可能会被列表数据遮住*/
 				position: -webkit-sticky;
 				position: sticky;
 			    top: 0;/*相对mescroll的div悬停的位置*/
 			}
 			/*android和pc端悬停*/
-			.nav-android-pc{
-				display: none;
+			.nav-fixed{
 				z-index: 9999;
 				position: fixed;
 				top: 44px;
@@ -117,12 +116,6 @@
 	<body>
 		<!--标题-->
 		<p class="header"><a class="btn-left" href="../index.html">main</a> 吸顶悬浮效果</p>
-		<!--android和pc端悬停效果-->
-		<div id="nav-android-pc" class="nav nav-android-pc">
-			<p class="active" i="0">全部</p>
-			<p i="1">奶粉</p>
-			<p i="2">面膜</p>
-		</div>
 		<!--滑动区域-->
 		<div id="mescroll" class="mescroll">
 			<!--您的项目如果是在微信,QQ,Safari等等iOS浏览器访问的,则需再嵌套<div class="mescroll-bounce"><div>,可解决列表顶部下拉和底部上拉露出浏览器灰色背景和卡顿2秒的问题,可避免数据不满屏下拉刷新dom元素可能不渲染的问题-->
@@ -131,14 +124,15 @@
 				<img class="swiper" src="../res/img/swiper.jpg"/>
 				<!--
 					悬浮菜单:
-					1.ios的悬停效果,通过给<div id="nav"></div>添加ios-sticky样式实现
-					2.android和pc端悬停效果,通过监听mescroll的scroll事件,控制<div id="nav-android-pc"></div>的显示和隐藏
-					(如果通过控制<div id="nav"></div>是否为fixed定位来实现,可能会在列表惯性滑动或下拉刷新时出现闪烁抖动的问题)
+					1.ios的悬停效果,通过给navWarp添加sticky样式来实现
+					2.android和pc端悬停效果,通过监听mescroll的scroll事件,控制navContent是否为fixed定位来实现
 				-->
-				<div id="nav" class="nav">
-					<p class="active" i="0">全部</p>
-					<p i="1">奶粉</p>
-					<p i="2">面膜</p>
+				<div id="navWarp">
+					<div id="navContent" class="nav">
+						<p class="active" i="0">全部</p>
+						<p i="1">奶粉</p>
+						<p i="2">面膜</p>
+					</div>
 				</div>
 				<!--upscrollWarp用于装载上拉进度和数据列表,避免清空列表不满屏,导致点击悬浮菜单时会滑下来-->
 				<div id="upscrollWarp">
@@ -170,19 +164,20 @@
 				}
 			});
 			
-			var nav=document.getElementById("nav");
+			var navWarp=document.getElementById("navWarp");
 			if(mescroll.os.ios){
-				//ios使用sticky的方式实现
-				nav.classList.add("ios-sticky");
+				//ios的悬停效果,通过给navWarp添加nav-sticky样式来实现
+				navWarp.classList.add("nav-sticky");
 			}else{
-				//android和pc端悬停效果,通过监听mescroll的scroll事件,控制<div id="nav-android-pc"></div>的显示和隐藏
-				var navAndroidPc=document.getElementById("nav-android-pc");
+				//android和pc端悬停效果,通过监听mescroll的scroll事件,控制navContent是否为fixed定位来实现
+				navWarp.style.height=navWarp.offsetHeight+"px";//固定高度占位,避免悬浮时列表抖动
+				var navContent=document.getElementById("navContent");
 				mescroll.optUp.onScroll=function(mescroll, y, isUp){
 					console.log("up --> onScroll 列表当前滚动的距离 y = " + y + ", 是否向上滑动 isUp = " + isUp);
-					if(y>=nav.offsetTop){
-						navAndroidPc.style.display="block";
+					if(y>=navWarp.offsetTop){
+						navContent.classList.add("nav-fixed");
 					}else{
-						navAndroidPc.style.display="none";
+						navContent.classList.remove("nav-fixed");
 					}
 				}
 			}
@@ -203,7 +198,7 @@
 						}
 					})
 					/*调整upscrollWarp的最小高度,使其刚好满屏,避免点击悬浮菜单时会滑下来;(这里每次点击都计算一次,毕竟轮播图高度改变或未能显示图都会影响计算的值)*/
-					var minHight = mescroll.getClientHeight() - nav.offsetHeight;
+					var minHight = mescroll.getClientHeight() - navWarp.offsetHeight;
 					document.getElementById("upscrollWarp").style.minHeight = minHight+"px";
 					//重置列表数据
 					mescroll.resetUpScroll();
@@ -297,7 +292,7 @@
 		                },
 		                error: errorCallback
 		            });
-                },1000)
+                },500)
 			}
 			
 			//禁止PC浏览器拖拽图片,避免与下拉刷新冲突;如果仅在移动端使用,可删除此代码
