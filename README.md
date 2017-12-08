@@ -16,7 +16,7 @@
 
 ## 目录:  
 
-* <a href="https://github.com/mescroll/mescroll-versions" target="_blank">最新版本:1.2.5 (2017-11-25) 很重要更新哦</a> <br/><br/>
+* <a href="https://github.com/mescroll/mescroll-versions" target="_blank">最新版本:1.2.8 (2017-12-08)</a> <br/><br/>
 * <a href="#功能亮点-">功能亮点 </a> <br/>
 * <a href="#快速入门-">快速入门 </a> <br/>
 * <a href="http://www.mescroll.com/preview.html?name=list-products-vue">vue的示例 </a> <br/>
@@ -335,6 +335,7 @@ var mescroll = new MeScroll("mescroll", { down: {下拉刷新的配置参数}, u
 	<tr align="center">
 		<td>toTop</td>
 		<td align="left">{ <br/>
+			warpId: null, <br/>
 			src: null, <br/>
 			offset: 1000, <br/>
 			warpClass: "mescroll-totop", <br/>
@@ -343,6 +344,7 @@ var mescroll = new MeScroll("mescroll", { down: {下拉刷新的配置参数}, u
 			duration: 300 <br/>
 		}</td>
 		<td align="left">回到顶部按钮的配置: <br/>
+			warpId: 父布局的id; 默认添加在body中 (v 1.2.8 新增) <br/>
 			src: 图片路径,必须配置src才会显示回到顶部按钮,不配置不显示 <br/>
 			offset: 列表滚动1000px显示回到顶部按钮 <br/>
 			warpClass: 按钮样式,参见mescroll.css <br/>
@@ -608,6 +610,19 @@ var mescroll = new MeScroll("mescroll", { down: {下拉刷新的配置参数}, u
 		<td>获取滚动内容的高度 </td>
 	</tr>
 	<tr align="center">
+		<td>mescroll.getStep(star, end, callback, t, rate);<br/>(v 1.2.8 新增) </td>
+		<td align="left">
+			star : 开始值; <br/>
+		 	end : 结束值; <br/>
+		 	callback(step,timer) :  回调 function(step,timer), <br/>
+		 	t : 计步时长; 传0则直接回调end值; 不传则默认300ms ; <br/>
+		 	rate : 周期; 不传则默认30ms计步一次 ; <br/>
+		 	此方法相当于默认在300ms内,每30ms返回star到end之间的阶梯值step; 可用于模拟帧动画 <br/>
+		 	比如mescroll的回到顶部缓冲动画,轮播导航案例的顶部菜单滚动都是通过getStep实现<br/>
+		 	(注: 您可根据实际情况在 callback 通过 window.clearInterval(timer) 提前结束计步器)
+	 	</td>
+	</tr>
+	<tr align="center">
 		<td>mescroll.destroy();</td>
 		<td>销毁mescroll</td>
 	</tr>
@@ -677,7 +692,7 @@ var mescroll = new MeScroll("mescroll", { down: {下拉刷新的配置参数}, u
 
 
 #### 6. 【轮播切换效果】
-#### ---------- <a href="http://www.mescroll.com/preview.html?name=swiper-tap" target="_blank">在线体验 </a> ---------- [查看源码](https://github.com/mescroll/mescroll/blob/master/demo/swiper/mescroll-swiper-tap.html) ---------- 
+#### ---------- <a href="http://www.mescroll.com/preview.html?name=swiper-tap" target="_blank">在线体验 </a> ---------- [查看源码](https://github.com/mescroll/mescroll/blob/master/demo/swiper/mescroll-swiper-nav.html) ---------- 
 ![](http://oux5x2xxe.bkt.clouddn.com/1512487862014IMG_4194.GIF) 
 <br/><br/>  
 
@@ -731,7 +746,7 @@ var mescroll = new MeScroll("mescroll", { down: {下拉刷新的配置参数}, u
 		【 获取方法一 】<br/>
 		我是大神 , 我为mescroll添砖加瓦<br/>
 		在 GitHub 上 Star 和 Fork 了 mescroll<br/>
-		并提出优化或改进建议 且Pull requests 获得了采纳 ~
+		并提出优化或改进建议,获得了采纳 ~
 		</td>
 	</tr>
 	<tr align="center">

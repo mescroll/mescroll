@@ -134,7 +134,10 @@
 //						  	btnClick : function() {
 //						  		alert("点击了去逛逛按钮");
 //						  	} 
-						}
+						},
+						//vue的案例请勿配置clearId和clearEmptyId,否则列表的数据模板会被清空
+//						clearId: "dataList",
+//						clearEmptyId: "dataList"
 					}
 				});
 				
@@ -149,7 +152,7 @@
 					getListDataFromNet(page.num, page.size, function(curPageData) {
 						//curPageData=[]; //打开本行注释,可演示列表无任何数据empty的配置
 						
-						//如果是第一页需手动制空列表
+						//如果是第一页需手动制空列表 (代替clearId和clearEmptyId的配置)
 						if(page.num == 1) self.pdlist = [];
 						
 						//更新列表数据
@@ -179,7 +182,10 @@
 			},
 		});
 		
-		/*联网加载列表数据*/
+		/*联网加载列表数据
+		 请忽略getListDataFromNet的逻辑,这里仅仅是在本地模拟分页数据,本地演示用
+		 实际项目以您服务器接口返回的数据为准,无需本地处理分页.
+		 * */
 		function getListDataFromNet(pageNum,pageSize,successCallback,errorCallback) {
 			//延时一秒,模拟联网
             setTimeout(function () {

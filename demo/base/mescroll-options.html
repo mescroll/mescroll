@@ -210,6 +210,7 @@
 					offset: 100, //离底部的距离
 					toTop: {
 						//回到顶部按钮,需配置src才显示
+						warpId: null, //父布局的id; 默认添加在body中
 						src: "../res/img/mescroll-totop.png", //图片路径,默认null;
 						offset: 1000, //列表滚动多少距离才显示回到顶部按钮,默认1000
 						warpClass: "mescroll-totop", //按钮样式,参见mescroll.css
@@ -232,7 +233,7 @@
 						} 
 					},
 					clearId: null, //加载第一页时需清空数据的列表id; 如果此项有值,将不使用clearEmptyId的值;
-					clearEmptyId: "dataList", //相当于同时设置了clearId和empty.warpId; 简化写法;
+					clearEmptyId: "dataList", //相当于同时设置了clearId和empty.warpId; 简化写法,默认null;
 					hardwareClass: "mescroll-hardware", //硬件加速样式,动画更流畅,参见mescroll.css
 					warpId: null, //可配置上拉加载的布局添加到指定id的div;默认不配置,默认添加到mescrollId
 					warpClass: "mescroll-upwarp", //容器,装载布局内容,参见mescroll.css
@@ -322,7 +323,11 @@
 				}
 			}
 			
-			/*联网加载列表数据*/
+			/*联网加载列表数据
+			 在您的实际项目中,请参考官方写法: http://www.mescroll.com/api.html#tagUpCallback
+			 请忽略getListDataFromNet的逻辑,这里仅仅是在本地模拟分页数据,本地演示用
+			 实际项目以您服务器接口返回的数据为准,无需本地处理分页.
+			 * */
 			function getListDataFromNet(pdType,pageNum,pageSize,successCallback,errorCallback) {
 				//延时一秒,模拟联网
                 setTimeout(function () {

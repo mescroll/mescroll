@@ -206,7 +206,11 @@
 				}
 			}
 			
-			/*联网加载列表数据*/
+			/*联网加载列表数据
+			 在您的实际项目中,请参考官方写法: http://www.mescroll.com/api.html#tagUpCallback
+			 请忽略getListDataFromNet的逻辑,这里仅仅是在本地模拟分页数据,本地演示用
+			 实际项目以您服务器接口返回的数据为准,无需本地处理分页.
+			 * */
 			function getListDataFromNet(pdType,pageNum,pageSize,successCallback,errorCallback) {
 				//延时一秒,模拟联网
                 setTimeout(function () {
