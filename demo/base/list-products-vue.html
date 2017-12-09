@@ -19,6 +19,11 @@
 			ul{list-style-type: none}
 			a {text-decoration: none;color: #18B4FE;}
 			
+			/*vue*/
+			[v-cloak] {
+			  display: none;
+			}
+
 			/*模拟的标题*/
 			.header{
 				z-index: 9990;
@@ -39,7 +44,7 @@
 				padding:12px;
 				line-height: 22px;
 			}
-			/*列表*/
+			/*mescroll滚动的区域*/
 			.mescroll{
 				position: fixed;
 				top: 44px;
@@ -47,9 +52,6 @@
 				height: auto;
 			}
 			/*展示上拉加载的数据列表*/
-			.data-list{
-				display: none;
-			}
 			.data-list li{
 				position: relative;
 				padding: 10px 8px 10px 120px;
@@ -88,7 +90,7 @@
 			<!--您的项目如果是在微信,QQ,Safari等等iOS浏览器访问的,则需再嵌套<div class="mescroll-bounce"><div>,可解决列表顶部下拉和底部上拉露出浏览器灰色背景和卡顿2秒的问题,可避免数据不满屏下拉刷新dom元素可能不渲染的问题-->
 			<div class="mescroll-bounce">
 				<!--展示上拉加载的数据列表-->
-				<ul id="dataList" class="data-list">
+				<ul id="dataList" class="data-list" v-cloak>
 					<li v-for="pd in pdlist">
 						<img class="pd-img" :src="pd.pdImg"/>
 						<p class="pd-name">{{pd.pdName}}</p>
@@ -117,13 +119,14 @@
 				//创建MeScroll对象,down可以不用配置,因为内部已默认开启下拉刷新,重置列表数据为第一页
 				//解析: 下拉回调默认调用mescroll.resetUpScroll(); 而resetUpScroll会将page.num=1,再执行up.callback,从而实现刷新列表数据为第一页;
 				var self = this;
-				self.mescroll = new MeScroll("mescroll", {
+				self.mescroll = new MeScroll("mescroll", { //请至少在vue的mounted生命周期初始化mescroll,以确保您配置的id能够被找到
 					up: {
 						callback: self.upCallback, //上拉回调
 						//以下参数可删除,不配置
 						//page:{size:8}, //可配置每页8条数据,默认10
 						toTop:{ //配置回到顶部按钮
 							src : "../res/img/mescroll-totop.png", //默认滚动到1000px显示,可配置offset修改
+							//html: null, //html标签内容,默认null; 如果同时设置了src,则优先取src
 							//offset : 1000
 						},
 						empty:{ //配置列表无任何数据的提示
@@ -136,13 +139,12 @@
 //						  	} 
 						},
 						//vue的案例请勿配置clearId和clearEmptyId,否则列表的数据模板会被清空
+						//vue的案例请勿配置clearId和clearEmptyId,否则列表的数据模板会被清空
 //						clearId: "dataList",
 //						clearEmptyId: "dataList"
 					}
 				});
 				
-				//初始化vue后,显示vue模板布局
-				document.getElementById("dataList").style.display="block";
 			},
 			methods: {
 				//上拉回调 page = {num:1, size:10}; num:当前页 ,默认从1开始; size:每页数据条数,默认10

@@ -16,7 +16,7 @@
 
 ## 目录:  
 
-* <a href="https://github.com/mescroll/mescroll-versions" target="_blank">最新版本:1.2.8 (2017-12-08)</a> <br/><br/>
+* <a href="https://github.com/mescroll/mescroll-versions" target="_blank">最新版本:1.2.8 (2017-12-08) 所有版本都向下兼容,放心升级</a> <br/><br/>
 * <a href="#功能亮点-">功能亮点 </a> <br/>
 * <a href="#快速入门-">快速入门 </a> <br/>
 * <a href="http://www.mescroll.com/preview.html?name=list-products-vue">vue的示例 </a> <br/>
@@ -337,6 +337,7 @@ var mescroll = new MeScroll("mescroll", { down: {下拉刷新的配置参数}, u
 		<td align="left">{ <br/>
 			warpId: null, <br/>
 			src: null, <br/>
+			html: null, <br/>
 			offset: 1000, <br/>
 			warpClass: "mescroll-totop", <br/>
 			showClass: "mescroll-fade-in", <br/>
@@ -346,6 +347,7 @@ var mescroll = new MeScroll("mescroll", { down: {下拉刷新的配置参数}, u
 		<td align="left">回到顶部按钮的配置: <br/>
 			warpId: 父布局的id; 默认添加在body中 (v 1.2.8 新增) <br/>
 			src: 图片路径,必须配置src才会显示回到顶部按钮,不配置不显示 <br/>
+			html: 标签内容,默认null; 如果同时设置了src,则优先取src (2017/12/10新增) <br/>
 			offset: 列表滚动1000px显示回到顶部按钮 <br/>
 			warpClass: 按钮样式,参见mescroll.css <br/>
 			showClass: 显示样式,参见mescroll.css <br/>
@@ -691,8 +693,20 @@ var mescroll = new MeScroll("mescroll", { down: {下拉刷新的配置参数}, u
 <br/><br/>  
 
 
-#### 6. 【轮播切换效果】
-#### ---------- <a href="http://www.mescroll.com/preview.html?name=swiper-tap" target="_blank">在线体验 </a> ---------- [查看源码](https://github.com/mescroll/mescroll/blob/master/demo/swiper/mescroll-swiper-nav.html) ---------- 
+#### 6. 【关键词搜索】
+#### ---------- <a href="http://www.mescroll.com/preview.html?name=search" target="_blank">在线体验 </a> ---------- [查看源码](https://github.com/mescroll/mescroll/blob/master/demo/search/mescroll-search.html) ---------- 
+![](http://oux5x2xxe.bkt.clouddn.com/1512835307876IMG_4217.GIF) 
+<br/><br/>  
+
+
+#### 7. 【轮播切换效果】
+#### ---------- <a href="http://www.mescroll.com/preview.html?name=swiper-tap" target="_blank">在线体验 </a> ---------- [查看源码](https://github.com/mescroll/mescroll/blob/master/demo/swiper/mescroll-swiper-tap.html) ---------- 
+![](http://oux5x2xxe.bkt.clouddn.com/1512487862014IMG_4194.GIF) 
+<br/><br/>  
+
+
+#### 8. 【轮播导航菜单】
+#### ---------- <a href="http://www.mescroll.com/preview.html?name=swiper-nav" target="_blank">在线体验 </a> ---------- [查看源码](https://github.com/mescroll/mescroll/blob/master/demo/swiper/mescroll-swiper-nav.html) ---------- 
 ![](http://oux5x2xxe.bkt.clouddn.com/1512487862014IMG_4194.GIF) 
 <br/><br/>  
 
