@@ -16,7 +16,7 @@
 
 ## 目录:  
 
-* <a href="https://github.com/mescroll/mescroll-versions" target="_blank">最新版本:1.2.8 (2017-12-08) 所有版本都向下兼容,放心升级</a> <br/><br/>
+* <a href="https://github.com/mescroll/mescroll-versions" target="_blank">最新版本:1.2.8.1 (2017-12-10) 所有版本都向下兼容,放心升级</a> <br/><br/>
 * <a href="#功能亮点-">功能亮点 </a> <br/>
 * <a href="#快速入门-">快速入门 </a> <br/>
 * <a href="http://www.mescroll.com/preview.html?name=list-products-vue">vue的示例 </a> <br/>

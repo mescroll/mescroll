@@ -1,7 +1,7 @@
 /*
  * mescroll -- 精致的下拉刷新和上拉加载js框架  ( a great JS framework for pull-refresh and pull-up-loading )
- * version 1.2.8
- * 2017-12-08
+ * version 1.2.8.1
+ * 2017-12-10
  * 
  * 您如果在vue,angular等环境中,因作用域的问题未能正常引入或初始化Mescroll对象,则可引用mescroll.m.js;
  * mescroll.m.js去掉了mescroll.min.js套的一层模块规范的代码
