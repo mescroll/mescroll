@@ -12,8 +12,11 @@
 				margin: 0;
 				padding: 0;
 				-webkit-touch-callout:none;
-				-webkit-user-select:none;
 				-webkit-tap-highlight-color:transparent;
+			}
+			*:not(input,textarea) { 
+			    -webkit-touch-callout: none; 
+			    -webkit-user-select: none; 
 			}
 			body{background-color: white}
 			ul{list-style-type: none}
@@ -46,9 +49,10 @@
 				width: 60%;
 				padding:6px 0;
 				border: 1px solid #18B4FE;
-				border-radius: 44px;
+				border-radius: 8px;
 				text-align: center;
 				outline:none;
+				-webkit-appearance: none;
 			}
 			.header .btn-right{
 				position: absolute;
@@ -129,7 +133,7 @@
 		<!--模拟的标题-->
 		<div class="header">
 			<a class="btn-left" href="../index.html">main</a> 
-			<input id="keyword" placeholder="请输入搜索关键词" />
+			<input id="keyword" type="text" placeholder="请输入搜索关键词" />
 			<p id="search" class="btn-right">搜索</p>
 		</div>
 		<!--滑动区域-->
