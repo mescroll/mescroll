@@ -8,6 +8,16 @@
 
 		<link rel="stylesheet" href="../../dist/mescroll.min.css">
 		<style type="text/css">
+			
+			/*body为滚动区域,本案例特意演示有标题的界面,需padding-top显示出下拉区域,此时滚动条会穿过标题,从而说明body为滚动区域适用于没有标题的界面
+			 
+			 * 与其他配置div案例的区别:
+			 * 1.无需写<div id="mescroll" class="mescroll">,无需设置mescroll的高度
+			 * 2.new Mescroll固定id为"body"
+			 * 3.在微信,QQ,Safari等等iOS浏览器访问时,会有一点几率出现顶部下拉和底部上拉露出浏览器灰色背景,但不会卡顿2秒
+			 * 4.滚动条会穿过标题,贯穿整个body
+			 * */
+			
 			* {
 				margin: 0;
 				padding: 0;
@@ -19,12 +29,6 @@
 			ul{list-style-type: none}
 			a {text-decoration: none;color: #18B4FE;}
 			
-			/*body为滚动区域,本案例特意演示有标题的界面,需padding-top显示出下拉区域,此时滚动条会穿过标题,从而说明body为滚动区域适用于没有标题的界面
-			 
-			 * 与其他配置div案例的区别:
-			 * 1.无需写<div id="mescroll" class="mescroll">,无需设置mescroll的高度
-			 * 2.new Mescroll固定id为"body"
-			 * */
 			body{padding-top: 84px;box-sizing: border-box;-webkit-box-sizing: border-box;}
 			
 			/*模拟的标题*/
@@ -116,21 +120,17 @@
 				<p i="3">图书</p>
 			</div>
 		</div>
-		<!--<div id="mescroll" class="mescroll"> body为滚动区域,则无需设置class="mescroll"的div-->
-			<!--<div class="mescroll-bounce"> body为滚动区域,不支持mescroll-bounce的设置-->
 				
-			<!--展示上拉加载的数据列表-->
-			<ul id="dataList" class="data-list">
-				<!--<li>
-					<img class="pd-img" src="../res/img/pd1.jpg"/>
-					<p class="pd-name">商品标题商品标题商品标题商品标题商品标题商品</p>
-					<p class="pd-price">200.00 元</p>
-					<p class="pd-sold">已售50件</p>
-				</li>-->
-			</ul>
+		<!--展示上拉加载的数据列表-->
+		<ul id="dataList" class="data-list">
+			<!--<li>
+				<img class="pd-img" src="../res/img/pd1.jpg"/>
+				<p class="pd-name">商品标题商品标题商品标题商品标题商品标题商品</p>
+				<p class="pd-price">200.00 元</p>
+				<p class="pd-sold">已售50件</p>
+			</li>-->
+		</ul>
 			
-			<!--</div>-->
-		<!--</div>-->
 	</body>
 	
 	<script src="../../dist/mescroll.min.js" type="text/javascript" charset="utf-8"></script>
@@ -277,8 +277,6 @@
                 },1000)
 			}
 			
-			//禁止PC浏览器拖拽图片,避免与下拉刷新冲突;如果仅在移动端使用,可删除此代码
-			document.ondragstart=function() {return false;}
 		});
 	</script>
 

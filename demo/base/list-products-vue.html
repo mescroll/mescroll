@@ -87,18 +87,15 @@
 		<p class="header"><a class="btn-left" href="../index.html">main</a> 示例: 在vue中使用mescroll</p>
 		<!--滑动区域-->
 		<div id="mescroll" class="mescroll">
-			<!--您的项目如果是在微信,QQ,Safari等等iOS浏览器访问的,则需再嵌套<div class="mescroll-bounce"><div>,可解决列表顶部下拉和底部上拉露出浏览器灰色背景和卡顿2秒的问题,可避免数据不满屏下拉刷新dom元素可能不渲染的问题-->
-			<div class="mescroll-bounce">
-				<!--展示上拉加载的数据列表-->
-				<ul id="dataList" class="data-list" v-cloak>
-					<li v-for="pd in pdlist">
-						<img class="pd-img" :src="pd.pdImg"/>
-						<p class="pd-name">{{pd.pdName}}</p>
-						<p class="pd-price">{{pd.pdPrice}} 元</p>
-						<p class="pd-sold">已售{{pd.pdSold}}件</p>
-					</li>
-				</ul>
-			</div>
+			<!--展示上拉加载的数据列表-->
+			<ul id="dataList" class="data-list" v-cloak>
+				<li v-for="pd in pdlist">
+					<img class="pd-img" :src="pd.pdImg"/>
+					<p class="pd-name">{{pd.pdName}}</p>
+					<p class="pd-price">{{pd.pdPrice}} 元</p>
+					<p class="pd-sold">已售{{pd.pdSold}}件</p>
+				</li>
+			</ul>
 		</div>
 	</body>
 	
@@ -123,6 +120,7 @@
 					up: {
 						callback: self.upCallback, //上拉回调
 						//以下参数可删除,不配置
+						isBounce: false, //此处禁止ios回弹,解析(务必认真阅读,特别是最后一点): http://www.mescroll.com/qa.html#q10
 						//page:{size:8}, //可配置每页8条数据,默认10
 						toTop:{ //配置回到顶部按钮
 							src : "../res/img/mescroll-totop.png", //默认滚动到1000px显示,可配置offset修改
@@ -212,8 +210,6 @@
             },500)
 		}
 		
-		//禁止PC浏览器拖拽图片,避免与下拉刷新冲突;如果仅在移动端使用,可删除此代码
-		document.ondragstart=function() {return false;}
 	</script>
 
 </html>

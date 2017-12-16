@@ -120,44 +120,32 @@
 		
 		<!--首页-->
 		<div id="mescroll0" class="mescroll">
-			<!--您的项目如果是在微信,QQ,Safari等等iOS浏览器访问的,则需再嵌套<div class="mescroll-bounce"><div>,可解决列表顶部下拉和底部上拉露出浏览器灰色背景和卡顿2秒的问题,可避免数据不满屏下拉刷新dom元素可能不渲染的问题-->
-			<div class="mescroll-bounce">
-				<ul id="dataList0" class="data-list">
-					<!--<li>
-						<img class="pd-img" src="../res/img/pd1.jpg"/>
-						<p class="pd-name">商品标题商品标题商品标题商品标题商品标题商品</p>
-						<p class="pd-price">200.00 元</p>
-						<p class="pd-sold">已售50件</p>
-					</li>-->
-				</ul>
-			</div>
+			<ul id="dataList0" class="data-list">
+				<!--<li>
+					<img class="pd-img" src="../res/img/pd1.jpg"/>
+					<p class="pd-name">商品标题商品标题商品标题商品标题商品标题商品</p>
+					<p class="pd-price">200.00 元</p>
+					<p class="pd-sold">已售50件</p>
+				</li>-->
+			</ul>
 		</div>
 		
 		<!--奶粉专区 (如果是vue的话 这里写v-show不是v-if)-->
 		<div id="mescroll1" class="mescroll hide">
-			<!--您的项目如果是在微信,QQ,Safari等等iOS浏览器访问的,则需再嵌套<div class="mescroll-bounce"><div>,可解决列表顶部下拉和底部上拉露出浏览器灰色背景和卡顿2秒的问题,可避免数据不满屏下拉刷新dom元素可能不渲染的问题-->
-			<div class="mescroll-bounce">
-				<ul id="dataList1" class="data-list">
-				</ul>
-			</div>
+			<ul id="dataList1" class="data-list">
+			</ul>
 		</div>
 		
 		<!--面膜专区 (如果是vue的话 这里写v-show不是v-if)-->
 		<div id="mescroll2" class="mescroll hide">
-			<!--您的项目如果是在微信,QQ,Safari等等iOS浏览器访问的,则需再嵌套<div class="mescroll-bounce"><div>,可解决列表顶部下拉和底部上拉露出浏览器灰色背景和卡顿2秒的问题,可避免数据不满屏下拉刷新dom元素可能不渲染的问题-->
-			<div class="mescroll-bounce">
-				<ul id="dataList2" class="data-list">
-				</ul>
-			</div>
+			<ul id="dataList2" class="data-list">
+			</ul>
 		</div>
 		
 		<!--图书专区 (如果是vue的话 这里写v-show不是v-if)-->
 		<div id="mescroll3" class="mescroll hide">
-			<!--您的项目如果是在微信,QQ,Safari等等iOS浏览器访问的,则需再嵌套<div class="mescroll-bounce"><div>,可解决列表顶部下拉和底部上拉露出浏览器灰色背景和卡顿2秒的问题,可避免数据不满屏下拉刷新dom元素可能不渲染的问题-->
-			<div class="mescroll-bounce">
-				<ul id="dataList3" class="data-list">
-				</ul>
-			</div>
+			<ul id="dataList3" class="data-list">
+			</ul>
 		</div>
 	</body>
 	
@@ -208,6 +196,7 @@
 					//上拉加载的配置项
 					up: {
 						callback: getListData, //上拉回调,此处可简写; 相当于 callback: function (page) { getListData(page); }
+						isBounce: false, //此处禁止ios回弹,解析(务必认真阅读,特别是最后一点): http://www.mescroll.com/qa.html#q10
 						noMoreSize: 4, //如果列表已无数据,可设置列表的总数量要大于半页才显示无更多数据;避免列表数据过少(比如只有一条数据),显示无更多数据会不好看; 默认5
 						empty: {
 							icon: "../res/img/mescroll-empty.png", //图标,默认null
@@ -332,8 +321,6 @@
                 },500)
 			}
 			
-			//禁止PC浏览器拖拽图片,避免与下拉刷新冲突;如果仅在移动端使用,可删除此代码
-			document.ondragstart=function() {return false;}
 		});
 	</script>
 

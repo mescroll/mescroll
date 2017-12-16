@@ -101,26 +101,23 @@
 		<p class="header"><a class="btn-left" href="../index.html">main</a> MeScroll所有配置项 (详见代码)</p>
 		<!--滑动区域-->
 		<div id="mescroll" class="mescroll">
-			<!--您的项目如果是在微信,QQ,Safari等等iOS浏览器访问的,则需再嵌套<div class="mescroll-bounce"><div>,可解决列表顶部下拉和底部上拉露出浏览器灰色背景和卡顿2秒的问题,可避免数据不满屏下拉刷新dom元素可能不渲染的问题-->
-			<div class="mescroll-bounce">
-				<!--模拟的轮播,菜单 可在down.callback中配置刷新轮播数据-->
-				<img class="swiper" src="../res/img/swiper.jpg"/>
-				<!--筛选条件; 模拟列表的重置和演示空布局的使用-->
-				<div class="nav">
-					<p class="active" i="0">全部</p>
-					<p i="1">奶粉</p>
-					<p i="2">图书</p>
-				</div>
-				<!--展示上拉加载的数据列表-->
-				<ul id="dataList" class="data-list">
-					<!--<li>
-						<img class="pd-img" src="../res/img/pd1.jpg"/>
-						<p class="pd-name">商品标题商品标题商品标题商品标题商品标题商品</p>
-						<p class="pd-price">200.00 元</p>
-						<p class="pd-sold">已售50件</p>
-					</li>-->
-				</ul>
+			<!--模拟的轮播,菜单 可在down.callback中配置刷新轮播数据-->
+			<img class="swiper" src="../res/img/swiper.jpg"/>
+			<!--筛选条件; 模拟列表的重置和演示空布局的使用-->
+			<div class="nav">
+				<p class="active" i="0">全部</p>
+				<p i="1">奶粉</p>
+				<p i="2">图书</p>
 			</div>
+			<!--展示上拉加载的数据列表-->
+			<ul id="dataList" class="data-list">
+				<!--<li>
+					<img class="pd-img" src="../res/img/pd1.jpg"/>
+					<p class="pd-name">商品标题商品标题商品标题商品标题商品标题商品</p>
+					<p class="pd-price">200.00 元</p>
+					<p class="pd-sold">已售50件</p>
+				</li>-->
+			</ul>
 		</div>
 	</body>
 	
@@ -200,6 +197,7 @@
 					auto: false, //是否在初始化时以上拉加载的方式自动加载第一页数据; 默认false
 					isLock: false, //是否锁定上拉,默认false;当列表没有更多数据时会自动锁定不可上拉;在endSuccess如果检查到有下一页数据,则会自动解锁true
 					isBoth: true, //上拉加载时,如果滑动到列表顶部是否可以同时触发下拉刷新;默认false,两者不可同时触发; 这里为了演示改为true,不必等列表加载完毕才可下拉;
+					isBounce: false, //是否允许ios的bounce回弹;默认true,允许回弹; 此处配置为false,可解决微信,QQ,Safari等等iOS浏览器列表顶部下拉和底部上拉露出浏览器灰色背景和卡顿2秒的问题
 					callback: getListData, //上拉回调,此处可简写; 相当于 callback: function (page, mescroll) { getListData(page); }
 					page: {
 						num: 0, //当前页 默认0,回调之前会加1; 即callback(page)会从1开始
@@ -212,11 +210,13 @@
 						//回到顶部按钮,需配置src才显示
 						warpId: null, //父布局的id; 默认添加在body中
 						src: "../res/img/mescroll-totop.png", //图片路径,默认null;
+						html: null, //html标签内容,默认null; 如果同时设置了src,则优先取src
 						offset: 1000, //列表滚动多少距离才显示回到顶部按钮,默认1000
 						warpClass: "mescroll-totop", //按钮样式,参见mescroll.css
 						showClass: "mescroll-fade-in", //显示样式,参见mescroll.css
 						hideClass: "mescroll-fade-out", //隐藏样式,参见mescroll.css
-						duration: 300 //回到顶部的动画时长,默认300ms
+						duration: 300, //回到顶部的动画时长,默认300ms
+						supportTap: false //默认点击事件用onclick,会有300ms的延时;如果您的运行环境支持tap,则可配置true;
 					},
 					loadFull: {
 						use: false, //列表数据过少,不足以滑动触发上拉加载,是否自动加载下一页,直到满屏或者无更多数据为止;默认false,因为可通过调高page.size或者嵌套mescroll-bounce的div避免这个情况
@@ -230,7 +230,8 @@
 						btntext: "去逛逛 >", //按钮,默认""
 						btnClick: function(){//点击按钮的回调,默认null
 							alert("点击了按钮,具体逻辑自行实现");
-						} 
+						},
+						supportTap: false //默认点击事件用onclick,会有300ms的延时;如果您的运行环境支持tap,则可配置true;
 					},
 					clearId: null, //加载第一页时需清空数据的列表id; 如果此项有值,将不使用clearEmptyId的值;
 					clearEmptyId: "dataList", //相当于同时设置了clearId和empty.warpId; 简化写法,默认null;
@@ -372,8 +373,6 @@
                 },1000)
 			}
 			
-			//禁止PC浏览器拖拽图片,避免与下拉刷新冲突;如果仅在移动端使用,可删除此代码
-			document.ondragstart=function() {return false;}
 		});
 	</script>
 

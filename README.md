@@ -61,9 +61,7 @@ NPM 安装命令:
 #### 2. 拷贝以下布局结构:  
 ```
         <div id="mescroll" class="mescroll"> //id可以改,而"mescroll"的class不能删
-            <div class="mescroll-bounce"> 
-            	//列表内容,如:<ul>列表数据</ul> ...
-            </div>  
+            //列表内容,如:<ul>列表数据</ul> ...
         </div>  
 ```  
 ###### 在iOS的微信,QQ,Safari等浏览器访问的项目建议加class="mescroll-bounce"的div <a class="blue" href="http://www.mescroll.com/qa.html#q10">解析(必读)</a>
@@ -352,7 +350,7 @@ var mescroll = new MeScroll("mescroll", { down: {下拉刷新的配置参数}, u
 			warpClass: 按钮样式,参见mescroll.css <br/>
 			showClass: 显示样式,参见mescroll.css <br/>
 			hideClass: 隐藏样式,参见mescroll.css <br/>
-			duration: 回到顶部的动画时长 <br/>
+			duration: 回到顶部的动画时长,默认300ms <br/>
 		</td>
 	</tr>
 	<tr align="center">
