@@ -64,7 +64,6 @@ NPM 安装命令:
             //列表内容,如:<ul>列表数据</ul> ...
         </div>  
 ```  
-###### 在iOS的微信,QQ,Safari等浏览器访问的项目建议加class="mescroll-bounce"的div <a class="blue" href="http://www.mescroll.com/qa.html#q10">解析(必读)</a>
 
 #### 3. 创建MeScroll对象:  
 ```
@@ -78,8 +77,10 @@ NPM 安装命令:
 	});
 ```  
 ###### 温馨提示:
-###### 如果您的下拉刷新是重置列表数据,那么down完全可以不用配置,具体用法参考<a class="blue" href="http://www.mescroll.com/demo.html">第一个基础案例</a>
+###### 1. 如果您的下拉刷新是重置列表数据,那么down完全可以不用配置,具体用法参考<a class="blue" href="http://www.mescroll.com/demo.html">第一个基础案例</a>
 ###### 解析: down内部默认调用的是mescroll.resetUpScroll(),而resetUpScroll会将page.num=1,再触发up.callback,从而实现刷新列表数据
+
+###### 2. 如果您的项目是在iOS的微信,QQ,Safari等浏览器访问的,则建议配置up的isBounce为false,禁止ios的回弹效果; <a class="blue" href="http://www.mescroll.com/qa.html#q10">解析(必读)</a>
 
 #### 4. 处理回调:
 ```
