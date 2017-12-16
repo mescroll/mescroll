@@ -16,7 +16,7 @@
 
 ## 目录:  
 
-* <a href="https://github.com/mescroll/mescroll-versions" target="_blank">最新版本:1.2.8.1 (2017-12-10) 所有版本都向下兼容,放心升级</a> <br/><br/>
+* <a href="https://github.com/mescroll/mescroll-versions" target="_blank">最新版本:1.3.0 (2017-12-16) 重要升级</a> <br/><br/>
 * <a href="#功能亮点-">功能亮点 </a> <br/>
 * <a href="#快速入门-">快速入门 </a> <br/>
 * <a href="http://www.mescroll.com/preview.html?name=list-products-vue">vue的示例 </a> <br/>
@@ -322,6 +322,11 @@ var mescroll = new MeScroll("mescroll", { down: {下拉刷新的配置参数}, u
 		<td>上拉加载时,如果滑动到列表顶部是否可以同时触发下拉刷新</td>
 	</tr>
 	<tr align="center">
+		<td>isBounce</td>
+		<td>true</td>
+		<td>是否允许ios的bounce回弹;默认true,允许回弹 (v 1.3.0新增)</td>
+	</tr>
+	<tr align="center">
 		<td>offset</td>
 		<td>100</td>
 		<td>列表滚动到距离底部小于100px,即可触发上拉加载的回调</td>
@@ -341,7 +346,8 @@ var mescroll = new MeScroll("mescroll", { down: {下拉刷新的配置参数}, u
 			warpClass: "mescroll-totop", <br/>
 			showClass: "mescroll-fade-in", <br/>
 			hideClass: "mescroll-fade-out", <br/>
-			duration: 300 <br/>
+			duration: 300, <br/>
+			supportTap: false <br/>
 		}</td>
 		<td align="left">回到顶部按钮的配置: <br/>
 			warpId: 父布局的id; 默认添加在body中 (v 1.2.8 新增) <br/>
@@ -352,6 +358,7 @@ var mescroll = new MeScroll("mescroll", { down: {下拉刷新的配置参数}, u
 			showClass: 显示样式,参见mescroll.css <br/>
 			hideClass: 隐藏样式,参见mescroll.css <br/>
 			duration: 回到顶部的动画时长,默认300ms <br/>
+			supportTap: 如果您的运行环境支持tap,则可配置true,可减少点击延时,快速响应事件;默认false,通过onclick添加点击事件; (v 1.3.0 新增) (注:微信和PC无法响应tap事件) <br/>
 		</td>
 	</tr>
 	<tr align="center">
@@ -372,7 +379,8 @@ var mescroll = new MeScroll("mescroll", { down: {下拉刷新的配置参数}, u
 			icon: null, <br/>
 			tip: "暂无相关数据~", <br/>
 			btntext: "", <br/>
-			btnClick: null <br/>
+			btnClick: null, <br/>
+			supportTap: false <br/>
 		}</td>
 		<td align="left">列表第一页无任何数据时,显示的空提示布局; 需配置warpId或clearEmptyId才生效 <br/>
 			warpId: 父布局的id; 如果此项有值,将不使用clearEmptyId的值; <br/>
@@ -380,6 +388,7 @@ var mescroll = new MeScroll("mescroll", { down: {下拉刷新的配置参数}, u
 			tip: 提示文本 <br/>
 			btntext: 按钮文本 <br/>
 			btnClick: 点击按钮的回调 <br/>
+			supportTap: 如果您的运行环境支持tap,则可配置true,可减少点击延时,快速响应事件;默认false,通过onclick添加点击事件; (v 1.3.0 新增) (注:微信和PC无法响应tap事件) <br/>
 		</td>
 	</tr>
 	<tr align="center">
@@ -611,6 +620,10 @@ var mescroll = new MeScroll("mescroll", { down: {下拉刷新的配置参数}, u
 		<td>获取滚动内容的高度 </td>
 	</tr>
 	<tr align="center">
+		<td>mescroll.getToBottom();<br/>(v 1.3.0新增)</td>
+		<td>获取当前滚动条到底部的距离 </td>
+	</tr>
+	<tr align="center">
 		<td>mescroll.getStep(star, end, callback, t, rate);<br/>(v 1.2.8 新增) </td>
 		<td align="left">
 			star : 开始值; <br/>
@@ -622,6 +635,10 @@ var mescroll = new MeScroll("mescroll", { down: {下拉刷新的配置参数}, u
 		 	比如mescroll的回到顶部缓冲动画,轮播导航案例的顶部菜单滚动都是通过getStep实现<br/>
 		 	(注: 您可根据实际情况在 callback 通过 window.clearInterval(timer) 提前结束计步器)
 	 	</td>
+	</tr>
+	<tr align="center">
+		<td>mescroll.version;<br/>(v 1.3.0新增)</td>
+		<td>mescroll的版本号</td>
 	</tr>
 	<tr align="center">
 		<td>mescroll.destroy();</td>
