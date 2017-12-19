@@ -17,7 +17,7 @@ var mescroll = initMeScroll("mescroll", {
 //		}
 //	},
 	up: {
-//		auto: false, //是否在初始化时以上拉加载的方式自动加载第一页数据; 默认false
+//		auto: true, //是否在初始化时以上拉加载的方式自动加载第一页数据; 默认true
 		callback: getListData, //上拉回调,此处可简写; 相当于 callback: function (page) { getListData(page); }
 	}
 });

@@ -16,7 +16,7 @@
 
 ## 目录:  
 
-* <a href="https://github.com/mescroll/mescroll-versions" target="_blank">最新版本:1.3.0 (2017-12-16) 重要升级</a> <br/><br/>
+* <a href="https://github.com/mescroll/mescroll-versions" target="_blank">最新版本:1.3.1 (2017-12-19) 重要升级</a> <br/><br/>
 * <a href="#功能亮点-">功能亮点 </a> <br/>
 * <a href="#快速入门-">快速入门 </a> <br/>
 * <a href="http://www.mescroll.com/preview.html?name=list-products-vue">vue的示例 </a> <br/>
@@ -29,7 +29,7 @@
 * <a href="#api文档-">API文档 </a> <br/>
 * <a href="#常用方法-">常用方法 </a> <br/>
 * <a href="#其他方法-">其他方法 </a> <br/><br/>
-* <a href="http://www.mescroll.com/qa.html?v=1216">常见问题 </a> <br/>
+* <a href="http://www.mescroll.com/qa.html?v=1219">常见问题 </a> <br/>
 * <a href="http://www.mescroll.com/reward.html#tagRank">打赏排行榜 </a> <br/>
 
 ## 功能亮点 :
@@ -77,10 +77,10 @@ NPM 安装命令:
 	});
 ```  
 ###### 温馨提示:
-###### 1. 如果您的下拉刷新是重置列表数据,那么down完全可以不用配置,具体用法参考<a class="blue" href="http://www.mescroll.com/demo.html?v=1216">第一个基础案例</a>
+###### 1. 如果您的下拉刷新是重置列表数据,那么down完全可以不用配置,具体用法参考<a class="blue" href="http://www.mescroll.com/demo.html?v=1219">第一个基础案例</a>
 ###### 解析: down内部默认调用的是mescroll.resetUpScroll(),而resetUpScroll会将page.num=1,再触发up.callback,从而实现刷新列表数据
 
-###### 2. 如果您的项目是在iOS的微信,QQ,Safari等浏览器访问的,则建议配置up的isBounce为false,禁止ios的回弹效果; <a class="blue" href="http://www.mescroll.com/qa.html?v=1216#q10">解析(必读)</a>
+###### 2. 如果您的项目是在iOS的微信,QQ,Safari等浏览器访问的,则建议配置up的isBounce为false,禁止ios的回弹效果; <a class="blue" href="http://www.mescroll.com/qa.html?v=1219#q10">解析(必读)</a>
 
 #### 4. 处理回调:
 ```
@@ -145,7 +145,7 @@ NPM 安装命令:
 --- 以上为mescroll最基本的用法,强烈建议您下载并查看 <a href="#基础案例-base-demos-">mescroll基础案例</a> , 发现mescroll更强大的功能 ~<br/>
 --- 基础案例一共6个, 每个案例3分钟, 一共花您18分钟; 这18分钟您将了解mescroll在不同情况下应如何快速配置 ~<br/>
 --- 磨刀不误砍柴工,心急吃不了热豆腐. 请静下心来体验与理解mescroll, 一定会让您事半功倍 ~<br/>
---- 如使用中有疑问, 请先查看  <a href="http://www.mescroll.com/qa.html?v=1216">常见问题专区</a> ~<br/><br/>
+--- 如使用中有疑问, 请先查看  <a href="http://www.mescroll.com/qa.html?v=1219">常见问题专区</a> ~<br/><br/>
 
 ## mescroll.m.js和mescroll.min.js
 您如果在vue,angular等环境中,因作用域的问题未能正常引入或初始化Mescroll对象,则引用mescroll.m.js;<br/>
@@ -176,7 +176,7 @@ mescroll.m.js只是去掉了mescroll.min.js套的一层模块规范的代码:
 ##### 具体请参考 <a href="https://github.com/mescroll/mescroll/issues/56">https://github.com/mescroll/mescroll/issues/56</a>
 
 ## API文档 :   
-#### <a href="http://www.mescroll.com/api.html?v=1216#options" target="_blank">前往官网查看 >> </a>
+#### <a href="http://www.mescroll.com/api.html?v=1219#options" target="_blank">前往官网查看 >> </a>
 
 ```
 //创建mescroll对象
@@ -198,7 +198,7 @@ var mescroll = new MeScroll("mescroll", { down: {下拉刷新的配置参数}, u
 	<tr align="center">
 		<td>auto</td>
 		<td>true</td>
-		<td>是否在初始化完毕之后自动执行下拉刷新的回调</td>
+		<td>是否在初始化完毕之后自动执行一次下拉刷新的回调</td>
 	</tr>
 	<tr align="center">
 		<td>autoShowLoading</td>
@@ -308,8 +308,8 @@ var mescroll = new MeScroll("mescroll", { down: {下拉刷新的配置参数}, u
 	</tr>
 	<tr align="center">
 		<td>auto</td>
-		<td>false</td>
-		<td>是否在初始化完毕之后自动执行上拉加载的回调</td>
+		<td>1.3.1以前版本默认false<br/>1.3.1版本默认true</td>
+		<td>是否在初始化完毕之后自动执行一次上拉加载的回调</td>
 	</tr>
 	<tr align="center">
 		<td>isLock</td>
