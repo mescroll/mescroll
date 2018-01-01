@@ -16,7 +16,7 @@
 
 ## 目录:  
 
-* <a href="https://github.com/mescroll/mescroll-versions" target="_blank">最新版本:1.3.1 (2017-12-19) 重要升级</a> <br/><br/>
+* <a href="https://github.com/mescroll/mescroll-versions" target="_blank">最新版本:1.3.2 (2018-01-01) 重要升级</a> <br/><br/>
 * <a href="#功能亮点-">功能亮点 </a> <br/>
 * <a href="#快速入门-">快速入门 </a> <br/>
 * <a href="http://www.mescroll.com/preview.html?name=list-products-vue">vue的示例 </a> <br/>
@@ -140,7 +140,6 @@ NPM 安装命令:
 --- <a href="https://github.com/mescroll/mescroll-versions" target="_blank">upCallback推荐的三个方法mescroll.endByPage(), mescroll.endBySize(), mescroll.endSuccess()是mescroll 1.2.1新增的, 请检查更新~ 1.2.1还更新了许多内容哦,点此查看~ 请保持star,这阵子都会有新功能加入~</a><br/>
 
 --- mescroll在vue中的使用案例---------- <a href="http://www.mescroll.com/preview.html?name=list-products-vue">点此在线体验 </a> ---------- [点此查看源码](https://github.com/mescroll/mescroll/blob/master/demo/base/list-products-vue.html) ---------- <br/>
---- body为滚动区域的使用案例---------- <a href="http://www.mescroll.com/preview.html?name=list-mescroll-body">点此在线体验 </a> ---------- [点此查看源码](https://github.com/mescroll/mescroll/blob/master/demo/base/list-mescroll-body.html) ---------- <br/>
 
 --- 以上为mescroll最基本的用法,强烈建议您下载并查看 <a href="#基础案例-base-demos-">mescroll基础案例</a> , 发现mescroll更强大的功能 ~<br/>
 --- 基础案例一共6个, 每个案例3分钟, 一共花您18分钟; 这18分钟您将了解mescroll在不同情况下应如何快速配置 ~<br/>
