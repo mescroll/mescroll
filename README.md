@@ -541,6 +541,13 @@ var mescroll = new MeScroll("mescroll", { down: {下拉刷新的配置参数}, u
 			mescroll.os.pc</b> 为true, 则是PC端;
 		</td>
 	</tr>
+	<tr align="center">
+		<td>mescroll.setBounce(boolean)<br/>(v 1.3.0 新增)</td>
+		<td>
+			<b>mescroll.setBounce(true)</b> 允许bounce;<br/>
+			<b>mescroll.setBounce(false)</b> 禁止bounce
+		</td>
+	</tr>
 </table>
 
 ## 其他方法 :  
