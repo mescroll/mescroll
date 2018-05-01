@@ -1,7 +1,7 @@
 # mescroll
 ## mescroll -- 精致的下拉刷新和上拉加载js框架 (JS framework for pull-refresh and pull-up-loading)
 ## http://www.mescroll.com
-## 将于2018年6月16日 开源 尽情期待
+
 1. 原生js, 支持vue, 不依赖jquery,zepto
 
 2. 一套代码多端运行. 完美运行于android,iOS,手机浏览器,兼容PC主流浏览器
@@ -10,7 +10,7 @@
 
 4. 主流APP案例, 丰富经典
 
-5. 免费商用
+5. MIT协议, 免费商用, 欢迎pull requests ~
 
 6. <a target="_blank" href="//shang.qq.com/wpa/qunwpa?idkey=1067896895dabdf6cf11f4decb0be8bfd3687d3d208730bf2757238ba1948469">mescroll交流群</a>
 		
