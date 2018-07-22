@@ -14,7 +14,7 @@
 ;(function(name, definition) {
 	// 检测上下文环境是否为AMD或CMD
 	var hasDefine = typeof define === 'function',
-	// 检查上下文环境是否为Node
+		// 检查上下文环境是否为Node
 		hasExports = typeof module !== 'undefined' && module.exports;
 
 	if(hasDefine) {
@@ -432,8 +432,8 @@
 
 		//配置参数
 		me.optUp = me.options.up || {
-				use: false
-			};
+			use: false
+		};
 
 		//具体参数配置
 		me.extendUpScroll(me.optUp);
@@ -991,64 +991,64 @@
 	}
 	MeScroll.install = function(Vue,options){
 		Vue.component('MeScroll',{
-			template:'  <div :id="meid" class="mescroll" v-bind:style="mescrollCss"><div style="position: relative;"><slot></slot></div></div>',
-			data: function () {
-				return {
-					_me: {},
-					mescrollCss: {
-						position: 'fixed',
-						top: 0,
-						bottom: 0,
-						height: 'auto',
-						width: '100%'
-					}
-				}
-			},
-			props: {
-				meid: {
-					type: String,
-					default: 'mescroll'
-				},
-				up: {
-					type: Object
-				},
-				down: {
-					type: Object
-				}
-			},
-			mounted: function () {
-				var up = null
-				var down = null
-				if(this.up){
-					up = Object.assign({},this.up)
-					up.callback = this.callUp
-				}else{
-					up = {}
-					up.callback = this.callUp
-				}
-				if(this.down){
-					down = Object.assign({},this.down)
-					down.callback = this.callDown
-				}else{
-					down = {}
-					down.callback = this.callDown
-				}
+      template:'  <div :id="meid" class="mescroll" v-bind:style="mescrollCss"><div style="position: relative;"><slot></slot></div></div>',
+      data: function () {
+        return {
+          _me: {},
+          mescrollCss: {
+            position: 'fixed',
+            top: 0,
+            bottom: 0,
+            height: 'auto',
+            width: '100%'
+          }
+        }
+      },
+      props: {
+        meid: {
+          type: String,
+          default: 'mescroll'
+        },
+        up: {
+          type: Object
+        },
+        down: {
+          type: Object
+        }
+      },
+      mounted: function () {
+        var up = null
+        var down = null
+        if(this.up){
+          up = Object.assign({},this.up)
+          up.callback = this.callUp
+        }else{
+          up = {}
+          up.callback = this.callUp
+        }
+        if(this.down){
+          down = Object.assign({},this.down)
+          down.callback = this.callDown
+        }else{
+          down = {}
+          down.callback = this.callDown
+        }
 
-				var _me = new MeScroll(this.meid, {
-					up: up,
-					down: down
-				});
-				this._me = _me
-				this.$emit('init', _me)
-			},
-			methods: {
-				callUp: function (page, mescroll) {
-					this.$emit('up', page, mescroll)
-				},
-				callDown: function (mescroll) {
-					this.$emit('down', mescroll)
-				}
-			}
+        var _me = new MeScroll(this.meid, {
+          up: up,
+          down: down
+        });
+        this._me = _me
+        this.$emit('init', _me)
+      },
+      methods: {
+        callUp: function (page, mescroll) {
+          this.$emit('up', page, mescroll)
+        },
+        callDown: function (mescroll) {
+          this.$emit('down', mescroll)
+        }
+      }
 		})
 
 	}
