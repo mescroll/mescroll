@@ -1,0 +1,279 @@
+/*
+ * mescroll -- 精致的下拉刷新和上拉加载js框架  ( a great JS framework for pull-refresh and pull-up-loading )
+ * version 1.3.2
+ * 2018-01-01
+ * author: wenju < mescroll@qq.com > 文举
+ * 
+ * 官网:	http://www.mescroll.com
+ * 文档:	https://github.com/mescroll/mescroll.git
+ * 动态:	https://github.com/mescroll/mescroll-versions
+ * 问答:http://www.mescroll.com/qa.html
+ * issues: https://github.com/mescroll/mescroll/issues
+ * QQ交流群: 633126761
+ * 
+ * 温馨提示: mescroll唯一的全局样式: html,body{height:100%},用于固定body的高度满屏; 如果影响到您原本的项目样式,可自行删除
+ * 
+ * 
+ * ----- mescroll的html结构解析 ----
+ * 
+   <div id="mescroll" class="mescroll">
+	
+		//下拉刷新区域 ( mescroll初始化之后自动创建 )
+		<div class="mescroll-downwarp">
+			<div class="downwarp-content">
+				<p class="downwarp-progress"></p> <p class="downwarp-tip">下拉刷新 </p>
+			</div>
+		</div>
+		
+		//界面的具体内容
+		//<div>界面内容</div>
+		//数据列表..
+		//<ul id="dataList" class="data-list">
+		//	<li>数据列表</li>
+		
+			//空布局 ( 列表无任何数据时, 自动创建显示 )
+			<div class="mescroll-empty">
+				<img class="empty-icon" src="../img/mescroll-empty.png"/>
+				<p class="empty-tip">暂无相关数据~</p>
+				 <p class="empty-btn">去逛逛 ></p> 
+			</div>
+			
+		//</ul>
+	
+		//上拉加载区域 ( mescroll初始化之后自动创建 )
+		<div class="mescroll-upwarp">
+			//加载中..
+			<p class="upwarp-progress mescroll-rotate"></p><p class="upwarp-tip">加载中..</p>
+			//无数据
+			<p class="upwarp-nodata">-- END --</p>
+		</div>
+		
+		//回到顶部按钮 ( 列表滚动到配置的距离时, 自动创建显示 )
+		<img class="mescroll-totop" src="../img/mescroll-totop.png"/>
+		
+	</div>
+ * 
+ */
+
+
+/*设置body的高度,以便正确的获取body高度和触发scroll事件*/
+html,
+body {
+	height: 100%;
+}
+
+/*使iOS列表滑动流畅*/
+body {
+	-webkit-overflow-scrolling: touch;
+}
+
+/*下拉刷新和上拉加载的滑动区域*/
+.mescroll {
+	width: 100%;
+	height: 100%;
+	overflow-y: auto;
+}
+
+/*启用硬件加速:使动画渲染流畅,解决部分手机闪白屏问题,在下拉刷新和上拉加载触发时启用,结束后移除,避免滥用导致其他兼容性问题*/
+.mescroll-hardware {
+	-webkit-transform: translateZ(0);
+	-webkit-transform-style: preserve-3d;
+	-webkit-backface-visibility: hidden;
+	-webkit-perspective: 1000;
+}
+
+/*下拉刷新区域*/
+.mescroll-downwarp {
+	position: relative;
+	width: 100%;
+	height: 0;
+	overflow: hidden;
+	text-align: center;
+}
+
+/*下拉刷新--高度重置的过渡动画*/
+.mescroll-downwarp-reset {
+	-webkit-transition: height 300ms;
+	transition: height 300ms;
+}
+
+/*下拉刷新--内容区,定位于区域底部*/
+.mescroll-downwarp .downwarp-content {
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	min-height: 30px;
+	padding: 10px 0;
+}
+
+/*上拉加载区域*/
+.mescroll-upwarp {
+	min-height: 30px;
+	padding: 15px 0;
+	text-align: center;
+	visibility: hidden;/*代替display: none,列表快速滑动到底部能及时显示上拉加载的区域*/
+}
+
+/*下拉刷新,上拉加载--提示文本*/
+.mescroll-downwarp .downwarp-tip,
+.mescroll-upwarp .upwarp-tip,
+.mescroll-upwarp .upwarp-nodata {
+	display: inline-block;
+	font-size: 12px;
+	color: gray;
+	vertical-align: middle;
+}
+.mescroll-downwarp .downwarp-tip,
+.mescroll-upwarp .upwarp-tip{
+	margin-left: 8px;
+}
+
+/*下拉刷新,上拉加载--旋转进度条*/
+.mescroll-downwarp .downwarp-progress,
+.mescroll-upwarp .upwarp-progress {
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	border-radius: 50%;
+	border: 1px solid gray;
+	border-bottom-color: transparent;
+	vertical-align: middle;
+}
+
+/*旋转动画*/
+.mescroll-rotate {
+	-webkit-animation: mescrollRotate 0.6s linear infinite;
+	animation: mescrollRotate 0.6s linear infinite;
+}
+
+@-webkit-keyframes mescrollRotate {
+	0% {
+		-webkit-transform: rotate(0deg);
+	}
+	100% {
+		-webkit-transform: rotate(360deg);
+	}
+}
+
+@keyframes mescrollRotate {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
+/*无任何数据的空布局*/
+.mescroll-empty {
+	width: 100%;
+	padding-top: 20px;
+	text-align: center;
+}
+
+.mescroll-empty .empty-icon {
+	width: 45%;
+}
+
+.mescroll-empty .empty-tip {
+	margin-top: 6px;
+	font-size: 14px;
+	color: gray;
+}
+
+.mescroll-empty .empty-btn {
+	max-width: 50%;
+	margin: 20px auto;
+	padding: 10px;
+	border: 1px solid #65AADD;
+	border-radius: 6px;
+	background-color: white;
+	color: #65AADD;
+}
+
+.mescroll-empty .empty-btn:active {
+	opacity: .75;
+}
+
+/*回到顶部的按钮*/
+.mescroll-totop {
+	z-index: 9990;
+	position: fixed;
+	right: 10px;
+	bottom: 30px;
+	width: 36px;
+	height: 36px;
+	border-radius: 50%;
+	opacity: 0;
+}
+
+/*显示动画--淡入*/
+.mescroll-fade-in {
+	-webkit-animation: mescrollFadeIn .5s linear forwards;
+	animation: mescrollFadeIn .5s linear forwards;
+}
+
+@-webkit-keyframes mescrollFadeIn {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+
+@keyframes mescrollFadeIn {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+
+/*隐藏动画--淡出*/
+.mescroll-fade-out {
+	pointer-events: none;
+	-webkit-animation: mescrollFadeOut .5s linear forwards;
+	animation: mescrollFadeOut .5s linear forwards;
+}
+
+@-webkit-keyframes mescrollFadeOut {
+	0% {
+		opacity: 1;
+	}
+	100% {
+		opacity: 0;
+	}
+}
+
+@keyframes mescrollFadeOut {
+	0% {
+		opacity: 1;
+	}
+	100% {
+		opacity: 0;
+	}
+}
+
+/*滚动条轨道背景(默认在PC端设置)*/
+.mescroll-bar::-webkit-scrollbar-track {
+	background-color: transparent;
+}
+
+/*滚动条轨道宽度 (默认在PC端设置)*/
+.mescroll-bar::-webkit-scrollbar {
+	width: 6px;
+}
+
+/*滚动条游标 (默认在PC端设置)*/
+.mescroll-bar::-webkit-scrollbar-thumb {
+	border-radius: 6px;
+	background-color: #ccc;
+}
+
+/*滚动条游标鼠标经过的颜色变化 (默认在PC端设置)*/
+.mescroll-bar::-webkit-scrollbar-thumb:hover {
+	background-color: #aaa;
+}
