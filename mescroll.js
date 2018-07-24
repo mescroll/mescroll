@@ -773,6 +773,13 @@
 	MeScroll.prototype.showEmpty = function() {
 		var me = this;
 		var optEmpty = me.optUp.empty; //空布局的配置
+		
+		//empty自定义回调函数		
+		if(typeof(optEmpty) == 'function'){
+			optEmpty();
+			return;
+		}
+		
 		var warpId = optEmpty.warpId || me.optUp.clearEmptyId; //优先使用warpId
 		if(warpId == null) return;
 		var emptyWarp = me.getDomById(warpId) //要显示空布局的位置
