@@ -19,7 +19,7 @@
 * <a href="https://github.com/mescroll/mescroll-versions" target="_blank">最新版本:1.3.2 (2018-01-01) 重要升级</a> <br/><br/>
 * <a href="#功能亮点-">功能亮点 </a> <br/>
 * <a href="#快速入门-">快速入门 </a> <br/>
-* <a href="http://www.mescroll.com/preview.html?name=list-products-vue" target="_blank">vue示例</a>
+* <a href="http://www.mescroll.com/preview.html?name=list-products-vue" target="_blank">vue在线示例</a>
 * <a href="#vue-cli">vue-cli示例</a>
 * <a href="https://github.com/mescroll/mescroll/tree/master/demo/vue-demo" target="_blank">MeScroll组件</a>
 * <a href="#基础案例-base-demos-"><b>基础案例 base demos</b></a> <br/>
@@ -146,8 +146,8 @@
 ## vue-cli
 在vue-cli中的使用步骤:
 ##### 1. 执行npm命令安装mescroll : &nbsp; &nbsp; **npm install mescroll.js**
-##### 2. 把 mescroll.min.css 拷贝到 assets/mescroll/ 目录, 在 main.js 中引入 : &nbsp; &nbsp; **import './assets/mescroll/mescroll.min.css'**
-##### 3. 在需要使用mescroll的界面中引入mescroll.min.js : &nbsp; &nbsp; **import MeScroll from 'mescroll.js'**
+##### 2. 引入mescroll.min.js : &nbsp; &nbsp; **import MeScroll from 'mescroll.js'**
+##### 3. 引入mescroll.min.css : &nbsp; &nbsp; **import 'mescroll.js/mescroll.min.css'**
 ##### 4. vue单文件示例 :</p>
 ```
 <template>
@@ -162,7 +162,9 @@
 </template>
 
 <script>
+//引入mescroll.min.js和mescroll.min.css
 import MeScroll from 'mescroll.js'
+import 'mescroll.js/mescroll.min.css'
 
 export default {
   name: 'xxxx',
@@ -178,7 +180,7 @@ export default {
       up: {
         callback: this.upCallback,
         toTop: { //配置回到顶部按钮
-          src: require('@/assets/mescroll/mescroll-totop.png'), //此处动态引入assets的文件需用require
+          src: require('@/assets/img/mescroll-totop.png'), //此处动态引入assets的文件需用require
         }
       }
     });
