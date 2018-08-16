@@ -1,7 +1,6 @@
 # mescroll
 ## mescroll -- 精致的下拉刷新和上拉加载js框架 (JS framework for pull-refresh and pull-up-loading)
 ## http://www.mescroll.com
-
 1. 原生js, 支持vue, 不依赖jquery,zepto
 
 2. 一套代码多端运行. 完美运行于android,iOS,手机浏览器,兼容PC主流浏览器
@@ -17,11 +16,12 @@
 
 ## 目录:  
 
-* <a href="https://github.com/mescroll/mescroll/releases" target="_blank">最新版本:1.3.2 (2018-01-01) 重要升级</a> <br/><br/>
+* <a href="https://github.com/mescroll/mescroll-versions" target="_blank">最新版本:1.3.2 (2018-01-01) 重要升级</a> <br/><br/>
 * <a href="#功能亮点-">功能亮点 </a> <br/>
 * <a href="#快速入门-">快速入门 </a> <br/>
-* <a href="http://www.mescroll.com/preview.html?name=list-products-vue">vue的示例 </a> <br/>
-* <a href="#mescrollmjs和mescrollminjs">mescroll.m.js和mescroll.min.js </a> <br/><br/>
+* <a href="http://www.mescroll.com/preview.html?name=list-products-vue" target="_blank">vue示例</a>
+* <a href="#vue-cli">vue-cli示例</a>
+* <a href="https://github.com/mescroll/mescroll/tree/master/demo/vue-demo" target="_blank">MeScroll组件</a>
 * <a href="#基础案例-base-demos-"><b>基础案例 base demos</b></a> <br/>
 * <a href="#中级案例-intermediate-demos-"><b>中级案例 intermediate demos</b></a> <br/>
 * <a href="#高级案例-senior-demos-"><b>高级案例 senior demos</b></a> <br/><br/>
@@ -30,7 +30,7 @@
 * <a href="#api文档-">API文档 </a> <br/>
 * <a href="#常用方法-">常用方法 </a> <br/>
 * <a href="#其他方法-">其他方法 </a> <br/><br/>
-* <a href="http://www.mescroll.com/qa.html?v=1219">常见问题 </a> <br/>
+* <a href="http://www.mescroll.com/qa.html?v=1216">常见问题 </a> <br/>
 * <a href="http://www.mescroll.com/reward.html#tagRank">打赏排行榜 </a> <br/>
 
 ## 功能亮点 :
@@ -49,8 +49,6 @@
 
 ## NPM
 #### 特别感谢 @<a href="https://github.com/channg">channg</a> 帮忙整理发布NPM
-<a href="https://www.npmjs.com/package/mescroll.js">https://www.npmjs.com/package/mescroll.js</a>
-NPM 安装命令:
 ```
     npm install mescroll.js
 ```  
@@ -78,10 +76,10 @@ NPM 安装命令:
 	});
 ```  
 ###### 温馨提示:
-###### 1. 如果您的下拉刷新是重置列表数据,那么down完全可以不用配置,具体用法参考<a class="blue" href="http://www.mescroll.com/demo.html?v=1219">第一个基础案例</a>
+###### 1. 如果您的下拉刷新是重置列表数据,那么down完全可以不用配置,具体用法参考<a class="blue" href="http://www.mescroll.com/demo.html?v=1216">第一个基础案例</a>
 ###### 解析: down内部默认调用的是mescroll.resetUpScroll(),而resetUpScroll会将page.num=1,再触发up.callback,从而实现刷新列表数据
 
-###### 2. 如果您的项目是在iOS的微信,QQ,Safari等浏览器访问的,则建议配置up的isBounce为false,禁止ios的回弹效果; <a class="blue" href="http://www.mescroll.com/qa.html?v=1219#q10">解析(必读)</a>
+###### 2. 如果您的项目是在iOS的微信,QQ,Safari等浏览器访问的,则建议配置up的isBounce为false,禁止ios的回弹效果; <a class="blue" href="http://www.mescroll.com/qa.html?v=1216#q10">解析(必读)</a>
 
 #### 4. 处理回调:
 ```
@@ -140,43 +138,97 @@ NPM 安装命令:
 
 --- <a href="https://github.com/mescroll/mescroll-versions" target="_blank">upCallback推荐的三个方法mescroll.endByPage(), mescroll.endBySize(), mescroll.endSuccess()是mescroll 1.2.1新增的, 请检查更新~ 1.2.1还更新了许多内容哦,点此查看~ 请保持star,这阵子都会有新功能加入~</a><br/>
 
---- mescroll在vue中的使用案例---------- <a href="http://www.mescroll.com/preview.html?name=list-products-vue">点此在线体验 </a> ---------- [点此查看源码](https://github.com/mescroll/mescroll/blob/master/demo/base/list-products-vue.html) ---------- <br/>
-
 --- 以上为mescroll最基本的用法,强烈建议您下载并查看 <a href="#基础案例-base-demos-">mescroll基础案例</a> , 发现mescroll更强大的功能 ~<br/>
 --- 基础案例一共6个, 每个案例3分钟, 一共花您18分钟; 这18分钟您将了解mescroll在不同情况下应如何快速配置 ~<br/>
 --- 磨刀不误砍柴工,心急吃不了热豆腐. 请静下心来体验与理解mescroll, 一定会让您事半功倍 ~<br/>
---- 如使用中有疑问, 请先查看  <a href="http://www.mescroll.com/qa.html?v=1219">常见问题专区</a> ~<br/><br/>
+--- 如使用中有疑问, 请先查看  <a href="http://www.mescroll.com/qa.html?v=1216">常见问题专区</a> ~<br/><br/>
 
-## mescroll.m.js和mescroll.min.js
-您如果在vue,angular等环境中,因作用域的问题未能正常引入或初始化Mescroll对象,则引用mescroll.m.js;<br/>
-mescroll.m.js只是去掉了mescroll.min.js套的一层模块规范的代码:
+## vue-cli
+在vue-cli中的使用步骤:
+##### 1. 执行npm命令安装mescroll : &nbsp; &nbsp; **npm install mescroll.js**
+##### 2. 把 mescroll.min.css 拷贝到 assets/mescroll/ 目录, 在 main.js 中引入 : &nbsp; &nbsp; **import './assets/mescroll/mescroll.min.css'**
+##### 3. 在需要使用mescroll的界面中引入mescroll.min.js : &nbsp; &nbsp; **import MeScroll from 'mescroll.js'**
+##### 4. vue单文件示例 :</p>
 ```
-;(function(name,definition){
-    //检测上下文环境是否为AMD或CMD
-    var hasDefine = typeof define === 'function',
-        // 检测上下文环境是否为Node
-        hasExports = typeof module !== 'function' && module.exports;
-    if(hasDefine){
-        //AMD环境或CMD环境
-        define(definition);
-    }else if(hasExports){
-        //定义为普通Node模块
-        module.exports = definition();
-    }else{
-        //将模块的执行结果挂在window变量中，在浏览器中this指向window对象
-        this[name] = definition();
+<template>
+  <div>
+    <!--mescroll滚动区域的基本结构-->
+    <div id="mescroll" class="mescroll">
+      <div>
+        <!--内容...-->
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import MeScroll from 'mescroll.js'
+
+export default {
+  name: 'xxxx',
+  data() {
+    return {
+      mescroll: null, //mescroll实例对象
+      dataList:[] //列表数据
     }
+  },
+  mounted: function () {
+    //创建MeScroll对象
+    this.mescroll = new MeScroll("mescroll", { //在vue的mounted生命周期初始化mescroll,确保此处配置的id能够被找到
+      up: {
+        callback: this.upCallback,
+        toTop: { //配置回到顶部按钮
+          src: require('@/assets/mescroll/mescroll-totop.png'), //此处动态引入assets的文件需用require
+        }
+      }
+    });
+  },
+  methods: {
+    //上拉回调 page = {num:1, size:10}; num:当前页 ,默认从1开始; size:每页数据条数,默认10
+    upCallback(page) {
+      //联网请求
+      axios.get("xxxxxx", {
+        params: {
+          num: page.num, //页码
+          size: page.size //每页长度
+        }
+      }).then((response)=> {
+        //请求的列表数据
+        let arr = response.data;
+        //如果是第一页需手动制空列表
+        if (page.num == 1) this.dataList = [];
+        //把请求到的数据添加到列表
+        this.dataList = this.dataList.concat(arr);
+        //数据渲染成功后,隐藏下拉刷新的状态
+        this.$nextTick(() => {
+          this.mescroll.endSuccess(arr.length);
+        })
+      }).catch((e)=> {
+        //联网失败的回调,隐藏下拉刷新和上拉加载的状态;
+        this.mescroll.endErr();
+      })
+    }
+  }
+}
+</script>
 
-})('Mescroll',function(){
-    var Mescroll = function(){}
-    return Mescroll
-})
+<style scope>
+  /*通过fixed固定mescroll的高度*/
+  .mescroll {
+    position: fixed;
+    top: 44px;
+    bottom: 0;
+    height: auto;
+  }
+</style>
+
 ```
-##### mescroll.m.js因为没有闭包限制作用域,所以能解决某些情况下引用mescroll.min.js报'Mescroll' undefined的问题
-##### 具体请参考 <a href="https://github.com/mescroll/mescroll/issues/56">https://github.com/mescroll/mescroll/issues/56</a>
+
+##### Vue单文件开发,如果您配置了up 的 isBounce为 false, 一定要看看 <a href="https://github.com/mescroll/mescroll/issues/80" target="_blank">https://github.com/mescroll/mescroll/issues/80</a>
+	       		
 
 ## API文档 :   
-#### <a href="http://www.mescroll.com/api.html?v=1219#options" target="_blank">前往官网查看 >> </a>
+#### <a href="http://www.mescroll.com/api.html?v=1216#options" target="_blank">前往官网查看 >> </a>
 
 ```
 //创建mescroll对象
@@ -198,7 +250,7 @@ var mescroll = new MeScroll("mescroll", { down: {下拉刷新的配置参数}, u
 	<tr align="center">
 		<td>auto</td>
 		<td>true</td>
-		<td>是否在初始化完毕之后自动执行一次下拉刷新的回调</td>
+		<td>是否在初始化完毕之后自动执行下拉刷新的回调</td>
 	</tr>
 	<tr align="center">
 		<td>autoShowLoading</td>
@@ -308,8 +360,8 @@ var mescroll = new MeScroll("mescroll", { down: {下拉刷新的配置参数}, u
 	</tr>
 	<tr align="center">
 		<td>auto</td>
-		<td>1.3.1以前版本默认false<br/>1.3.1版本默认true</td>
-		<td>是否在初始化完毕之后自动执行一次上拉加载的回调</td>
+		<td>false</td>
+		<td>是否在初始化完毕之后自动执行上拉加载的回调</td>
 	</tr>
 	<tr align="center">
 		<td>isLock</td>
@@ -537,9 +589,9 @@ var mescroll = new MeScroll("mescroll", { down: {下拉刷新的配置参数}, u
 	<tr align="center">
 		<td>mescroll.os<br/>(v 1.2.5 新增)</td>
 		<td>
-			mescroll.os.ios</b> 为true, 则是ios设备;<br/>
-			mescroll.os.android</b> 为true, 则是android设备;<br/>
-			mescroll.os.pc</b> 为true, 则是PC端;
+			<b>mescroll.os.ios</b> 为true, 则是ios设备;<br/>
+			<b>mescroll.os.android</b> 为true, 则是android设备;<br/>
+			<b>mescroll.os.pc</b> 为true, 则是PC端;
 		</td>
 	</tr>
 	<tr align="center">
@@ -756,8 +808,8 @@ var mescroll = new MeScroll("mescroll", { down: {下拉刷新的配置参数}, u
 
 <table border="1" cellspacing="0" width="100%">
 	<tr align="center" height="80px">
-		<td>mescroll.min.css</td>
-		<td>mescroll.min.js</td>
+		<td>mescroll.css</td>
+		<td>mescroll.js</td>
 		<td>mescroll所有基础案例源码</td>
 		<td>mescroll所有中级案例源码</td>
 	</tr>
