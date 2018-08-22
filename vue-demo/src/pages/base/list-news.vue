@@ -7,7 +7,7 @@
       <router-link class="btn-right" to="listProducts">list-products</router-link>
     </p>
     <!--滑动区域-->
-    <div id="mescroll" class="mescroll">
+    <div ref="mescroll" class="mescroll">
       <div>
         <p class="notice">本Demo的下拉刷新: 添加新数据到列表顶部</p>
         <ul id="newsList" class="news-list">
@@ -31,14 +31,12 @@ export default {
   data () {
     return {
       mescroll: null,
-      lastScrollTop: 0, // 路由切换时滚动条的位置
-      lastBounce: null, // 路由切换时是否禁止ios回弹
       newArr: [] // 数据列表
     }
   },
   mounted () {
-    // 创建MeScroll对象:注意配置的id不能和父组件id重复,或者使用ref的方式传入dom元素
-    this.mescroll = new MeScroll('mescroll', {// 在mounted生命周期初始化mescroll,以确保您配置的id能够被找到.
+    // 创建MeScroll对象:为避免配置的id和父组件id重复,这里使用ref的方式初始化mescroll
+    this.mescroll = new MeScroll(this.$refs.mescroll, {// 在mounted生命周期初始化mescroll,以确保您配置的dom元素能够被找到.
       down: {
         auto: false, // 是否在初始化完毕之后自动执行下拉回调callback; 默认true
         callback: this.downCallback // 下拉刷新的回调
@@ -57,27 +55,27 @@ export default {
       }
     })
   },
-  beforeRouteEnter (to, from, next) {
+  beforeRouteEnter (to, from, next) { // 如果没有配置回到顶部按钮或isBounce,则beforeRouteEnter不用写
     next(vm => {
       if (vm.mescroll) {
-        // 滚动到之前列表的位置
-        if (vm.lastScrollTop) {
-          vm.mescroll.setScrollTop(vm.lastScrollTop)
+        // 恢复到之前设置的isBounce状态
+        if (vm.mescroll.lastBounce != null) vm.mescroll.setBounce(vm.mescroll.lastBounce)
+        // 滚动到之前列表的位置(注意:路由使用keep-alive才生效)
+        if (vm.mescroll.lastScrollTop) {
+          vm.mescroll.setScrollTop(vm.mescroll.lastScrollTop)
           setTimeout(() => { // 需延时,因为setScrollTop内部会触发onScroll,可能会渐显回到顶部按钮
             vm.mescroll.setTopBtnFadeDuration(0)// 设置回到顶部按钮显示时无渐显动画
           }, 16)
         }
-        // 恢复到之前设置的isBounce状态
-        if (vm.lastBounce != null) vm.mescroll.setBounce(vm.lastBounce)
       }
     })
   },
-  beforeRouteLeave (to, from, next) {
+  beforeRouteLeave (to, from, next) { // 如果没有配置回到顶部按钮或isBounce,则beforeRouteLeave不用写
     if (this.mescroll) {
-      this.lastScrollTop = this.mescroll.getScrollTop()// 记录当前滚动条的位置
-      this.mescroll.hideTopBtn(0)// 隐藏回到顶部按钮,无渐隐动画
-      this.lastBounce = this.mescroll.optUp.isBounce// 记录当前是否禁止ios回弹
+      this.mescroll.lastBounce = this.mescroll.optUp.isBounce// 记录当前是否禁止ios回弹
       this.mescroll.setBounce(true) // 允许bounce
+      this.mescroll.lastScrollTop = this.mescroll.getScrollTop()// 记录当前滚动条的位置
+      this.mescroll.hideTopBtn(0)// 隐藏回到顶部按钮,无渐隐动画
     }
     next()
   },

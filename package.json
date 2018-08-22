@@ -10,7 +10,7 @@
     "url": "git+https://github.com/mescroll/mescroll.git"
   },
   "author": "wenju",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/mescroll/mescroll/issues"
   },

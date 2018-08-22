@@ -16,12 +16,13 @@
 
 ## 目录:  
 
-* <a href="https://github.com/mescroll/mescroll-versions" target="_blank">最新版本:1.3.2 (2018-01-01) 重要升级</a> <br/><br/>
+* <a href="https://github.com/mescroll/mescroll/releases" target="_blank">最新版本:1.3.5 (2018-08-20) 重要升级</a> <br/><br/>
 * <a href="#功能亮点-">功能亮点 </a> <br/>
 * <a href="#快速入门-">快速入门 </a> <br/>
-* <a href="http://www.mescroll.com/preview.html?name=list-products-vue" target="_blank">vue在线示例</a>
-* <a href="#vue-cli">vue-cli示例</a>
-* <a href="https://github.com/mescroll/mescroll/tree/master/vue-demo" target="_blank">MeScroll组件</a>
+* <a href="#vue-cli">vue-cli示例 (理解原理)</a>
+* <a href="#mescroll组件-" target="_blank">mescroll组件(推荐使用)</a>
+* <a href="https://github.com/mescroll/mescroll/tree/master/vue-demo" target="_blank">vue示例Demo (建议看看)</a>
+* <a href="http://www.mescroll.com/preview.html?name=list-products-vue" target="_blank">vue在线示例 (了解即可)</a>
 * <a href="#基础案例-base-demos-"><b>基础案例 base demos</b></a> <br/>
 * <a href="#中级案例-intermediate-demos-"><b>中级案例 intermediate demos</b></a> <br/>
 * <a href="#高级案例-senior-demos-"><b>高级案例 senior demos</b></a> <br/><br/>
@@ -30,7 +31,7 @@
 * <a href="#api文档-">API文档 </a> <br/>
 * <a href="#常用方法-">常用方法 </a> <br/>
 * <a href="#其他方法-">其他方法 </a> <br/><br/>
-* <a href="http://www.mescroll.com/qa.html?v=1216">常见问题 </a> <br/>
+* <a href="http://www.mescroll.com/qa.html?v=0820">常见问题 </a> <br/>
 * <a href="http://www.mescroll.com/reward.html#tagRank">打赏排行榜 </a> <br/>
 
 ## 功能亮点 :
@@ -50,7 +51,7 @@
 ## NPM
 #### 特别感谢 @<a href="https://github.com/channg">channg</a> 帮忙整理发布NPM
 ```
-    npm install mescroll.js
+    npm install --save mescroll.js
 ```  
 
 ## 快速入门 :
@@ -71,15 +72,32 @@
 			callback: downCallback //下拉刷新的回调,别写成downCallback(),多了括号就自动执行方法了
 		},
 		up: {
-			callback: upCallback //上拉加载回调,简写callback:function(page){upCallback(page);}
+			callback: upCallback, //上拉加载回调,简写callback:function(page){upCallback(page);}
+			//以下是一些常用的配置,当然不写也可以的.
+			page: {
+				num: 0, //当前页 默认0,回调之前会加1; 即callback(page)会从1开始
+				size: 10, //每页数据条数,默认10
+			},
+			noMoreSize: 5, //如果列表已无数据,可设置列表的总数量要大于5才显示无更多数据;避免列表数据过少(比如只有一条数据),显示无更多数据会不好看
+			toTop: {
+				//回到顶部按钮
+				src: "../img/mescroll-totop.png", //图片路径,默认null,支持网络图
+				offset: 1000, //列表滚动1000px才显示回到顶部按钮			
+			},
+			empty: {
+				//列表第一页无任何数据时,显示的空提示布局; 需配置warpId才显示
+				warpId:	null, //父布局的id (1.3.5版本支持传入dom元素)
+				icon: "../img/mescroll-empty.png", //图标,默认null,支持网络图
+				tip: "暂无相关数据~", //提示
+			}
 		}
 	});
 ```  
 ###### 温馨提示:
-###### 1. 如果您的下拉刷新是重置列表数据,那么down完全可以不用配置,具体用法参考<a class="blue" href="http://www.mescroll.com/demo.html?v=1216">第一个基础案例</a>
+###### 1. 如果您的下拉刷新是重置列表数据,那么down完全可以不用配置,具体用法参考<a class="blue" href="http://www.mescroll.com/demo.html?v=0820">第一个基础案例</a>
 ###### 解析: down内部默认调用的是mescroll.resetUpScroll(),而resetUpScroll会将page.num=1,再触发up.callback,从而实现刷新列表数据
 
-###### 2. 如果您的项目是在iOS的微信,QQ,Safari等浏览器访问的,则建议配置up的isBounce为false,禁止ios的回弹效果; <a class="blue" href="http://www.mescroll.com/qa.html?v=1216#q10">解析(必读)</a>
+###### 2. 如果您的项目是在iOS的微信,QQ,Safari等浏览器访问的,建议配置up的isBounce为false,禁止ios的回弹效果; <a class="blue" href="http://www.mescroll.com/qa.html?v=0820#q10">解析(必读)</a>
 
 #### 4. 处理回调:
 ```
@@ -141,19 +159,19 @@
 --- 以上为mescroll最基本的用法,强烈建议您下载并查看 <a href="#基础案例-base-demos-">mescroll基础案例</a> , 发现mescroll更强大的功能 ~<br/>
 --- 基础案例一共6个, 每个案例3分钟, 一共花您18分钟; 这18分钟您将了解mescroll在不同情况下应如何快速配置 ~<br/>
 --- 磨刀不误砍柴工,心急吃不了热豆腐. 请静下心来体验与理解mescroll, 一定会让您事半功倍 ~<br/>
---- 如使用中有疑问, 请先查看  <a href="http://www.mescroll.com/qa.html?v=1216">常见问题专区</a> ~<br/><br/>
+--- 如使用中有疑问, 请先查看  <a href="http://www.mescroll.com/qa.html?v=0820">常见问题专区</a> ~<br/><br/>
 
 ## vue-cli
 在vue-cli中的使用步骤:
-##### 1. 执行npm命令安装mescroll : &nbsp; &nbsp; **npm install mescroll.js**
+##### 1. 执行npm命令安装mescroll : &nbsp; &nbsp; **npm install --save mescroll.js**
 ##### 2. 引入mescroll.min.js : &nbsp; &nbsp; **import MeScroll from 'mescroll.js'**
 ##### 3. 引入mescroll.min.css : &nbsp; &nbsp; **import 'mescroll.js/mescroll.min.css'**
-##### 4. vue单文件示例 :</p>
+##### 4. vue单文件示例 :
 ```
 <template>
   <div>
-    <!--mescroll滚动区域的基本结构-->
-    <div id="mescroll" class="mescroll">
+    <!--mescroll滚动区域的基本结构,为避免id重复导致的多次初始化,这里使用ref-->
+    <div ref="mescroll" class="mescroll">
       <div>
         <!--内容...-->
       </div>
@@ -176,12 +194,27 @@ export default {
   },
   mounted: function () {
     //创建MeScroll对象
-    this.mescroll = new MeScroll("mescroll", { //在vue的mounted生命周期初始化mescroll,确保此处配置的id能够被找到
+    this.mescroll = new MeScroll(this.$refs.mescroll, { // 在vue的mounted生命周期初始化mescroll,确保此处配置的ref有值
+    	// down:{}, //下拉刷新的配置. (如果下拉刷新和上拉加载处理的逻辑是一样的,则down可不用写了)
       up: {
         callback: this.upCallback,
-        toTop: { //配置回到顶部按钮
-          src: require('@/assets/img/mescroll-totop.png'), //此处动态引入assets的文件需用require
-        }
+        // 以下是一些常用的配置,当然不写也可以的.
+		page: {
+			num: 0, //当前页 默认0,回调之前会加1; 即callback(page)会从1开始
+			size: 10, //每页数据条数,默认10
+		},
+		noMoreSize: 5, //如果列表已无数据,可设置列表的总数量要大于5才显示无更多数据;避免列表数据过少(比如只有一条数据),显示无更多数据会不好看
+		toTop: {
+			//回到顶部按钮
+			src: "/static/mescroll/mescroll-totop.png", //图片路径,默认null,支持网络图
+			offset: 1000, //列表滚动1000px才显示回到顶部按钮			
+		},
+		empty: {
+			//列表第一页无任何数据时,显示的空提示布局; 需配置warpId才显示
+			warpId:	"xx", //父布局的id (1.3.5版本支持传入dom元素)
+			icon: "/static/mescroll/mescroll-empty.png", //图标,默认null,支持网络图
+			tip: "暂无相关数据~", //提示
+		}
       }
     });
   },
@@ -210,6 +243,32 @@ export default {
         this.mescroll.endErr();
       })
     }
+  },
+  // 进入路由时,恢复列表状态
+  beforeRouteEnter (to, from, next) {  // 如果没有配置回到顶部按钮或isBounce,则beforeRouteEnter不用写
+    next(vm => {
+      if (vm.mescroll) {
+      	// 恢复到之前设置的isBounce状态
+        if (vm.mescroll.lastBounce != null) vm.mescroll.setBounce(vm.mescroll.lastBounce)
+        // 滚动到之前列表的位置 (注意:路由使用keep-alive才生效)
+        if (vm.mescroll.lastScrollTop) {
+          vm.mescroll.setScrollTop(vm.mescroll.lastScrollTop)
+          setTimeout(() => { // 需延时,因为setScrollTop内部会触发onScroll,可能会渐显回到顶部按钮
+            vm.mescroll.setTopBtnFadeDuration(0)// 设置回到顶部按钮显示时无渐显动画
+          }, 16)
+        }
+      }
+    })
+  },
+  // 离开路由时,记录列表状态
+  beforeRouteLeave (to, from, next) {  // 如果没有配置回到顶部按钮或isBounce,则beforeRouteLeave不用写
+    if (this.mescroll) {
+      this.mescroll.lastBounce = this.mescroll.optUp.isBounce// 记录当前是否禁止ios回弹
+	  this.mescroll.setBounce(true) // 允许bounce
+      this.mescroll.lastScrollTop = this.mescroll.getScrollTop()// 记录当前滚动条的位置
+      this.mescroll.hideTopBtn(0)// 隐藏回到顶部按钮,无渐隐动画
+    }
+    next()
   }
 }
 </script>
@@ -226,15 +285,118 @@ export default {
 
 ```
 
-##### Vue单文件开发,如果您配置了up 的 isBounce为 false, 一定要看看 <a href="https://github.com/mescroll/mescroll/issues/80" target="_blank">https://github.com/mescroll/mescroll/issues/80</a>
-	       		
+##### 以上写法可能有些繁琐,在vue中强烈建议使用mescroll组件,简单快捷:
+
+## mescroll组件
+mescroll组件使用步骤:
+##### 1. 执行npm命令安装mescroll : &nbsp; &nbsp; **npm install --save mescroll.js**
+##### 2. 引入mescroll组件 : &nbsp; &nbsp; **import MescrollVue from 'mescroll.js/mescroll.vue'**
+##### 3. vue单文件示例 :
+```
+<template>
+  <div>
+    <!--mescroll滚动区域的基本结构-->
+    <mescroll-vue ref="mescroll" :down="mescrollDown" :up="mescrollUp" @init="mescrollInit">
+      <!--内容...-->
+    </mescroll-vue>
+  </div>
+</template>
+
+<script>
+// 引入mescroll的vue组件
+import MescrollVue from 'mescroll.js/mescroll.vue'
+
+export default {
+  name: 'xxx',
+  components: {
+    MescrollVue // 注册mescroll组件
+  },
+  data () {
+    return {
+      mescroll: null, // mescroll实例对象
+      mescrollDown:{}, //下拉刷新的配置. (如果下拉刷新和上拉加载处理的逻辑是一样的,则mescrollDown可不用写了)
+      mescrollUp: { // 上拉加载的配置.
+        callback: this.upCallback, // 上拉回调,此处可简写; 相当于 callback: function (page, mescroll) { getListData(page); }
+        //以下是一些常用的配置,当然不写也可以的.
+				page: {
+					num: 0, //当前页 默认0,回调之前会加1; 即callback(page)会从1开始
+					size: 10 //每页数据条数,默认10
+				},
+				noMoreSize: 5, //如果列表已无数据,可设置列表的总数量要大于5才显示无更多数据;避免列表数据过少(比如只有一条数据),显示无更多数据会不好看
+				toTop: {
+					//回到顶部按钮
+					src: "/static/mescroll/mescroll-totop.png", //图片路径,默认null,支持网络图
+					offset: 1000 //列表滚动1000px才显示回到顶部按钮			
+				},
+				empty: {
+					//列表第一页无任何数据时,显示的空提示布局; 需配置warpId才显示
+					warpId: "xx", //父布局的id (1.3.5版本支持传入dom元素)
+					icon: "/static/mescroll/mescroll-empty.png", //图标,默认null,支持网络图
+					tip: "暂无相关数据~" //提示
+				}
+      },
+      dataList: [] // 列表数据
+    }
+  },
+  beforeRouteEnter (to, from, next) { // 如果没有配置回到顶部按钮或isBounce,则beforeRouteEnter不用写
+    next(vm => {
+      vm.$refs.mescroll.beforeRouteEnter() // 进入路由时,滚动到原来的列表位置,恢复回到顶部按钮和isBounce的配置
+    })
+  },
+  beforeRouteLeave (to, from, next) { // 如果没有配置回到顶部按钮或isBounce,则beforeRouteLeave不用写
+    this.$refs.mescroll.beforeRouteLeave() // 退出路由时,记录列表滚动的位置,隐藏回到顶部按钮和isBounce的配置
+    next()
+  },
+  methods: {
+    // mescroll组件初始化的回调,可获取到mescroll对象
+    mescrollInit (mescroll) {
+      this.mescroll = mescroll
+    },
+    // 上拉回调 page = {num:1, size:10}; num:当前页 ,默认从1开始; size:每页数据条数,默认10
+    upCallback (page, mescroll) {
+      // 联网请求
+      axios.get('xxxxxx', {
+        params: {
+          num: page.num, // 页码
+          size: page.size // 每页长度
+        }
+      }).then((response) => {
+        // 请求的列表数据
+        let arr = response.data
+        // 如果是第一页需手动制空列表
+        if (page.num === 1) this.dataList = []
+        // 把请求到的数据添加到列表
+        this.dataList = this.dataList.concat(arr)
+        // 数据渲染成功后,隐藏下拉刷新的状态
+        this.$nextTick(() => {
+          mescroll.endSuccess(arr.length)
+        })
+      }).catch((e) => {
+        // 联网失败的回调,隐藏下拉刷新和上拉加载的状态;
+        mescroll.endErr()
+      })
+    }
+  }
+}
+</script>
+
+<style scope>
+  /*以fixed的方式固定mescroll的高度*/
+  .mescroll {
+    position: fixed;
+    top: 44px;
+    bottom: 0;
+    height: auto;
+  }
+</style>
+```	       		
 
 ## API文档 :   
-#### <a href="http://www.mescroll.com/api.html?v=1216#options" target="_blank">前往官网查看 >> </a>
+#### <a href="http://www.mescroll.com/api.html?v=0820#options" target="_blank">前往官网查看 >> </a>
 
 ```
 //创建mescroll对象
-var mescroll = new MeScroll("mescroll", { down: {下拉刷新的配置参数}, up: {上拉加载的配置参数} });
+var mescroll = new MeScroll(id或dom对象, { down: {下拉刷新的配置参数}, up: {上拉加载的配置参数} });
 ```  
 
 <table border="1" cellspacing="0">
@@ -404,7 +566,7 @@ var mescroll = new MeScroll("mescroll", { down: {下拉刷新的配置参数}, u
 			supportTap: false <br/>
 		}</td>
 		<td align="left">回到顶部按钮的配置: <br/>
-			warpId: 父布局的id; 默认添加在body中 (v 1.2.8 新增) <br/>
+			warpId: 父布局的id; 默认添加在body中 (1.3.5版本支持传入dom元素)  <br/>
 			src: 图片路径,必须配置src才会显示回到顶部按钮,不配置不显示 <br/>
 			html: 标签内容,默认null; 如果同时设置了src,则优先取src (2017/12/10新增) <br/>
 			offset: 列表滚动1000px显示回到顶部按钮 <br/>
@@ -437,7 +599,7 @@ var mescroll = new MeScroll("mescroll", { down: {下拉刷新的配置参数}, u
 			supportTap: false <br/>
 		}</td>
 		<td align="left">列表第一页无任何数据时,显示的空提示布局; 需配置warpId或clearEmptyId才生效 <br/>
-			warpId: 父布局的id; 如果此项有值,将不使用clearEmptyId的值; <br/>
+			warpId: 父布局的id; 如果此项有值,将不使用clearEmptyId的值; (1.3.5版本支持传入dom元素) <br/>
 			icon: 空布局的图标路径 <br/>
 			tip: 提示文本 <br/>
 			btntext: 按钮文本 <br/>
@@ -453,7 +615,7 @@ var mescroll = new MeScroll("mescroll", { down: {下拉刷新的配置参数}, u
 	<tr align="center">
 		<td>clearEmptyId</td>
 		<td>null</td>
-		<td>相当于同时设置了clearId和empty.warpId; 简化写法; 在vue中使用,则无需配置此项</td>
+		<td>相当于同时设置了clearId和empty.warpId; 简化写法; 在vue中使用,不能配置此项  (1.3.5版本支持传入dom元素)</td>
 	</tr>
 	<tr align="center">
 		<td>hardwareClass</td>
@@ -631,9 +793,11 @@ var mescroll = new MeScroll("mescroll", { down: {下拉刷新的配置参数}, u
 		mescroll.endUpScroll() 内部有调用</td>
 	</tr>
 	<tr align="center">
-		<td>mescroll.hideUpScroll();</td>
+		<td>mescroll.hideUpScroll(displayAble);</td>
 		<td>隐藏上拉加载的布局<br/>
-		mescroll.endUpScroll() 内部有调用</td>
+		mescroll.endUpScroll() 内部有调用<br/>
+		1.3.5新增参数 displayAble: 是否通过display:none隐藏, 默认false通过visibility:hidden的方式隐藏
+		</td>
 	</tr>
 	<tr align="center">
 		<td>mescroll.clearDataList();</td>
@@ -657,12 +821,16 @@ var mescroll = new MeScroll("mescroll", { down: {下拉刷新的配置参数}, u
 		mescroll.endSuccess() 内部有调用</td>
 	</tr>
 	<tr align="center">
-		<td>mescroll.showTopBtn();</td>
-		<td>显示回到顶部的按钮</td>
+		<td>mescroll.showTopBtn(time);</td>
+		<td>显示回到顶部的按钮<br/>time: 显示的动画时长,默认0.5秒 (1.3.5版本新增参数)</td>
 	</tr>
 	<tr align="center">
-		<td>mescroll.hideTopBtn();</td>
-		<td>隐藏回到顶部的按钮</td>
+		<td>mescroll.hideTopBtn(time);</td>
+		<td>隐藏回到顶部的按钮 <br/>time: 隐藏的动画时长,默认0.5秒 (1.3.5版本新增参数)</td>
+	</tr>
+	<tr align="center">
+		<td>mescroll.setTopBtnFadeDuration(time);<br/>(1.3.5版本新增)</td>
+		<td>设置回到顶部按钮的显示和隐藏的动画时长 <br/>time: 显示隐藏动画时长,默认0.5秒</td>
 	</tr>
 	<tr align="center">
 		<td>mescroll.getScrollTop();</td>
