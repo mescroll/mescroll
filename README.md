@@ -21,7 +21,7 @@
 * <a href="#快速入门-">快速入门 </a> <br/>
 * <a href="http://www.mescroll.com/preview.html?name=list-products-vue" target="_blank">vue在线示例</a>
 * <a href="#vue-cli">vue-cli示例</a>
-* <a href="https://github.com/mescroll/mescroll/tree/master/demo/vue-demo" target="_blank">MeScroll组件</a>
+* <a href="https://github.com/mescroll/mescroll/tree/master/vue-demo" target="_blank">MeScroll组件</a>
 * <a href="#基础案例-base-demos-"><b>基础案例 base demos</b></a> <br/>
 * <a href="#中级案例-intermediate-demos-"><b>中级案例 intermediate demos</b></a> <br/>
 * <a href="#高级案例-senior-demos-"><b>高级案例 senior demos</b></a> <br/><br/>
