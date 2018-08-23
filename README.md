@@ -61,13 +61,15 @@
 #### 2. 拷贝以下布局结构:  
 ```
         <div id="mescroll" class="mescroll"> //id可以改,而"mescroll"的class不能删
-            //列表内容,如:<ul>列表数据</ul> ...
+        	<div> //这个div不能删, 可以改成ul或者其他容器标签.
+            	//内容...
+            </div>
         </div>  
 ```  
 
 #### 3. 创建MeScroll对象:  
 ```
-        var mescroll = new MeScroll("mescroll", { //第一个参数"mescroll"对应上面布局结构div的id
+        var mescroll = new MeScroll("mescroll", { //第一个参数"mescroll"对应上面布局结构div的id (1.3.5版本支持传入dom对象)
     		down: {
 			callback: downCallback //下拉刷新的回调,别写成downCallback(),多了括号就自动执行方法了
 		},
@@ -86,7 +88,7 @@
 			},
 			empty: {
 				//列表第一页无任何数据时,显示的空提示布局; 需配置warpId才显示
-				warpId:	null, //父布局的id (1.3.5版本支持传入dom元素)
+				warpId:	"xxid", //父布局的id (1.3.5版本支持传入dom元素)
 				icon: "../img/mescroll-empty.png", //图标,默认null,支持网络图
 				tip: "暂无相关数据~", //提示
 			}
@@ -185,7 +187,7 @@ import MeScroll from 'mescroll.js'
 import 'mescroll.js/mescroll.min.css'
 
 export default {
-  name: 'xxxx',
+  name: 'xxx',
   data() {
     return {
       mescroll: null, //mescroll实例对象
@@ -211,7 +213,7 @@ export default {
 	},
 	empty: {
 		//列表第一页无任何数据时,显示的空提示布局; 需配置warpId才显示
-		warpId:	"xx", //父布局的id (1.3.5版本支持传入dom元素)
+		warpId:	"xxid", //父布局的id (1.3.5版本支持传入dom元素)
 		icon: "/static/mescroll/mescroll-empty.png", //图标,默认null,支持网络图
 		tip: "暂无相关数据~", //提示
 	}
@@ -285,7 +287,7 @@ export default {
 
 ```
 
-##### 以上写法可能有些繁琐,在vue中强烈建议使用mescroll组件,简单快捷:
+##### 以上写法有些繁琐,在vue中强烈建议使用mescroll组件,简单快捷:
 
 ## mescroll组件
 mescroll组件使用步骤:
@@ -330,7 +332,7 @@ export default {
 	},
 	empty: {
 		//列表第一页无任何数据时,显示的空提示布局; 需配置warpId才显示
-		warpId: "xx", //父布局的id (1.3.5版本支持传入dom元素)
+		warpId: "xxid", //父布局的id (1.3.5版本支持传入dom元素)
 		icon: "/static/mescroll/mescroll-empty.png", //图标,默认null,支持网络图
 		tip: "暂无相关数据~" //提示
 	}
