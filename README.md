@@ -61,7 +61,7 @@
 #### 2. 拷贝以下布局结构:  
 ```
         <div id="mescroll" class="mescroll"> //id可以改,而"mescroll"的class不能删
-        	<div> //这个div不能删, 可以改成ul或者其他容器标签.
+            <div> //这个div不能删, 可以改成ul或者其他容器标签.
             	//内容...
             </div>
         </div>  
@@ -156,15 +156,13 @@
         }
 ```  
 
---- <a href="https://github.com/mescroll/mescroll-versions" target="_blank">upCallback推荐的三个方法mescroll.endByPage(), mescroll.endBySize(), mescroll.endSuccess()是mescroll 1.2.1新增的, 请检查更新~ 1.2.1还更新了许多内容哦,点此查看~ 请保持star,这阵子都会有新功能加入~</a><br/>
-
 --- 以上为mescroll最基本的用法,强烈建议您下载并查看 <a href="#基础案例-base-demos-">mescroll基础案例</a> , 发现mescroll更强大的功能 ~<br/>
 --- 基础案例一共6个, 每个案例3分钟, 一共花您18分钟; 这18分钟您将了解mescroll在不同情况下应如何快速配置 ~<br/>
 --- 磨刀不误砍柴工,心急吃不了热豆腐. 请静下心来体验与理解mescroll, 一定会让您事半功倍 ~<br/>
 --- 如使用中有疑问, 请先查看  <a href="http://www.mescroll.com/qa.html?v=0820">常见问题专区</a> ~<br/><br/>
 
 ## vue-cli
-在vue-cli中的使用步骤:
+在vue-cli中的使用步骤  (至少更新到1.3.5版本):
 ##### 1. 执行npm命令安装mescroll : &nbsp; &nbsp; **npm install --save mescroll.js**
 ##### 2. 引入mescroll.min.js : &nbsp; &nbsp; **import MeScroll from 'mescroll.js'**
 ##### 3. 引入mescroll.min.css : &nbsp; &nbsp; **import 'mescroll.js/mescroll.min.css'**
@@ -290,7 +288,7 @@ export default {
 ##### 以上写法有些繁琐,在vue中强烈建议使用mescroll组件,简单快捷:
 
 ## mescroll组件
-mescroll组件使用步骤:
+mescroll组件使用步骤 (至少更新到1.3.5版本):
 ##### 1. 执行npm命令安装mescroll : &nbsp; &nbsp; **npm install --save mescroll.js**
 ##### 2. 引入mescroll组件 : &nbsp; &nbsp; **import MescrollVue from 'mescroll.js/mescroll.vue'**
 ##### 3. vue单文件示例 :
