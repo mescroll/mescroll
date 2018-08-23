@@ -20,7 +20,7 @@
 * <a href="#功能亮点-">功能亮点 </a> <br/>
 * <a href="#快速入门-">快速入门 </a> <br/>
 * <a href="#vue-cli">vue-cli示例 (理解原理)</a>
-* <a href="#mescroll组件" target="_blank">mescroll组件(推荐使用)</a>
+* <a href="#mescroll组件" target="_blank">mescroll组件 (推荐使用)</a>
 * <a href="https://github.com/mescroll/mescroll/tree/master/vue-demo" target="_blank">vue示例Demo (建议看看)</a>
 * <a href="http://www.mescroll.com/preview.html?name=list-products-vue" target="_blank">vue在线示例 (了解即可)</a>
 * <a href="#基础案例-base-demos-"><b>基础案例 base demos</b></a> <br/>
@@ -199,22 +199,22 @@ export default {
       up: {
         callback: this.upCallback,
         // 以下是一些常用的配置,当然不写也可以的.
-		page: {
-			num: 0, //当前页 默认0,回调之前会加1; 即callback(page)会从1开始
-			size: 10, //每页数据条数,默认10
-		},
-		noMoreSize: 5, //如果列表已无数据,可设置列表的总数量要大于5才显示无更多数据;避免列表数据过少(比如只有一条数据),显示无更多数据会不好看
-		toTop: {
-			//回到顶部按钮
-			src: "/static/mescroll/mescroll-totop.png", //图片路径,默认null,支持网络图
-			offset: 1000, //列表滚动1000px才显示回到顶部按钮			
-		},
-		empty: {
-			//列表第一页无任何数据时,显示的空提示布局; 需配置warpId才显示
-			warpId:	"xx", //父布局的id (1.3.5版本支持传入dom元素)
-			icon: "/static/mescroll/mescroll-empty.png", //图标,默认null,支持网络图
-			tip: "暂无相关数据~", //提示
-		}
+	page: {
+		num: 0, //当前页 默认0,回调之前会加1; 即callback(page)会从1开始
+		size: 10, //每页数据条数,默认10
+	},
+	noMoreSize: 5, //如果列表已无数据,可设置列表总数大于5才显示无更多数据;避免列表数据过少(比如只有一条数据),显示无更多数据会不好看
+	toTop: {
+		//回到顶部按钮
+		src: "/static/mescroll/mescroll-totop.png", //图片路径,默认null,支持网络图
+		offset: 1000, //列表滚动1000px才显示回到顶部按钮			
+	},
+	empty: {
+		//列表第一页无任何数据时,显示的空提示布局; 需配置warpId才显示
+		warpId:	"xx", //父布局的id (1.3.5版本支持传入dom元素)
+		icon: "/static/mescroll/mescroll-empty.png", //图标,默认null,支持网络图
+		tip: "暂无相关数据~", //提示
+	}
       }
     });
   },
@@ -264,7 +264,7 @@ export default {
   beforeRouteLeave (to, from, next) {  // 如果没有配置回到顶部按钮或isBounce,则beforeRouteLeave不用写
     if (this.mescroll) {
       this.mescroll.lastBounce = this.mescroll.optUp.isBounce// 记录当前是否禁止ios回弹
-	  this.mescroll.setBounce(true) // 允许bounce
+      this.mescroll.setBounce(true) // 允许bounce
       this.mescroll.lastScrollTop = this.mescroll.getScrollTop()// 记录当前滚动条的位置
       this.mescroll.hideTopBtn(0)// 隐藏回到顶部按钮,无渐隐动画
     }
@@ -318,22 +318,22 @@ export default {
       mescrollUp: { // 上拉加载的配置.
         callback: this.upCallback, // 上拉回调,此处可简写; 相当于 callback: function (page, mescroll) { getListData(page); }
         //以下是一些常用的配置,当然不写也可以的.
-				page: {
-					num: 0, //当前页 默认0,回调之前会加1; 即callback(page)会从1开始
-					size: 10 //每页数据条数,默认10
-				},
-				noMoreSize: 5, //如果列表已无数据,可设置列表的总数量要大于5才显示无更多数据;避免列表数据过少(比如只有一条数据),显示无更多数据会不好看
-				toTop: {
-					//回到顶部按钮
-					src: "/static/mescroll/mescroll-totop.png", //图片路径,默认null,支持网络图
-					offset: 1000 //列表滚动1000px才显示回到顶部按钮			
-				},
-				empty: {
-					//列表第一页无任何数据时,显示的空提示布局; 需配置warpId才显示
-					warpId: "xx", //父布局的id (1.3.5版本支持传入dom元素)
-					icon: "/static/mescroll/mescroll-empty.png", //图标,默认null,支持网络图
-					tip: "暂无相关数据~" //提示
-				}
+	page: {
+		num: 0, //当前页 默认0,回调之前会加1; 即callback(page)会从1开始
+		size: 10 //每页数据条数,默认10
+	},
+	noMoreSize: 5, //如果列表已无数据,可设置列表总数大于5才显示无更多数据;避免列表数据过少(比如只有一条数据),显示无更多数据会不好看
+	toTop: {
+		//回到顶部按钮
+		src: "/static/mescroll/mescroll-totop.png", //图片路径,默认null,支持网络图
+		offset: 1000 //列表滚动1000px才显示回到顶部按钮			
+	},
+	empty: {
+		//列表第一页无任何数据时,显示的空提示布局; 需配置warpId才显示
+		warpId: "xx", //父布局的id (1.3.5版本支持传入dom元素)
+		icon: "/static/mescroll/mescroll-empty.png", //图标,默认null,支持网络图
+		tip: "暂无相关数据~" //提示
+	}
       },
       dataList: [] // 列表数据
     }
