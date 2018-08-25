@@ -8,7 +8,7 @@
     <!--滑动区域-->
     <mescroll-vue ref="mescroll" :up="mescrollUp" @init="mescrollInit">
       <!--模拟的轮播,菜单 可在down.callback中配置刷新轮播数据-->
-      <img class="swiper" src="/static/mock/img/swiper.jpg"/>
+      <img class="swiper" src="../../../static/mock/img/swiper.jpg"/>
       <!--筛选条件; 模拟列表的重置和演示空布局的使用-->
       <div class="nav">
         <p :class="getActiveCls(0)" @click="changeTab(0)">全部</p>
@@ -50,12 +50,12 @@ export default {
         },
         noMoreSize: 5, // 如果列表已无数据,可设置列表的总数量要大于等于5条才显示无更多数据;避免列表数据过少(比如只有一条数据),显示无更多数据会不好看
         toTop: {
-          src: '/static/mescroll/mescroll-totop.png' // 回到顶部按钮的图片路径,支持网络图
+          src: './static/mescroll/mescroll-totop.png' // 回到顶部按钮的图片路径,支持网络图
         },
         empty: {
           // 列表第一页无任何数据时,显示的空提示布局; 需配置warpId才生效;
           warpId: 'dataList', // 父布局的id;
-          icon: '/static/mescroll/mescroll-empty.png', // 图标,支持网络图
+          icon: './static/mescroll/mescroll-empty.png', // 图标,支持网络图
           tip: '暂无相关数据~', // 提示
           btntext: '去逛逛 >', // 按钮,默认""
           btnClick () { // 点击按钮的回调,默认null

@@ -50,7 +50,7 @@ export default {
         },
         noMoreSize: 5, // 如果列表已无数据,可设置列表的总数量要大于等于5条才显示无更多数据;避免列表数据过少(比如只有一条数据),显示无更多数据会不好看
         toTop: { // 配置回到顶部按钮
-          src: '/static/mescroll/mescroll-totop.png'
+          src: './static/mescroll/mescroll-totop.png'
         }
       }
     })
@@ -82,6 +82,7 @@ export default {
   methods: {
     /* 下拉刷新的回调 */
     downCallback () {
+      console.log('this.mescroll.version=' + this.mescroll.version);
       // 联网加载数据
       this.getListDataFromNet(0, 1, (data) => {
         // 添加新数据到列表顶部

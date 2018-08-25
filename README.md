@@ -31,7 +31,7 @@
 * <a href="#api文档-">API文档 </a> <br/>
 * <a href="#常用方法-">常用方法 </a> <br/>
 * <a href="#其他方法-">其他方法 </a> <br/><br/>
-* <a href="http://www.mescroll.com/qa.html?v=0820">常见问题 </a> <br/>
+* <a href="http://www.mescroll.com/qa.html?v=0825">常见问题 </a> <br/>
 * <a href="http://www.mescroll.com/reward.html#tagRank">打赏排行榜 </a> <br/>
 
 ## 功能亮点 :
@@ -96,10 +96,10 @@
 	});
 ```  
 ###### 温馨提示:
-###### 1. 如果您的下拉刷新是重置列表数据,那么down完全可以不用配置,具体用法参考<a class="blue" href="http://www.mescroll.com/demo.html?v=0820">第一个基础案例</a>
+###### 1. 如果您的下拉刷新是重置列表数据,那么down完全可以不用配置,具体用法参考<a class="blue" href="http://www.mescroll.com/demo.html?v=0825">第一个基础案例</a>
 ###### 解析: down内部默认调用的是mescroll.resetUpScroll(),而resetUpScroll会将page.num=1,再触发up.callback,从而实现刷新列表数据
 
-###### 2. 如果您的项目是在iOS的微信,QQ,Safari等浏览器访问的,建议配置up的isBounce为false,禁止ios的回弹效果; <a class="blue" href="http://www.mescroll.com/qa.html?v=0820#q10">解析(必读)</a>
+###### 2. 如果您的项目是在iOS的微信,QQ,Safari等浏览器访问的,建议配置up的isBounce为false,禁止ios的回弹效果; <a class="blue" href="http://www.mescroll.com/qa.html?v=0825#q10">解析(必读)</a>
 
 #### 4. 处理回调:
 ```
@@ -159,7 +159,7 @@
 --- 以上为mescroll最基本的用法,强烈建议您下载并查看 <a href="#基础案例-base-demos-">mescroll基础案例</a> , 发现mescroll更强大的功能 ~<br/>
 --- 基础案例一共6个, 每个案例3分钟, 一共花您18分钟; 这18分钟您将了解mescroll在不同情况下应如何快速配置 ~<br/>
 --- 磨刀不误砍柴工,心急吃不了热豆腐. 请静下心来体验与理解mescroll, 一定会让您事半功倍 ~<br/>
---- 如使用中有疑问, 请先查看  <a href="http://www.mescroll.com/qa.html?v=0820">常见问题专区</a> ~<br/><br/>
+--- 如使用中有疑问, 请先查看  <a href="http://www.mescroll.com/qa.html?v=0825">常见问题专区</a> ~<br/><br/>
 
 ## vue-cli
 在vue-cli中的使用步骤  (至少更新到1.3.5版本):
@@ -206,13 +206,13 @@ export default {
 	noMoreSize: 5, //如果列表已无数据,可设置列表总数大于5才显示无更多数据;避免列表数据过少(比如只有一条数据),显示无更多数据会不好看
 	toTop: {
 		//回到顶部按钮
-		src: "/static/mescroll/mescroll-totop.png", //图片路径,默认null,支持网络图
+		src: "./static/mescroll/mescroll-totop.png", //图片路径,默认null,支持网络图
 		offset: 1000, //列表滚动1000px才显示回到顶部按钮			
 	},
 	empty: {
 		//列表第一页无任何数据时,显示的空提示布局; 需配置warpId才显示
 		warpId:	"xxid", //父布局的id (1.3.5版本支持传入dom元素)
-		icon: "/static/mescroll/mescroll-empty.png", //图标,默认null,支持网络图
+		icon: "./static/mescroll/mescroll-empty.png", //图标,默认null,支持网络图
 		tip: "暂无相关数据~", //提示
 	}
       }
@@ -325,13 +325,13 @@ export default {
 	noMoreSize: 5, //如果列表已无数据,可设置列表总数大于5才显示无更多数据;避免列表数据过少(比如只有一条数据),显示无更多数据会不好看
 	toTop: {
 		//回到顶部按钮
-		src: "/static/mescroll/mescroll-totop.png", //图片路径,默认null,支持网络图
+		src: "./static/mescroll/mescroll-totop.png", //图片路径,默认null,支持网络图
 		offset: 1000 //列表滚动1000px才显示回到顶部按钮			
 	},
 	empty: {
 		//列表第一页无任何数据时,显示的空提示布局; 需配置warpId才显示
 		warpId: "xxid", //父布局的id (1.3.5版本支持传入dom元素)
-		icon: "/static/mescroll/mescroll-empty.png", //图标,默认null,支持网络图
+		icon: "./static/mescroll/mescroll-empty.png", //图标,默认null,支持网络图
 		tip: "暂无相关数据~" //提示
 	}
       },
@@ -392,7 +392,7 @@ export default {
 ```	       		
 
 ## API文档 :   
-#### <a href="http://www.mescroll.com/api.html?v=0820#options" target="_blank">前往官网查看 >> </a>
+#### <a href="http://www.mescroll.com/api.html?v=0825#options" target="_blank">前往官网查看 >> </a>
 
 ```
 //创建mescroll对象
