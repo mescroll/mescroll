@@ -51,7 +51,7 @@
 ## NPM
 #### 特别感谢 @<a href="https://github.com/channg">channg</a> 帮忙整理发布NPM
 ```
-    npm install --save mescroll.js
+    npm install --save mescroll.js    //不要使用cnpm安装
 ```  
 
 ## 快速入门 :
@@ -163,7 +163,7 @@
 
 ## vue-cli
 在vue-cli中的使用步骤  (至少更新到1.3.5版本):
-##### 1. 执行npm命令安装mescroll : &nbsp; &nbsp; **npm install --save mescroll.js**
+##### 1. 执行npm命令安装mescroll : &nbsp; &nbsp; **npm install --save mescroll.js**    //不要使用cnpm安装
 ##### 2. 引入mescroll.min.js : &nbsp; &nbsp; **import MeScroll from 'mescroll.js'**
 ##### 3. 引入mescroll.min.css : &nbsp; &nbsp; **import 'mescroll.js/mescroll.min.css'**
 ##### 4. vue单文件示例 :
@@ -289,7 +289,7 @@ export default {
 
 ## mescroll组件
 mescroll组件使用步骤 (至少更新到1.3.5版本):
-##### 1. 执行npm命令安装mescroll : &nbsp; &nbsp; **npm install --save mescroll.js**
+##### 1. 执行npm命令安装mescroll : &nbsp; &nbsp; **npm install --save mescroll.js**    //不要使用cnpm安装
 ##### 2. 引入mescroll组件 : &nbsp; &nbsp; **import MescrollVue from 'mescroll.js/mescroll.vue'**
 ##### 3. vue单文件示例 :
 ```
