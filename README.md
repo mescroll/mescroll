@@ -177,7 +177,7 @@ var mescroll = new MeScroll("mescroll", {
 	up: {
 		lazyLoad: {
 	        	use: true, // 是否开启懒加载,默认false
-		        attr: 'imgurl', // 网络图片地址的属性名 (图片加载成功会自动移除改属性): &lt;img imgurl='网络图  src='占位图''/&gt;
+		        attr: 'imgurl', // 网络图片地址的属性名 (图片加载成功会自动移除改属性): <img imgurl='网络图  src='占位图''/>
 		        showClass: 'mescroll-lazy-in', // 图片加载成功的显示动画: 渐变显示,参见mescroll.css
 		        delay: 500, // 列表滚动的过程中每500ms检查一次图片是否在可视区域,如果在可视区域则加载图片
 		        offset: 200 // 超出可视区域200px的图片仍可触发懒加载,目的是提前加载部分图片
