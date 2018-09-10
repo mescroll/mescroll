@@ -132,7 +132,10 @@
 					toTop:{ //配置回到顶部按钮
 						src : "../res/img/mescroll-totop.png", //默认滚动到1000px显示,可配置offset修改
 						//offset : 1000
-					}
+					},
+					lazyLoad: {
+			        	use: true // 是否开启懒加载,默认false
+			        }
 				}
 			});
 			
@@ -170,7 +173,7 @@
 				for (var i = 0; i < curPageData.length; i++) {
 					var pd=curPageData[i];
 					
-					var str='<img class="pd-img" src="'+pd.pdImg+'"/>';
+					var str='<img class="pd-img" src="../res/img/loading-sq.png" imgurl="'+pd.pdImg+'"/>';
 					str+='<p class="pd-name">'+pd.pdName+'</p>';
 					str+='<p class="pd-price">'+pd.pdPrice+' 元</p>';
 					str+='<p class="pd-sold">已售'+pd.pdSold+'件</p>';

@@ -1,6 +1,6 @@
 /*! mescroll -- 精致的下拉刷新和上拉加载js框架  ( a great JS framework for pull-refresh and pull-up-loading )
- * version 1.3.5
- * 2018-08-20
+ * version 1.3.6
+ * 2018-09-10
  * author: wenju < mescroll@qq.com > 文举
  * *
  * 官网:  http://www.mescroll.com
@@ -9,7 +9,6 @@
  * issues:  https://github.com/mescroll/mescroll/issues
  * QQ交流群: 633126761
  */
-;
 (function (name, definition) {
   if (typeof define === 'function') {
     // AMD环境或CMD环境
@@ -24,7 +23,7 @@
 })('MeScroll', function () {
   var MeScroll = function (mescrollId, options) {
     var me = this;
-    me.version = '1.3.5'; // mescroll版本号
+    me.version = '1.3.6'; // mescroll版本号
     me.isScrollBody = (!mescrollId || mescrollId === 'body'); // 滑动区域是否为body
     me.scrollDom = me.isScrollBody ? document.body : me.getDomById(mescrollId); // MeScroll的滑动区域
     if (!me.scrollDom) return;
@@ -34,16 +33,17 @@
     var u = navigator.userAgent;
     var isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); // 是否为ios设备
     var isPC = typeof window.orientation === 'undefined'; // 是否为PC端
-    var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1;
-    ; // 是否为android端
+    var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1;// 是否为android端
+
     me.os = {
       ios: isIOS,
       pc: isPC,
       android: isAndroid
-    };
+    }
 
     me.isDownScrolling = false; // 是否在执行下拉刷新的回调
     me.isUpScrolling = false; // 是否在执行上拉加载的回调
+    var hasDownCallback = me.options.down && me.options.down.callback; // 是否配置了down的callback
 
     // 初始化下拉刷新
     me.initDownScroll();
@@ -52,8 +52,8 @@
 
     // 自动加载
     setTimeout(function () { // 待主线程执行完毕再执行,避免new MeScroll未初始化,在回调获取不到mescroll的实例
-      // 自动触发下拉刷新
-      if (me.optDown.use && me.optDown.auto) {
+      // 自动触发下拉刷新 (只有配置了down的callback才自动触发下拉刷新)
+      if (me.optDown.use && me.optDown.auto && hasDownCallback) {
         if (me.optDown.autoShowLoading) {
           me.triggerDownScroll(); // 显示下拉进度,执行下拉回调
         } else {
@@ -168,7 +168,7 @@
         supportTap: false // 如果您的运行环境支持tap,则可配置true;
       },
       clearId: null, // 加载第一页时需清空数据的列表id; 如果此项有值,将不使用clearEmptyId的值;
-      clearEmptyId: null, // 相当于同时设置了clearId和empty.warpId; 简化写法;
+      clearEmptyId: null, // 相当于同时设置了clearId和empty.warpId; 简化写法;默认null; 注意vue中不能配置此项
       hardwareClass: 'mescroll-hardware', // 硬件加速样式,使上拉动画流畅
       warpId: null, // 可配置上拉加载的布局添加到指定id的div;默认不配置,默认添加到mescrollId
       warpClass: 'mescroll-upwarp', // 上拉加载的布局容器样式
@@ -189,6 +189,13 @@
       scrollbar: {
         use: isPC, // 默认只在PC端自定义滚动条样式
         barClass: 'mescroll-bar'
+      },
+      lazyLoad: {
+        use: false, // 是否开启懒加载,默认false
+        attr: 'imgurl', // 网络图片地址的属性名 (图片加载成功会自动移除改属性): <img imgurl='网络图  src='占位图''/>
+        showClass: 'mescroll-lazy-in', // 显示样式,参见mescroll.css
+        delay: 500, // 列表滚动的过程中每500ms检查一次图片是否在可视区域,如果在可视区域则加载图片
+        offset: 200 // 超出可视区域200px的图片仍可触发懒加载,目的是提前加载部分图片
       }
     })
   }
@@ -218,7 +225,7 @@
 
     // 鼠标或手指的按下事件
     me.touchstartEvent = function (e) {
-      if (me.isScrollTo) e.preventDefault(); // 如果列表执行滑动事件,则阻止事件,优先执行scrollTo方法
+      if (me.isScrollTo) me.preventDefault(e); // 如果列表执行滑动事件,则阻止事件,优先执行scrollTo方法
 
       me.startPoint = me.getPoint(e); // 记录起点
       me.lastPoint = me.startPoint; // 重置上次move的点
@@ -253,7 +260,7 @@
       if (moveY > 0) {
         // 在顶部
         if (scrollTop <= 0) {
-          if (e.cancelable && !e.defaultPrevented) e.preventDefault(); // 阻止浏览器默认的滚动,避免触发bounce
+          me.preventDefault(e); // 阻止浏览器默认的滚动,避免触发bounce
 
           // 可下拉的条件
           if (me.optDown.use && !me.inTouchend && !me.isDownScrolling && !me.optDown.isLock && (!me.isUpScrolling || (me.isUpScrolling && me.optUp.isBoth))) {
@@ -317,9 +324,7 @@
         var toBottom = scrollHeight - clientHeight - scrollTop; // 滚动条距离底部的距离
 
         // 如果在底部,则阻止浏览器默认事件
-        if (!me.optUp.isBounce && e.cancelable && !e.defaultPrevented && toBottom <= 0) {
-          e.preventDefault();
-        }
+        if (!me.optUp.isBounce && toBottom <= 0) me.preventDefault(e);
 
         // 如果不满屏或者已经在底部,无法触发scroll事件,此时需主动触发上拉回调
         if (me.optUp.use && !me.optUp.isLock && me.optUp.hasNext && !me.isUpScrolling && (!me.isDownScrolling || (me.isDownScrolling && me.optDown.isBoth)) && (clientHeight + me.optUp.offset >= scrollHeight || toBottom <= 0)) {
@@ -384,6 +389,12 @@
         me.optDown.inited(me, me.downwarp);
       }, 0)
     }
+  }
+
+  /* 阻止浏览器默认滚动事件 */
+  MeScroll.prototype.preventDefault = function (e) {
+    // cancelable:是否可以被禁用; defaultPrevented:是否已经被禁用
+    e && e.cancelable && !e.defaultPrevented && e.preventDefault();
   }
 
   /* 根据点击滑动事件获取第一个手指的坐标 */
@@ -456,6 +467,8 @@
 
     // 滚动监听
     me.preScrollY = 0;
+    me.lazyStartTime = new Date().getTime();// 懒加载的初始间隔时间
+    me.lazyTag = 'mescroll-lazying';// 懒加载时,图片正在加载的标记
     me.scrollEvent = function () {
       // 列表内容顶部卷去的高度(含列表边框)
       var scrollTop = me.getScrollTop();
@@ -476,15 +489,28 @@
             me.triggerUpScroll();
           }
         }
+      }
 
-        // 顶部按钮的显示隐藏
-        var optTop = me.optUp.toTop;
-        if (optTop.src || optTop.html) {
-          if (scrollTop >= optTop.offset) {
-            me.showTopBtn();
-          } else {
-            me.hideTopBtn();
-          }
+      // 顶部按钮的显示隐藏
+      var optTop = me.optUp.toTop;
+      if (optTop.src || optTop.html) {
+        if (scrollTop >= optTop.offset) {
+          me.showTopBtn();
+        } else {
+          me.hideTopBtn();
+        }
+      }
+
+      // 懒加载
+      if (me.optUp.lazyLoad.use) {
+        // 节流:限制触发时间间隔
+        var curTime = new Date().getTime();
+        me.lazyTimer && clearTimeout(me.lazyTimer);
+        if (curTime - me.lazyStartTime >= me.optUp.lazyLoad.delay) {
+          me.lazyStartTime = curTime;
+          me.lazyLoad(0);// 列表刚滚动的时候,懒加载一次
+        } else {
+          me.lazyTimer = me.lazyLoad();
         }
       }
 
@@ -558,19 +584,17 @@
       el = el.parentNode; // 继续检查其父元素
     }
 
-    // 拦截touchmove事件:是否可以被禁用&&是否已经被禁用
-    if (isPrevent && e.cancelable && !e.defaultPrevented) {
-      e.preventDefault();
-    }
+    // 拦截touchmove事件
+    isPrevent && me.preventDefault(e)
   }
 
   /* 触发上拉加载 */
   MeScroll.prototype.triggerUpScroll = function () {
-    if (!this.isUpScrolling) {
+    if (this.optUp.callback && !this.isUpScrolling) {
       this.showUpScroll(); // 上拉加载中...
       this.optUp.page.num++; // 预先加一页,如果失败则减回
-      this.isUpAutoLoad = true; // 标记上拉已经自动执行过
-      this.optUp.callback && this.optUp.callback(this.optUp.page, this); // 执行回调,联网加载数据
+      this.isUpAutoLoad = true; // 标记上拉已经自动执行过,避免初始化时多次触发上拉回调
+      this.optUp.callback(this.optUp.page, this); // 执行回调,联网加载数据
     }
   }
 
@@ -637,7 +661,7 @@
           this.showDownScroll(); // 传true,显示下拉刷新的进度布局,不清空列表
         }
       }
-      this.isUpAutoLoad = true; // 标记上拉已经自动执行过
+      this.isUpAutoLoad = true; // 标记上拉已经自动执行过,避免初始化时多次触发上拉回调
       this.optUp.callback && this.optUp.callback(page, this); // 执行上拉回调
     }
   }
@@ -692,51 +716,55 @@
      * systime: 服务器时间(可空);用来解决这个小问题:当准备翻下一页时,数据库新增了几条记录,此时翻下一页,前面的几条数据会和上一页的重复;这里传入了systime,那么upCallback的page.time就会有值,把page.time传给服务器,让后台过滤新加入的那几条记录
      */
   MeScroll.prototype.endSuccess = function (dataSize, hasNext, systime) {
+    var me = this;
     // 结束下拉刷新
-    if (this.isDownScrolling) this.endDownScroll();
+    if (me.isDownScrolling) me.endDownScroll();
 
     // 结束上拉加载
-    if (this.optUp.use) {
+    if (me.optUp.use) {
       var isShowNoMore; // 是否已无更多数据
       if (dataSize != null) {
-        var pageNum = this.optUp.page.num; // 当前页码
-        var pageSize = this.optUp.page.size; // 每页长度
+        var pageNum = me.optUp.page.num; // 当前页码
+        var pageSize = me.optUp.page.size; // 每页长度
         // 如果是第一页
         if (pageNum === 1) {
-          this.clearDataList(); // 自动清空第一页列表数据
-          if (systime) this.optUp.page.time = systime; // 设置加载列表数据第一页的时间
+          me.clearDataList(); // 自动清空第一页列表数据
+          if (systime) me.optUp.page.time = systime; // 设置加载列表数据第一页的时间
         }
         if (dataSize < pageSize || hasNext === false) {
           // 返回的数据不满一页时,则说明已无更多数据
-          this.optUp.hasNext = false;
+          me.optUp.hasNext = false;
           if (dataSize === 0 && pageNum === 1) {
             // 如果第一页无任何数据且配置了空布局
             isShowNoMore = false;
-            this.showEmpty();
+            me.showEmpty();
           } else {
             // 总列表数少于配置的数量,则不显示无更多数据
             var allDataSize = (pageNum - 1) * pageSize + dataSize;
-            if (allDataSize < this.optUp.noMoreSize) {
+            if (allDataSize < me.optUp.noMoreSize) {
               isShowNoMore = false;
             } else {
               isShowNoMore = true;
             }
-            this.removeEmpty(); // 移除空布局
+            me.removeEmpty(); // 移除空布局
           }
         } else {
           // 还有下一页
           isShowNoMore = false;
-          this.optUp.hasNext = true;
-          this.removeEmpty(); // 移除空布局
+          me.optUp.hasNext = true;
+          me.removeEmpty(); // 移除空布局
         }
       }
 
       // 隐藏上拉
-      var displayAble = !this.optUp.hasNext; // 没有下一页且少于noMoreSize,则以display:none的方式隐藏上拉布局
-      this.endUpScroll(isShowNoMore, displayAble);
+      var displayAble = !me.optUp.hasNext; // 没有下一页且少于noMoreSize,则以display:none的方式隐藏上拉布局
+      me.endUpScroll(isShowNoMore, displayAble);
 
       // 检查是否满屏自动加载下一页
-      this.loadFull();
+      me.loadFull();
+
+      // 懒加载
+      me.optUp.lazyLoad.use && me.lazyLoad();
     }
   }
 
@@ -762,7 +790,7 @@
      此方法最好在列表的数据加载完成之后调用,以便计算列表内容高度的准确性 */
   MeScroll.prototype.loadFull = function () {
     var me = this;
-    if (me.optUp.loadFull.use && !me.optUp.isLock && me.optUp.hasNext && me.getScrollHeight() <= me.getClientHeight()) {
+    if (me.optUp.loadFull.use && !me.optUp.isLock && me.optUp.hasNext && me.optUp.callback && me.getScrollHeight() <= me.getClientHeight()) {
       setTimeout(function () {
         // 延时之后,还需再判断一下高度,因为可能有些图片在延时期间加载完毕撑开高度
         if (me.getScrollHeight() <= me.getClientHeight()) me.triggerUpScroll();
@@ -799,7 +827,7 @@
         if (optEmpty.supportTap) {
           emptyBtn.addEventListener('tap', function (e) {
             e.stopPropagation();
-            e.preventDefault();
+            me.preventDefault(e)
             optEmpty.btnClick();
           })
         } else {
@@ -834,7 +862,7 @@
         if (optTop.supportTap) {
           me.toTopBtn.addEventListener('tap', function (e) {
             e.stopPropagation();
-            e.preventDefault();
+            me.preventDefault(e);
             var disToTop = optTop.btnClick && optTop.btnClick(); // 执行回调
             if (disToTop !== true) { // 如果回调里return true,将不执行回到顶部操作
               me.scrollTo(0, me.optUp.toTop.duration); // 置顶
@@ -927,6 +955,71 @@
         window.clearInterval(timer);
       }
     }, rate);
+  }
+
+  /* 加载可视区域的图片 */
+  MeScroll.prototype.lazyLoad = function (delay) {
+    var me = this;
+    var t = delay != null ? delay : me.optUp.lazyLoad.delay; // delay需支持传0,不使用短路求值
+    var timer = setTimeout(function () {
+      var domArr = me.scrollDom.querySelectorAll('[' + me.optUp.lazyLoad.attr + ']');
+      var len = domArr.length;
+      for (var i = 0; i < len; i++) {
+        var dom = domArr[i];
+        if (dom.getAttribute(me.lazyTag) !== 'true' && me.isInSee(dom, me.optUp.lazyLoad.offset)) {
+          var imgurl = dom.getAttribute(me.optUp.lazyLoad.attr);
+          // 采用临时img标签加载网络图: 1.不影响占位图; 2.成功可设置渐变动画; 3.失败后可重新触发加载;
+          var temp = new Image();
+          temp.onload = function () {
+            var imgurl = this.src;// 需通过this取值
+            var dom = this.dom;
+            var showClass = me.optUp.lazyLoad.showClass;// 渐变动画
+            showClass && dom.classList.add(showClass);
+            if (dom.tagName === 'IMG') {
+              dom.src = imgurl;// 如果是img标签,则直接设置src
+            } else {
+              dom.style.backgroundImage = 'url(' + imgurl + ')';// 如果其他标签,则直接设置背景
+            }
+            dom.removeAttribute(me.optUp.lazyLoad.attr);
+            dom.removeAttribute(me.lazyTag);
+          }
+          temp.onerror = function () {
+            this.dom.removeAttribute(me.lazyTag);// 失败的时候取消加载中的标记
+          }
+          temp.onabort = function () {
+            this.dom.removeAttribute(me.lazyTag);// 失败的时候取消加载中的标记
+          }
+          temp.src = imgurl;
+          // 标记在加载中..
+          dom.setAttribute(me.lazyTag, 'true');
+          // 把dom挂载到temp,确保在for循环的temp.onload能够正确取到对应的dom
+          temp.dom = dom;
+        }
+      }
+    }, t)
+    return timer;
+  }
+
+  /* 判断元素是否在列表垂直区域可视 (不考虑scrollLeft的情况,因为没法监听每个div的水平滚动事件,也不考虑translateY的情况,因为情况比较少,且会增加计算的复杂度) */
+  MeScroll.prototype.isInSee = function (dom, offset) {
+    offset = offset || 0; // 可视区域上下偏移的距离
+    var topDom = this.getOffsetTop(dom);// 元素顶部到容器顶部的距离
+    var topSee = this.getScrollTop() - offset;// 滚动条的位置(可视范围的顶部)
+    var bottomDom = topDom + dom.offsetHeight;// 元素底部到容器顶部的距离
+    var bottomSee = topSee + offset + this.getClientHeight() + offset;// 滚动条的位置+容器高度(可视范围的底部)
+    // 图片顶部在可视范围内 || 图片底部在可视范围 ; 不考虑scrollLeft和translateY的情况
+    return (topDom < bottomSee && topDom >= topSee) || (bottomDom <= bottomSee && bottomDom > topSee);
+  }
+
+  /* 获取元素到mescroll滚动列表顶部的距离 */
+  MeScroll.prototype.getOffsetTop = function (dom) {
+    var top = dom.offsetTop;
+    var parent = dom.offsetParent;
+    while (parent != null && parent !== this.scrollDom) {
+      top += parent.offsetTop + parent.clientTop;
+      parent = parent.offsetParent;
+    }
+    return top;
   }
 
   /* 滚动内容的高度 */
