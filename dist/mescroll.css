@@ -1,6 +1,6 @@
 /*! mescroll -- 精致的下拉刷新和上拉加载js框架  ( a great JS framework for pull-refresh and pull-up-loading )
- * version 1.3.5
- * 2018-08-20
+ * version 1.3.6
+ * 2018-09-10
  * author: wenju < mescroll@qq.com > 文举
  * *
  * 官网:  http://www.mescroll.com
@@ -211,6 +211,7 @@ body {
 }
 
 /*显示动画--淡入*/
+.mescroll-lazy-in,
 .mescroll-fade-in {
   -webkit-animation: mescrollFadeIn .5s linear forwards;
   animation: mescrollFadeIn .5s linear forwards;

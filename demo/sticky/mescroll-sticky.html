@@ -157,8 +157,11 @@
 				up: {
 					callback: getListData, //上拉回调,此处可简写; 相当于 callback: function (page, mescroll) { getListData(page); }
 					isBounce: false, //此处禁止ios回弹,解析(务必认真阅读,特别是最后一点): http://www.mescroll.com/qa.html#q10
-					clearEmptyId: "dataList", //相当于同时设置了clearId和empty.warpId; 简化写法;
-					warpId: "upscrollWarp" //让上拉进度装到upscrollWarp里面
+					clearEmptyId: "dataList", //相当于同时设置了clearId和empty.warpId; 简化写法;默认null; 注意vue中不能配置此项
+					warpId: "upscrollWarp", //让上拉进度装到upscrollWarp里面
+					lazyLoad: {
+			        	use: true // 是否开启懒加载,默认false
+			        }
 				}
 			});
 			
@@ -237,7 +240,7 @@
 				for (var i = 0; i < curPageData.length; i++) {
 					var pd=curPageData[i];
 					
-					var str='<img class="pd-img" src="'+pd.pdImg+'"/>';
+					var str='<img class="pd-img" src="../res/img/loading-sq.png" imgurl="'+pd.pdImg+'"/>';
 					str+='<p class="pd-name">'+pd.pdName+'</p>';
 					str+='<p class="pd-price">'+pd.pdPrice+' 元</p>';
 					str+='<p class="pd-sold">已售'+pd.pdSold+'件</p>';

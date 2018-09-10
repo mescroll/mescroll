@@ -15,7 +15,7 @@
       <!--展示上拉加载的数据列表-->
       <ul id="dataList" class="data-list">
         <li v-for="pd in dataList" :key="pd.id">
-          <img class="pd-img" :src="pd.pdImg"/>
+          <img class="pd-img" :imgurl="pd.pdImg" src="../../../static/mock/img/loading.png"/>
           <p class="pd-name">{{pd.pdName}}</p>
           <p class="pd-price">{{pd.pdPrice}} 元</p>
           <p class="pd-sold">已售{{pd.pdSold}}件</p>
@@ -54,6 +54,9 @@ export default {
         noMoreSize: 5, // 如果列表已无数据,可设置列表的总数量要大于等于5条才显示无更多数据;避免列表数据过少(比如只有一条数据),显示无更多数据会不好看
         toTop: { // 配置回到顶部按钮
           src: './static/mescroll/mescroll-totop.png'
+        },
+        lazyLoad: {
+          use: true // 是否开启懒加载,默认false
         }
       }
     })

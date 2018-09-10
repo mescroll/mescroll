@@ -11,14 +11,15 @@
 
 5. MIT协议, 免费商用, 欢迎pull requests ~
 
-6. <a target="_blank" href="//shang.qq.com/wpa/qunwpa?idkey=1067896895dabdf6cf11f4decb0be8bfd3687d3d208730bf2757238ba1948469">mescroll交流群</a>
+6. <a target="_blank" href="//shang.qq.com/wpa/qunwpa?idkey=1067896895dabdf6cf11f4decb0be8bfd3687d3d208730bf2757238ba1948469">mescroll交流群: 633126761</a>
 		
 
 ## 目录:  
 
-* <a href="https://github.com/mescroll/mescroll/releases" target="_blank">最新版本:1.3.5 (2018-08-20) 重要升级</a> <br/><br/>
+* <a href="https://github.com/mescroll/mescroll/releases" target="_blank">最新版本:1.3.6 (2018-09-10) 重要升级</a> <br/><br/>
 * <a href="#功能亮点-">功能亮点 </a> <br/>
 * <a href="#快速入门-">快速入门 </a> <br/>
+* <a href="#图片懒加载-">图片懒加载 </a> <br/>
 * <a href="#vue-cli">vue-cli示例 (理解原理)</a>
 * <a href="#mescroll组件" target="_blank">mescroll组件 (推荐使用)</a>
 * <a href="https://github.com/mescroll/mescroll/tree/master/vue-demo" target="_blank">vue示例Demo (建议看看)</a>
@@ -31,7 +32,7 @@
 * <a href="#api文档-">API文档 </a> <br/>
 * <a href="#常用方法-">常用方法 </a> <br/>
 * <a href="#其他方法-">其他方法 </a> <br/><br/>
-* <a href="http://www.mescroll.com/qa.html?v=0825">常见问题 </a> <br/>
+* <a href="http://www.mescroll.com/qa.html?v=0910">常见问题 </a> <br/>
 * <a href="http://www.mescroll.com/reward.html#tagRank">打赏排行榜 </a> <br/>
 
 ## 功能亮点 :
@@ -47,6 +48,8 @@
 5. 一个界面可支持多个下拉刷新,上拉加载
 
 6. 可临时锁定下拉刷新和上拉加载  
+
+7. 支持图片懒加载,可配置各种占位图与显示动画,上手超简单
 
 ## NPM
 #### 特别感谢 @<a href="https://github.com/channg">channg</a> 帮忙整理发布NPM
@@ -90,16 +93,20 @@
 				//列表第一页无任何数据时,显示的空提示布局; 需配置warpId才显示
 				warpId:	"xxid", //父布局的id (1.3.5版本支持传入dom元素)
 				icon: "../img/mescroll-empty.png", //图标,默认null,支持网络图
-				tip: "暂无相关数据~", //提示
-			}
+				tip: "暂无相关数据~" //提示
+			},
+			lazyLoad: {
+		        use: true, // 是否开启懒加载,默认false
+		        attr: 'imgurl' // 网络图片地址的属性名 (图片加载成功会自动移除改属性): <img imgurl='网络图  src='占位图''/>
+		    }
 		}
 	});
 ```  
 ###### 温馨提示:
-###### 1. 如果您的下拉刷新是重置列表数据,那么down完全可以不用配置,具体用法参考<a class="blue" href="http://www.mescroll.com/demo.html?v=0825">第一个基础案例</a>
+###### 1. 如果您的下拉刷新是重置列表数据,那么down完全可以不用配置,具体用法参考<a class="blue" href="http://www.mescroll.com/demo.html?v=0910">第一个基础案例</a>
 ###### 解析: down内部默认调用的是mescroll.resetUpScroll(),而resetUpScroll会将page.num=1,再触发up.callback,从而实现刷新列表数据
 
-###### 2. 如果您的项目是在iOS的微信,QQ,Safari等浏览器访问的,建议配置up的isBounce为false,禁止ios的回弹效果; <a class="blue" href="http://www.mescroll.com/qa.html?v=0825#q10">解析(必读)</a>
+###### 2. 如果您的项目是在iOS的微信,QQ,Safari等浏览器访问的,建议配置up的isBounce为false,禁止ios的回弹效果; <a class="blue" href="http://www.mescroll.com/qa.html?v=0910#q10">解析(必读)</a>
 
 #### 4. 处理回调:
 ```
@@ -109,7 +116,7 @@
                 url: 'xxxxxx',
                 success: function(data){
                 	//联网成功的回调,隐藏下拉刷新的状态;
-        		mescroll.endSuccess();//无参
+        		mescroll.endSuccess();//无参,注意此处无参
         		//设置数据
         		//setXxxx(data);//自行实现 TODO
                },
@@ -159,7 +166,36 @@
 --- 以上为mescroll最基本的用法,强烈建议您下载并查看 <a href="#基础案例-base-demos-">mescroll基础案例</a> , 发现mescroll更强大的功能 ~<br/>
 --- 基础案例一共6个, 每个案例3分钟, 一共花您18分钟; 这18分钟您将了解mescroll在不同情况下应如何快速配置 ~<br/>
 --- 磨刀不误砍柴工,心急吃不了热豆腐. 请静下心来体验与理解mescroll, 一定会让您事半功倍 ~<br/>
---- 如使用中有疑问, 请先查看  <a href="http://www.mescroll.com/qa.html?v=0825">常见问题专区</a> ~<br/><br/>
+--- 如使用中有疑问, 请先查看  <a href="http://www.mescroll.com/qa.html?v=0910">常见问题专区</a> ~<br/><br/>
+
+## 图片懒加载
+mescroll的图片懒加载功能是1.3.6新增的,使用超简单 :
+##### 1. 确保mescroll已更新到1.3.6版本
+##### 2. 初始化mescroll的时候,在up中配置lazyLoad的use为true :
+```
+var mescroll = new MeScroll("mescroll", {
+	up: {
+		lazyLoad: {
+	        	use: true, // 是否开启懒加载,默认false
+		        attr: 'imgurl', // 网络图片地址的属性名 (图片加载成功会自动移除改属性): &lt;img imgurl='网络图  src='占位图''/&gt;
+		        showClass: 'mescroll-lazy-in', // 图片加载成功的显示动画: 渐变显示,参见mescroll.css
+		        delay: 500, // 列表滚动的过程中每500ms检查一次图片是否在可视区域,如果在可视区域则加载图片
+		        offset: 200 // 超出可视区域200px的图片仍可触发懒加载,目的是提前加载部分图片
+	    	}
+	}
+})
+```
+
+##### 3. 设置img或div的 imgurl 属性, 值为图片的网络地址  
+```
+img标签: &lt;img imgurl="网络图" src="占位图"/&gt; // 占位图直接在src设置; 图片加载成功,就会替换src的占位图
+div或其他标签: &lt;div imgurl="网络图" style="background-image: url(占位图)"&gt;&lt;div&gt; // 占位图在css中设置; 图片以背景图的形式展示
+```  
+
+##### 4. 至此mescroll的懒加载功能已经可以正常使用了,mescroll在列表滚动时会自动加载可视区域内的图片.另外,有时候您可能会动态添加或修改图片,希望手动触发一下懒加载, 那么只需调用 mescroll.lazyLoad() 或 mescroll.endByPage() 或 mescroll.endBySize() 或 mescroll.endSuccess() 即可.  
+		
+##### 5. mescroll的所有案例都开启了懒加载,您可参考体验. <a href="preview.html?name=list-mescroll-lazy" target="_blank">当然这里还有专门介绍懒加载的案例~</a>
+
 
 ## vue-cli
 在vue-cli中的使用步骤  (至少更新到1.3.5版本):
@@ -392,7 +428,7 @@ export default {
 ```	       		
 
 ## API文档 :   
-#### <a href="http://www.mescroll.com/api.html?v=0825#options" target="_blank">前往官网查看 >> </a>
+#### <a href="http://www.mescroll.com/api.html?v=0910#options" target="_blank">前往官网查看 >> </a>
 
 ```
 //创建mescroll对象
@@ -672,6 +708,25 @@ var mescroll = new MeScroll(id或dom对象, { down: {下拉刷新的配置参数
 		<td>{<br/>&nbsp; use : ... , <br/>&nbsp; barClass : "mescroll-bar" <br/>}</td>
 		<td>use : 是否开启自定义滚动条; PC端默认true开启自定义滚动条; 移动端默认false不使用 <br/>barClass : 自定义滚动条的样式; 参见mescroll.css</td>
 	</tr>
+	<tr>
+		<td align="center">lazyLoad<br/>（1.3.6新增）</td>
+		<td>
+			{<br/>
+		        use: false,<br/>
+		        attr: 'imgurl',<br/>
+		        showClass: 'mescroll-lazy-in',<br/>
+		        delay: 500,<br/>
+		        offset: 200<br/>
+		    }
+		</td>
+		<td>
+			use: 是否开启懒加载,默认false<br/>
+	        attr: 标签中网络图片地址的属性名,默认"imgurl"<br/>
+	        showClass: 显示样式:渐变显示,参见mescroll.css<br/>
+	        delay: 列表滚动的过程中检查一次图片是否在可视区域的时间间隔,默认500 (单位ms)<br/>
+	        offset: 超出可视区域多少px的图片仍可触发懒加载 默认200
+		</td>
+	</tr>
 </table>  
 
 ## 常用方法 :   
@@ -763,6 +818,13 @@ var mescroll = new MeScroll(id或dom对象, { down: {下拉刷新的配置参数
 		<td>
 			<b>mescroll.setBounce(true)</b> 允许bounce;<br/>
 			<b>mescroll.setBounce(false)</b> 禁止bounce
+		</td>
+	</tr>
+	<tr align="center">
+		<td>mescroll.lazyLoad(delay)<br/>(v 1.3.6 新增)</td>
+		<td>
+			主动触发懒加载: 自动加载可视区域的图片.<br />
+			delay:延时加载图片的时间,默认500ms.目的是确保dom元素已渲染完成.
 		</td>
 	</tr>
 </table>

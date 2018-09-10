@@ -205,7 +205,7 @@
 						time: null //加载第一页数据服务器返回的时间; 防止用户翻页时,后台新增了数据从而导致下一页数据重复;
 					},
 					noMoreSize: 5, //如果列表已无数据,可设置列表的总数量要大于半页才显示无更多数据;避免列表数据过少(比如只有一条数据),显示无更多数据会不好看
-					offset: 100, //列表离底部的距离小于等于100px时,则触发up的callback
+					offset: 100, //离底部的距离
 					toTop: {
 						//回到顶部按钮,需配置src才显示
 						warpId: null, //父布局的id; 默认添加在body中
@@ -234,7 +234,7 @@
 						supportTap: false //默认点击事件用onclick,会有300ms的延时;如果您的运行环境支持tap,则可配置true;
 					},
 					clearId: null, //加载第一页时需清空数据的列表id; 如果此项有值,将不使用clearEmptyId的值;
-					clearEmptyId: "dataList", //相当于同时设置了clearId和empty.warpId; 简化写法,默认null;
+					clearEmptyId: "dataList", //相当于同时设置了clearId和empty.warpId; 简化写法;默认null; 注意vue中不能配置此项
 					hardwareClass: "mescroll-hardware", //硬件加速样式,动画更流畅,参见mescroll.css
 					warpId: null, //可配置上拉加载的布局添加到指定id的div;默认不配置,默认添加到mescrollId
 					warpClass: "mescroll-upwarp", //容器,装载布局内容,参见mescroll.css
@@ -261,7 +261,14 @@
 					scrollbar: {
 						use: isPC, //默认只在PC端自定义滚动条样式
 						barClass: "mescroll-bar"
-					}
+					},
+					lazyLoad: {
+				        use: true, // 是否开启懒加载,默认false
+				        attr: 'imgurl', // html标签中,临时存放网络图片地址的属性名: <img src='占位图' imgurl='网络图'/>
+				        showClass: 'mescroll-lazy-in', // 显示样式,参见mescroll.css
+				        delay: 500, // 列表滚动的过程中每500ms检查一次图片是否在可视区域,如果在可视区域则加载图片
+				        offset: 200 // 超出可视区域200px的图片仍可触发懒加载,目的是提前加载部分图片
+				    }
 				}
 			});
 			
@@ -313,7 +320,7 @@
 				for (var i = 0; i < curPageData.length; i++) {
 					var pd=curPageData[i];
 					
-					var str='<img class="pd-img" src="'+pd.pdImg+'"/>';
+					var str='<img class="pd-img" src="../res/img/loading-sq.png" imgurl="'+pd.pdImg+'"/>';
 					str+='<p class="pd-name">'+pd.pdName+'</p>';
 					str+='<p class="pd-price">'+pd.pdPrice+' 元</p>';
 					str+='<p class="pd-sold">已售'+pd.pdSold+'件</p>';

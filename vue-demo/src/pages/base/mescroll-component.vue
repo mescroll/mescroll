@@ -18,7 +18,7 @@
       <!--展示上拉加载的数据列表-->
       <ul id="dataList" class="data-list">
         <li v-for="pd in dataList" :key="pd.id">
-          <img class="pd-img" :src="pd.pdImg"/>
+          <img class="pd-img" :imgurl="pd.pdImg" src="../../../static/mock/img/loading.png"/>
           <p class="pd-name">{{pd.pdName}}</p>
           <p class="pd-price">{{pd.pdPrice}} 元</p>
           <p class="pd-sold">已售{{pd.pdSold}}件</p>
@@ -61,6 +61,9 @@ export default {
           btnClick () { // 点击按钮的回调,默认null
             alert('点击了按钮,具体逻辑自行实现')
           }
+        },
+        lazyLoad: {
+          use: true // 是否开启懒加载,默认false
         }
       },
       dataList: [], // 列表数据

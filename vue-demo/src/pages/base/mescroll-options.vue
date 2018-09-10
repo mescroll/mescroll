@@ -18,7 +18,7 @@
       <!--展示上拉加载的数据列表-->
       <ul id="dataList" class="data-list">
         <li v-for="pd in dataList" :key="pd.id">
-          <img class="pd-img" :src="pd.pdImg"/>
+          <img class="pd-img" :imgurl="pd.pdImg" src="../../../static/mock/img/loading.png"/>
           <p class="pd-name">{{pd.pdName}}</p>
           <p class="pd-price">{{pd.pdPrice}} 元</p>
           <p class="pd-sold">已售{{pd.pdSold}}件</p>
@@ -177,6 +177,13 @@ export default {
         scrollbar: {
           use: typeof window.orientation === 'undefined', // 默认只在PC端自定义滚动条样式
           barClass: 'mescroll-bar'
+        },
+        lazyLoad: {
+          use: true, // 是否开启懒加载,默认false
+          attr: 'imgurl', // html标签中,存放网络图片地址的属性名: <img src='占位图' imgurl='网络图'/>
+          showClass: 'mescroll-lazy-in', // 显示样式,参见mescroll.css
+          delay: 500, // 列表滚动的过程中每500ms检查一次图片是否在可视区域,如果在可视区域则加载图片
+          offset: 200 // 超出可视区域200px的图片仍可触发懒加载,目的是提前加载部分图片
         }
       }
     })
