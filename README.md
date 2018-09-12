@@ -97,7 +97,8 @@
 			},
 			lazyLoad: {
 		        	use: true, // 是否开启懒加载,默认false
-		        	attr: 'imgurl' // 网络图片地址的属性名 (图片加载成功会自动移除改属性): <img imgurl='网络图  src='占位图''/>
+		        	attr: 'imgurl', // 网络图片地址的属性名 (图片加载成功会自动移除改属性): <img imgurl='网络图  src='占位图''/>
+				offset: 200 // 超出可视区域多少px的图片仍可触发懒加载 默认200. 目的是提前加载可视区域外的部分图片
 		    	}
 		}
 	});
@@ -203,7 +204,7 @@ div或其他标签: <div imgurl="网络图" style="background-image: url(占位�
 
 
 ## vue-cli
-在vue-cli中的使用步骤  (至少更新到1.3.5版本):
+在vue单文件中的使用步骤  (至少更新到1.3.5版本):
 ##### 1. 执行npm命令安装mescroll : &nbsp; &nbsp; **npm install --save mescroll.js**    //不要使用cnpm安装
 ##### 2. 引入mescroll.min.js : &nbsp; &nbsp; **import MeScroll from 'mescroll.js'**
 ##### 3. 引入mescroll.min.css : &nbsp; &nbsp; **import 'mescroll.js/mescroll.min.css'**
