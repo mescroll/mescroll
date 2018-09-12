@@ -20,9 +20,9 @@
 * <a href="#功能亮点-">功能亮点 </a> <br/>
 * <a href="#快速入门-">快速入门 </a> <br/>
 * <a href="#图片懒加载-">图片懒加载 </a> <br/>
-* <a href="#vue-cli">vue-cli示例 (理解原理)</a>
+* <a href="#vue-cli">vue单文件 (理解原理)</a>
 * <a href="#mescroll组件" target="_blank">mescroll组件 (推荐使用)</a>
-* <a href="https://github.com/mescroll/mescroll/tree/master/vue-demo" target="_blank">vue示例Demo (建议看看)</a>
+* <a href="https://github.com/mescroll/mescroll/tree/master/vue-demo" target="_blank">vue-cli demo (建议看看)</a>
 * <a href="http://www.mescroll.com/preview.html?name=list-products-vue" target="_blank">vue在线示例 (了解即可)</a>
 * <a href="#基础案例-base-demos-"><b>基础案例 base demos</b></a> <br/>
 * <a href="#中级案例-intermediate-demos-"><b>中级案例 intermediate demos</b></a> <br/>
