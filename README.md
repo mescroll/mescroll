@@ -96,9 +96,9 @@
 				tip: "暂无相关数据~" //提示
 			},
 			lazyLoad: {
-		        use: true, // 是否开启懒加载,默认false
-		        attr: 'imgurl' // 网络图片地址的属性名 (图片加载成功会自动移除改属性): <img imgurl='网络图  src='占位图''/>
-		    }
+		        	use: true, // 是否开启懒加载,默认false
+		        	attr: 'imgurl' // 网络图片地址的属性名 (图片加载成功会自动移除改属性): <img imgurl='网络图  src='占位图''/>
+		    	}
 		}
 	});
 ```  
@@ -182,7 +182,7 @@ var mescroll = new MeScroll("mescroll", {
 	up: {
 		lazyLoad: {
 	        	use: true, // 是否开启懒加载,默认false
-		        attr: 'imgurl', // 网络图片地址的属性名 (图片加载成功会自动移除改属性): &lt;img imgurl='网络图  src='占位图''/&gt;
+		        attr: 'imgurl', // 网络图片地址的属性名 (图片加载成功会自动移除改属性): <img imgurl='网络图  src='占位图''/>
 		        showClass: 'mescroll-lazy-in', // 图片加载成功的显示动画: 渐变显示,参见mescroll.css
 		        delay: 500, // 列表滚动的过程中每500ms检查一次图片是否在可视区域,如果在可视区域则加载图片
 		        offset: 200 // 超出可视区域200px的图片仍可触发懒加载,目的是提前加载部分图片
@@ -193,13 +193,13 @@ var mescroll = new MeScroll("mescroll", {
 
 ##### 3. 设置img或div的 imgurl 属性, 值为图片的网络地址  
 ```
-img标签: &lt;img imgurl="网络图" src="占位图"/&gt; // 占位图直接在src设置; 图片加载成功,就会替换src的占位图
-div或其他标签: &lt;div imgurl="网络图" style="background-image: url(占位图)"&gt;&lt;div&gt; // 占位图在css中设置; 图片以背景图的形式展示
+img标签: <img imgurl="网络图" src="占位图"/> // 占位图直接在src设置; 图片加载成功,就会替换src的占位图
+div或其他标签: <div imgurl="网络图" style="background-image: url(占位图)"></div>; // 占位图在css中设置; 图片以背景图的形式展示
 ```  
 
 ##### 4. 至此mescroll的懒加载功能已经可以正常使用了,mescroll在列表滚动时会自动加载可视区域内的图片.另外,有时候您可能会动态添加或修改图片,希望手动触发一下懒加载, 那么只需调用 mescroll.lazyLoad() 或 mescroll.endByPage() 或 mescroll.endBySize() 或 mescroll.endSuccess() 即可.  
 		
-##### 5. mescroll的所有案例都开启了懒加载,您可参考体验. <a href="preview.html?name=list-mescroll-lazy" target="_blank">当然这里还有专门介绍懒加载的案例~</a>
+##### 5. mescroll的所有案例都开启了懒加载,您可参考体验. <a href="http://www.mescroll.com/preview.html?name=list-mescroll-lazy" target="_blank">当然这里还有专门介绍懒加载的案例~</a>
 
 
 ## vue-cli
