@@ -262,6 +262,11 @@
 					//方法四 (不推荐),会存在一个小问题:比如列表共有20条数据,每页加载10条,共2页.如果只根据当前页的数据个数判断,则需翻到第三页才会知道无更多数据,如果传了hasNext,则翻到第二页即可显示无更多数据.
 					mescrollArr[dataIndex].endSuccess(pageData.length);
 					
+					//提示:pageData.length必传的原因:
+					// 1.判断是否有下一页的首要依据: 当传的值小于page.size时,则一定会认为无更多数据.
+					// 2.比传入的totalPage, totalSize, hasNext具有更高的判断优先级
+					// 3.使配置的noMoreSize生效
+					
 					//设置列表数据
 					setListData(pageData,dataIndex);
 				}, function(){

@@ -5,7 +5,9 @@
 
 2.拷贝以下布局结构
 <div id="mescroll" class="mescroll"> // id可修改,但class不能改;另外mescroll的height: 100%,所以父布局要有高度,否则无法触发上拉加载.
-	//滑动区域的内容,如:<ul>列表数据</ul> ...
+	<div> //这个div不能删, 可以改成ul或者其他容器标签.
+		//滑动区域的内容,如:<ul>列表数据</ul> ...
+	</div>
 </div>
 
 3.创建MeScroll对象,内部已默认开启下拉刷新
