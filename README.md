@@ -154,9 +154,9 @@
 			//mescroll.endSuccess(curPageData.length);
 			
 			//提示:curPageData.length必传的原因:
-			// 1.判断是否有下一页的首要依据: 当传的值小于page.size时,则一定会认为无更多数据.
-			// 2.比传入的totalPage, totalSize, hasNext具有更高的判断优先级
-			// 3.使配置的noMoreSize生效
+			// 1.使配置的noMoreSize生效
+			// 2.判断是否有下一页的首要依据: 当传的值小于page.size时,则一定会认为无更多数据. 比传入的totalPage, totalSize, hasNext具有更高的判断优先级
+			// 3.当传的值等于page.size时,才会取totalPage, totalSize, hasNext判断是否有下一页. 传totalPage, totalSize, hasNext主要目的是避免方法四描述的小问题
 					
 			//设置列表数据
 			//setListData(curPageData);//自行实现 TODO
