@@ -83,6 +83,9 @@
       warpClass: 'mescroll-downwarp', // 下拉刷新的布局容器样式,参见mescroll.css
       resetClass: 'mescroll-downwarp-reset', // 下拉刷新高度重置的动画,参见mescroll.css
       htmlContent: '<p class="downwarp-progress"></p><p class="downwarp-tip">下拉刷新 </p>', // 布局内容
+      downStartText: null,
+      releaseText: null,
+      loadText: null,
       inited: function (mescroll, downwarp) {
         // 下拉刷新初始化完毕的回调
         mescroll.downTipDom = downwarp.getElementsByClassName('downwarp-tip')[0];
@@ -90,12 +93,14 @@
       },
       inOffset: function (mescroll) {
         // 下拉的距离进入offset范围内那一刻的回调
-        if (mescroll.downTipDom) mescroll.downTipDom.innerHTML = '下拉刷新';
+        var textContent = typeof mescroll.optDown.downStartText === 'string' ? mescroll.optDown.downStartText.trim() : '下拉刷新';
+        if (mescroll.downTipDom) mescroll.downTipDom.innerHTML = textContent;
         if (mescroll.downProgressDom) mescroll.downProgressDom.classList.remove('mescroll-rotate');
       },
       outOffset: function (mescroll) {
         // 下拉的距离大于offset那一刻的回调
-        if (mescroll.downTipDom) mescroll.downTipDom.innerHTML = '释放更新';
+        var textContent = typeof mescroll.optDown.releaseText === 'string' ? mescroll.optDown.releaseText.trim() : '释放更新';
+        if (mescroll.downTipDom) mescroll.downTipDom.innerHTML = textContent;
       },
       onMoving: function (mescroll, rate, downHight) {
         // 下拉过程中的回调,滑动过程一直在执行; rate下拉区域当前高度与指定距离的比值(inOffset: rate<1; outOffset: rate>=1); downHight当前下拉区域的高度
@@ -111,7 +116,8 @@
       },
       showLoading: function (mescroll) {
         // 显示下拉刷新进度的回调
-        if (mescroll.downTipDom) mescroll.downTipDom.innerHTML = '加载中 ...';
+        var textContent = typeof mescroll.optDown.loadText === 'string' ? mescroll.optDown.loadText.trim() : '加载中 ...';
+        if (mescroll.downTipDom) mescroll.downTipDom.innerHTML = textContent;
         if (mescroll.downProgressDom) mescroll.downProgressDom.classList.add('mescroll-rotate');
       },
       callback: function (mescroll) {
