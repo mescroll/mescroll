@@ -181,7 +181,7 @@
 
 --- 以上为mescroll最基本的用法,强烈建议您下载并查看 <a href="#基础案例-base-demos-">mescroll基础案例</a> , 发现mescroll更强大的功能 ~<br/>
 --- 基础案例一共6个, 每个案例3分钟, 一共花您18分钟; 这18分钟您将了解mescroll在不同情况下应如何快速配置 ~<br/>
---- 特别建议您, 手动改改 <a href="http://www.mescroll.com/preview.html?name=mescroll-options" target="_blank">mescroll-options</a> 的每项配置, 观察修改后的效果, 轻松理解各项参数, 还会有意想不到的发现哦~
+--- 特别建议您, 手动改改 <a href="http://www.mescroll.com/preview.html?name=mescroll-options">mescroll-options</a> 的每项配置, 观察修改后的效果, 轻松理解各项参数, 还会有意想不到的发现哦 ~<br/>
 --- 磨刀不误砍柴工,心急吃不了热豆腐. 请静下心来体验与理解mescroll, 一定会让您事半功倍 ~<br/>
 --- 如使用中有疑问, 请先查看  <a href="http://www.mescroll.com/qa.html?v=0910">常见问题专区</a> ~<br/><br/>
 
