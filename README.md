@@ -70,7 +70,17 @@
         </div>  
 ```  
 
-#### 3. 创建MeScroll对象:  
+#### 3. 固定mescroll的div高度. 推荐通过定位的方式,简单快捷: <a href="http://www.mescroll.com/qa.html#q2">(点此查看其他方法)</a> 
+```
+       .mescroll{
+		position: fixed;
+		top: 44px;
+		bottom: 0;
+		height: auto; /*如设置bottom:50px,则需height:auto才能生效*/
+	}
+```  
+
+#### 4. 创建MeScroll对象:  
 ```
         var mescroll = new MeScroll("mescroll", { //第一个参数"mescroll"对应上面布局结构div的id (1.3.5版本支持传入dom对象)
     		down: {
@@ -109,7 +119,7 @@
 
 ###### 2. 如果您的项目是在iOS的微信,QQ,Safari等浏览器访问的,建议配置up的isBounce为false,禁止ios的回弹效果; <a class="blue" href="http://www.mescroll.com/qa.html?v=0910#q10">解析(必读)</a>
 
-#### 4. 处理回调:
+#### 5. 处理回调:
 ```
         //下拉刷新的回调
         function downCallback(){
@@ -171,6 +181,7 @@
 
 --- 以上为mescroll最基本的用法,强烈建议您下载并查看 <a href="#基础案例-base-demos-">mescroll基础案例</a> , 发现mescroll更强大的功能 ~<br/>
 --- 基础案例一共6个, 每个案例3分钟, 一共花您18分钟; 这18分钟您将了解mescroll在不同情况下应如何快速配置 ~<br/>
+--- 特别建议您, 手动改改 <a href="http://www.mescroll.com/preview.html?name=mescroll-options" target="_blank">mescroll-options</a> 的每项配置, 观察修改后的效果, 轻松理解各项参数, 还会有意想不到的发现哦~
 --- 磨刀不误砍柴工,心急吃不了热豆腐. 请静下心来体验与理解mescroll, 一定会让您事半功倍 ~<br/>
 --- 如使用中有疑问, 请先查看  <a href="http://www.mescroll.com/qa.html?v=0910">常见问题专区</a> ~<br/><br/>
 
