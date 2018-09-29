@@ -55,6 +55,7 @@ export default {
         isLock: false, // 是否锁定下拉,默认false;
         isBoth: false, // 下拉刷新时,如果滑动到列表底部是否可以同时触发上拉加载;默认false,两者不可同时触发;
         callback: function (mescroll) {
+          console.log('down --> callback');
           // 加载轮播数据
           // loadSwiper();
           // 下拉刷新的回调,默认重置上拉加载列表为第一页(down的auto默认true,初始化Mescroll之后会自动执行到这里,而mescroll.resetUpScroll会触发up的callback)
@@ -65,10 +66,14 @@ export default {
         bottomOffset: 20, // 当手指touchmove位置在距离body底部20px范围内的时候结束上拉刷新,避免Webview嵌套导致touchend事件不执行
         minAngle: 45, // 向下滑动最少偏移的角度,取值区间  [0,90];默认45度,即向下滑动的角度大于45度则触发下拉;而小于45度,将不触发下拉,避免与左右滑动的轮播等组件冲突;
         hardwareClass: 'mescroll-hardware', // 硬件加速样式;解决iOS下拉因隐藏进度条而闪屏的问题,参见mescroll.css
+        mustToTop: false, // 是否滚动条必须在顶部,才可以下拉刷新.默认false. 当您发现下拉刷新会闪白屏时,设置true即可修复.
         warpId: null, // 可配置下拉刷新的布局添加到指定id的div;默认不配置,默认添加到mescrollId
         warpClass: 'mescroll-downwarp', // 容器,装载布局内容,参见mescroll.css
         resetClass: 'mescroll-downwarp-reset', // 高度重置的动画,参见mescroll.css
-        htmlContent: '<p class="downwarp-progress"></p><p class="downwarp-tip">下拉刷新 </p>', // 布局内容
+        textInOffset: '下拉刷新', // 下拉的距离在offset范围内的提示文本
+        textOutOffset: '释放更新', // 下拉的距离大于offset范围的提示文本
+        textLoading: '加载中 ...', // 加载中的提示文本
+        htmlContent: '<p class="downwarp-progress"></p><p class="downwarp-tip"></p>', // 布局内容
         inited: function (mescroll, downwarp) {
           console.log('down --> inited')
           // 初始化完毕的回调,可缓存dom
@@ -78,13 +83,13 @@ export default {
         inOffset: function (mescroll) {
           console.log('down --> inOffset')
           // 进入指定距离offset范围内那一刻的回调
-          if (mescroll.downTipDom) mescroll.downTipDom.innerHTML = '下拉刷新'
+          if (mescroll.downTipDom) mescroll.downTipDom.innerHTML = mescroll.optDown.textInOffset
           if (mescroll.downProgressDom) mescroll.downProgressDom.classList.remove('mescroll-rotate')
         },
         outOffset: function (mescroll) {
           console.log('down --> outOffset')
           // 下拉超过指定距离offset那一刻的回调
-          if (mescroll.downTipDom) mescroll.downTipDom.innerHTML = '释放更新'
+          if (mescroll.downTipDom) mescroll.downTipDom.innerHTML = mescroll.optDown.textOutOffset
         },
         onMoving: function (mescroll, rate, downHight) {
           // 下拉过程中的回调,滑动过程一直在执行; rate下拉区域当前高度与指定距离offset的比值(inOffset: rate<1; outOffset: rate>=1); downHight当前下拉区域的高度
@@ -103,8 +108,13 @@ export default {
         showLoading: function (mescroll) {
           console.log('down --> showLoading')
           // 触发下拉刷新的回调
-          if (mescroll.downTipDom) mescroll.downTipDom.innerHTML = '加载中 ...'
+          if (mescroll.downTipDom) mescroll.downTipDom.innerHTML = mescroll.optDown.textLoading
           if (mescroll.downProgressDom) mescroll.downProgressDom.classList.add('mescroll-rotate')
+        },
+        afterLoading: function (mescroll) {
+          console.log('down --> afterLoading');
+          // 结束下拉之前的回调. 返回延时执行结束下拉的时间,默认0ms; 常用于结束下拉之前再显示另外一小段动画,才去结束下拉的场景, 参考案例【dotJump】
+          return 0
         }
       },
       // 上拉加载的所有配置项
@@ -132,7 +142,8 @@ export default {
           showClass: 'mescroll-fade-in', // 显示样式,参见mescroll.css
           hideClass: 'mescroll-fade-out', // 隐藏样式,参见mescroll.css
           duration: 300, // 回到顶部的动画时长,默认300ms
-          supportTap: false // 默认点击事件用onclick,会有300ms的延时;如果您的运行环境支持tap,则可配置true;
+          supportTap: false, // 默认点击事件用onclick,会有300ms的延时;如果您的运行环境支持tap,则可配置true;
+          btnClick: null // 点击按钮的回调; 小提示:如果在回调里return true,将不执行回到顶部的操作.
         },
         loadFull: {
           use: false, // 列表数据过少,不足以滑动触发上拉加载,是否自动加载下一页,直到满屏或者无更多数据为止;默认false,因为可通过调高page.size或者嵌套mescroll-bounce的div避免这个情况
@@ -249,7 +260,7 @@ export default {
        实际项目以您服务器接口返回的数据为准,无需本地处理分页.
        * */
     getListDataFromNet (pdType, pageNum, pageSize, successCallback, errorCallback) {
-      // 延时一秒,模拟联网
+      // 延时一秒, 模拟联网
       setTimeout(() => {
         // axios.get("xxxxxx", {
         //   params: {
