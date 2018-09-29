@@ -1,6 +1,6 @@
 /*! mescroll -- 精致的下拉刷新和上拉加载js框架  ( a great JS framework for pull-refresh and pull-up-loading )
- * version 1.3.6
- * 2018-09-10
+ * version 1.3.7
+ * 2018-09-27
  * author: wenju < mescroll@qq.com > 文举
  * *
  * 官网:  http://www.mescroll.com
@@ -23,7 +23,7 @@
 })('MeScroll', function () {
   var MeScroll = function (mescrollId, options) {
     var me = this;
-    me.version = '1.3.6'; // mescroll版本号
+    me.version = '1.3.7'; // mescroll版本号
     me.isScrollBody = (!mescrollId || mescrollId === 'body'); // 滑动区域是否为body
     me.scrollDom = me.isScrollBody ? document.body : me.getDomById(mescrollId); // MeScroll的滑动区域
     if (!me.scrollDom) return;
@@ -79,10 +79,14 @@
       bottomOffset: 20, // 当手指touchmove位置在距离body底部20px范围内的时候结束上拉刷新,避免Webview嵌套导致touchend事件不执行
       minAngle: 45, // 向下滑动最少偏移的角度,取值区间  [0,90];默认45度,即向下滑动的角度大于45度则触发下拉;而小于45度,将不触发下拉,避免与左右滑动的轮播等组件冲突;
       hardwareClass: 'mescroll-hardware', // 硬件加速样式,解决部分手机闪屏或动画不流畅的问题
+      mustToTop: false, // 是否滚动条必须在顶部,才可以下拉刷新.默认false. 当您发现下拉刷新会闪白屏时,设置true即可修复.
       warpId: null, // 可配置下拉刷新的布局添加到指定id的div;默认不配置,默认添加到mescrollId
       warpClass: 'mescroll-downwarp', // 下拉刷新的布局容器样式,参见mescroll.css
       resetClass: 'mescroll-downwarp-reset', // 下拉刷新高度重置的动画,参见mescroll.css
-      htmlContent: '<p class="downwarp-progress"></p><p class="downwarp-tip">下拉刷新 </p>', // 布局内容
+      textInOffset: '下拉刷新', // 下拉的距离在offset范围内的提示文本
+      textOutOffset: '释放更新', // 下拉的距离大于offset范围的提示文本
+      textLoading: '加载中 ...', // 加载中的提示文本
+      htmlContent: '<p class="downwarp-progress"></p><p class="downwarp-tip"></p>', // 布局内容
       inited: function (mescroll, downwarp) {
         // 下拉刷新初始化完毕的回调
         mescroll.downTipDom = downwarp.getElementsByClassName('downwarp-tip')[0];
@@ -90,12 +94,12 @@
       },
       inOffset: function (mescroll) {
         // 下拉的距离进入offset范围内那一刻的回调
-        if (mescroll.downTipDom) mescroll.downTipDom.innerHTML = '下拉刷新';
+        if (mescroll.downTipDom) mescroll.downTipDom.innerHTML = mescroll.optDown.textInOffset;
         if (mescroll.downProgressDom) mescroll.downProgressDom.classList.remove('mescroll-rotate');
       },
       outOffset: function (mescroll) {
         // 下拉的距离大于offset那一刻的回调
-        if (mescroll.downTipDom) mescroll.downTipDom.innerHTML = '释放更新';
+        if (mescroll.downTipDom) mescroll.downTipDom.innerHTML = mescroll.optDown.textOutOffset;
       },
       onMoving: function (mescroll, rate, downHight) {
         // 下拉过程中的回调,滑动过程一直在执行; rate下拉区域当前高度与指定距离的比值(inOffset: rate<1; outOffset: rate>=1); downHight当前下拉区域的高度
@@ -111,8 +115,12 @@
       },
       showLoading: function (mescroll) {
         // 显示下拉刷新进度的回调
-        if (mescroll.downTipDom) mescroll.downTipDom.innerHTML = '加载中 ...';
+        if (mescroll.downTipDom) mescroll.downTipDom.innerHTML = mescroll.optDown.textLoading;
         if (mescroll.downProgressDom) mescroll.downProgressDom.classList.add('mescroll-rotate');
+      },
+      afterLoading: function (mescroll) {
+        // 准备结束下拉的回调. 返回结束下拉的延时执行时间,默认0ms; 常用于结束下拉之前再显示另外一小段动画,才去隐藏下拉刷新的场景, 参考案例【dotJump】
+        return 0
       },
       callback: function (mescroll) {
         // 下拉刷新的回调;默认重置上拉加载列表为第一页
@@ -232,15 +240,24 @@
 
       me.maxTouchmoveY = me.getBodyHeight() - me.optDown.bottomOffset; // 手指触摸的最大范围(写在touchstart避免body获取高度为0的情况)
       me.inTouchend = false; // 标记不是touchend
-
-      if (me.os.pc && me.getScrollTop() <= 0) {
-        me.scrollDom.addEventListener('mousemove', me.touchmoveEvent, {
-          passive: false
-        });
-        // 在顶部给PC端添加move事件
-        document.ondragstart = function () { // 在顶部禁止PC端拖拽图片,避免与下拉刷新冲突
-          return false;
+      var scrollTop = me.getScrollTop();// 滚动条的位置
+      if (scrollTop <= 0) {
+        if (me.optDown.mustToTop && scrollTop < 0 && me.isKeepTop == false) {
+          me.isKeepTop = false; // 此处避免设置必须顶部下拉的时候,先上拉,再下拉,松手,马上下拉,滚动条还未重置到0, 此时的下拉会导致抖动, 设置false可修复
+        } else {
+          me.isKeepTop = true; // 标记在滚动条在顶部
         }
+        // 在顶部给PC端添加move事件
+        if (me.os.pc) {
+          me.scrollDom.addEventListener('mousemove', me.touchmoveEvent, {
+            passive: false
+          });
+          document.ondragstart = function () { // 在顶部禁止PC端拖拽图片,避免与下拉刷新冲突
+            return false;
+          }
+        }
+      } else {
+        me.isKeepTop = false; // 标记在滚动条不在顶部
       }
     }
 
@@ -252,6 +269,7 @@
       if (!me.startPoint) return;
 
       var scrollTop = me.getScrollTop(); // 当前滚动条的距离
+      if (scrollTop > 0) me.isKeepTop = false; // 在移动过程中,只要滚动条有一次大于0,则标记false
       var curPoint = me.getPoint(e); // 当前点
 
       var moveY = curPoint.y - me.startPoint.y; // 和起点比,移动的距离,大于0向下拉,小于0向上拉
@@ -264,6 +282,8 @@
 
           // 可下拉的条件
           if (me.optDown.use && !me.inTouchend && !me.isDownScrolling && !me.optDown.isLock && (!me.isUpScrolling || (me.isUpScrolling && me.optUp.isBoth))) {
+            if (me.optDown.mustToTop && !me.isKeepTop) return; // 是否配置了必须在顶部才可以下拉
+
             // 下拉的角度是否在配置的范围内
             var x = Math.abs(me.lastPoint.x - curPoint.x);
             var y = Math.abs(me.lastPoint.y - curPoint.y);
@@ -288,9 +308,12 @@
                 me.movetype = 1; // 加入标记,保证只执行一次
                 me.optDown.inOffset(me); // 进入指定距离范围内那一刻的回调,只执行一次
                 me.downwarp.classList.remove(me.optDown.resetClass); // 移除高度重置的动画
-                me.scrollDom.classList.add(me.optDown.hardwareClass); // 开启硬件加速,解决iOS下拉因隐藏进度条而闪屏的问题
-                me.scrollDom.style.webkitOverflowScrolling = 'auto'; // 取消列表回弹效果,避免与下面me.downwarp.style.height混合,而导致界面抖动闪屏
                 me.isMoveDown = true; // 标记下拉区域高度改变,在touchend重置回来
+                if (me.os.ios && !me.isKeepTop) { // 下拉过程中,滚动条一直在顶部的,则不必取消回弹,否则会闪白屏
+                  me.scrollDom.classList.add(me.optDown.hardwareClass); // 开启硬件加速,解决iOS下拉因隐藏进度条而闪屏的问题
+                  me.scrollDom.style.webkitOverflowScrolling = 'auto'; // 取消列表回弹效果,避免与下面me.downwarp.style.height混合,而导致界面抖动闪屏
+                  me.isSetScrollAuto = true; // 标记设置了webkitOverflowScrolling为auto
+                }
               }
               me.downHight += diff;
 
@@ -300,9 +323,12 @@
                 me.movetype = 2; // 加入标记,保证只执行一次
                 me.optDown.outOffset(me); // 下拉超过指定距离那一刻的回调,只执行一次
                 me.downwarp.classList.remove(me.optDown.resetClass); // 移除高度重置的动画
-                me.scrollDom.classList.add(me.optDown.hardwareClass); // 开启硬件加速,解决iOS下拉因隐藏进度条而闪屏的问题
-                me.scrollDom.style.webkitOverflowScrolling = 'auto'; // 取消列表回弹效果,避免与下面me.downwarp.style.height混合,而导致界面抖动闪屏
                 me.isMoveDown = true; // 标记下拉区域高度改变,在touchend重置回来
+                if (me.os.ios && !me.isKeepTop) { // 下拉过程中,滚动条一直在顶部的,则不必取消回弹,否则会闪白屏
+                  me.scrollDom.classList.add(me.optDown.hardwareClass); // 开启硬件加速,解决iOS下拉因隐藏进度条而闪屏的问题
+                  me.scrollDom.style.webkitOverflowScrolling = 'auto'; // 取消列表回弹效果,避免与下面me.downwarp.style.height混合,而导致界面抖动闪屏
+                  me.isSetScrollAuto = true; // 标记设置了webkitOverflowScrolling为auto
+                }
               }
               if (diff > 0) { // 向下拉
                 me.downHight += diff * me.optDown.outOffsetRate; // 越往下,高度变化越小
@@ -353,8 +379,11 @@
           me.downHight = 0;
           me.downwarp.style.height = 0;
         }
-        me.scrollDom.style.webkitOverflowScrolling = 'touch';
-        me.scrollDom.classList.remove(me.optDown.hardwareClass);
+        if (me.isSetScrollAuto) {
+          me.scrollDom.style.webkitOverflowScrolling = 'touch';
+          me.scrollDom.classList.remove(me.optDown.hardwareClass);
+          me.isSetScrollAuto = false;
+        }
         me.movetype = 0;
         me.isMoveDown = false;
       }
@@ -394,7 +423,7 @@
   /* 阻止浏览器默认滚动事件 */
   MeScroll.prototype.preventDefault = function (e) {
     // cancelable:是否可以被禁用; defaultPrevented:是否已经被禁用
-    e && e.cancelable && !e.defaultPrevented && e.preventDefault();
+    if (e && e.cancelable && !e.defaultPrevented) e.preventDefault()
   }
 
   /* 根据点击滑动事件获取第一个手指的坐标 */
@@ -424,10 +453,21 @@
 
   /* 结束下拉刷新 */
   MeScroll.prototype.endDownScroll = function () {
-    this.downHight = 0;
-    this.downwarp.style.height = 0;
-    this.isDownScrolling = false;
-    if (this.downProgressDom) this.downProgressDom.classList.remove('mescroll-rotate');
+    var me = this;
+    // 结束下拉刷新的方法
+    var endScroll = function () {
+      me.downHight = 0;
+      me.downwarp.style.height = 0;
+      me.isDownScrolling = false;
+      if (me.downProgressDom) me.downProgressDom.classList.remove('mescroll-rotate');
+    }
+    // 结束下拉刷新时的回调
+    var delay = me.optDown.afterLoading(me); // 结束下拉刷新的延时,单位ms
+    if (typeof delay === 'number' && delay > 0) {
+      setTimeout(endScroll, delay);
+    } else {
+      endScroll();
+    }
   }
 
   /* 锁定下拉刷新:isLock=ture,null锁定;isLock=false解锁 */
@@ -584,8 +624,8 @@
       el = el.parentNode; // 继续检查其父元素
     }
 
-    // 拦截touchmove事件
-    isPrevent && me.preventDefault(e)
+    // 拦截touchmove事件:是否可以被禁用&&是否已经被禁用 (这里不使用me.preventDefault(e)的方法,因为某些情况下会报找不到方法的异常)
+    if (isPrevent && e.cancelable && !e.defaultPrevented) e.preventDefault();
   }
 
   /* 触发上拉加载 */

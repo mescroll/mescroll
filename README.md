@@ -16,7 +16,7 @@
 
 ## 目录:  
 
-* <a href="https://github.com/mescroll/mescroll/releases" target="_blank">最新版本:1.3.6 (2018-09-10) 重要升级</a> <br/><br/>
+* <a href="https://github.com/mescroll/mescroll/releases" target="_blank">最新版本:1.3.7 (2018-09-27) 重要升级</a> <br/><br/>
 * <a href="#功能亮点-">功能亮点 </a> <br/>
 * <a href="#快速入门-">快速入门 </a> <br/>
 * <a href="#图片懒加载-">图片懒加载 </a> <br/>
@@ -83,7 +83,7 @@
 				num: 0, //当前页 默认0,回调之前会加1; 即callback(page)会从1开始
 				size: 10, //每页数据条数,默认10
 			},
-			noMoreSize: 5, //如果列表已无数据,可设置列表的总数量要大于5才显示无更多数据;避免列表数据过少(比如只有一条数据),显示无更多数据会不好看
+			noMoreSize: 5, //如果列表已无数据,可设置列表的总数量要大于5才显示无更多数据;避免列表数据过少(比如只有一条数据),显示无更多数据会不好看.这就是为什么无更多数据 有时候不显示的原因了.
 			toTop: {
 				//回到顶部按钮
 				src: "../img/mescroll-totop.png", //图片路径,默认null,支持网络图
@@ -176,7 +176,7 @@
 
 ## 图片懒加载
 mescroll的图片懒加载功能是1.3.6新增的,使用超简单 :
-##### 1. 确保mescroll已更新到1.3.6版本
+##### 1. 确保mescroll至少更新到1.3.6版本
 ##### 2. 初始化mescroll的时候,在up中配置lazyLoad的use为true :
 ```
 var mescroll = new MeScroll("mescroll", {
@@ -461,7 +461,7 @@ var mescroll = new MeScroll(id或dom对象, { down: {下拉刷新的配置参数
 	<tr align="center">
 		<td>autoShowLoading</td>
 		<td>false</td>
-		<td>当设置auto=true时(在初始化完毕之后自动执行下拉刷新的回调)<br/>是否显示下拉刷新的进度</td>
+		<td>当设置auto=true时(在初始化完毕之后自动执行下拉刷新的回调)<br/>是否显示下拉刷新的进度<br/>需配置down的callback才生效</td>
 	</tr>
 	<tr align="center">
 		<td>isLock</td>
@@ -504,13 +504,38 @@ var mescroll = new MeScroll(id或dom对象, { down: {下拉刷新的配置参数
 		<td>下拉刷新的布局容器样式,参见mescroll.css</td>
 	</tr>
 	<tr align="center">
+		<td>mustToTop<br/>1.3.7版本新增</td>
+		<td>false</td>
+		<td>是否滚动条必须在顶部,才可以下拉刷新.默认false. 当您发现下拉刷新会闪白屏时,设置true即可修复.</td>
+	</tr>
+	<tr align="center">
+		<td>warpId</td>
+		<td>null</td>
+		<td>可配置下拉刷新的布局添加到指定id的div <br/> 默认不配置,默认添加到mescrollId</td>
+	</tr>
+	<tr align="center">
 		<td>resetClass</td>
 		<td>"mescroll-downwarp-reset"</td>
 		<td>下拉刷新高度重置的动画,参见mescroll.css</td>
 	</tr>
+    <tr align="center">
+		<td>textInOffset<br/>1.3.7版本新增</td>
+		<td>'下拉刷新'</td>
+		<td>下拉的距离在offset范围内的提示文本</td>
+	</tr>
+    <tr align="center">
+		<td>textOutOffset<br/>1.3.7版本新增</td>
+		<td>'释放更新'</td>
+		<td>下拉的距离大于offset范围的提示文本</td>
+	</tr>
+    <tr align="center">
+		<td>textLoading<br/>1.3.7版本新增</td>
+		<td>'加载中 ...'</td>
+		<td>加载中的提示文本</td>
+	</tr>
 	<tr align="center">
 		<td>htmlContent</td>
-		<td>'&lt;p class="downwarp-progress"&gt;&lt;/p&gt;&lt;p class="downwarp-tip"&gt;下拉刷新&lt;/p&gt;'</td>
+		<td>'&lt;p class="downwarp-progress"&gt;&lt;/p&gt;&lt;p class="downwarp-tip"&gt;&lt;/p&gt;'</td>
 		<td>下拉刷新的布局内容</td>
 	</tr>
 	<tr align="center">
@@ -542,6 +567,11 @@ var mescroll = new MeScroll(id或dom对象, { down: {下拉刷新的配置参数
 		<td>showLoading</td>
 		<td>function(mescroll) { ... }</td>
 		<td>显示下拉刷新进度的回调</td>
+	</tr>
+	<tr align="center">
+		<td>afterLoading</td>
+		<td>function(mescroll) { return 0 }</td>
+		<td>结束加载中,准备隐藏下拉的回调 <br/>返回结束下拉的延时执行时间,默认0ms<br/>常用于结束下拉之前再显示另外一小段动画,才去隐藏下拉刷新的场景, 参考案例【dotJump】</td>
 	</tr>
 	<tr align="center">
 		<td>callback</td>
@@ -668,6 +698,11 @@ var mescroll = new MeScroll(id或dom对象, { down: {下拉刷新的配置参数
 		<td>warpClass</td>
 		<td>"mescroll-upwarp"</td>
 		<td>上拉加载的布局容器样式,参见mescroll.css</td>
+	</tr>
+	<tr align="center">
+		<td>warpId</td>
+		<td>null</td>
+		<td>可配置上拉加载的布局添加到指定id的div;默认不配置,默认添加到mescrollId</td>
 	</tr>
 	<tr align="center">
 		<td>htmlLoading</td>

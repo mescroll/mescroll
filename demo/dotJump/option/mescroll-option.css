@@ -1,0 +1,103 @@
+/*
+ * 自定义下拉刷新和上拉加载的结构
+ * 
+	//下拉刷新区域
+	<div class="mescroll-downwarp">
+		//可自定义内容
+		<p class="downwarp-circle"></p>
+		<img class="downwarp-ball" src="mescroll-ball.svg"/>
+	</div>
+
+	//上拉加载区域
+	<div class="mescroll-upwarp">
+		//加载中..
+		<div class="upwarp-loading"><p></p><p></p><p></p><p></p><i></i></div>
+		//无数据
+		<p class="upwarp-nodata">没有更多数据了~</p>
+	</div>
+ */
+
+/*下拉刷新*/
+.mescroll-downwarp .downwarp-circle{
+	display: inline-block;
+	width: 13px;
+	height: 13px;
+	border-radius: 50%;
+	background-color: #18B4FE;
+}
+.mescroll-downwarp .downwarp-ball{
+	display: none;
+}
+
+/*结束下拉之前,播放的动画*/
+.mescorll-scale-out{
+	-webkit-animation: mescorllScaleOut .3s linear forwards;
+	animation: mescorllScaleOut .3s linear forwards;
+}
+
+@-webkit-keyframes mescorllScaleOut{
+	0% {
+	    -webkit-transform: scale(1);
+	    opacity: 1;
+	}
+	100% {
+		-webkit-transform: scale(100);
+		opacity: 0.3;
+	}
+}
+@keyframes mescorllScaleOut{
+	0% {
+	    -webkit-transform: scale(1);
+	    opacity: 1;
+	}
+	100% {
+		-webkit-transform: scale(100);
+		opacity: 0.3;
+	}
+}
+
+/*上拉加载区域*/
+.mescroll-upwarp .upwarp-nodata {
+	width: auto;
+	height: 30px;
+	margin: auto;
+}
+
+.mescroll-upwarp .upwarp-loading{
+	position: relative;
+	display: inline-block;
+	line-height: 5px;
+}
+.mescroll-upwarp .upwarp-loading p,
+.mescroll-upwarp .upwarp-loading i{
+	display: inline-block;
+	width: 5px;
+	height: 5px;
+	margin: 2px;
+	border-radius: 50%;
+}
+.mescroll-upwarp .upwarp-loading p{background-color: #cacaca}
+
+/*小圆点移动的动画*/
+.mescroll-upwarp .upwarp-loading i{
+	position: absolute;
+	left: 0;
+	top: 0;
+	background-color: white;
+	-webkit-animation: animDotMove .6s steps(1,end) infinite;
+	animation: animDotMove .6s steps(1,end) infinite;
+}
+@-webkit-keyframes animDotMove {
+	0% {left: 0}
+	25% {left: 9px}
+	50% {left: 18px}
+	75% {left: 27px}
+	100% {left: 0}
+}
+@keyframes animDotMove {
+	0% {left: 0}
+	25% {left: 9px}
+	50% {left: 18px}
+	75% {left: 27px}
+	100% {left: 0}
+}
