@@ -226,7 +226,8 @@
 						showClass: "mescroll-fade-in", //显示样式,参见mescroll.css
 						hideClass: "mescroll-fade-out", //隐藏样式,参见mescroll.css
 						duration: 300, //回到顶部的动画时长,默认300ms
-						supportTap: false //默认点击事件用onclick,会有300ms的延时;如果您的运行环境支持tap,则可配置true;
+						supportTap: false, //默认点击事件用onclick,会有300ms的延时;如果您的运行环境支持tap,则可配置true;
+						btnClick: null // 点击按钮的回调; 小提示:如果在回调里return true,将不执行回到顶部的操作.
 					},
 					loadFull: {
 						use: false, //列表数据过少,不足以滑动触发上拉加载,是否自动加载下一页,直到满屏或者无更多数据为止;默认false,因为可通过调高page.size或者嵌套mescroll-bounce的div避免这个情况
