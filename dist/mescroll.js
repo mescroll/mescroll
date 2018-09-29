@@ -1,6 +1,6 @@
 /*! mescroll -- 精致的下拉刷新和上拉加载js框架  ( a great JS framework for pull-refresh and pull-up-loading )
- * version 1.3.7
- * 2018-09-27
+ * version 1.3.8
+ * 2018-09-29
  * author: wenju < mescroll@qq.com > 文举
  * *
  * 官网:  http://www.mescroll.com
@@ -23,7 +23,7 @@
 })('MeScroll', function () {
   var MeScroll = function (mescrollId, options) {
     var me = this;
-    me.version = '1.3.7'; // mescroll版本号
+    me.version = '1.3.8'; // mescroll版本号
     me.isScrollBody = (!mescrollId || mescrollId === 'body'); // 滑动区域是否为body
     me.scrollDom = me.isScrollBody ? document.body : me.getDomById(mescrollId); // MeScroll的滑动区域
     if (!me.scrollDom) return;
@@ -241,23 +241,15 @@
       me.maxTouchmoveY = me.getBodyHeight() - me.optDown.bottomOffset; // 手指触摸的最大范围(写在touchstart避免body获取高度为0的情况)
       me.inTouchend = false; // 标记不是touchend
       var scrollTop = me.getScrollTop();// 滚动条的位置
-      if (scrollTop <= 0) {
-        if (me.optDown.mustToTop && scrollTop < 0 && me.isKeepTop == false) {
-          me.isKeepTop = false; // 此处避免设置必须顶部下拉的时候,先上拉,再下拉,松手,马上下拉,滚动条还未重置到0, 此时的下拉会导致抖动, 设置false可修复
-        } else {
-          me.isKeepTop = true; // 标记在滚动条在顶部
-        }
+      me.isKeepTop = scrollTop === 0; // 标记滚动条起点为0
+      if (me.os.pc && scrollTop <= 0) {
         // 在顶部给PC端添加move事件
-        if (me.os.pc) {
-          me.scrollDom.addEventListener('mousemove', me.touchmoveEvent, {
-            passive: false
-          });
-          document.ondragstart = function () { // 在顶部禁止PC端拖拽图片,避免与下拉刷新冲突
-            return false;
-          }
+        me.scrollDom.addEventListener('mousemove', me.touchmoveEvent, {
+          passive: false
+        });
+        document.ondragstart = function () { // 在顶部禁止PC端拖拽图片,避免与下拉刷新冲突
+          return false;
         }
-      } else {
-        me.isKeepTop = false; // 标记在滚动条不在顶部
       }
     }
 

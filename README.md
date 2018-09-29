@@ -16,7 +16,7 @@
 
 ## 目录:  
 
-* <a href="https://github.com/mescroll/mescroll/releases" target="_blank">最新版本:1.3.7 (2018-09-27) 重要升级</a> <br/><br/>
+* <a href="https://github.com/mescroll/mescroll/releases" target="_blank">最新版本:1.3.8 (2018-09-29) 重要升级</a> <br/><br/>
 * <a href="#功能亮点-">功能亮点 </a> <br/>
 * <a href="#快速入门-">快速入门 </a> <br/>
 * <a href="#图片懒加载-">图片懒加载 </a> <br/>
