@@ -32,7 +32,7 @@
 * <a href="#api文档-">API文档 </a> <br/>
 * <a href="#常用方法-">常用方法 </a> <br/>
 * <a href="#其他方法-">其他方法 </a> <br/><br/>
-* <a href="http://www.mescroll.com/qa.html?v=0927">常见问题 </a> <br/>
+* <a href="http://www.mescroll.com/qa.html?v=0929">常见问题 </a> <br/>
 * <a href="http://www.mescroll.com/reward.html#tagRank">打赏排行榜 </a> <br/>
 
 ## 功能亮点 :
@@ -115,10 +115,10 @@
 	});
 ```  
 ###### 温馨提示:
-###### 1. 如果您的下拉刷新是重置列表数据,那么down完全可以不用配置,具体用法参考<a class="blue" href="http://www.mescroll.com/demo.html?v=0927">第一个基础案例</a>
+###### 1. 如果您的下拉刷新是重置列表数据,那么down完全可以不用配置,具体用法参考<a class="blue" href="http://www.mescroll.com/demo.html?v=0929">第一个基础案例</a>
 ###### 解析: down内部默认调用的是mescroll.resetUpScroll(),而resetUpScroll会将page.num=1,再触发up.callback,从而实现刷新列表数据
 
-###### 2. 如果您的项目是在iOS的微信,QQ,Safari等浏览器访问的,建议配置up的isBounce为false,禁止ios的回弹效果; <a class="blue" href="http://www.mescroll.com/qa.html?v=0927#q10">解析(必读)</a>
+###### 2. 如果您的项目是在iOS的微信,QQ,Safari等浏览器访问的,建议配置up的isBounce为false,禁止ios的回弹效果; <a class="blue" href="http://www.mescroll.com/qa.html?v=0929#q10">解析(必读)</a>
 
 #### 5. 处理回调:
 ```
@@ -184,7 +184,7 @@
 --- 基础案例一共6个, 每个案例3分钟, 一共花您18分钟; 这18分钟您将了解mescroll在不同情况下应如何快速配置 ~<br/>
 --- 特别建议您, 手动改改 <a href="http://www.mescroll.com/preview.html?name=mescroll-options">mescroll-options</a> 的每项配置, 观察修改后的效果, 轻松理解各项参数, 还会有意想不到的发现哦 ~<br/>
 --- 磨刀不误砍柴工,心急吃不了热豆腐. 请静下心来体验与理解mescroll, 一定会让您事半功倍 ~<br/>
---- 如使用中有疑问, 请先查看  <a href="http://www.mescroll.com/qa.html?v=0927">常见问题专区</a> ~<br/><br/>
+--- 如使用中有疑问, 请先查看  <a href="http://www.mescroll.com/qa.html?v=0929">常见问题专区</a> ~<br/><br/>
 
 ## 图片懒加载
 mescroll的图片懒加载功能是1.3.6新增的,使用超简单 :
@@ -448,7 +448,7 @@ export default {
 ```	       		
 
 ## API文档 :   
-#### <a href="http://www.mescroll.com/api.html?v=0927#options" target="_blank">前往官网查看 >> </a>
+#### <a href="http://www.mescroll.com/api.html?v=0929#options" target="_blank">前往官网查看 >> </a>
 
 ```
 //创建mescroll对象
