@@ -32,7 +32,7 @@
 * <a href="#api文档-">API文档 </a> <br/>
 * <a href="#常用方法-">常用方法 </a> <br/>
 * <a href="#其他方法-">其他方法 </a> <br/><br/>
-* <a href="http://www.mescroll.com/qa.html?v=0910">常见问题 </a> <br/>
+* <a href="http://www.mescroll.com/qa.html?v=0927">常见问题 </a> <br/>
 * <a href="http://www.mescroll.com/reward.html#tagRank">打赏排行榜 </a> <br/>
 
 ## 功能亮点 :
@@ -93,6 +93,7 @@
 				num: 0, //当前页 默认0,回调之前会加1; 即callback(page)会从1开始
 				size: 10, //每页数据条数,默认10
 			},
+			htmlNodata: '<p class="upwarp-nodata">亲,没有更多数据了~</p>',
 			noMoreSize: 5, //如果列表已无数据,可设置列表的总数量要大于5才显示无更多数据;避免列表数据过少(比如只有一条数据),显示无更多数据会不好看.这就是为什么无更多数据 有时候不显示的原因了.
 			toTop: {
 				//回到顶部按钮
@@ -114,10 +115,10 @@
 	});
 ```  
 ###### 温馨提示:
-###### 1. 如果您的下拉刷新是重置列表数据,那么down完全可以不用配置,具体用法参考<a class="blue" href="http://www.mescroll.com/demo.html?v=0910">第一个基础案例</a>
+###### 1. 如果您的下拉刷新是重置列表数据,那么down完全可以不用配置,具体用法参考<a class="blue" href="http://www.mescroll.com/demo.html?v=0927">第一个基础案例</a>
 ###### 解析: down内部默认调用的是mescroll.resetUpScroll(),而resetUpScroll会将page.num=1,再触发up.callback,从而实现刷新列表数据
 
-###### 2. 如果您的项目是在iOS的微信,QQ,Safari等浏览器访问的,建议配置up的isBounce为false,禁止ios的回弹效果; <a class="blue" href="http://www.mescroll.com/qa.html?v=0910#q10">解析(必读)</a>
+###### 2. 如果您的项目是在iOS的微信,QQ,Safari等浏览器访问的,建议配置up的isBounce为false,禁止ios的回弹效果; <a class="blue" href="http://www.mescroll.com/qa.html?v=0927#q10">解析(必读)</a>
 
 #### 5. 处理回调:
 ```
@@ -183,7 +184,7 @@
 --- 基础案例一共6个, 每个案例3分钟, 一共花您18分钟; 这18分钟您将了解mescroll在不同情况下应如何快速配置 ~<br/>
 --- 特别建议您, 手动改改 <a href="http://www.mescroll.com/preview.html?name=mescroll-options">mescroll-options</a> 的每项配置, 观察修改后的效果, 轻松理解各项参数, 还会有意想不到的发现哦 ~<br/>
 --- 磨刀不误砍柴工,心急吃不了热豆腐. 请静下心来体验与理解mescroll, 一定会让您事半功倍 ~<br/>
---- 如使用中有疑问, 请先查看  <a href="http://www.mescroll.com/qa.html?v=0910">常见问题专区</a> ~<br/><br/>
+--- 如使用中有疑问, 请先查看  <a href="http://www.mescroll.com/qa.html?v=0927">常见问题专区</a> ~<br/><br/>
 
 ## 图片懒加载
 mescroll的图片懒加载功能是1.3.6新增的,使用超简单 :
@@ -256,6 +257,7 @@ export default {
 		num: 0, //当前页 默认0,回调之前会加1; 即callback(page)会从1开始
 		size: 10, //每页数据条数,默认10
 	},
+	htmlNodata: '<p class="upwarp-nodata">亲,没有更多数据了~</p>',
 	noMoreSize: 5, //如果列表已无数据,可设置列表总数大于5才显示无更多数据;避免列表数据过少(比如只有一条数据),显示无更多数据会不好看
 	toTop: {
 		//回到顶部按钮
@@ -375,6 +377,7 @@ export default {
 		num: 0, //当前页 默认0,回调之前会加1; 即callback(page)会从1开始
 		size: 10 //每页数据条数,默认10
 	},
+	htmlNodata: '<p class="upwarp-nodata">亲,没有更多数据了~</p>',
 	noMoreSize: 5, //如果列表已无数据,可设置列表总数大于5才显示无更多数据;避免列表数据过少(比如只有一条数据),显示无更多数据会不好看
 	toTop: {
 		//回到顶部按钮
@@ -445,7 +448,7 @@ export default {
 ```	       		
 
 ## API文档 :   
-#### <a href="http://www.mescroll.com/api.html?v=0910#options" target="_blank">前往官网查看 >> </a>
+#### <a href="http://www.mescroll.com/api.html?v=0927#options" target="_blank">前往官网查看 >> </a>
 
 ```
 //创建mescroll对象
@@ -647,6 +650,7 @@ var mescroll = new MeScroll(id或dom对象, { down: {下拉刷新的配置参数
 			hideClass: "mescroll-fade-out", <br/>
 			duration: 300, <br/>
 			supportTap: false <br/>
+			btnClick : null <br/>
 		}</td>
 		<td align="left">回到顶部按钮的配置: <br/>
 			warpId: 父布局的id; 默认添加在body中 (1.3.5版本支持传入dom元素)  <br/>
@@ -658,6 +662,7 @@ var mescroll = new MeScroll(id或dom对象, { down: {下拉刷新的配置参数
 			hideClass: 隐藏样式,参见mescroll.css <br/>
 			duration: 回到顶部的动画时长,默认300ms <br/>
 			supportTap: 如果您的运行环境支持tap,则可配置true,可减少点击延时,快速响应事件;默认false,通过onclick添加点击事件; (v 1.3.0 新增) (注:微信和PC无法响应tap事件) <br/>
+			btnClick: 点击按钮的回调; 提示:如果在回调里return true,将不执行回到顶部的操作
 		</td>
 	</tr>
 	<tr align="center">
