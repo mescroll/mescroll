@@ -493,6 +493,11 @@ var mescroll = new MeScroll(id或dom对象, { down: {下拉刷新的配置参数
 		<td>在列表顶部,下拉大于80px,松手即可触发下拉刷新的回调</td>
 	</tr>
 	<tr align="center">
+		<td>inOffsetRate (1.4.0新增)</td>
+		<td>1</td>
+		<td>在列表顶部,下拉的距离小于offset时,改变下拉区域高度比例;值小于1且越接近0,高度变化越小,表现为越往下越难拉</td>
+	</tr>
+	<tr align="center">
 		<td>outOffsetRate</td>
 		<td>0.2</td>
 		<td>在列表顶部,下拉的距离大于offset时,改变下拉区域高度比例;值越接近0,高度变化越小,表现为越往下越难拉</td>
