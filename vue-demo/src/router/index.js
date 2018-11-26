@@ -5,6 +5,7 @@ import listNews from '@/pages/base/list-news'
 import mescrollOptions from '@/pages/base/mescroll-options'
 import listProducts from '@/pages/base/list-products'
 import mescrollComponent from '@/pages/base/mescroll-component'
+import mescrollMore from '@/pages/base/mescroll-more'
 
 Vue.use(Router)
 
@@ -30,6 +31,10 @@ export default new Router({
       path: '/mescrollComponent',
       name: 'mescrollComponent',
       component: mescrollComponent
+    }, {
+      path: '/mescrollMore',
+      name: 'mescrollMore',
+      component: mescrollMore
     }
   ]
 })

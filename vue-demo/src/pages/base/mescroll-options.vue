@@ -51,7 +51,7 @@ export default {
       down: {
         use: true, // 是否初始化下拉刷新; 默认true
         auto: true, // 是否在初始化完毕之后自动执行下拉回调callback; 默认true
-        autoShowLoading: false, // 如果在初始化完毕之后自动执行下拉回调,是否显示下拉刷新进度; 默认false
+        autoShowLoading: true, // 如果在初始化完毕之后自动执行下拉回调,是否显示下拉刷新进度; 默认false
         isLock: false, // 是否锁定下拉,默认false;
         isBoth: false, // 下拉刷新时,如果滑动到列表底部是否可以同时触发上拉加载;默认false,两者不可同时触发;
         callback: function (mescroll) {
@@ -62,6 +62,7 @@ export default {
           mescroll.resetUpScroll()
         },
         offset: 60, // 触发刷新的距离,默认80
+        inOffsetRate: 1, // 在列表顶部,下拉的距离小于offset时,改变下拉区域高度比例;值小于1且越接近0,高度变化越小,表现为越往下越难拉
         outOffsetRate: 0.2, // 超过指定距离范围外时,改变下拉区域高度比例;值小于1且越接近0,越往下拉高度变化越小;
         bottomOffset: 20, // 当手指touchmove位置在距离body底部20px范围内的时候结束上拉刷新,避免Webview嵌套导致touchend事件不执行
         minAngle: 45, // 向下滑动最少偏移的角度,取值区间  [0,90];默认45度,即向下滑动的角度大于45度则触发下拉;而小于45度,将不触发下拉,避免与左右滑动的轮播等组件冲突;
@@ -303,7 +304,7 @@ export default {
 }
 </script>
 
-<style scope>
+<style scoped>
   /*以fixed的方式固定mescroll的高度*/
   .mescroll {
     position: fixed;

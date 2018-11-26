@@ -146,7 +146,7 @@ export default {
 }
 </script>
 
-<style scope>
+<style scoped>
   /*以fixed的方式固定mescroll的高度*/
   .mescroll {
     position: fixed;

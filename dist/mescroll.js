@@ -1,6 +1,6 @@
 /*! mescroll -- 精致的下拉刷新和上拉加载js框架  ( a great JS framework for pull-refresh and pull-up-loading )
- * version 1.3.8
- * 2018-09-29
+ * version 1.4.0
+ * 2018-11-25
  * author: wenju < mescroll@qq.com > 文举
  * *
  * 官网:  http://www.mescroll.com
@@ -23,7 +23,7 @@
 })('MeScroll', function () {
   var MeScroll = function (mescrollId, options) {
     var me = this;
-    me.version = '1.3.8'; // mescroll版本号
+    me.version = '1.4.0'; // mescroll版本号
     me.isScrollBody = (!mescrollId || mescrollId === 'body'); // 滑动区域是否为body
     me.scrollDom = me.isScrollBody ? document.body : me.getDomById(mescrollId); // MeScroll的滑动区域
     if (!me.scrollDom) return;
@@ -75,6 +75,7 @@
       isLock: false, // 是否锁定下拉刷新,默认false;
       isBoth: false, // 下拉刷新时,如果滑动到列表底部是否可以同时触发上拉加载;默认false,两者不可同时触发;
       offset: 80, // 在列表顶部,下拉大于80px,松手即可触发下拉刷新的回调
+      inOffsetRate: 1, // 在列表顶部,下拉的距离小于offset时,改变下拉区域高度比例;值小于1且越接近0,高度变化越小,表现为越往下越难拉
       outOffsetRate: 0.2, // 在列表顶部,下拉的距离大于offset时,改变下拉区域高度比例;值小于1且越接近0,高度变化越小,表现为越往下越难拉
       bottomOffset: 20, // 当手指touchmove位置在距离body底部20px范围内的时候结束上拉刷新,避免Webview嵌套导致touchend事件不执行
       minAngle: 45, // 向下滑动最少偏移的角度,取值区间  [0,90];默认45度,即向下滑动的角度大于45度则触发下拉;而小于45度,将不触发下拉,避免与左右滑动的轮播等组件冲突;
@@ -284,7 +285,7 @@
               var angle = Math.asin(y / z) / Math.PI * 180; // 两点之间的角度,区间 [0,90]
               if (angle < me.optDown.minAngle) return; // 如果小于配置的角度,则不往下执行下拉刷新
             }
-
+						
             // 如果手指的位置超过配置的距离,则提前结束下拉,避免Webview嵌套导致touchend无法触发
             if (me.maxTouchmoveY > 0 && curPoint.y >= me.maxTouchmoveY) {
               me.inTouchend = true; // 标记执行touchend
@@ -307,7 +308,7 @@
                   me.isSetScrollAuto = true; // 标记设置了webkitOverflowScrolling为auto
                 }
               }
-              me.downHight += diff;
+              me.downHight += diff * me.optDown.inOffsetRate; // 越往下,高度变化越小
 
               // 指定距离  <= 下拉距离
             } else {
@@ -617,7 +618,7 @@
     }
 
     // 拦截touchmove事件:是否可以被禁用&&是否已经被禁用 (这里不使用me.preventDefault(e)的方法,因为某些情况下会报找不到方法的异常)
-    if (isPrevent && e.cancelable && !e.defaultPrevented) e.preventDefault();
+    if (isPrevent && e.cancelable && !e.defaultPrevented && typeof e.preventDefault === "function") e.preventDefault();
   }
 
   /* 触发上拉加载 */

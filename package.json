@@ -1,6 +1,6 @@
 {
   "name": "mescroll.js",
-  "version": "1.3.8",
+  "version": "1.4.0",
   "description": "精致的下拉刷新和上拉加载 js框架.支持vue,完美运行于移动端和主流PC浏览器 ( a great JS framework for pull-refresh and pull-up-loading )",
   "main": "mescroll.min.js",
   "scripts": {
