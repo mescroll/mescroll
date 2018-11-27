@@ -7,6 +7,7 @@
       <router-link to="mescrollComponent">mescroll-vue 组件 <span class="tip" style="color:red">强烈推荐以组件的方式使用</span></router-link>
       <router-link to="mescrollOptions">mescroll-options 所有配置项 <span class="tip">快速熟悉mescroll</span></router-link>
       <router-link to="mescrollMore">mescroll-more 多mescroll <span class="tip">列表仅初始化一次,缓存数据</span></router-link>
+      <router-link to="mescrollSwiperNav">mescroll-swiper-nav <span class="tip">轮播菜单</span></router-link>
     </div>
   </div>
 </template>

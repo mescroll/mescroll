@@ -5,7 +5,7 @@
       <router-link class="btn-left" to="/">main</router-link>
       MeScroll组件,强烈推荐使用
     </p>
-    <!--滑动区域-->
+    <!--滑动区域 ref='mescroll'不能删, 目的是路由切换时可通过ref调用mescroll-vue组件的beforeRouteEnter方法-->
     <mescroll-vue ref="mescroll" :up="mescrollUp" @init="mescrollInit">
       <!--模拟的轮播,菜单 可在down.callback中配置刷新轮播数据-->
       <img class="swiper" src="../../../static/mock/img/swiper.jpg"/>
@@ -72,11 +72,13 @@ export default {
   },
   beforeRouteEnter (to, from, next) { // 如果没有配置回到顶部按钮或isBounce,则beforeRouteEnter不用写
     next(vm => {
-      vm.$refs.mescroll.beforeRouteEnter() // 进入路由时,滚动到原来的列表位置,恢复回到顶部按钮和isBounce的配置
+      // 找到当前mescroll的ref,调用子组件mescroll-vue的beforeRouteEnter方法
+      vm.$refs.mescroll && vm.$refs.mescroll.beforeRouteEnter() // 进入路由时,滚动到原来的列表位置,恢复回到顶部按钮和isBounce的配置
     })
   },
   beforeRouteLeave (to, from, next) { // 如果没有配置回到顶部按钮或isBounce,则beforeRouteLeave不用写
-    this.$refs.mescroll.beforeRouteLeave() // 退出路由时,记录列表滚动的位置,隐藏回到顶部按钮和isBounce的配置
+    // 找到当前mescroll的ref,调用子组件mescroll-vue的beforeRouteEnter方法
+    this.$refs.mescroll && this.$refs.mescroll.beforeRouteLeave() // 退出路由时,记录列表滚动的位置,隐藏回到顶部按钮和isBounce的配置
     next()
   },
   methods: {

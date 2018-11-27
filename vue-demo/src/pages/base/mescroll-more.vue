@@ -13,7 +13,7 @@
     </div>
 
     <!--全部-->
-    <mescroll-vue v-show="tabType==0" :down="getMescrollDown(0)" :up="getMescrollUp(0)" @init="mescrollInit0">
+    <mescroll-vue ref="mescroll0" v-show="tabType==0" :down="getMescrollDown(0)" :up="getMescrollUp(0)" @init="mescrollInit0">
       <ul id="dataList0">
         <li class="data-li" v-for="pd in tab0.list" :key="pd.id">
           <img class="pd-img" :src="pd.pdImg"/>
@@ -25,7 +25,7 @@
     </mescroll-vue>
 
     <!-- 奶粉 可不配down-->
-    <mescroll-vue v-show="tabType==1" :up="getMescrollUp(1)" @init="mescrollInit1">
+    <mescroll-vue ref="mescroll1" v-show="tabType==1" :up="getMescrollUp(1)" @init="mescrollInit1">
       <ul id="dataList1">
         <li class="data-li" v-for="pd in tab1.list" :key="pd.id">
           <img class="pd-img" :src="pd.pdImg"/>
@@ -37,7 +37,7 @@
     </mescroll-vue>
 
     <!-- 面膜 -->
-    <mescroll-vue v-show="tabType==2" :up="getMescrollUp(2)" @init="mescrollInit2">
+    <mescroll-vue ref="mescroll2" v-show="tabType==2" :up="getMescrollUp(2)" @init="mescrollInit2">
       <ul id="dataList2">
         <li class="data-li" v-for="pd in tab2.list" :key="pd.id">
           <img class="pd-img" :src="pd.pdImg"/>
@@ -49,7 +49,7 @@
     </mescroll-vue>
 
     <!-- 图书 -->
-    <mescroll-vue v-show="tabType==3" :up="getMescrollUp(3)" @init="mescrollInit3">
+    <mescroll-vue ref="mescroll3" v-show="tabType==3" :up="getMescrollUp(3)" @init="mescrollInit3">
       <ul id="dataList3">
         <li class="data-li" v-for="pd in tab3.list" :key="pd.id">
           <img class="pd-img" :src="pd.pdImg"/>
@@ -213,6 +213,7 @@ export default {
     },
     // 获取菜单对应的数据
     getTabData (tabType) {
+      if (tabType == null) tabType = this.tabType;
       if (tabType === 0) {
         return this.tab0;
       } else if (tabType === 1) {
@@ -269,16 +270,18 @@ export default {
           errorCallback && errorCallback();
         }
       }, 1000)
-    },
-    beforeRouteEnter (to, from, next) { // 如果没有配置回到顶部按钮或isBounce,则beforeRouteEnter不用写
-      next(vm => {
-        vm.$refs.mescroll.beforeRouteEnter() // 进入路由时,滚动到原来的列表位置,恢复回到顶部按钮和isBounce的配置
-      })
-    },
-    beforeRouteLeave (to, from, next) { // 如果没有配置回到顶部按钮或isBounce,则beforeRouteLeave不用写
-      this.$refs.mescroll.beforeRouteLeave() // 退出路由时,记录列表滚动的位置,隐藏回到顶部按钮和isBounce的配置
-      next()
     }
+  },
+  beforeRouteEnter (to, from, next) { // 如果没有配置回到顶部按钮或isBounce,则beforeRouteEnter不用写
+    next(vm => {
+      let curMescroll = vm.$refs['mescroll' + vm.tabType]; // 找到当前mescroll的ref,调用子组件mescroll-vue的beforeRouteEnter方法
+      curMescroll && curMescroll.beforeRouteEnter() // 进入路由时,滚动到原来的列表位置,恢复回到顶部按钮和isBounce的配置
+    })
+  },
+  beforeRouteLeave (to, from, next) { // 如果没有配置回到顶部按钮或isBounce,则beforeRouteLeave不用写
+    let curMescroll = this.$refs['mescroll' + this.tabType]; // 找到当前mescroll的ref,调用子组件mescroll-vue的beforeRouteEnter方法
+    curMescroll && curMescroll.beforeRouteLeave() // 退出路由时,记录列表滚动的位置,隐藏回到顶部按钮和isBounce的配置
+    next()
   }
 }
 </script>

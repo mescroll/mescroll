@@ -6,6 +6,7 @@ import mescrollOptions from '@/pages/base/mescroll-options'
 import listProducts from '@/pages/base/list-products'
 import mescrollComponent from '@/pages/base/mescroll-component'
 import mescrollMore from '@/pages/base/mescroll-more'
+import mescrollSwiperNav from '@/pages/base/mescroll-swiper-nav'
 
 Vue.use(Router)
 
@@ -35,6 +36,10 @@ export default new Router({
       path: '/mescrollMore',
       name: 'mescrollMore',
       component: mescrollMore
+    }, {
+      path: '/mescrollSwiperNav',
+      name: 'mescrollSwiperNav',
+      component: mescrollSwiperNav
     }
   ]
 })
