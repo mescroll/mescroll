@@ -76,7 +76,6 @@
                     } // 图书
                 ],
                 tabType: 0, // 菜单类型
-                temp: 0
             };
         },
         methods: {
