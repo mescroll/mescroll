@@ -7,12 +7,12 @@
       <!--菜单 需加上mescroll-touch-x,原因: http://www.mescroll.com/qa.html#q10 -->
       <div class="tabs-warp">
         <div ref="tabsContent" class="tabs-content mescroll-touch-x">
-         <div style="display: inline-block"> <!--PC端运行,加上这个div可修复tab-bar错位的问题 -->
-          <ul class="tabs" ref="tabs">
-            <li class="tab" v-for="(tab,i) in tabs" :class="{active: i===curIndex}" :style="{width: tabWidth+'px'}" :key="i" @click="changeTab(i)">{{tab.name}}</li>
-          </ul>
-          <div class="tab-bar" :style="{width: barWidth+'px', left: barLeft}"></div>
-         </div>
+          <div style="display: inline-block"> <!--PC端运行,加上这个div可修复tab-bar错位的问题 -->
+            <ul class="tabs" ref="tabs">
+              <li class="tab" v-for="(tab,i) in tabs" :class="{active: i===curIndex}" :style="{width: tabWidth+'px'}" :key="i" @click="changeTab(i)">{{tab.name}}</li>
+            </ul>
+            <div class="tab-bar" :style="{width: barWidth+'px', left: barLeft}"></div>
+          </div>
         </div>
       </div>
     </div>
@@ -195,6 +195,7 @@ export default {
       tabWidth: 80, // 每个tab的宽度
       barWidth: 40, // tab底部红色线的宽度
       curIndex: 0, // 当前tab的下标
+      tabScrollLeft: 0, // 菜单滚动条的位置
       swiperOption: { // 轮播配置
         on: {
           transitionEnd: () => {
@@ -266,6 +267,7 @@ export default {
         let tabDom = tabsContent.getElementsByClassName('tab')[tabIndex];
         let star = tabsContent.scrollLeft;// 当前位置
         let end = tabDom.offsetLeft + tabDom.clientWidth / 2 - document.body.clientWidth / 2; // 居中
+        this.tabScrollLeft = end;
         curTab.mescroll.getStep(star, end, function (step) {
           tabsContent.scrollLeft = step; // 从当前位置逐渐移动到中间位置,默认时长300ms
         });
@@ -354,6 +356,8 @@ export default {
     next(vm => {
       let curMescroll = vm.$refs['mescroll' + vm.curIndex]; // 找到当前mescroll的ref,调用子组件mescroll-vue的beforeRouteEnter方法
       curMescroll && curMescroll.beforeRouteEnter() // 进入路由时,滚动到原来的列表位置,恢复回到顶部按钮和isBounce的配置
+      // 恢复水平菜单的滚动条位置
+      if (vm.$refs.tabsContent) vm.$refs.tabsContent.scrollLeft = vm.tabScrollLeft;
     })
   },
   beforeRouteLeave (to, from, next) { // 如果没有配置回到顶部按钮或isBounce,则beforeRouteLeave不用写
