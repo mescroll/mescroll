@@ -7,10 +7,12 @@
       <!--菜单 需加上mescroll-touch-x,原因: http://www.mescroll.com/qa.html#q10 -->
       <div class="tabs-warp">
         <div ref="tabsContent" class="tabs-content mescroll-touch-x">
+         <div style="display: inline-block"> <!--PC端运行,加上这个div可修复tab-bar错位的问题 -->
           <ul class="tabs" ref="tabs">
             <li class="tab" v-for="(tab,i) in tabs" :class="{active: i===curIndex}" :style="{width: tabWidth+'px'}" :key="i" @click="changeTab(i)">{{tab.name}}</li>
           </ul>
           <div class="tab-bar" :style="{width: barWidth+'px', left: barLeft}"></div>
+         </div>
         </div>
       </div>
     </div>
