@@ -399,7 +399,7 @@ export default {
   }
   .tabs-warp .tabs-content{
     width: 100%;
-    height: 50px;
+    height: 70px;/*chrome/firefox/IE滚动条默认宽度为：17px，safari滚动条默认宽度为：21px   此高度比tabs-warp高于21，普遍合适 */
     overflow-x: auto;
   }
   .tabs-warp .tabs-content .tabs{
