@@ -4,7 +4,7 @@
     <div class="header">
       <router-link class="btn-left" to="/">main</router-link>
       <p class="title">轮播切换效果</p>
-      <!--菜单 需加上mescroll-touch-x,原因: http://www.mescroll.com/qa.html#q10 -->
+      <!--菜单. 如果up配置了isBounce为false,则需加上mescroll-touch-x,原因: http://www.mescroll.com/qa.html#q10 -->
       <div class="tabs-warp">
         <div ref="tabsContent" class="tabs-content mescroll-touch-x">
           <div style="display: inline-block"> <!--PC端运行,加上这个div可修复tab-bar错位的问题 -->
