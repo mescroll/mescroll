@@ -88,6 +88,7 @@
       textOutOffset: '释放更新', // 下拉的距离大于offset范围的提示文本
       textLoading: '加载中 ...', // 加载中的提示文本
       htmlContent: '<p class="downwarp-progress"></p><p class="downwarp-tip"></p>', // 布局内容
+      vw: false, // 设置true即可解决移动端vw布局的元素抖动问题
       inited: function (mescroll, downwarp) {
         // 下拉刷新初始化完毕的回调
         mescroll.downTipDom = downwarp.getElementsByClassName('downwarp-tip')[0];
@@ -330,7 +331,7 @@
               }
             }
 
-            me.downwarp.style.height = me.downHight + 'px'; // 实时更新下拉区域高度
+            me.downwarp.style.height = (me.optDown.vw ? Math.round(me.downHight) : me.downHight) + 'px'; // 实时更新下拉区域高度
             var rate = me.downHight / me.optDown.offset; // 下拉区域当前高度与指定距离的比值
             me.optDown.onMoving(me, rate, me.downHight); // 下拉过程中的回调,一直在执行
           }
