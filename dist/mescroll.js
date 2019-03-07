@@ -1,6 +1,6 @@
 /*! mescroll -- 精致的下拉刷新和上拉加载js框架  ( a great JS framework for pull-refresh and pull-up-loading )
- * version 1.4.0
- * 2018-11-25
+ * version 1.4.1
+ * 2019-2-1
  * author: wenju < mescroll@qq.com > 文举
  * *
  * 官网:  http://www.mescroll.com
@@ -797,7 +797,7 @@
       me.loadFull();
 
       // 懒加载
-      me.optUp.lazyLoad.use && me.lazyLoad();
+      me.optUp.lazyLoad.use && me.lazyLoad(16);
     }
   }
 
