@@ -145,9 +145,9 @@
                 url: 'xxxxxx?num='+ page.num +"&size="+ page.size,
                 success: function(data){
                 	var curPageData = data.xxx; // 接口返回的当前页数据列表
-					var totalPage = data.xxx; // 接口返回的总页数 (比如列表有26个数据,每页10条,共3页; 则totalPage值为3)
-					var totalSize = data.xxx; // 接口返回的总数据量(比如列表有26个数据,每页10条,共3页; 则totalSize值为26)
-					var hasNext = data.xxx; // 接口返回的是否有下一页 (true/false)
+			var totalPage = data.xxx; // 接口返回的总页数 (比如列表有26个数据,每页10条,共3页; 则totalPage值为3)
+			var totalSize = data.xxx; // 接口返回的总数据量(比如列表有26个数据,每页10条,共3页; 则totalSize值为26)
+			var hasNext = data.xxx; // 接口返回的是否有下一页 (true/false)
 					
 			//联网成功的回调,隐藏下拉刷新和上拉加载的状态;
 			//mescroll会根据传的参数,自动判断列表如果无任何数据,则提示空;列表无下一页数据,则提示无更多数据;
