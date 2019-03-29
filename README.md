@@ -32,7 +32,7 @@
 * <a href="#api文档-">API文档 </a> <br/>
 * <a href="#常用方法-">常用方法 </a> <br/>
 * <a href="#其他方法-">其他方法 </a> <br/><br/>
-* <a href="http://www.mescroll.com/qa.html?v=0201">常见问题 </a> <br/>
+* <a href="http://www.mescroll.com/qa.html?v=0329">常见问题 </a> <br/>
 * <a href="http://www.mescroll.com/reward.html#tagRank">打赏排行榜 </a> <br/>
 
 ## 功能亮点 :
@@ -115,10 +115,10 @@
 	});
 ```  
 ###### 温馨提示:
-###### 1. 如果您的下拉刷新是重置列表数据,那么down完全可以不用配置,具体用法参考<a class="blue" href="http://www.mescroll.com/demo.html?v=0201">第一个基础案例</a>
+###### 1. 如果您的下拉刷新是重置列表数据,那么down完全可以不用配置,具体用法参考<a class="blue" href="http://www.mescroll.com/demo.html?v=0329">第一个基础案例</a>
 ###### 解析: down内部默认调用的是mescroll.resetUpScroll(),而resetUpScroll会将page.num=1,再触发up.callback,从而实现刷新列表数据
 
-###### 2. 如果您的项目是在iOS的微信,QQ,Safari等浏览器访问的,建议配置up的isBounce为false,禁止ios的回弹效果; <a class="blue" href="http://www.mescroll.com/qa.html?v=0201#q10">解析(必读)</a>
+###### 2. 如果您的项目是在iOS的微信,QQ,Safari等浏览器访问的,建议配置up的isBounce为false,禁止ios的回弹效果; <a class="blue" href="http://www.mescroll.com/qa.html?v=0329#q10">解析(必读)</a>
 
 #### 5. 处理回调:
 ```
@@ -143,7 +143,12 @@
         function upCallback(page){
             $.ajax({
                 url: 'xxxxxx?num='+ page.num +"&size="+ page.size,
-                success: function(curPageData){
+                success: function(data){
+                	var curPageData = data.xxx; // 接口返回的当前页数据列表
+					var totalPage = data.xxx; // 接口返回的总页数 (比如列表有26个数据,每页10条,共3页; 则totalPage值为3)
+					var totalSize = data.xxx; // 接口返回的总数据量(比如列表有26个数据,每页10条,共3页; 则totalSize值为26)
+					var hasNext = data.xxx; // 接口返回的是否有下一页 (true/false)
+					
 			//联网成功的回调,隐藏下拉刷新和上拉加载的状态;
 			//mescroll会根据传的参数,自动判断列表如果无任何数据,则提示空;列表无下一页数据,则提示无更多数据;
 					
@@ -184,11 +189,11 @@
 --- 基础案例一共6个, 每个案例3分钟, 一共花您18分钟; 这18分钟您将了解mescroll在不同情况下应如何快速配置 ~<br/>
 --- 特别建议您, 手动改改 <a href="http://www.mescroll.com/preview.html?name=mescroll-options">mescroll-options</a> 的每项配置, 观察修改后的效果, 轻松理解各项参数, 还会有意想不到的发现哦 ~<br/>
 --- 磨刀不误砍柴工,心急吃不了热豆腐. 请静下心来体验与理解mescroll, 一定会让您事半功倍 ~<br/>
---- 如使用中有疑问, 请先查看  <a href="http://www.mescroll.com/qa.html?v=0201">常见问题专区</a> ~<br/><br/>
+--- 如使用中有疑问, 请先查看  <a href="http://www.mescroll.com/qa.html?v=0329">常见问题专区</a> ~<br/><br/>
 
 ## 图片懒加载
-mescroll的图片懒加载功能是1.3.6新增的,使用超简单 :
-##### 1. 确保mescroll至少更新到1.3.6版本
+mescroll的图片懒加载使用超简单 :
+##### 1. 确保mescroll至少更新到1.4.1版本
 ##### 2. 初始化mescroll的时候,在up中配置lazyLoad的use为true :
 ```
 var mescroll = new MeScroll("mescroll", {
@@ -451,7 +456,7 @@ export default {
 ```	       		
 
 ## API文档 :   
-#### <a href="http://www.mescroll.com/api.html?v=0201#options" target="_blank">前往官网查看 >> </a>
+#### <a href="http://www.mescroll.com/api.html?v=0329#options" target="_blank">前往官网查看 >> </a>
 
 ```
 //创建mescroll对象
