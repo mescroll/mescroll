@@ -366,6 +366,7 @@
         if (me.downHight >= me.optDown.offset) {
           // 符合触发刷新的条件
           me.triggerDownScroll();
+          
         } else {
           // 不符合的话 则重置
           me.downwarp.classList.add(me.optDown.resetClass); // 加入高度重置的动画,过渡平滑
@@ -439,9 +440,12 @@
   MeScroll.prototype.showDownScroll = function () {
     this.isDownScrolling = true; // 标记下拉中
     this.optDown.showLoading(this); // 下拉刷新中...
-    this.downHight = this.optDown.offset; // 更新下拉区域高度
-    this.downwarp.classList.add(this.optDown.resetClass); // 加入高度重置的动画,过渡平滑
-    this.downwarp.style.height = this.optDown.offset + 'px'; // 调整下拉区域高度
+    var me = this;
+    this.getStep(this.downHight,this.optDown.offset,function(step){
+        me.downHight = step; // 更新下拉区域高度
+        me.downwarp.style.height = step + 'px'; // 调整下拉区域高度
+    },200)
+    
   }
 
   /* 结束下拉刷新 */
@@ -449,8 +453,10 @@
     var me = this;
     // 结束下拉刷新的方法
     var endScroll = function () {
-      me.downHight = 0;
-      me.downwarp.style.height = 0;
+      me.getStep(me.downHight,0,function(step){
+        me.downHight = step; // 更新下拉区域高度
+        me.downwarp.style.height = step + 'px'; // 调整下拉区域高度
+      },300)
       me.isDownScrolling = false;
       if (me.downProgressDom) me.downProgressDom.classList.remove('mescroll-rotate');
     }
@@ -974,20 +980,26 @@
       return;
     }
     t = t || 300; // 时长 300ms
-    rate = rate || 30; // 周期 30ms
-    var count = t / rate; // 次数
-    var step = diff / count; // 步长
-    var i = 0; // 计数
-    var timer = window.setInterval(function () {
-      if (i < count - 1) {
-        star += step;
-        callback && callback(star, timer);
-        i++;
-      } else {
-        callback && callback(end, timer); // 最后一次直接设置end,避免计算误差
-        window.clearInterval(timer);
-      }
-    }, rate);
+    var InOut = function(t){
+        return 0.5 * (1 - Math.cos(Math.PI * t));
+    }
+    var countTime = 0;
+    var timer = null;
+    var move = function(timeStamp){
+        if(countTime===0){
+            countTime=timeStamp;
+        }
+        var duration =  (timeStamp-countTime);
+        var position = InOut(duration/t)*diff + star; 
+        callback && callback(position, timer);
+        if(duration<t){
+            timer = requestAnimationFrame(move)
+        }else{
+            callback && callback(end, timer);
+            cancelAnimationFrame(timer)
+        }
+    }
+    var timer = requestAnimationFrame(move)
   }
 
   /* 加载可视区域的图片 */

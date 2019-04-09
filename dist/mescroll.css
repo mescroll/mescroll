@@ -93,12 +93,6 @@ body {
   text-align: center;
 }
 
-/*下拉刷新--高度重置的过渡动画*/
-.mescroll-downwarp-reset {
-  -webkit-transition: height 300ms;
-  transition: height 300ms;
-}
-
 /*下拉刷新--内容区,定位于区域底部*/
 .mescroll-downwarp .downwarp-content {
   position: absolute;
