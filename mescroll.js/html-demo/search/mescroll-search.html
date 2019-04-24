@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+
+		<link rel="stylesheet" href="../../dist/mescroll.min.css">
+		<style type="text/css">
+			* {
+				margin: 0;
+				padding: 0;
+				-webkit-touch-callout:none;
+				-webkit-tap-highlight-color:transparent;
+			}
+			*:not(input,textarea) { 
+			    -webkit-touch-callout: none; 
+			    -webkit-user-select: none; 
+			}
+			body{background-color: white}
+			ul{list-style-type: none}
+			a {text-decoration: none;color: #18B4FE;}
+			
+			/*模拟的标题*/
+			.header{
+				z-index: 9990;
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 44px;
+				line-height: 44px;
+				text-align: center;
+				border-bottom: 1px solid #eee;
+				background-color: white;
+			}
+			.header .btn-left{
+				position: absolute;
+				top: 0;
+				left: 0;
+				padding:12px 20px;
+				line-height: 22px;
+			}
+			.header input{
+				position: absolute;
+				top: 8px;
+				left: 20%;
+				width: 60%;
+				padding:6px 0;
+				border: 1px solid #18B4FE;
+				border-radius: 8px;
+				text-align: center;
+				outline:none;
+				-webkit-appearance: none;
+			}
+			.header .btn-right{
+				position: absolute;
+				top: 0;
+				right: 0;
+				padding:0 20px;
+				color: #18B4FE;
+			}
+			/*热门搜索*/
+			.nav-title{
+				padding: 20px 0 12px 20px;
+				font-size: 14px;
+				color: gray;
+			}
+			.hot-words{
+				padding-bottom: 25px;
+				border-bottom: 1px solid #eee;
+			}
+			.hot-words li{
+				display: inline-block;
+				margin-left: 15px;
+				padding: 4px 20px;
+				border: 1px solid #FF6990;
+				border-radius: 50px;
+				color: #FF6990;
+			}
+			/*mescroll 滚动区域*/
+			.mescroll{
+				position: fixed;
+				top: 44px;
+				bottom: 0;
+				height: auto;
+			}
+			/*搜索结果*/
+			.data-list li{
+				position: relative;
+				padding: 10px 8px 10px 120px;
+				border-bottom: 1px solid #eee;
+			}
+			.data-list .pd-img{
+				position: absolute;
+				left: 18px;
+				top: 18px;
+				width: 80px;
+				height: 80px;
+			}
+			.data-list .pd-name{
+				font-size: 16px;
+				line-height: 20px;
+				height: 40px;
+				overflow: hidden;
+			}
+			.data-list .pd-price{
+				margin-top: 8px;
+				color: red;
+			}
+			.data-list .pd-sold{
+				font-size: 12px;
+				margin-top: 8px;
+				color: gray;
+			}
+			/*回到顶部按钮*/
+			.mescroll-totop{
+				font-size: 12px;
+				line-height: 10px;
+				background-color: white;
+				border: 1px solid gray;
+				text-align: center;
+			}
+			.mescroll-totop p{
+				padding-top: 6px;
+				color: #666;
+			}
+		</style>
+	</head>
+
+	<body>
+		<!--模拟的标题-->
+		<div class="header">
+			<a class="btn-left" href="../index.html">main</a> 
+			<input id="keyword" type="text" placeholder="请输入搜索关键词" />
+			<p id="search" class="btn-right">搜索</p>
+		</div>
+		<!--滑动区域-->
+		<div id="mescroll" class="mescroll">
+				
+			<p class="nav-title">热门搜索 :</p>
+			<ul class="hot-words">
+				<li>奶粉</li>
+				<li>面霜</li>
+				<li>DHA</li>
+			</ul>
+			<!--搜索结果-->
+			<ul id="dataList" class="data-list">
+				<!--<li>
+					<img class="pd-img" src="../res/img/pd1.jpg"/>
+					<p class="pd-name">商品标题商品标题商品标题商品标题商品标题商品</p>
+					<p class="pd-price">200.00 元</p>
+					<p class="pd-sold">已售50件</p>
+				</li>-->
+			</ul>
+				
+		</div>
+	</body>
+	
+	<script src="../../dist/mescroll.min.js" type="text/javascript" charset="utf-8"></script>
+	<!--mescroll本身不依赖jq,这里为了模拟发送ajax请求-->
+	<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" charset="utf-8">
+		$(function(){
+			//创建MeScroll对象,内部已默认开启下拉刷新,自动执行up.callback,重置列表数据;
+			var mescroll = new MeScroll("mescroll", {
+				down:{
+					auto:false //是否在初始化完毕之后自动执行下拉回调callback; 默认true; (注: down的callback默认调用 mescroll.resetUpScroll(); )
+//					callback: function(mescroll) {
+//						mescroll.resetUpScroll(); //下拉刷新的回调,默认重置上拉加载列表为第一页
+//					},
+				},
+				up: {
+					callback: getListData, //上拉回调,此处可简写; 相当于 callback: function (page) { getListData(page); }
+					clearEmptyId: "dataList", //1.下拉刷新时会自动先清空此列表,再加入数据; 2.无任何数据时会在此列表自动提示空
+					isBounce: false, //此处禁止ios回弹,解析(务必认真阅读,特别是最后一点): http://www.mescroll.com/qa.html#q10
+					noMoreSize: 3, //如果列表已无数据,可设置列表的总数量要大于半页才显示无更多数据;避免列表数据过少(比如只有一条数据),显示无更多数据会不好看
+					empty: {
+						//列表第一页无任何数据时,显示的空提示布局; 需配置warpId或clearEmptyId才生效;
+						//warpId:null, //父布局的id; 如果此项有值,将不使用clearEmptyId的值;
+						icon: "../res/img/mescroll-empty.png", //图标,默认null
+						tip: "亲,没有您要找的商品~", //提示
+//						btntext: "去逛逛 >", //按钮,默认""
+//						btnClick: function(){//点击按钮的回调,默认null
+//							alert("点击了按钮,具体逻辑自行实现");
+//						} 
+					},
+					toTop:{ //配置回到顶部按钮
+						//src : "../res/img/mescroll-totop.png", //默认滚动到1000px显示,可配置offset修改
+						html : "<p>^<br/>顶部<p>", //标签内容,默认null; 如果同时设置了src,则优先取src
+						offset : 500
+					},
+					lazyLoad: {
+			        	use: true // 是否开启懒加载,默认false
+			        }
+				}
+			});
+			
+			//当前关键词
+			var curWord=null;
+			
+			//热门搜索
+			$(".hot-words li").click(function() {
+				curWord=this.innerText; //更新关键词
+				mescroll.resetUpScroll(); //重新搜索,重置列表数据
+			})
+			
+			//搜索按钮
+			$("#search").click(function(){
+				var word=$("#keyword").val();
+				if(word){
+					curWord=word; //更新关键词
+					mescroll.resetUpScroll(); //重新搜索,重置列表数据
+				}
+			})
+			
+			/*联网加载列表数据  page = {num:1, size:10}; num:当前页 从1开始, size:每页数据条数 */
+			function getListData(page){
+				//联网加载数据
+				getListDataFromNet(curWord, page.num, page.size, function(curPageData){
+					//联网成功的回调,隐藏下拉刷新和上拉加载的状态;
+					//mescroll会根据传的参数,自动判断列表如果无任何数据,则提示空;列表无下一页数据,则提示无更多数据;
+					console.log("page.num="+page.num+", page.size="+page.size+", curPageData.length="+curPageData.length);
+					
+					//方法一(推荐): 后台接口有返回列表的总页数 totalPage
+					//mescroll.endByPage(curPageData.length, totalPage); //必传参数(当前页的数据个数, 总页数)
+					
+					//方法二(推荐): 后台接口有返回列表的总数据量 totalSize
+					//mescroll.endBySize(curPageData.length, totalSize); //必传参数(当前页的数据个数, 总数据量)
+					
+					//方法三(推荐): 您有其他方式知道是否有下一页 hasNext
+					//mescroll.endSuccess(curPageData.length, hasNext); //必传参数(当前页的数据个数, 是否有下一页true/false)
+					
+					//方法四 (不推荐),会存在一个小问题:比如列表共有20条数据,每页加载10条,共2页.如果只根据当前页的数据个数判断,则需翻到第三页才会知道无更多数据,如果传了hasNext,则翻到第二页即可显示无更多数据.
+					mescroll.endSuccess(curPageData.length);
+					
+					//提示:curPageData.length必传的原因:
+					// 1.判断是否有下一页的首要依据: 当传的值小于page.size时,则一定会认为无更多数据.
+					// 2.比传入的totalPage, totalSize, hasNext具有更高的判断优先级
+					// 3.使配置的noMoreSize生效
+					
+					//设置列表数据,因为配置了emptyClearId,第一页会清空dataList的数据,所以setListData应该写在最后;
+					setListData(curPageData);
+				}, function(){
+					//联网失败的回调,隐藏下拉刷新和上拉加载的状态;
+	                mescroll.endErr();
+				});
+			}
+			
+			/*设置列表数据*/
+			function setListData(curPageData){
+				var listDom=document.getElementById("dataList");
+				for (var i = 0; i < curPageData.length; i++) {
+					var pd=curPageData[i];
+					
+					var str='<img class="pd-img" src="../res/img/loading-sq.png" imgurl="'+pd.pdImg+'"/>';
+					str+='<p class="pd-name">'+pd.pdName+'</p>';
+					str+='<p class="pd-price">'+pd.pdPrice+' 元</p>';
+					str+='<p class="pd-sold">已售'+pd.pdSold+'件</p>';
+					
+					var liDom=document.createElement("li");
+					liDom.innerHTML=str;
+					listDom.appendChild(liDom);
+				}
+			}
+			
+			/*联网加载列表数据
+			 在您的实际项目中,请参考官方写法: http://www.mescroll.com/api.html#tagUpCallback
+			 请忽略getListDataFromNet的逻辑,这里仅仅是在本地模拟分页数据,本地演示用
+			 实际项目以您服务器接口返回的数据为准,无需本地处理分页.
+			 * */
+			function getListDataFromNet(curWord, pageNum,pageSize,successCallback,errorCallback) {
+				//延时一秒,模拟联网
+                setTimeout(function () {
+                	$.ajax({
+		                type: 'GET',
+		                url: '../res/pdlist1.json',
+//		                url: '../res/pdlist1.json?num='+pageNum+"&size="+pageSize+"&word="+curWord,
+		                dataType: 'json',
+		                success: function(dataAll){
+		                	//模拟服务器接口的搜索
+		                	var data=[];
+	                		for (var i = 0; i < dataAll.length; i++) {
+	                			if (dataAll[i].pdName.indexOf(curWord)!=-1) {
+	                				data.push(dataAll[i]);
+	                			}
+	                		}
+		                	//模拟服务器接口的分页
+		                	var listData=[];
+							for (var i = (pageNum-1)*pageSize; i < pageNum*pageSize; i++) {
+			            		if(i==data.length) break;
+			            		listData.push(data[i]);
+			            	}
+							
+		                	successCallback(listData);
+		                },
+		                error: errorCallback
+		            });
+                },500)
+			}
+			
+		});
+	</script>
+
+</html>

@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+
+		<link rel="stylesheet" href="../../dist/mescroll.min.css">
+		<style type="text/css">
+			* {
+				margin: 0;
+				padding: 0;
+				-webkit-touch-callout:none;
+				-webkit-user-select:none;
+				-webkit-tap-highlight-color:transparent;
+			}
+			body{background-color: white}
+			ul{list-style-type: none}
+			a {text-decoration: none;color: #18B4FE;}
+			
+			/*vue*/
+			[v-cloak] {
+			  display: none;
+			}
+			
+			/*模拟的标题*/
+			.header{
+				z-index: 9990;
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 100%;
+				line-height: 16px;
+				padding-top: 12px;
+				text-align: center;
+				background-color: white;
+			}
+			.header .btn-left{
+				position: absolute;
+				top: 0;
+				left: 0;
+				padding:12px;
+			}
+			/*菜单*/
+			.header .nav{
+				font-size: 12px;
+				margin-top: 8px;
+				border-bottom: 1px solid #ddd;
+			}
+			.header .nav p{
+				display: inline-block;
+				width: 30%;
+				padding: 5px 0;
+			}
+			.header .nav .active{
+				border-bottom: 1px solid #FF6990;
+				color: #FF6990;
+			}
+			/*列表*/
+			.mescroll{
+				position: fixed;
+				top: 64px;
+				bottom: 0;
+				height: auto;
+			}
+			/*展示上拉加载的数据列表*/
+			.data-list li{
+				position: relative;
+				padding: 10px 8px 10px 120px;
+				border-bottom: 1px solid #eee;
+			}
+			/*img标签,在src设置默认图*/
+			.data-list .pd-img{
+				position: absolute;
+				left: 18px;
+				top: 18px;
+				width: 80px;
+				height: 80px;
+			}
+			/*div标签,在css中设置默认图*/
+			.data-list .pd-bg{
+				position: absolute;
+				left: 18px;
+				top: 18px;
+				width: 80px;
+				height: 80px;
+				background-size: contain; /*设置显示方式:auto, contain, cover*/
+				background-position:center;  /*设置对齐方式*/
+				background-image: url(../res/img/loading-sq.png);/*div标签,在css中设置默认图.您可注释此行,对比效果*/
+			}
+			.data-list .pd-name{
+				font-size: 16px;
+				line-height: 20px;
+				height: 40px;
+				overflow: hidden;
+			}
+			.data-list .pd-price{
+				margin-top: 8px;
+				color: red;
+			}
+			.data-list .pd-sold{
+				font-size: 12px;
+				margin-top: 8px;
+				color: gray;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="vmwarp" v-cloak>
+			<!--标题-->
+			<div class="header">
+				<a class="btn-left" href="../index.html">main</a>
+				<p>mescroll的懒加载</p>
+				<!--菜单-->
+				<div class="nav">
+					<p i="0" @click="changeTab(0)" :class="{'active':pdType==0}">img标签懒加载</p>
+					<p i="1" @click="changeTab(1)" :class="{'active':pdType==1}">div背景图懒加载</p>
+					<p i="2" @click="changeTab(2)" :class="{'active':pdType==2}">各种占位图</p>
+				</div>
+			</div>
+			<!--滑动区域-->
+			<div id="mescroll" class="mescroll">
+				<!--展示上拉加载的数据列表-->
+				<ul id="dataList" class="data-list">
+					<li v-for="(pd,i) in pdlist">
+						
+						<!-- img标签: <img src="占位图" imgurl="网络图"/> -->
+						<img v-if="pdType==0" class="pd-img" src="../res/img/loading-sq.png" :imgurl="pd.pdImg"/>
+						
+						<!-- div标签: 占位图在css中设置 -->
+						<div v-if="pdType==1" class="pd-bg" :imgurl="pd.pdImg"></div>
+						
+						<!--各种占位图-->
+						<img v-if="pdType==2" class="pd-img" :src="getLoading(i)" :imgurl="pd.pdImg"/>
+						
+						<p class="pd-name">{{pd.pdName}}</p>
+						<p class="pd-price">{{pd.pdPrice}} 元</p>
+						<p class="pd-sold">已售{{pd.pdSold}}件</p>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</body>
+	
+	<script src="../../dist/mescroll.js" type="text/javascript" charset="utf-8"></script>
+	<!--mescroll本身不依赖jq,这里为了模拟发送ajax请求-->
+	<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../res/vue.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" charset="utf-8">
+		//创建vue对象
+		var vm = new Vue({
+			el: "#vmwarp",
+			data: {
+				pdType:0,
+				mescroll: null,
+				pdlist: []
+			},
+			mounted: function() {
+				//创建MeScroll对象,down可以不用配置,因为内部已默认开启下拉刷新,重置列表数据为第一页
+				//解析: 下拉回调默认调用mescroll.resetUpScroll(); 而resetUpScroll会将page.num=1,再执行up.callback,从而实现刷新列表数据为第一页;
+				this.mescroll = new MeScroll("mescroll", { //请至少在vue的mounted生命周期初始化mescroll,以确保您配置的id能够被找到
+					up: {
+						callback: this.upCallback, //上拉回调
+						//以下参数可删除,不配置
+						lazyLoad:{
+							use:true//启动懒加载
+						},
+						isBounce: false, //此处禁止ios回弹,解析(务必认真阅读,特别是最后一点): http://www.mescroll.com/qa.html#q10
+						//page:{size:8}, //可配置每页8条数据,默认10
+						toTop:{ //配置回到顶部按钮
+							src : "../res/img/mescroll-totop.png", //默认滚动到1000px显示,可配置offset修改
+							//html: null, //html标签内容,默认null; 如果同时设置了src,则优先取src
+							//offset : 1000
+						},
+						empty:{ //配置列表无任何数据的提示
+							warpId:"dataList",
+							icon : "../res/img/mescroll-empty.png" , 
+//						  	tip : "亲,暂无相关数据哦~" , 
+//						  	btntext : "去逛逛 >" , 
+//						  	btnClick : function() {
+//						  		alert("点击了去逛逛按钮");
+//						  	} 
+						},
+						//vue的案例请勿配置clearId和clearEmptyId,否则列表的数据模板会被清空
+						//vue的案例请勿配置clearId和clearEmptyId,否则列表的数据模板会被清空
+//						clearId: "dataList",
+//						clearEmptyId: "dataList"
+					}
+				});
+				
+			},
+			methods: {
+				//切换菜单
+				changeTab:function(pdType){
+					if(this.pdType!=pdType){
+						this.pdType=pdType;
+						//重置列表数据
+						this.pdlist = [];//先置空列表,可显示上拉的加载进度
+						this.mescroll.resetUpScroll();
+						//隐藏回到顶部按钮
+						this.mescroll.hideTopBtn();
+						
+						//这里为了模拟加载中的占位图,延长了懒加载的时间间隔
+						if(pdType==2){
+							this.mescroll.optUp.lazyLoad.delay=5000;
+						}else{
+							this.mescroll.optUp.lazyLoad.delay=300;//默认 300ms
+						}
+					}
+				},
+				//获取各种占位图
+				getLoading:function(i){
+					return '../res/img/loading'+(i%10)+'.gif';
+				},
+				//上拉回调 page = {num:1, size:10}; num:当前页 ,默认从1开始; size:每页数据条数,默认10
+				upCallback: function(page) {
+					var self = this;
+						
+					//联网加载数据
+					getListDataFromNet(self.pdType, page.num, page.size, function(curPageData) {
+						//curPageData=[]; //打开本行注释,可演示列表无任何数据empty的配置
+						
+						//如果第一页,则先手动制空列表
+						if(page.num == 1) self.pdlist = [];
+						
+						//更新列表数据
+						self.pdlist = self.pdlist.concat(curPageData);
+						
+						//联网成功的回调,隐藏下拉刷新和上拉加载的状态;
+						//mescroll会根据传的参数,自动判断列表如果无任何数据,则提示空;列表无下一页数据,则提示无更多数据;
+						console.log("page.num="+page.num+", page.size="+page.size+", curPageData.length="+curPageData.length+", self.pdlist.length==" + self.pdlist.length);
+						
+						//方法一(推荐): 后台接口有返回列表的总页数 totalPage
+						//self.mescroll.endByPage(curPageData.length, totalPage); //必传参数(当前页的数据个数, 总页数)
+						
+						//方法二(推荐): 后台接口有返回列表的总数据量 totalSize
+						//self.mescroll.endBySize(curPageData.length, totalSize); //必传参数(当前页的数据个数, 总数据量)
+						
+						//方法三(推荐): 您有其他方式知道是否有下一页 hasNext
+						//self.mescroll.endSuccess(curPageData.length, hasNext); //必传参数(当前页的数据个数, 是否有下一页true/false)
+						
+						//方法四 (不推荐),会存在一个小问题:比如列表共有20条数据,每页加载10条,共2页.如果只根据当前页的数据个数判断,则需翻到第三页才会知道无更多数据,如果传了hasNext,则翻到第二页即可显示无更多数据.
+						self.mescroll.endSuccess(curPageData.length); //endByPage,endBySize,endSuccess内部会调用mescroll.lazyLoad的方法
+						
+						//提示:curPageData.length必传的原因:
+						// 1.判断是否有下一页的首要依据: 当传的值小于page.size时,则一定会认为无更多数据.
+						// 2.比传入的totalPage, totalSize, hasNext具有更高的判断优先级
+						// 3.使配置的noMoreSize生效
+					
+					}, function() {
+						//联网失败的回调,隐藏下拉刷新和上拉加载的状态;
+						self.mescroll.endErr();
+					});
+				},
+			}
+		});
+			
+			
+		/*联网加载列表数据
+		 在您的实际项目中,请参考官方写法: http://www.mescroll.com/api.html#tagUpCallback
+		 请忽略getListDataFromNet的逻辑,这里仅仅是在本地模拟分页数据,本地演示用
+		 实际项目以您服务器接口返回的数据为准,无需本地处理分页.
+		 * */
+		function getListDataFromNet(pdType,pageNum,pageSize,successCallback,errorCallback) {
+			//延时一秒,模拟联网
+            setTimeout(function () {
+            	$.ajax({
+	                type: 'GET',
+	                url: '../res/pdlist1.json',
+//		            url: '../res/pdlist1.json?pdType='+pdType+'&num='+pageNum+'&size='+pageSize,
+	                dataType: 'json',
+	                success: function(data){
+	                	var listData=[];
+                		//模拟分页数据
+						for (var i = (pageNum-1)*pageSize; i < pageNum*pageSize; i++) {
+		            		if(i==data.length) break;
+		            		listData.push(data[i]);
+		            	}
+	                	//回调
+	                	successCallback(listData);
+	                },
+	                error: errorCallback
+	            });
+            },1000)
+		}
+			
+	</script>
+
+</html>

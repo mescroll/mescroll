@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		
+		<!--在您实际的项目中,请留意mescroll-option.css的图片路径是否引用正确,可写成绝对路径或网络地址-->
+		<!--可把mescroll-option.css代码拷贝到mescroll.min.css中,合为一个css文件,方便引用-->
+		<link rel="stylesheet" href="../../dist/mescroll.min.css">
+		<link rel="stylesheet" href="option/mescroll-option.css">
+		<style type="text/css">
+			* {
+				margin: 0;
+				padding: 0;
+				-webkit-touch-callout:none;
+				-webkit-user-select:none;
+				-webkit-tap-highlight-color:transparent;
+			}
+			body{background-color: white}
+			ul{list-style-type: none}
+			img{width: 100%;vertical-align: bottom;}
+			
+			/*模拟的标题,底部*/
+			.header{
+				z-index: 9990;
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 84px;
+				border-bottom: 1px solid #eee;
+				background-image: url(img/header.jpg);
+				background-size: contain;
+				background-position: center;
+				background-repeat: no-repeat;
+				background-color: white;
+			}
+			.footer{
+				z-index: 9990;
+				position: fixed;
+				bottom: 0;
+				left: 0;
+				width: 100%;
+				height: 50px;
+				border-top: 1px solid #eee;
+				background-image: url(img/footer.jpg);
+				background-size: contain;
+				background-position: center;
+				background-repeat: no-repeat;
+				background-color: white;
+			}
+			
+			/*列表*/
+			.mescroll{
+				position: fixed;
+				top: 84px;
+				bottom: 51px;
+				height: auto;
+			}
+			/*回到顶部按钮*/
+			.mescroll-totop {
+				bottom: 70px;
+			}
+			
+			/*展示上拉加载的数据列表*/
+			.data-list{border-top: 4px solid #eee;}
+			.data-list li{
+				position: relative;
+				padding: 10px 8px 10px 120px;
+				border-bottom: 1px solid #eee;
+			}
+			.data-list .pd-img{
+				position: absolute;
+				left: 18px;
+				top: 18px;
+				width: 80px;
+				height: 80px;
+			}
+			.data-list .pd-name{
+				font-size: 16px;
+				line-height: 20px;
+				height: 40px;
+				overflow: hidden;
+			}
+			.data-list .pd-price{
+				margin-top: 8px;
+				color: red;
+			}
+			.data-list .pd-sold{
+				font-size: 12px;
+				margin-top: 8px;
+				color: gray;
+			}
+		</style>
+	</head>
+
+	<body>
+		<!--标题-->
+		<a href="../index.html"><div class="header"></div></a>
+		
+		<!--滑动区域-->
+		<div id="mescroll" class="mescroll">
+			<!--模拟的内容-->
+			<img src="img/beibei1.jpg"/>
+			<img src="img/beibei2.jpg"/>
+			<!--展示上拉加载的数据列表-->
+			<ul id="dataList" class="data-list">
+				<!--<li>
+					<img class="pd-img" src="../res/img/pd1.jpg"/>
+					<p class="pd-name">商品标题商品标题商品标题商品标题商品标题商品</p>
+					<p class="pd-price">200.00 元</p>
+					<p class="pd-sold">已售50件</p>
+				</li>-->
+			</ul>
+		</div>
+		
+		<!--底部-->
+		<a href="../index.html"><div class="footer"></div></a>
+	</body>
+	
+	<!--在您实际的项目中,请留意mescroll-option.js的图片路径是否引用正确,可写成绝对路径或网络地址-->
+	<!--可把mescroll-option.js代码拷贝到mescroll.min.js中,合为一个js文件,方便引用-->
+	<script src="../../dist/mescroll.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="option/mescroll-option.js" type="text/javascript" charset="utf-8"></script>
+	<!--mescroll本身不依赖jq,这里为了模拟发送ajax请求-->
+	<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" charset="utf-8">
+		$(function(){
+			//创建MeScroll对象
+			var mescroll = initMeScroll("mescroll", {
+				down:{
+					auto:false,//是否在初始化完毕之后自动执行下拉回调callback; 默认true
+					callback: downCallback //下拉刷新的回调
+				},
+				up: {
+					auto:true,//初始化完毕,是否自动触发上拉加载的回调
+					isBoth: true, //上拉加载时,如果滑动到列表顶部是否可以同时触发下拉刷新;默认false,两者不可同时触发; 这里为了演示改为true,不必等列表加载完毕才可下拉;
+					callback: upCallback, //上拉加载的回调
+					isBounce: false, //此处禁止ios回弹,解析(务必认真阅读,特别是最后一点): http://www.mescroll.com/qa.html#q10
+					toTop:{ //配置回到顶部按钮
+						src : "../res/img/mescroll-totop.png", //默认滚动到1000px显示,可配置offset修改
+						//offset : 1000
+					},
+					lazyLoad: {
+			        	use: true // 是否开启懒加载,默认false
+			        }
+				}
+			});
+			
+			/*下拉刷新的回调 */
+			function downCallback(){
+				//加载轮播数据..
+				//...
+				//加载列表数据
+				getListDataFromNet(0, 1, function(data){
+					//联网成功的回调,隐藏下拉刷新的状态
+					mescroll.endSuccess();
+					//设置列表数据
+					setListData(data, false);
+				}, function(){
+					//联网失败的回调,隐藏下拉刷新的状态
+	                mescroll.endErr();
+				});
+			}
+			
+			/*上拉加载的回调 page = {num:1, size:10}; num:当前页 从1开始, size:每页数据条数 */
+			function upCallback(page){
+				//联网加载数据
+				getListDataFromNet(page.num, page.size, function(curPageData){
+					//联网成功的回调,隐藏下拉刷新和上拉加载的状态;
+					//mescroll会根据传的参数,自动判断列表如果无任何数据,则提示空;列表无下一页数据,则提示无更多数据;
+					console.log("page.num="+page.num+", page.size="+page.size+", curPageData.length="+curPageData.length);
+					
+					//方法一(推荐): 后台接口有返回列表的总页数 totalPage
+					//mescroll.endByPage(curPageData.length, totalPage); //必传参数(当前页的数据个数, 总页数)
+					
+					//方法二(推荐): 后台接口有返回列表的总数据量 totalSize
+					//mescroll.endBySize(curPageData.length, totalSize); //必传参数(当前页的数据个数, 总数据量)
+					
+					//方法三(推荐): 您有其他方式知道是否有下一页 hasNext
+					//mescroll.endSuccess(curPageData.length, hasNext); //必传参数(当前页的数据个数, 是否有下一页true/false)
+					
+					//方法四 (不推荐),会存在一个小问题:比如列表共有20条数据,每页加载10条,共2页.如果只根据当前页的数据个数判断,则需翻到第三页才会知道无更多数据,如果传了hasNext,则翻到第二页即可显示无更多数据.
+					mescroll.endSuccess(curPageData.length);
+					
+					//提示:curPageData.length必传的原因:
+					// 1.判断是否有下一页的首要依据: 当传的值小于page.size时,则一定会认为无更多数据.
+					// 2.比传入的totalPage, totalSize, hasNext具有更高的判断优先级
+					// 3.使配置的noMoreSize生效
+					
+					//设置列表数据
+					setListData(curPageData, true);
+				}, function(){
+					//联网失败的回调,隐藏上拉加载的状态
+	                mescroll.endErr();
+				});
+			}
+			
+			/*设置列表数据*/
+			function setListData(curPageData,isAppend){
+				var listDom=document.getElementById("dataList");
+				for (var i = 0; i < curPageData.length; i++) {
+					var pd=curPageData[i];
+					
+					var str='<img class="pd-img" src="../res/img/loading-sq.png" imgurl="'+pd.pdImg+'"/>';
+					str+='<p class="pd-name">'+pd.pdName+'</p>';
+					str+='<p class="pd-price">'+pd.pdPrice+' 元</p>';
+					str+='<p class="pd-sold">已售'+pd.pdSold+'件</p>';
+					
+					var liDom=document.createElement("li");
+					liDom.innerHTML=str;
+					
+					if (isAppend) {
+						listDom.appendChild(liDom);//加在列表的后面,上拉加载
+					} else{
+						listDom.insertBefore(liDom, listDom.firstChild);//加在列表的前面,下拉刷新
+					}
+				}
+			}
+			
+			/*联网加载列表数据
+			 在您的实际项目中,请参考官方写法: http://www.mescroll.com/api.html#tagUpCallback
+			 请忽略getListDataFromNet的逻辑,这里仅仅是在本地模拟分页数据,本地演示用
+			 实际项目以您服务器接口返回的数据为准,无需本地处理分页.
+			 * */
+			function getListDataFromNet(pageNum,pageSize,successCallback,errorCallback) {
+				//延时一秒,模拟联网
+                setTimeout(function () {
+                	$.ajax({
+		                type: 'GET',
+		                url: '../res/pdlist1.json',
+//		                url: '../res/pdlist1.json?num='+pageNum+'&size='+pageSize,
+		                dataType: 'json',
+		                success: function(data){
+		                	var listData=[];
+		                	
+		                	if(pageNum==0){
+		                		//此处模拟下拉刷新返回的数据
+								var i = Math.floor(Math.random() * data.length);//随机取一个商品返回
+								data[i].pdName="【新增商品】 商品标题";
+								listData.push(data[i]);
+								
+		                	}else{
+		                		//此处模拟上拉加载返回的数据 (模拟分页数据)
+								for (var i = (pageNum-1)*pageSize; i < pageNum*pageSize; i++) {
+				            		if(i==data.length) break;
+				            		listData.push(data[i]);
+				            	}
+		                	}
+		                	
+		                	//回调
+		                	successCallback(listData);
+		                },
+		                error: errorCallback
+		            });
+                },2000)
+			}
+			
+		});
+	</script>
+
+</html>

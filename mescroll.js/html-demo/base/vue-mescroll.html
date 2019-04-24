@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+
+		<link rel="stylesheet" href="../../dist/mescroll.min.css">
+		<style type="text/css">
+			* {
+				margin: 0;
+				padding: 0;
+				-webkit-touch-callout:none;
+				-webkit-user-select:none;
+				-webkit-tap-highlight-color:transparent;
+			}
+			body{background-color: white}
+			ul{list-style-type: none}
+			a {text-decoration: none;color: #18B4FE;}
+			
+			/*vue*/
+			[v-cloak] {
+			  display: none;
+			}
+
+			/*模拟的标题*/
+			.header{
+				z-index: 9990;
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 44px;
+				line-height: 44px;
+				text-align: center;
+				border-bottom: 1px solid #eee;
+				background-color: white;
+			}
+			.header .btn-left{
+				position: absolute;
+				top: 0;
+				left: 0;
+				padding:12px;
+				line-height: 22px;
+			}
+			/*mescroll滚动的区域*/
+			.mescroll{
+				position: fixed;
+				top: 44px;
+				bottom: 0;
+				height: auto;
+			}
+			/*展示上拉加载的数据列表*/
+			.data-list li{
+				position: relative;
+				padding: 10px 8px 10px 120px;
+				border-bottom: 1px solid #eee;
+			}
+			.data-list .pd-img{
+				position: absolute;
+				left: 18px;
+				top: 18px;
+				width: 80px;
+				height: 80px;
+			}
+			.data-list .pd-name{
+				font-size: 16px;
+				line-height: 20px;
+				height: 40px;
+				overflow: hidden;
+			}
+			.data-list .pd-price{
+				margin-top: 8px;
+				color: red;
+			}
+			.data-list .pd-sold{
+				font-size: 12px;
+				margin-top: 8px;
+				color: gray;
+			}
+		</style>
+	</head>
+
+	<body>
+		<!--模拟的标题-->
+		<p class="header"><a class="btn-left" href="../index.html">main</a> 示例: 在vue中使用mescroll</p>
+		<!--滑动区域-->
+		<div id="mescroll" class="mescroll">
+			<!--展示上拉加载的数据列表-->
+			<ul id="dataList" class="data-list" v-cloak>
+				<li v-for="pd in pdlist">
+					<img class="pd-img" :src="pd.pdImg"/>
+					<p class="pd-name">{{pd.pdName}}</p>
+					<p class="pd-price">{{pd.pdPrice}} 元</p>
+					<p class="pd-sold">已售{{pd.pdSold}}件</p>
+				</li>
+			</ul>
+		</div>
+	</body>
+	
+	<script src="../../dist/mescroll.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../res/vue.min.js" type="text/javascript" charset="utf-8"></script>
+	<!--模拟的数据-->
+	<script src="../res/pdlist1.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" charset="utf-8">
+	
+		//创建vue对象
+		var vm = new Vue({
+			el: "#dataList",
+			data: {
+				mescroll: null,
+				pdlist: []
+			},
+			mounted: function() {
+				//创建MeScroll对象,down可以不用配置,因为内部已默认开启下拉刷新,重置列表数据为第一页
+				//解析: 下拉回调默认调用mescroll.resetUpScroll(); 而resetUpScroll会将page.num=1,再执行up.callback,从而实现刷新列表数据为第一页;
+				var self = this;
+				self.mescroll = new MeScroll("mescroll", { //请至少在vue的mounted生命周期初始化mescroll,以确保您配置的id能够被找到
+					up: {
+						callback: self.upCallback, //上拉回调
+					}
+				});
+				
+			},
+			methods: {
+				//上拉回调 page = {num:1, size:10}; num:当前页 ,默认从1开始; size:每页数据条数,默认10
+				upCallback: function(page) {
+					//联网加载数据
+					var self = this;
+					getListDataFromNet(page.num, page.size, function(curPageData) {
+						//curPageData=[]; //打开本行注释,可演示列表无任何数据empty的配置
+						
+						//如果是第一页需手动制空列表 (代替clearId和clearEmptyId的配置)
+						if(page.num == 1) self.pdlist = [];
+						
+						//更新列表数据
+						self.pdlist = self.pdlist.concat(curPageData);
+						
+						//联网成功的回调,隐藏下拉刷新和上拉加载的状态;
+						//mescroll会根据传的参数,自动判断列表如果无任何数据,则提示空;列表无下一页数据,则提示无更多数据;
+						console.log("page.num="+page.num+", page.size="+page.size+", curPageData.length="+curPageData.length+", self.pdlist.length==" + self.pdlist.length);
+						
+						//方法一(推荐): 后台接口有返回列表的总页数 totalPage
+						//self.mescroll.endByPage(curPageData.length, totalPage); //必传参数(当前页的数据个数, 总页数)
+						
+						//方法二(推荐): 后台接口有返回列表的总数据量 totalSize
+						//self.mescroll.endBySize(curPageData.length, totalSize); //必传参数(当前页的数据个数, 总数据量)
+						
+						//方法三(推荐): 您有其他方式知道是否有下一页 hasNext
+						//self.mescroll.endSuccess(curPageData.length, hasNext); //必传参数(当前页的数据个数, 是否有下一页true/false)
+						
+						//方法四 (不推荐),会存在一个小问题:比如列表共有20条数据,每页加载10条,共2页.如果只根据当前页的数据个数判断,则需翻到第三页才会知道无更多数据,如果传了hasNext,则翻到第二页即可显示无更多数据.
+						self.mescroll.endSuccess(curPageData.length);
+						
+						//提示:curPageData.length必传的原因:
+						// 1.判断是否有下一页的首要依据: 当传的值小于page.size时,则一定会认为无更多数据.
+						// 2.比传入的totalPage, totalSize, hasNext具有更高的判断优先级
+						// 3.使配置的noMoreSize生效
+					
+					}, function() {
+						//联网失败的回调,隐藏下拉刷新和上拉加载的状态;
+						self.mescroll.endErr();
+					});
+				},
+			},
+		});
+		
+		/*联网加载列表数据
+		 请忽略getListDataFromNet的逻辑,这里仅仅是在本地模拟分页数据,本地演示用
+		 实际项目以您服务器接口返回的数据为准,无需本地处理分页.
+		 * */
+		function getListDataFromNet(pageNum,pageSize,successCallback,errorCallback) {
+			//延时一秒,模拟联网
+            setTimeout(function () {
+//          	axios.get("xxxxxx", {
+//					params: {
+//						num: pageNum, //页码
+//						size: pageSize //每页长度
+//					}
+//				})
+//				.then(function(response) {
+					var data=pdlist1; // 模拟数据: ../res/pdlist1.js
+                	var listData=[];//模拟分页数据
+					for (var i = (pageNum-1)*pageSize; i < pageNum*pageSize; i++) {
+	            		if(i==data.length) break;
+	            		listData.push(data[i]);
+	            	}
+                	successCallback&&successCallback(listData);//成功回调
+//				})
+//				.catch(function(error) {
+//					errorCallback&&errorCallback()//失败回调
+//				});
+            },500)
+		}
+		
+	</script>
+
+</html>

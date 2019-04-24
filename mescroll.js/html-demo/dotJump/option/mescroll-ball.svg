@@ -1,0 +1,5 @@
+<svg width="50px"  height="50px"  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" class="lds-ball">
+	<circle cx="50" ng-attr-cy="{{config.cy}}" ng-attr-r="{{config.radius}}" ng-attr-fill="{{config.color}}" cy="23" r="13" fill="#18B4FE">
+		<animate attributeName="cy" calcMode="spline" values="23;77;23" keyTimes="0;0.5;1" dur="0.65" keySplines="0.45 0 0.9 0.55;0 0.45 0.55 0.9" begin="0s" repeatCount="indefinite"></animate>
+	</circle>
+</svg>

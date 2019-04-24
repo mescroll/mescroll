@@ -1,0 +1,68 @@
+/*
+ * 自定义下拉刷新
+ * 
+	//下拉刷新区域
+	<div class="mescroll-downwarp">
+		<div class="downwarp-content">
+			<img class="downwarp-slogan" src="mescroll-slogan.jpg"/>
+			<p class="downwarp-progress"></p>
+			<p class="downwarp-loading mescroll-rotate"></p>
+			<p class="downwarp-mascot"></p>
+		</div>
+	</div>
+ */
+
+/*下拉刷新--标语*/
+.mescroll-downwarp .downwarp-slogan{
+	display: block;
+	width: 210px;
+	height: 84px;
+	margin: auto;
+}
+/*下拉刷新--向下进度动画*/
+.mescroll-downwarp .downwarp-progress{
+	width: 20px;
+	height: 20px;
+	border: none;
+	margin: auto;
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-image: url(mescroll-progress.png);
+	-webkit-transition: all 300ms;
+	transition: all 300ms;
+}
+/*下拉刷新--进度条*/
+.mescroll-downwarp .downwarp-loading{
+	width: 16px;
+	height: 16px;
+	border-radius: 50%;
+    border: 1px solid #FF8095;
+    border-bottom-color: transparent;
+}
+/*下拉刷新--吉祥物*/
+.mescroll-downwarp .downwarp-mascot{
+	position: absolute;
+	right: 8px;
+	bottom: 0;
+	width: 50px;
+	height: 50px;
+	background-size: contain;
+	background-repeat: no-repeat;
+	-webkit-animation: animMascot .6s steps(1,end) infinite;
+	animation: animMascot .6s steps(1,end) infinite;
+}
+@-webkit-keyframes animMascot {
+	0% {background-image: url(mescroll-bb1.png)}
+	25% {background-image: url(mescroll-bb2.png)}
+	50% {background-image: url(mescroll-bb3.png)}
+	75% {background-image: url(mescroll-bb4.png)}
+	100% {background-image: url(mescroll-bb1.png)}
+}
+@keyframes animMascot {
+	0% {background-image: url(mescroll-bb1.png)}
+	25% {background-image: url(mescroll-bb2.png)}
+	50% {background-image: url(mescroll-bb3.png)}
+	75% {background-image: url(mescroll-bb4.png)}
+	100% {background-image: url(mescroll-bb1.png)}
+}

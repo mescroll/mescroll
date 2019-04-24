@@ -1,0 +1,7 @@
+﻿vue-demo的运行方法:
+
+1.新建一个vue项目,把vue-demo的src和static文件夹拷贝进去
+
+2.安装mescroll:   npm install --save mescroll.js (最好不要用cnpm,因为可能不是最新版本)
+
+3.轮播的案例还需要安装vue-awesome-swiper:   npm install vue-awesome-swiper --save

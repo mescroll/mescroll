@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+
+		<link rel="stylesheet" href="../../dist/mescroll.min.css">
+		<style type="text/css">
+			* {
+				margin: 0;
+				padding: 0;
+				-webkit-touch-callout:none;
+				-webkit-user-select:none;
+				-webkit-tap-highlight-color:transparent;
+			}
+			body{background-color: white}
+			ul{list-style-type: none}
+			a {text-decoration: none;color: #18B4FE;}
+			
+			/*模拟的标题*/
+			.header{
+				z-index: 9990;
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 44px;
+				line-height: 44px;
+				text-align: center;
+				border-bottom: 1px solid #eee;
+				background-color: white;
+			}
+			.header .btn-left{
+				position: absolute;
+				top: 0;
+				left: 0;
+				line-height: 22px;
+				padding:12px;
+			}
+			/*模拟的轮播*/
+			.swiper{
+				width: 100%;
+				vertical-align: bottom;
+			}
+			/*菜单*/
+			.nav{
+				text-align: center;
+				border-bottom: 1px solid #ddd;
+				background-color: white;
+			}
+			.nav p{
+				display: inline-block;
+				width: 30%;
+				padding: 10px 0;
+			}
+			.nav .active{
+				border-bottom: 1px solid #FF6990;
+				color: #FF6990;
+			}
+			/*ios使用sticky样式实现*/
+			.nav-sticky{
+				z-index: 9999;/*需设置zIndex,避免在悬停时,可能会被列表数据遮住*/
+				position: -webkit-sticky;
+				position: sticky;
+			    top: 0;/*相对mescroll的div悬停的位置*/
+			}
+			/*android和pc端悬停*/
+			.nav-fixed{
+				z-index: 9999;
+				position: fixed;
+				top: 44px;
+				left: 0;
+				width: 100%;
+			}
+			/*列表*/
+			.mescroll{
+				position: fixed;
+				top: 44px;
+				bottom: 0;
+				width: 100%;
+				height: auto;
+			}
+			/*展示上拉加载的数据列表*/
+			.data-list li{
+				position: relative;
+				padding: 10px 8px 10px 120px;
+				border-bottom: 1px solid #eee;
+			}
+			.data-list .pd-img{
+				position: absolute;
+				left: 18px;
+				top: 18px;
+				width: 80px;
+				height: 80px;
+			}
+			.data-list .pd-name{
+				font-size: 16px;
+				line-height: 20px;
+				height: 40px;
+				overflow: hidden;
+			}
+			.data-list .pd-price{
+				margin-top: 8px;
+				color: red;
+			}
+			.data-list .pd-sold{
+				font-size: 12px;
+				margin-top: 8px;
+				color: gray;
+			}
+		</style>
+	</head>
+
+	<body>
+		<!--标题-->
+		<p class="header"><a class="btn-left" href="../index.html">main</a> 吸顶悬浮效果</p>
+		<!--滑动区域-->
+		<div id="mescroll" class="mescroll">
+			<!--模拟的轮播-->
+			<img class="swiper" src="../res/img/swiper.jpg"/>
+			<!--
+				悬浮菜单:
+				1.ios的悬停效果,通过给navWarp添加sticky样式来实现
+				2.android和pc端悬停效果,通过监听mescroll的scroll事件,控制navContent是否为fixed定位来实现
+			-->
+			<div id="navWarp">
+				<div id="navContent" class="nav">
+					<p class="active" i="0">全部</p>
+					<p i="1">奶粉</p>
+					<p i="2">面膜</p>
+				</div>
+			</div>
+			<!--upscrollWarp用于装载上拉进度和数据列表,避免清空列表不满屏,导致点击悬浮菜单时会滑下来-->
+			<div id="upscrollWarp">
+				<!--展示上拉加载的数据列表-->
+				<ul id="dataList" class="data-list">
+					<!--<li>
+						<img class="pd-img" src="../res/img/pd1.jpg"/>
+						<p class="pd-name">商品标题商品标题商品标题商品标题商品标题商品</p>
+						<p class="pd-price">200.00 元</p>
+						<p class="pd-sold">已售50件</p>
+					</li>-->
+				</ul>
+			</div>
+		</div>
+	</body>
+	
+	<script src="../../dist/mescroll.min.js" type="text/javascript" charset="utf-8"></script>
+	<!--mescroll本身不依赖jq,这里为了模拟发送ajax请求-->
+	<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" charset="utf-8">
+		$(function(){
+			//创建MeScroll对象,内部已默认开启下拉刷新,自动执行up.callback,刷新列表数据;
+			var mescroll = new MeScroll("mescroll", {
+				up: {
+					callback: getListData, //上拉回调,此处可简写; 相当于 callback: function (page, mescroll) { getListData(page); }
+					isBounce: false, //此处禁止ios回弹,解析(务必认真阅读,特别是最后一点): http://www.mescroll.com/qa.html#q10
+					clearEmptyId: "dataList", //相当于同时设置了clearId和empty.warpId; 简化写法;默认null; 注意vue中不能配置此项
+					warpId: "upscrollWarp", //让上拉进度装到upscrollWarp里面
+					lazyLoad: {
+			        	use: true // 是否开启懒加载,默认false
+			        }
+				}
+			});
+			
+			var navWarp=document.getElementById("navWarp");
+			if(mescroll.os.ios){
+				//ios的悬停效果,通过给navWarp添加nav-sticky样式来实现
+				navWarp.classList.add("nav-sticky");
+			}else{
+				//android和pc端悬停效果,通过监听mescroll的scroll事件,控制navContent是否为fixed定位来实现
+				navWarp.style.height=navWarp.offsetHeight+"px";//固定高度占位,避免悬浮时列表抖动
+				var navContent=document.getElementById("navContent");
+				mescroll.optUp.onScroll=function(mescroll, y, isUp){
+					console.log("up --> onScroll 列表当前滚动的距离 y = " + y + ", 是否向上滑动 isUp = " + isUp);
+					if(y>=navWarp.offsetTop){
+						navContent.classList.add("nav-fixed");
+					}else{
+						navContent.classList.remove("nav-fixed");
+					}
+				}
+			}
+			
+			/*初始化菜单*/
+			var pdType=0;//全部商品0; 奶粉1; 图书2;
+			$(".nav p").click(function(){
+				var i=$(this).attr("i");
+				if(pdType!=i) {
+					//更改列表条件
+					pdType=i;
+					//变色
+					$(".nav p").each(function(i,dom){
+						if(dom.getAttribute("i")==pdType){
+							dom.classList.add("active");
+						}else{
+							dom.classList.remove("active");
+						}
+					})
+					/*调整upscrollWarp的最小高度,使其刚好满屏,避免点击悬浮菜单时会滑下来;(这里每次点击都计算一次,毕竟轮播图高度改变或未能显示图都会影响计算的值)*/
+					var minHight = mescroll.getClientHeight() - navWarp.offsetHeight;
+					document.getElementById("upscrollWarp").style.minHeight = minHight+"px";
+					//重置列表数据
+					mescroll.resetUpScroll();
+				}
+			})
+			
+			/*联网加载列表数据  page = {num:1, size:10}; num:当前页 从1开始, size:每页数据条数 */
+			function getListData(page){
+				//联网加载数据
+				getListDataFromNet(pdType, page.num, page.size, function(curPageData){
+					//联网成功的回调,隐藏下拉刷新和上拉加载的状态;
+					//mescroll会根据传的参数,自动判断列表如果无任何数据,则提示空;列表无下一页数据,则提示无更多数据;
+					console.log("pdType="+pdType+", page.num="+page.num+", page.size="+page.size+", curPageData.length="+curPageData.length);
+					
+					//方法一(推荐): 后台接口有返回列表的总页数 totalPage
+					//mescroll.endByPage(curPageData.length, totalPage); //必传参数(当前页的数据个数, 总页数)
+					
+					//方法二(推荐): 后台接口有返回列表的总数据量 totalSize
+					//mescroll.endBySize(curPageData.length, totalSize); //必传参数(当前页的数据个数, 总数据量)
+					
+					//方法三(推荐): 您有其他方式知道是否有下一页 hasNext
+					//mescroll.endSuccess(curPageData.length, hasNext); //必传参数(当前页的数据个数, 是否有下一页true/false)
+					
+					//方法四 (不推荐),会存在一个小问题:比如列表共有20条数据,每页加载10条,共2页.如果只根据当前页的数据个数判断,则需翻到第三页才会知道无更多数据,如果传了hasNext,则翻到第二页即可显示无更多数据.
+					mescroll.endSuccess(curPageData.length);
+					
+					//提示:curPageData.length必传的原因:
+					// 1.判断是否有下一页的首要依据: 当传的值小于page.size时,则一定会认为无更多数据.
+					// 2.比传入的totalPage, totalSize, hasNext具有更高的判断优先级
+					// 3.使配置的noMoreSize生效
+					
+					//设置列表数据
+					setListData(curPageData);
+				}, function(){
+					//联网失败的回调,隐藏下拉刷新和上拉加载的状态;
+	                mescroll.endErr();
+				});
+			}
+			
+			/*设置列表数据*/
+			function setListData(curPageData){
+				var listDom=document.getElementById("dataList");
+				for (var i = 0; i < curPageData.length; i++) {
+					var pd=curPageData[i];
+					
+					var str='<img class="pd-img" src="../res/img/loading-sq.png" imgurl="'+pd.pdImg+'"/>';
+					str+='<p class="pd-name">'+pd.pdName+'</p>';
+					str+='<p class="pd-price">'+pd.pdPrice+' 元</p>';
+					str+='<p class="pd-sold">已售'+pd.pdSold+'件</p>';
+					
+					var liDom=document.createElement("li");
+					liDom.innerHTML=str;
+					listDom.appendChild(liDom);
+				}
+			}
+			
+			/*联网加载列表数据
+			 在您的实际项目中,请参考官方写法: http://www.mescroll.com/api.html#tagUpCallback
+			 请忽略getListDataFromNet的逻辑,这里仅仅是在本地模拟分页数据,本地演示用
+			 实际项目以您服务器接口返回的数据为准,无需本地处理分页.
+			 * */
+			function getListDataFromNet(pdType,pageNum,pageSize,successCallback,errorCallback) {
+				//延时一秒,模拟联网
+                setTimeout(function () {
+                	$.ajax({
+		                type: 'GET',
+		                url: '../res/pdlist1.json',
+//		                url: '../res/pdlist1.json?pdType='+pdType+'&num='+pageNum+'&size='+pageSize,
+		                dataType: 'json',
+		                success: function(data){
+		                	var listData=[];
+		                	
+		                	//pdType 全部商品0; 奶粉1; 图书2;
+		                	if(pdType==0){
+		                		//全部商品 (模拟分页数据)
+								for (var i = (pageNum-1)*pageSize; i < pageNum*pageSize; i++) {
+				            		if(i==data.length) break;
+				            		listData.push(data[i]);
+				            	}
+								
+		                	}else if(pdType==1){
+		                		//奶粉
+		                		for (var i = 0; i < data.length; i++) {
+		                			if (data[i].pdName.indexOf("奶")!=-1) {
+		                				listData.push(data[i]);
+		                			}
+		                		}
+		                		
+		                	}else if(pdType==2){
+		                		//面膜
+		                		for (var i = 0; i < data.length; i++) {
+		                			if (data[i].pdName.indexOf("面膜")!=-1) {
+		                				listData.push(data[i]);
+		                			}
+		                		}
+		                	}
+		                	
+		                	//回调
+		                	successCallback(listData);
+		                },
+		                error: errorCallback
+		            });
+                },500)
+			}
+			
+		});
+	</script>
+
+</html>
