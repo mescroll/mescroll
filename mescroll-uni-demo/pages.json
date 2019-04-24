@@ -1,0 +1,125 @@
+{
+    "pages" : [
+        //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+        {
+            "path" : "pages/index/index",
+            "style" : {
+                "navigationBarTitleText" : "mescroll-uni"
+            }
+        },
+        {
+            "path" : "pages/base/list-news",
+            "style" : {
+				"navigationBarTitleText" : "list-news",
+				"enablePullDownRefresh" : false, // 不开启下拉刷新, 默认就是false
+				"onReachBottomDistance" : 100, // 页面上拉触底事件触发时距页面底部距离, 默认 50
+				"app-plus" : {
+					"bounce" : "none" // 取消iOS回弹,避免和下拉刷新冲突 (小程序无法取消)
+				}
+			}
+        },
+        {
+            "path" : "pages/base/list-products",
+            "style" : {
+				"navigationBarTitleText" : "list-products",
+				"enablePullDownRefresh" : false, // 不开启下拉刷新
+				"onReachBottomDistance" : 100, // 页面上拉触底事件触发时距页面底部距离
+				"app-plus" : {
+					"bounce" : "none" // 取消iOS回弹,避免和下拉刷新冲突 (小程序无法取消)
+				}
+			}
+        },
+        {
+            "path" : "pages/base/mescroll-options",
+            "style" : {
+				"navigationBarTitleText" : "mescroll-options",
+				"enablePullDownRefresh" : false, // 不开启下拉刷新
+				"onReachBottomDistance" : 100, // 页面上拉触底事件触发时距页面底部距离
+				"app-plus" : {
+					"bounce" : "none" // 取消iOS回弹,避免和下拉刷新冲突 (小程序无法取消)
+				}
+			}
+        },
+        {
+            "path" : "pages/base/list-mescroll-one",
+            "style" : {
+				"navigationBarTitleText" : "list-mescroll-one",
+				"enablePullDownRefresh" : false, // 不开启下拉刷新
+				"onReachBottomDistance" : 100, // 页面上拉触底事件触发时距页面底部距离
+				"app-plus" : {
+					"bounce" : "none" // 取消iOS回弹,避免和下拉刷新冲突 (小程序无法取消)
+				}
+			}
+        },
+        {
+            "path" : "pages/base/list-mescroll-more",
+            "style" : {
+				"navigationBarTitleText" : "list-mescroll-more",
+				"enablePullDownRefresh" : false, // 不开启下拉刷新
+				"onReachBottomDistance" : 100, // 页面上拉触底事件触发时距页面底部距离
+				"app-plus" : {
+					"bounce" : "none" // 取消iOS回弹,避免和下拉刷新冲突 (小程序无法取消)
+				}
+			}
+        },
+        {
+            "path" : "pages/base/list-search",
+            "style" : {
+				"navigationBarTitleText" : "list-search",
+				"enablePullDownRefresh" : false, // 不开启下拉刷新
+				"onReachBottomDistance" : 100, // 页面上拉触底事件触发时距页面底部距离
+				"app-plus" : {
+					"bounce" : "none" // 取消iOS回弹,避免和下拉刷新冲突 (小程序无法取消)
+				}
+			}
+        },
+        {
+            "path" : "pages/intermediate/beibei",
+            "style" : {
+				"navigationBarTitleText" : "贝贝 mescroll-beibei.vue",
+				"enablePullDownRefresh" : false, // 不开启下拉刷新
+				"onReachBottomDistance" : 100, // 页面上拉触底事件触发时距页面底部距离
+				"app-plus" : {
+					"bounce" : "none" // 取消iOS回弹,避免和下拉刷新冲突 (小程序无法取消)
+				}
+			}
+        },
+        {
+            "path" : "pages/intermediate/xinlang",
+            "style" : {
+				"navigationBarTitleText" : "新浪微博 mescroll-xinlang.vue",
+				"enablePullDownRefresh" : false, // 不开启下拉刷新
+				"onReachBottomDistance" : 100, // 页面上拉触底事件触发时距页面底部距离
+				"app-plus" : {
+					"bounce" : "none" // 取消iOS回弹,避免和下拉刷新冲突 (小程序无法取消)
+				}
+			}
+        },
+        {
+            "path" : "pages/senior/meituan",
+            "style" : {
+				"navigationBarTitleText" : "美团 mescroll-meituan.vue",
+				"enablePullDownRefresh" : false, // 不开启下拉刷新
+				"onReachBottomDistance" : 100, // 页面上拉触底事件触发时距页面底部距离
+				"app-plus" : {
+					"bounce" : "none" // 取消iOS回弹,避免和下拉刷新冲突 (小程序无法取消)
+				}
+			}
+        },
+        {
+            "path" : "pages/senior/meitunmama",
+            "style" : {
+				"navigationBarTitleText" : "美囤妈妈 mescroll-meitun.vue",
+				"enablePullDownRefresh" : false, // 不开启下拉刷新
+				"onReachBottomDistance" : 100, // 页面上拉触底事件触发时距页面底部距离
+				"app-plus" : {
+					"bounce" : "none" // 取消iOS回弹,避免和下拉刷新冲突 (小程序无法取消)
+				}
+			}
+        }
+    ],
+    "globalStyle" : {
+        "navigationBarTextStyle" : "black",
+        "navigationBarBackgroundColor" : "#fff"
+    }
+}
