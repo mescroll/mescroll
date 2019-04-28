@@ -1,8 +1,8 @@
 <template>
 	<view :style="{'padding-top':padTop,'padding-bottom':padBottom}" @touchstart="touchstartEvent" @touchmove="touchmoveEvent" @touchend="touchendEvent" @touchcancel="touchendEvent">
 		<!-- 下拉加载区域 -->
-		<view v-if="optDown" class="mescroll-downwarp" :class="{'mescroll-downwarp-reset':isDownReset}" :style="{'height': downHight+'px'}">
-			<view class="downwarp-content">
+		<view v-if="optDown" class="mescroll-downwarp" :class="{'mescroll-downwarp-reset':isDownReset}" :style="{'height': downHight+'px', 'position': 'relative', 'overflow': 'hidden', '-webkit-transition': isDownReset?'height 300ms':''}">
+			<view class="downwarp-content" style="text-align: center;position: absolute;left: 0;bottom: 0;width: 100%;padding: 20upx 0;">
 				<view v-if="isDownLoading" class="downwarp-progress"></view>
 				<view v-if="!isDownLoading" class="downwarp-arrow" :style="{'transform':'rotate(' + downRotate + 'deg)'}"></view>
 				<view class="downwarp-tip">{{downText}}</view>

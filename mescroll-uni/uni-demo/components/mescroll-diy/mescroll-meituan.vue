@@ -1,7 +1,7 @@
 <template>
 	<view :style="{'padding-top':padTop,'padding-bottom':padBottom}" @touchstart="touchstartEvent" @touchmove="touchmoveEvent" @touchend="touchendEvent" @touchcancel="touchendEvent">
 		<!-- 下拉加载区域 -->
-		<view v-if="optDown" class="mescroll-downwarp" :class="{'mescroll-downwarp-reset':isDownReset}" :style="{'height': downHight+'px'}">
+		<view v-if="optDown" class="mescroll-downwarp" :class="{'mescroll-downwarp-reset':isDownReset}" :style="{'height': downHight+'px', 'position': 'relative', 'overflow': 'hidden', '-webkit-transition': isDownReset?'height 300ms':''}">
 			<view class="downwarp-content">
 				<view :style="{'height':downLoadHeight}" :class="{'downwarp-load':!isDownLoading,'downwarp-load-start':isDownLoading}"></view>
 				<view class="downwarp-load-preload"></view>
