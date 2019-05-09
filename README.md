@@ -306,7 +306,7 @@ export default {
   },
   // 进入路由时,恢复列表状态
   
-  (to, from, next) {  // 如果没有配置回到顶部按钮或isBounce,则beforeRouteEnter不用写
+  beforeRouteEnter(to, from, next) {  // 如果没有配置回到顶部按钮或isBounce,则beforeRouteEnter不用写
     next(vm => {
       if (vm.mescroll) {
       	// 恢复到之前设置的isBounce状态
