@@ -838,6 +838,11 @@
     var warpId = optEmpty.warpId || me.optUp.clearEmptyId; // 优先使用warpId
     if (warpId == null) return;
     var emptyWarp = me.getDomById(warpId) // 要显示空布局的位置
+    // 如果是手动显示自定义内容 && 该 dom 存在
+    if (optEmpty.isCustom && emptyWarp) {
+      me.emptyDom = emptyWarp;
+      return (emptyWarp.style.display = 'block');
+    }
     if (emptyWarp) {
       me.removeEmpty(); // 先移除,避免重复加入
       // 初始化无任何数据的空布局
@@ -867,7 +872,12 @@
   }
   /* 移除空布局 */
   MeScroll.prototype.removeEmpty = function () {
-    this.removeChild(this.emptyDom);
+    if (this.optUp.empty.isCustom && this.emptyDom) {
+      // 如果是手动显示自定义内容的话，隐藏该 dom
+      this.emptyDom.style.display = 'none'
+    } else {
+      this.removeChild(this.emptyDom);
+    }
   }
 
   /* --------回到顶部的按钮-------- */
