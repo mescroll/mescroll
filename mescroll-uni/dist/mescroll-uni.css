@@ -94,8 +94,14 @@
 /*无任何数据的空布局*/
 .mescroll-empty {
 	width: 100%;
-	padding-top: 40upx;
+	padding: 40upx;
 	text-align: center;
+}
+.mescroll-empty.empty-fixed{
+	z-index: 99;
+	position: fixed;
+	top: 30%;
+	left: 0;
 }
 
 .mescroll-empty .empty-icon {
@@ -109,14 +115,14 @@
 }
 
 .mescroll-empty .empty-btn {
-	max-width: 40%;
-	margin: 60upx auto;
-	padding: 20upx;
+	display: inline-block;
+	margin-top: 40upx;
+	min-width: 200upx;
+	padding: 18upx;
 	font-size: 28upx;
-	border: 1upx solid #FF6990;
-	border-radius: 12upx;
-	background-color: white;
-	color: #FF6990;
+	border: 1upx solid #E04B28;
+	border-radius: 60upx;
+	color: #E04B28;
 }
 
 .mescroll-empty .empty-btn:active {

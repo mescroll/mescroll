@@ -78,7 +78,10 @@
 						use: true, // 是否显示空布局
 						icon: "http://www.mescroll.com/img/mescroll-empty.png", // 图标路径
 						tip: '~ 暂无相关数据 ~', // 提示
-						btnText: '去逛逛 >' // 按钮
+						btnText: '去逛逛 >', // 按钮
+						fixed: false, // 是否使用fixed定位,默认false; 配置fixed为true,以下的top和zIndex才生效
+						top: "35%", // fixed定位的top值 (完整的单位值,如 "35%"; "300upx")
+						zIndex: 99 // fixed定位z-index值
 					}
 				},
 				pdList: [], //列表数据
