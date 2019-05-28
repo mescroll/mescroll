@@ -157,7 +157,7 @@
 			/*上拉加载的回调: mescroll携带page的参数, 其中num:当前页 从1开始, size:每页数据条数,默认10 */
 			upCallback(mescroll) {
 				if(this.tabType!=mescroll.tabType){
-					mescroll.endSuccess(); // 只处理当前页的回调,避免tab切换过快,触发的回调和当前页不一致的问题
+					mescroll.endErr(); // 只处理当前页的回调,避免tab切换过快,触发的回调和当前页不一致的问题
 					return;
 				}
 				if (mescroll.tabType==0) {
