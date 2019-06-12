@@ -1,11 +1,11 @@
 /*! mescroll-uni
- * version 1.0.2
- * 2019-05-28 文举
+ * version 1.0.5
+ * 2019-06-12 文举
  * http://www.mescroll.com
  */
 export default function MeScroll(options) {
 	let me = this;
-	me.version = '1.0.2'; // mescroll版本号
+	me.version = '1.0.5'; // mescroll版本号
 	me.options = options || {}; // 配置
 
 	me.isDownScrolling = false; // 是否在执行下拉刷新的回调
@@ -85,6 +85,7 @@ MeScroll.prototype.extendUpScroll = function(optUp) {
 		showLoading: null, // 显示加载中的回调
 		showNoMore: null, // 显示无更多数据的回调
 		hideUpScroll: null, // 隐藏上拉加载的回调
+		errDistance: 110, // endErr的时候需往上滑动一段距离,使其往下滑动时再次触发onReachBottom
 		toTop: {
 			// 回到顶部按钮,需配置src才显示
 			src: null, // 图片路径,默认null (建议写成网络图,不必考虑相对路径)
@@ -511,6 +512,7 @@ MeScroll.prototype.endErr = function() {
 	if (this.isUpScrolling) {
 		this.optUp.page.num--;
 		this.endUpScroll(false);
+		this.scrollTo(this.getScrollTop() - this.optUp.errDistance)
 	}
 }
 
@@ -540,13 +542,19 @@ MeScroll.prototype.hideTopBtn = function() {
 	}
 }
 
-/* 滚动条的位置 */
+/* 获取滚动条的位置 */
 MeScroll.prototype.getScrollTop = function() {
 	return this.scrollTop || 0
 }
 
+/* 记录滚动条的位置 */
 MeScroll.prototype.setScrollTop = function(y) {
 	this.scrollTop = y;
+}
+
+/* 滚动到指定位置 */
+MeScroll.prototype.scrollTo = function (y, t) {
+	uni.pageScrollTo({scrollTop:y, duration:t})
 }
 
 /* body的高度 */

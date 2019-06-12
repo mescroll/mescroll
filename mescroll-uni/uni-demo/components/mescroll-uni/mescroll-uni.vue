@@ -107,11 +107,8 @@
 			// 点击回到顶部的按钮回调
 			toTopClick(){
 				this.isShowToTop = false; // 回到顶部按钮需要先隐藏,再执行回到顶部,避免闪动
-				uni.pageScrollTo({ // 执行回到顶部
-					scrollTop: 0,
-					duration: this.mescroll.optUp.toTop.duration
-				});
-				this.$emit('topclick',this.mescroll) // 派发点击回到顶部按钮的回调
+				this.mescroll.scrollTo(0, this.mescroll.optUp.toTop.duration); // 执行回到顶部
+				this.$emit('topclick', this.mescroll); // 派发点击回到顶部按钮的回调
 			}
 		},
 		// 编译到H5,不会执行onReady,只执行mounted
