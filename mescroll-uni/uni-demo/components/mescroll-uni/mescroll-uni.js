@@ -498,7 +498,7 @@ MeScroll.prototype.endSuccess = function(dataSize, hasNext, systime) {
 }
 
 /* 回调失败,结束下拉刷新和上拉加载 */
-MeScroll.prototype.endErr = function() {
+MeScroll.prototype.endErr = function(errDistance) {
 	// 结束下拉,回调失败重置回原来的页码和时间
 	if (this.isDownScrolling) {
 		let page = this.optUp.page;
@@ -512,7 +512,10 @@ MeScroll.prototype.endErr = function() {
 	if (this.isUpScrolling) {
 		this.optUp.page.num--;
 		this.endUpScroll(false);
-		this.scrollTo(this.getScrollTop() - this.optUp.errDistance)
+		if(errDistance !== 0){ // 不处理0
+			if(!errDistance) errDistance = this.optUp.errDistance; // 不传,则取默认
+			this.scrollTo(this.getScrollTop() - errDistance) // 往上回滚的距离
+		}
 	}
 }
 
