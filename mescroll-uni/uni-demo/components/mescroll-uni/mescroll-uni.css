@@ -99,6 +99,7 @@ page,
 
 /*无任何数据的空布局*/
 .mescroll-empty {
+	box-sizing: border-box;
 	width: 100%;
 	padding: 40upx;
 	text-align: center;
