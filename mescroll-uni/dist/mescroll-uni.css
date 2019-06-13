@@ -1,12 +1,13 @@
 /*! mescroll-uni
  * version 1.0.3
- * 2019-05-28 文举
+ * 2019-06-12 文举
  * http://www.mescroll.com
  */
 
 page,
 .mescroll-uni{
 	height: 100%;
+	-webkit-overflow-scrolling: touch;
 }
 
 /*下拉刷新区域*/
@@ -98,6 +99,7 @@ page,
 
 /*无任何数据的空布局*/
 .mescroll-empty {
+	box-sizing: border-box;
 	width: 100%;
 	padding: 40upx;
 	text-align: center;

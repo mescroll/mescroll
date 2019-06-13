@@ -1,11 +1,11 @@
 /*! mescroll-uni
- * version 1.0.5
+ * version 1.0.3
  * 2019-06-12 文举
  * http://www.mescroll.com
  */
 export default function MeScroll(options) {
 	let me = this;
-	me.version = '1.0.5'; // mescroll版本号
+	me.version = '1.0.3'; // mescroll版本号
 	me.options = options || {}; // 配置
 
 	me.isDownScrolling = false; // 是否在执行下拉刷新的回调
