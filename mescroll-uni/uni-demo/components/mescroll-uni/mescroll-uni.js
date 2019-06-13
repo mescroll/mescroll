@@ -521,7 +521,7 @@ MeScroll.prototype.endErr = function(errDistance) {
 
 /* 显示空布局 */
 MeScroll.prototype.showEmpty = function() {
-	this.optUp.empty.onShow && this.optUp.empty.onShow(true)
+	this.optUp.empty.use && this.optUp.empty.onShow && this.optUp.empty.onShow(true)
 }
 
 /* 移除空布局 */
