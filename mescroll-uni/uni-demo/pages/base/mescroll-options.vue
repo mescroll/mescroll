@@ -16,18 +16,14 @@
 			<view :class="{active:tabType==2}" @click="changeTab(2)">图书</view>
 		</view>
 		<!-- 数据列表 -->
-		<view class="data-li" v-for="pd in pdList" :key="pd.id">
-			<image class="pd-img" :src="pd.pdImg" mode="widthFix"/>
-			<view class="pd-name">{{pd.pdName}}</view>
-			<text class="pd-price">{{pd.pdPrice}} 元</text>
-			<text class="pd-sold">已售{{pd.pdSold}}件</text>
-		</view>
+		<pd-list :list="pdList"></pd-list>
 	</mescroll-uni>
 </template>
 
 <script>
-	import MescrollUni from "../../components/mescroll-uni/mescroll-uni.vue";
-	import mockData from "../../common/pdlist.js"; // 模拟数据
+	import MescrollUni from "@/components/mescroll-uni/mescroll-uni.vue";
+	import PdList from "@/components/other/pd-list.vue";
+	import mockData from "@/common/pdlist.js"; // 模拟数据
 	
 	// 您可以修改 /components/mescroll-uni/mescroll-uni-option.js的全局配置, 快速自定义自己的下拉组件
 	// npm安装的, 可以直接修改 /node_modules/mescroll-uni/mescroll-uni-option.js
@@ -35,7 +31,8 @@
 	
 	export default {
 		components: {
-			MescrollUni
+			MescrollUni,
+			PdList
 		},
 		data() {
 			return {
@@ -90,14 +87,6 @@
 		},
 		onUnload(){
 			this.mescroll=null;
-		},
-		//注册滚动到底部的事件,用于上拉加载
-		onReachBottom() {
-			this.mescroll && this.mescroll.onReachBottom();
-		},
-		//注册列表滚动事件,用于下拉刷新
-		onPageScroll(e) {
-			this.mescroll && this.mescroll.onPageScroll(e);
 		},
 		methods: {
 			// mescroll组件初始化的回调,可获取到mescroll对象

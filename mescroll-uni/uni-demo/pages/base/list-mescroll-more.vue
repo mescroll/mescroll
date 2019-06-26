@@ -24,12 +24,7 @@
 						<image style="width: 100%" src="http://www.mescroll.com/img/swiper2.jpg" mode="widthFix"/>
 					</swiper-item>
 				</swiper>
-				<view class="data-li" v-for="pd in tab0.list" :key="pd.id">
-					<image class="pd-img" :src="pd.pdImg" mode="widthFix"/>
-					<view class="pd-name">{{pd.pdName}}</view>
-					<text class="pd-price">{{pd.pdPrice}} 元</text>
-					<text class="pd-sold">已售{{pd.pdSold}}件</text>
-				</view>
+				<pd-list :list="tab0.list"></pd-list>
 			</mescroll-uni>
 		</view>	
 		
@@ -37,12 +32,7 @@
 		<!--注意: 不能写成 <template v-if="tabType==1">, 不能用template和v-if  -->
 		<view v-show="tabType==1">
 			<mescroll-uni top="120" :down="getDownOption(1)" :up="getUpOption()" @down="downCallback" @up="upCallback" @init="mescrollInit1">
-				<view class="data-li" v-for="pd in tab1.list" :key="pd.id">
-					<image class="pd-img" :src="pd.pdImg" mode="widthFix"/>
-					<view class="pd-name">{{pd.pdName}}</view>
-					<text class="pd-price">{{pd.pdPrice}} 元</text>
-					<text class="pd-sold">已售{{pd.pdSold}}件</text>
-				</view>
+				<pd-list :list="tab1.list"></pd-list>
 			</mescroll-uni>
 		</view>	
 		
@@ -50,12 +40,7 @@
 		<!--注意: 不能写成 <template v-if="tabType==2">, 不能用template和v-if  -->
 		<view v-show="tabType==2">
 			<mescroll-uni top="120" :down="getDownOption(2)" :up="getUpOption()" @down="downCallback" @up="upCallback" @init="mescrollInit2">
-				<view class="data-li" v-for="pd in tab2.list" :key="pd.id">
-					<image class="pd-img" :src="pd.pdImg" mode="widthFix"/>
-					<view class="pd-name">{{pd.pdName}}</view>
-					<text class="pd-price">{{pd.pdPrice}} 元</text>
-					<text class="pd-sold">已售{{pd.pdSold}}件</text>
-				</view>
+				<pd-list :list="tab2.list"></pd-list>
 			</mescroll-uni>
 		</view>
 		
@@ -63,24 +48,21 @@
 		<!--注意: 不能写成 <template v-if="tabType==3"> , 不能用template和v-if -->
 		<view v-show="tabType==3">
 			<mescroll-uni top="120" :down="getDownOption(3)" :up="getUpOption()" @down="downCallback" @up="upCallback" @init="mescrollInit3" @emptyclick="emptyClick">
-				<view class="data-li" v-for="pd in tab3.list" :key="pd.id">
-					<image class="pd-img" :src="pd.pdImg" mode="widthFix"/>
-					<view class="pd-name">{{pd.pdName}}</view>
-					<text class="pd-price">{{pd.pdPrice}} 元</text>
-					<text class="pd-sold">已售{{pd.pdSold}}件</text>
-				</view>
+				<pd-list :list="tab3.list"></pd-list>
 			</mescroll-uni>
 		</view>	
 	</view>
 </template>
 
 <script>
-	import MescrollUni from "../../components/mescroll-uni/mescroll-uni.vue";
-	import mockData from "../../common/pdlist.js"; // 模拟数据
+	import MescrollUni from "@/components/mescroll-uni/mescroll-uni.vue";
+	import PdList from "@/components/other/pd-list.vue";
+	import mockData from "@/common/pdlist.js"; // 模拟数据
 	
 	export default {
 		components: {
-			MescrollUni
+			MescrollUni,
+			PdList
 		},
 		data() {
 			return {
@@ -90,20 +72,6 @@
 				tab3:{mescroll:null, isListInit:false, scrollY:0, list:[]},//图书
 				tabType: 0 //菜单类型
 			}
-		},
-		//注册滚动到底部的事件,用于上拉加载
-		onReachBottom() {
-			this.tab0.mescroll && this.tab0.mescroll.onReachBottom();
-			this.tab1.mescroll && this.tab1.mescroll.onReachBottom();
-			this.tab2.mescroll && this.tab2.mescroll.onReachBottom();
-			this.tab3.mescroll && this.tab3.mescroll.onReachBottom();
-		},
-		//注册列表滚动事件,用于下拉刷新
-		onPageScroll(e) {
-			this.tab0.mescroll && this.tab0.mescroll.onPageScroll(e);
-			this.tab1.mescroll && this.tab1.mescroll.onPageScroll(e);
-			this.tab2.mescroll && this.tab2.mescroll.onPageScroll(e);
-			this.tab3.mescroll && this.tab3.mescroll.onPageScroll(e);
 		},
 		methods: {
 			// mescroll组件初始化的回调,可获取到mescroll对象

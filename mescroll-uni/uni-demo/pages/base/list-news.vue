@@ -9,7 +9,7 @@
 </template>
 
 <script>
-	import MescrollUni from "../../components/mescroll-uni/mescroll-uni.vue";
+	import MescrollUni from "@/components/mescroll-uni/mescroll-uni.vue";
 	
 	export default {
 		components: {
@@ -30,14 +30,6 @@
 				},
 				dataList: []
 			}
-		},
-		//注册滚动到底部的事件,用于上拉加载
-		onReachBottom() {
-			this.mescroll && this.mescroll.onReachBottom();
-		},
-		//注册列表滚动事件,用于下拉刷新
-		onPageScroll(e) {
-			this.mescroll && this.mescroll.onPageScroll(e);
 		},
 		methods: {
 			// mescroll组件初始化的回调,可获取到mescroll对象

@@ -26,7 +26,7 @@
 
 <script>
 	// 自定义的mescroll-xinlang.vue
-	import MescrollUni from "../../components/mescroll-diy/mescroll-xinlang.vue";
+	import MescrollUni from "@/components/mescroll-diy/mescroll-xinlang.vue";
 	
 	export default {
 		components: {
@@ -42,14 +42,6 @@
 				dataList: [], // 数据列表
 				top: 0 //提示,到顶部的距离
 			}
-		},
-		//注册滚动到底部的事件,用于上拉加载
-		onReachBottom() {
-			this.mescroll && this.mescroll.onReachBottom();
-		},
-		//注册列表滚动事件,用于下拉刷新
-		onPageScroll(e) {
-			this.mescroll && this.mescroll.onPageScroll(e);
 		},
 		methods: {
 			// mescroll组件初始化的回调,可获取到mescroll对象

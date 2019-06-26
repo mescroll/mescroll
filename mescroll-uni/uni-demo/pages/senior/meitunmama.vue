@@ -8,12 +8,7 @@
 			<image src="http://www.mescroll.com/img/meitun/meitun1.jpg" mode="widthFix"/>
 			<image src="http://www.mescroll.com/img/meitun/meitun2.jpg" mode="widthFix"/>
 			<!-- 分页的数据列表 -->
-			<view class="data-li" v-for="pd in pdList" :key="pd.id">
-				<image class="pd-img" :src="pd.pdImg" mode="widthFix"/>
-				<view class="pd-name">{{pd.pdName}}</view>
-				<text class="pd-price">{{pd.pdPrice}} 元</text>
-				<text class="pd-sold">已售{{pd.pdSold}}件</text>
-			</view>
+			<pd-list :list="pdList"></pd-list>
 		</mescroll-uni>
 		
 		<!-- 模拟的底部 -->
@@ -22,28 +17,20 @@
 </template>
 
 <script>
-	// 自定义的mescroll-meitun.vue
-	import MescrollUni from "../../components/mescroll-diy/mescroll-meitun.vue";
-	// 模拟数据
-	import mockData from "../../common/pdlist.js";
+	import MescrollUni from "@/components/mescroll-diy/mescroll-meitun.vue"; // 自定义的mescroll-meitun.vue
+	import PdList from "@/components/other/pd-list.vue";
+	import mockData from "@/common/pdlist.js";
 	
 	export default {
 		components: {
-			MescrollUni
+			MescrollUni,
+			PdList
 		},
 		data() {
 			return {
 				mescroll: null, //mescroll实例对象
 				pdList: [] // 数据列表
 			}
-		},
-		//注册滚动到底部的事件,用于上拉加载
-		onReachBottom() {
-			this.mescroll && this.mescroll.onReachBottom();
-		},
-		//注册列表滚动事件,用于下拉刷新
-		onPageScroll(e) {
-			this.mescroll && this.mescroll.onPageScroll(e);
 		},
 		methods: {
 			// mescroll组件初始化的回调,可获取到mescroll对象
@@ -52,7 +39,10 @@
 			},
 			// 下拉刷新的回调
 			downCallback(mescroll){
-				mescroll.resetUpScroll() // 重置列表为第一页 (自动执行 mescroll.num=1, 再触发upCallback方法 )
+				// 这里可以继续调用其他数据接口
+				// ...
+				// 重置列表为第一页 (自动执行 mescroll.num=1, 再触发upCallback方法 )
+				mescroll.resetUpScroll() 
 			},
 			/*上拉加载的回调: mescroll携带page的参数, 其中num:当前页 从1开始, size:每页数据条数,默认10 */
 			upCallback(mescroll) {

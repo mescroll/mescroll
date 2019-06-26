@@ -30,6 +30,10 @@
 		
 		<view class="group-title">intermediate demos 中级案例</view>
 		
+		<navigator url="/pages/intermediate/mescroll-swiper">
+			<view class="demo-li">mescroll-swiper<text class="demo-tip">轮播菜单导航</text></view>
+		</navigator>
+		
 		<navigator url="/pages/intermediate/beibei">
 			<view class="demo-li">仿【贝贝】下拉刷新上拉加载<text class="demo-tip">自定义mescroll组件</text></view>
 		</navigator>
