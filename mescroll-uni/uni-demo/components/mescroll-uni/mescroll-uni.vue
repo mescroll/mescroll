@@ -1,5 +1,5 @@
 <template>
-	<scroll-view class="mescroll-uni" :style="{'padding-top':padTop,'padding-bottom':padBottom}" :lower-threshold="upOffset" :scroll-top="scrollTop" :scroll-with-animation="scrollAnim" @scroll="scroll" @scrolltolower="scrolltolower" @touchstart="touchstartEvent" @touchmove="touchmoveEvent" @touchend="touchendEvent" @touchcancel="touchendEvent" :scroll-y='true' :enable-back-to-top="true">
+	<scroll-view :class="{'mescroll-uni':true, 'mescroll-uni-fixed':fixed}" :style="{'padding-top':padTop,'padding-bottom':padBottom}" :lower-threshold="upOffset" :scroll-top="scrollTop" :scroll-with-animation="scrollAnim" @scroll="scroll" @scrolltolower="scrolltolower" @touchstart="touchstartEvent" @touchmove="touchmoveEvent" @touchend="touchendEvent" @touchcancel="touchendEvent" :scroll-y='true' :enable-back-to-top="true">
 		<!-- 下拉加载区域 (部分css样式需写成style,否则编译到浏览器会丢失,坐等HBuilderX优化编译器..)-->
 		<view v-if="optDown" class="mescroll-downwarp" :class="{'mescroll-downwarp-reset':isDownReset}" :style="{'height': downHight+'px', 'position': 'relative', 'overflow': 'hidden', '-webkit-transition': isDownReset?'height 300ms':''}">
 			<view class="downwarp-content" style="text-align: center;position: absolute;left: 0;bottom: 0;width: 100%;padding: 20upx 0;">
@@ -61,7 +61,13 @@
 			down: Object, // 下拉刷新的参数配置
 			up: Object, // 上拉加载的参数配置
 			top: [String,Number],  // padding-top的数值,单位upx. 目的是使下拉布局往下偏移
-			bottom: [String,Number]  // padding-bottom的数值,单位upx. 目的是使上拉布局往上偏移
+			bottom: [String,Number],  // padding-bottom的数值,单位upx. 目的是使上拉布局往上偏移
+			fixed: { // 是否通过fixe固定mescroll的高度, 默认true
+				type: Boolean,
+				default(){
+					return true
+				}
+			}
 		},
 		computed: {
 			// 下拉刷新的配置
@@ -82,11 +88,11 @@
 			},
 			// padding-top的数值,单位upx,需转成px. 目的是使下拉布局往下偏移
 			padTop(){
-				return uni.upx2px(Number(this.top) || 0)+'px';
+				return this.top ? uni.upx2px(Number(this.top))+'px' : 0;
 			},
 			// padding-bottom的数值,单位upx,需转成px 目的是使上拉布局往上偏移
 			padBottom(){
-				return uni.upx2px(Number(this.bottom) || 0)+'px';
+				return this.bottom ? uni.upx2px(Number(this.bottom))+'px' : 0;
 			},
 			// 距底部多远时（单位px），触发 scrolltolower 事件
 			upOffset(){

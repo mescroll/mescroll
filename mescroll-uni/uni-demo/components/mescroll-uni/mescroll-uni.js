@@ -1,8 +1,9 @@
-/*! mescroll-uni
+/* mescroll-uni
  * version 1.1.0
- * 2019-06-26 文举
+ * 2019-06-26
  * http://www.mescroll.com
  */
+
 export default function MeScroll(options) {
 	let me = this;
 	me.version = '1.1.0'; // mescroll版本号
@@ -306,7 +307,7 @@ MeScroll.prototype.initUpScroll = function() {
 
 /*滚动到底部的事件*/
 MeScroll.prototype.onReachBottom = function() {
-	console.warn('无需再为当前mescroll版本注册onReachBottom事件'); // 兼容1.0.3以下版本,防止报错
+	console.warn('当前版本无需再调用mescroll.onReachBottom()'); // 兼容1.0.3以下版本,防止报错
 }
 MeScroll.prototype.scrolltolower = function() {
 	let me = this;
@@ -319,7 +320,7 @@ MeScroll.prototype.scrolltolower = function() {
 
 /*列表滚动事件*/
 MeScroll.prototype.onPageScroll = function() {
-	console.warn('无需再为当前mescroll版本注册onPageScroll事件'); // 兼容1.0.3以下版本,防止报错
+	console.warn('当前版本无需再调用mescroll.onPageScroll(e)'); // 兼容1.0.3以下版本,防止报错
 }
 MeScroll.prototype.scroll = function(e) {
 	let me = this;

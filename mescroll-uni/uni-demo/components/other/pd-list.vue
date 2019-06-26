@@ -1,6 +1,7 @@
+<!-- 商品列表组件 <pd-list :list="xx"></pd-list> -->
 <template>
 	<view class="pd-list">
-		<view class="pd-li" v-for="pd in pdlist" :key="pd.id">
+		<view class="pd-li" v-for="pd in list" :key="pd.id">
 			<image class="pd-img" :src="pd.pdImg" mode="widthFix"/>
 			<view class="pd-name">{{pd.pdName}}</view>
 			<text class="pd-price">{{pd.pdPrice}} 元</text>
@@ -12,7 +13,7 @@
 <script>
 	export default {
 		props:{
-			pdlist: { // 数据列表
+			list: { // 数据列表
 				type: Array,
 				default(){
 					return []
