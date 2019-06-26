@@ -1,5 +1,5 @@
 <template>
-	<view class="mescroll-uni" :style="{'padding-top':padTop,'padding-bottom':padBottom}" @touchstart="touchstartEvent" @touchmove="touchmoveEvent" @touchend="touchendEvent" @touchcancel="touchendEvent">
+	<scroll-view class="mescroll-uni" :style="{'padding-top':padTop,'padding-bottom':padBottom}" :lower-threshold="upOffset" :scroll-top="scrollTop" :scroll-with-animation="scrollAnim" @scroll="scroll" @scrolltolower="scrolltolower" @touchstart="touchstartEvent" @touchmove="touchmoveEvent" @touchend="touchendEvent" @touchcancel="touchendEvent" :scroll-y='true' :enable-back-to-top="true">
 		<!-- 下拉加载区域 (部分css样式需写成style,否则编译到浏览器会丢失,坐等HBuilderX优化编译器..)-->
 		<view v-if="optDown" class="mescroll-downwarp" :class="{'mescroll-downwarp-reset':isDownReset}" :style="{'height': downHight+'px', 'position': 'relative', 'overflow': 'hidden', '-webkit-transition': isDownReset?'height 300ms':''}">
 			<view class="downwarp-content" style="text-align: center;position: absolute;left: 0;bottom: 0;width: 100%;padding: 20upx 0;">
@@ -31,7 +31,7 @@
 
 		<!-- 回到顶部按钮 -->
 		<image v-if="optToTop" class="mescroll-totop" :class="{'mescroll-fade-in':isShowToTop}" :src="optToTop.src" mode="widthFix" @click="toTopClick" />
-	</view>
+	</scroll-view>
 </template>
 
 <script>
@@ -52,7 +52,9 @@
 				isUpLoading: false, // 上拉加载: 是否显示 "加载中..."
 				isUpNoMore: false, // 上拉加载: 是否显示 "-- END --"
 				isShowEmpty: false, // 是否显示空布局
-				isShowToTop: false // 是否显示回到顶部按钮
+				isShowToTop: false, // 是否显示回到顶部按钮
+				scrollTop: 0, // 滚动条的位置
+				scrollAnim: false // 是否开启滚动动画
 			}
 		},
 		props: {
@@ -85,9 +87,21 @@
 			// padding-bottom的数值,单位upx,需转成px 目的是使上拉布局往上偏移
 			padBottom(){
 				return uni.upx2px(Number(this.bottom) || 0)+'px';
+			},
+			// 距底部多远时（单位px），触发 scrolltolower 事件
+			upOffset(){
+				return this.mescroll ? this.mescroll.optUp.offset : 100;
 			}
 		},
 		methods: {
+			//注册滚动到底部的事件,用于上拉加载
+			scrolltolower() {
+				this.mescroll && this.mescroll.scrolltolower();
+			},
+			//注册列表滚动事件,用于下拉刷新
+			scroll(e) {
+				this.mescroll && this.mescroll.scroll(e.detail);
+			},
 			//注册列表touchstart事件,用于下拉刷新
 			touchstartEvent(e) {
 				this.mescroll && this.mescroll.touchstartEvent(e);
@@ -198,13 +212,35 @@
 			vm.mescroll = new MeScroll(myOption);
 			// init回调mescroll对象
 			vm.$emit('init', vm.mescroll);
-
+			
 			// 设置mescroll实例对象的body高度,使down的bottomOffset生效
 			uni.getSystemInfo({
 				success(res) {
 					vm.mescroll.setBodyHeight(res.windowHeight);
 				}
 			});
+			
+			// 因为使用的是scrollview,这里需自定义scrollTo
+			vm.mescroll.resetScrollTo((y, t)=>{
+				let curY = vm.mescroll.getScrollTop()
+				if (t === 0) {
+					vm.scrollAnim = false;
+					vm.scrollTop = curY;
+					vm.$nextTick(function(){
+						vm.scrollTop = y
+					})
+				} else{
+					vm.scrollAnim = true;
+					vm.mescroll.getStep(curY, y, step=>{
+						vm.scrollTop = step
+					}, t)
+				}
+			})
+			
+			// #ifdef MP
+			// 小程序的outOffsetRate需为1,否则下拉会抖动
+			vm.mescroll.optDown.outOffsetRate = 1;
+			// #endif
 		}
 	}
 </script>

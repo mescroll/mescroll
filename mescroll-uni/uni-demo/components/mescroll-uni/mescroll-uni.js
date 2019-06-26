@@ -1,11 +1,11 @@
 /*! mescroll-uni
- * version 1.0.3
- * 2019-06-12 文举
+ * version 1.1.0
+ * 2019-06-26 文举
  * http://www.mescroll.com
  */
 export default function MeScroll(options) {
 	let me = this;
-	me.version = '1.0.3'; // mescroll版本号
+	me.version = '1.1.0'; // mescroll版本号
 	me.options = options || {}; // 配置
 
 	me.isDownScrolling = false; // 是否在执行下拉刷新的回调
@@ -79,13 +79,13 @@ MeScroll.prototype.extendUpScroll = function(optUp) {
 			time: null // 加载第一页数据服务器返回的时间; 防止用户翻页时,后台新增了数据从而导致下一页数据重复;
 		},
 		noMoreSize: 5, // 如果列表已无数据,可设置列表的总数量要大于等于5条才显示无更多数据;避免列表数据过少(比如只有一条数据),显示无更多数据会不好看
+		offset: 100, // 距底部多远时,触发upCallback
 		textLoading: '加载中 ...', // 加载中的提示文本
 		textNoMore: '-- END --', // 没有更多数据的提示文本
 		inited: null, // 初始化完毕的回调
 		showLoading: null, // 显示加载中的回调
 		showNoMore: null, // 显示无更多数据的回调
 		hideUpScroll: null, // 隐藏上拉加载的回调
-		errDistance: 110, // endErr的时候需往上滑动一段距离,使其往下滑动时再次触发onReachBottom
 		toTop: {
 			// 回到顶部按钮,需配置src才显示
 			src: null, // 图片路径,默认null (建议写成网络图,不必考虑相对路径)
@@ -156,7 +156,7 @@ MeScroll.prototype.touchmoveEvent = function(e) {
 	let curPoint = me.getPoint(e); // 当前点
 
 	let moveY = curPoint.y - me.startPoint.y; // 和起点比,移动的距离,大于0向下拉,小于0向上拉
-	
+
 	// (向下拉&&在顶部)
 	if (moveY > 0 && scrollTop <= 0) {
 
@@ -180,7 +180,7 @@ MeScroll.prototype.touchmoveEvent = function(e) {
 				return;
 			}
 
-			// me.preventDefault(e); // 这里只能通过配置pages.json的style.app-plus.bounce为"none"来禁止浏览器的bounce
+			me.preventDefault(e); // 这里只能通过配置pages.json的style.app-plus.bounce为"none"来禁止浏览器的bounce
 
 			let diff = curPoint.y - me.lastPoint.y; // 和上次比,移动的距离 (大于0向下,小于0向上)
 
@@ -306,6 +306,9 @@ MeScroll.prototype.initUpScroll = function() {
 
 /*滚动到底部的事件*/
 MeScroll.prototype.onReachBottom = function() {
+	console.warn('无需再为当前mescroll版本注册onReachBottom事件'); // 兼容1.0.3以下版本,防止报错
+}
+MeScroll.prototype.scrolltolower = function() {
 	let me = this;
 	if (!me.isUpScrolling && (!me.isDownScrolling || (me.isDownScrolling && me.optDown.isBoth))) {
 		if (!me.optUp.isLock && me.optUp.hasNext) {
@@ -315,7 +318,10 @@ MeScroll.prototype.onReachBottom = function() {
 }
 
 /*列表滚动事件*/
-MeScroll.prototype.onPageScroll = function(e) {
+MeScroll.prototype.onPageScroll = function() {
+	console.warn('无需再为当前mescroll版本注册onPageScroll事件'); // 兼容1.0.3以下版本,防止报错
+}
+MeScroll.prototype.scroll = function(e) {
 	let me = this;
 	let scrollTop = e.scrollTop;
 
@@ -498,7 +504,7 @@ MeScroll.prototype.endSuccess = function(dataSize, hasNext, systime) {
 }
 
 /* 回调失败,结束下拉刷新和上拉加载 */
-MeScroll.prototype.endErr = function(errDistance) {
+MeScroll.prototype.endErr = function() {
 	// 结束下拉,回调失败重置回原来的页码和时间
 	if (this.isDownScrolling) {
 		let page = this.optUp.page;
@@ -512,10 +518,7 @@ MeScroll.prototype.endErr = function(errDistance) {
 	if (this.isUpScrolling) {
 		this.optUp.page.num--;
 		this.endUpScroll(false);
-		if(errDistance !== 0){ // 不处理0
-			if(!errDistance) errDistance = this.optUp.errDistance; // 不传,则取默认
-			this.scrollTo(this.getScrollTop() - errDistance) // 往上回滚的距离
-		}
+		this.scrollTo(this.getScrollTop() - 1, 0) // 往上回滚1px,使其能够再次触发scrolltolower
 	}
 }
 
@@ -556,8 +559,43 @@ MeScroll.prototype.setScrollTop = function(y) {
 }
 
 /* 滚动到指定位置 */
-MeScroll.prototype.scrollTo = function (y, t) {
-	uni.pageScrollTo({scrollTop:y, duration:t})
+MeScroll.prototype.scrollTo = function(y, t) {
+	this.myScrollTo&&this.myScrollTo(y, t) // scrollview需自定义回到顶部方法
+}
+
+/* 自定义scrollTo */
+MeScroll.prototype.resetScrollTo = function(myScrollTo) {
+	this.myScrollTo = myScrollTo
+}
+
+/* 计步器
+ star: 开始值
+ end: 结束值
+ callback(step,timer): 回调step值,计步器timer,可自行通过window.clearInterval(timer)结束计步器;
+ t: 计步时长,传0则直接回调end值;不传则默认300ms
+ rate: 周期;不传则默认30ms计步一次
+ * */
+MeScroll.prototype.getStep = function(star, end, callback, t, rate) {
+	let diff = end - star; // 差值
+	if (t === 0 || diff === 0) {
+		callback && callback(end);
+		return;
+	}
+	t = t || 300; // 时长 300ms
+	rate = rate || 30; // 周期 30ms
+	let count = t / rate; // 次数
+	let step = diff / count; // 步长
+	let i = 0; // 计数
+	let timer = setInterval(function() {
+		if (i < count - 1) {
+			star += step;
+			callback && callback(star, timer);
+			i++;
+		} else {
+			callback && callback(end, timer); // 最后一次直接设置end,避免计算误差
+			clearInterval(timer);
+		}
+	}, rate);
 }
 
 /* body的高度 */
@@ -567,4 +605,10 @@ MeScroll.prototype.getBodyHeight = function() {
 
 MeScroll.prototype.setBodyHeight = function(h) {
 	this.bodyHeight = h;
+}
+
+/* 阻止浏览器默认滚动事件 */
+MeScroll.prototype.preventDefault = function(e) {
+	// cancelable:是否可以被禁用; defaultPrevented:是否已经被禁用
+	if (e && e.cancelable && !e.defaultPrevented) e.preventDefault()
 }
