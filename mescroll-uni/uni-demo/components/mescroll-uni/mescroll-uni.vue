@@ -102,7 +102,9 @@
 			},
 			//注册列表滚动事件,用于下拉刷新
 			scroll(e) {
-				this.mescroll && this.mescroll.scroll(e.detail);
+				this.mescroll && this.mescroll.scroll(e.detail, ()=>{
+					this.$emit('scroll', this.mescroll) // 此时可直接通过 this.mescroll.scrollTop获取滚动条位置; this.mescroll.isScrollUp获取是否向上滑动
+				})
 			},
 			//注册列表touchstart事件,用于下拉刷新
 			touchstartEvent(e) {

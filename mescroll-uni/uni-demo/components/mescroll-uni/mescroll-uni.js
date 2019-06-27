@@ -43,7 +43,7 @@ MeScroll.prototype.extendDownScroll = function(optDown) {
 		isLock: false, // 是否锁定下拉刷新,默认false;
 		isBoth: true, // 下拉刷新时,如果滑动到列表底部是否可以同时触发上拉加载;默认true,两者可同时触发;
 		offset: 80, // 在列表顶部,下拉大于80px,松手即可触发下拉刷新的回调
-		fps: 25, // 下拉节流,1秒处理25次, 40ms处理1次
+		fps: 25, // 下拉节流,1秒处理25次 (值越大每秒刷新频率越高)
 		inOffsetRate: 1, // 在列表顶部,下拉的距离小于offset时,改变下拉区域高度比例;值小于1且越接近0,高度变化越小,表现为越往下越难拉
 		outOffsetRate: 0.2, // 在列表顶部,下拉的距离大于offset时,改变下拉区域高度比例;值小于1且越接近0,高度变化越小,表现为越往下越难拉
 		bottomOffset: 20, // 当手指touchmove位置在距离body底部20px范围内的时候结束上拉刷新,避免Webview嵌套导致touchend事件不执行
@@ -80,6 +80,7 @@ MeScroll.prototype.extendUpScroll = function(optUp) {
 			size: 10, // 每页数据的数量
 			time: null // 加载第一页数据服务器返回的时间; 防止用户翻页时,后台新增了数据从而导致下一页数据重复;
 		},
+		fps: 10, // 上拉节流,1秒处理10次 (值越大每秒刷新频率越高)
 		noMoreSize: 5, // 如果列表已无数据,可设置列表的总数量要大于等于5条才显示无更多数据;避免列表数据过少(比如只有一条数据),显示无更多数据会不好看
 		offset: 100, // 距底部多远时,触发upCallback
 		textLoading: '加载中 ...', // 加载中的提示文本
@@ -103,7 +104,8 @@ MeScroll.prototype.extendUpScroll = function(optUp) {
 			btnText: '', // 按钮
 			btnClick: null, // 点击按钮的回调
 			onShow: null // 是否显示的回调
-		}
+		},
+		onScroll: false // 是否监听滚动事件
 	})
 }
 
@@ -213,7 +215,7 @@ MeScroll.prototype.touchmoveEvent = function(e) {
 					me.isMoveDown = true; // 标记下拉区域高度改变,在touchend重置回来
 				}
 				if (diff > 0) { // 向下拉
-					me.downHight += diff * me.optDown.outOffsetRate; // 越往下,高度变化越小
+					me.downHight += Math.round(diff * me.optDown.outOffsetRate); // 越往下,高度变化越小
 				} else { // 向上收
 					me.downHight += diff; // 向上收回高度,则向上滑多少收多少高度
 				}
@@ -322,10 +324,9 @@ MeScroll.prototype.onReachBottom = function() {
 	console.warn('当前版本无需再调用mescroll.onReachBottom()'); // 兼容1.0.3以下版本,防止报错
 }
 MeScroll.prototype.scrolltolower = function() {
-	let me = this;
-	if (!me.isUpScrolling && (!me.isDownScrolling || (me.isDownScrolling && me.optDown.isBoth))) {
-		if (!me.optUp.isLock && me.optUp.hasNext) {
-			me.triggerUpScroll();
+	if (!this.isUpScrolling && (!this.isDownScrolling || (this.isDownScrolling && this.optDown.isBoth))) {
+		if (!this.optUp.isLock && this.optUp.hasNext) {
+			this.triggerUpScroll();
 		}
 	}
 }
@@ -334,7 +335,16 @@ MeScroll.prototype.scrolltolower = function() {
 MeScroll.prototype.onPageScroll = function() {
 	console.warn('当前版本无需再调用mescroll.onPageScroll(e)'); // 兼容1.0.3以下版本,防止报错
 }
-MeScroll.prototype.scroll = function(e) {
+MeScroll.prototype.scroll = function(e, onScroll) {
+	// 节流
+	let t = new Date().getTime();
+	if(this.scrollTime && t - this.scrollTime < this.scrollTimeDiff){ // 小于节流时间,则不处理
+		return;
+	}else{
+		this.scrollTime = t
+		this.scrollTimeDiff = 1000/this.optUp.fps
+	}
+	
 	let me = this;
 	let scrollTop = e.scrollTop;
 
@@ -348,13 +358,13 @@ MeScroll.prototype.scroll = function(e) {
 	}
 
 	// 滑动监听
-	if (me.optUp.onScroll) {
+	if (me.optUp.onScroll && onScroll) {
 		// 向上滑还是向下滑动
 		if (me.preScrollY == null) me.preScrollY = 0;
-		let isUp = scrollTop - me.preScrollY > 0;
+		me.isScrollUp = scrollTop - me.preScrollY > 0;
 		me.preScrollY = scrollTop;
 		// 滚动回调
-		me.optUp.onScroll(me, scrollTop, isUp);
+		onScroll(me, scrollTop, me.isScrollUp);
 	}
 
 	me.setScrollTop(scrollTop);
