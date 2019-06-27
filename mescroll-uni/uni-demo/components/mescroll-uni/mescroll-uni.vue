@@ -1,5 +1,5 @@
 <template>
-	<scroll-view class="mescroll-uni" :style="{'height': height,'padding-top':padTop,'padding-bottom':padBottom}" :lower-threshold="upOffset" :scroll-top="scrollTop" :scroll-with-animation="scrollAnim" @scroll="scroll" @scrolltolower="scrolltolower" @touchstart="touchstartEvent" @touchmove="touchmoveEvent" @touchend="touchendEvent" @touchcancel="touchendEvent" :scroll-y='true' :enable-back-to-top="true">
+	<scroll-view class="mescroll-uni" :style="{'height': height,'padding-top':padTop,'padding-bottom':padBottom}" :lower-threshold="upOffset" :scroll-top="scrollTop" :scroll-with-animation="scrollAnim" @scroll="scroll" @scrolltolower="scrolltolower" @touchstart="touchstartEvent" @touchmove="touchmoveEvent" @touchend="touchendEvent" @touchcancel="touchendEvent" :scroll-y='scrollAble' :enable-back-to-top="true">
 		<!-- 下拉加载区域 (部分css样式需写成style,否则编译到浏览器会丢失,坐等HBuilderX优化编译器..)-->
 		<view v-if="optDown" class="mescroll-downwarp" :class="{'mescroll-downwarp-reset':isDownReset}" :style="{'height': downHight+'px', 'position': 'relative', 'overflow': 'hidden', '-webkit-transition': isDownReset?'height 300ms':''}">
 			<view class="downwarp-content" style="text-align: center;position: absolute;left: 0;bottom: 0;width: 100%;padding: 20upx 0;">
@@ -43,8 +43,9 @@
 	export default {
 		data() {
 			return {
-				mescroll: null,
-				height: '100%',
+				mescroll: null, // mescroll实例
+				height: '100%', // mescroll的高度
+				scrollAble: true, // 是否禁止下滑 (下拉时禁止,避免抖动)
 				downHight: 0, //下拉刷新: 容器高度
 				downRotate: 0, //下拉刷新: 圆形进度条旋转的角度
 				downText: '', //下拉刷新: 提示的文本
@@ -91,7 +92,7 @@
 			},
 			// 距底部多远时（单位px），触发 scrolltolower 事件
 			upOffset(){
-				return this.mescroll ? this.mescroll.optUp.offset : 100;
+				return this.mescroll ? this.mescroll.optUp.offset : 50;
 			}
 		},
 		methods: {
@@ -135,12 +136,14 @@
 				down: {
 					inOffset(mescroll) {
 						// 下拉的距离进入offset范围内那一刻的回调
+						vm.scrollAble = false; // 禁止下拉,避免抖动 (自定义mescroll组件时,此行不可删)
 						vm.isDownReset = false; // 不重置高度 (自定义mescroll组件时,此行不可删)
 						vm.isDownLoading = false; // 不显示加载中
 						vm.downText = mescroll.optDown.textInOffset; // 设置文本
 					},
 					outOffset(mescroll) {
 						// 下拉的距离大于offset那一刻的回调
+						vm.scrollAble = false; // 禁止下拉,避免抖动 (自定义mescroll组件时,此行不可删)
 						vm.isDownReset = false; // 不重置高度 (自定义mescroll组件时,此行不可删)
 						vm.isDownLoading = false; // 不显示加载中
 						vm.downText = mescroll.optDown.textOutOffset; // 设置文本
@@ -152,15 +155,17 @@
 					},
 					showLoading(mescroll, downHight) {
 						// 显示下拉刷新进度的回调
+						vm.scrollAble = true; // 开启下拉 (自定义mescroll组件时,此行不可删)
 						vm.isDownReset = true; // 重置高度 (自定义mescroll组件时,此行不可删)
-						vm.isDownLoading = true;// 显示加载中
 						vm.downHight = downHight; // 设置下拉区域的高度 (自定义mescroll组件时,此行不可删)
+						vm.isDownLoading = true;// 显示加载中
 						vm.downText = mescroll.optDown.textLoading; // 设置文本
 					},
 					endDownScroll(mescroll) {
+						vm.scrollAble = true;// 开启下拉 (自定义mescroll组件时,此行不可删)
 						vm.isDownReset = true;// 重置高度 (自定义mescroll组件时,此行不可删)
-						vm.isDownLoading = false; // 不显示加载中
 						vm.downHight = 0; // 设置下拉区域的高度 (自定义mescroll组件时,此行不可删)
+						vm.isDownLoading = false; // 不显示加载中
 					},
 					// 派发下拉刷新的回调
 					callback: function(mescroll){
