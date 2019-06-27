@@ -1,37 +1,39 @@
 <template>
-	<scroll-view :class="{'mescroll-uni':true, 'mescroll-uni-fixed':fixed}" :style="{'padding-top':padTop,'padding-bottom':padBottom}" :lower-threshold="upOffset" :scroll-top="scrollTop" :scroll-with-animation="scrollAnim" @scroll="scroll" @scrolltolower="scrolltolower" @touchstart="touchstartEvent" @touchmove="touchmoveEvent" @touchend="touchendEvent" @touchcancel="touchendEvent" :scroll-y='true' :enable-back-to-top="true">
-		<!-- 下拉加载区域 (部分css样式需写成style,否则编译到浏览器会丢失,坐等HBuilderX优化编译器..)-->
-		<view v-if="optDown" class="mescroll-downwarp" :class="{'mescroll-downwarp-reset':isDownReset}" :style="{'height': downHight+'px', 'position': 'relative', 'overflow': 'hidden', '-webkit-transition': isDownReset?'height 300ms':''}">
-			<view class="downwarp-content" style="text-align: center;position: absolute;left: 0;bottom: 0;width: 100%;padding: 20upx 0;">
-				<view class="downwarp-progress" :style="{'transform':'rotate(' + downRotate + 'deg)'}" :class="{'mescroll-rotate':isDownLoading}"></view>
-				<view class="downwarp-tip">{{downText}}</view>
+	<view class="mescroll-uni-warp">
+		<scroll-view :class="{'mescroll-uni':true, 'mescroll-uni-fixed':fixed}" :style="{'padding-top':padTop,'padding-bottom':padBottom}" :lower-threshold="upOffset" :scroll-top="scrollTop" :scroll-with-animation="scrollAnim" @scroll="scroll" @scrolltolower="scrolltolower" @touchstart="touchstartEvent" @touchmove="touchmoveEvent" @touchend="touchendEvent" @touchcancel="touchendEvent" :scroll-y='true' :enable-back-to-top="true">
+			<!-- 下拉加载区域 (部分css样式需写成style,否则编译到浏览器会丢失,坐等HBuilderX优化编译器..)-->
+			<view v-if="optDown" class="mescroll-downwarp" :class="{'mescroll-downwarp-reset':isDownReset}" :style="{'height': downHight+'px', 'position': 'relative', 'overflow': 'hidden', '-webkit-transition': isDownReset?'height 300ms':''}">
+				<view class="downwarp-content" style="text-align: center;position: absolute;left: 0;bottom: 0;width: 100%;padding: 20upx 0;">
+					<view class="downwarp-progress" :style="{'transform':'rotate(' + downRotate + 'deg)'}" :class="{'mescroll-rotate':isDownLoading}"></view>
+					<view class="downwarp-tip">{{downText}}</view>
+				</view>
 			</view>
-		</view>
+			
+			<!-- 列表内容 -->
+			<slot></slot>
+			
+			<!-- 空布局 -->
+			<view v-if="optEmpty&&isShowEmpty" :class="{'mescroll-empty':true,'empty-fixed':optEmpty.fixed}" :style="{'z-index':optEmpty.zIndex,'top':optEmpty.top}">
+				<image v-if="optEmpty.icon" class="empty-icon" :src="optEmpty.icon" mode="widthFix" />
+				<view v-if="optEmpty.tip" class="empty-tip">{{optEmpty.tip}}</view>
+				<view v-if="optEmpty.btnText" class="empty-btn" @click="emptyClick">{{optEmpty.btnText}}</view>
+			</view>
 		
-		<!-- 列表内容 -->
-		<slot></slot>
+			<!-- 上拉加载区域 -->
+			<view v-if="optUp" class="mescroll-upwarp">
+				<!-- 加载中.. -->
+				<template v-if="isUpLoading">
+					<view class="upwarp-progress mescroll-rotate"></view>
+					<view class="upwarp-tip">{{optUp.textLoading}}</view>
+				</template>
+				<!-- 无数据 -->
+				<view v-if="isUpNoMore" class="upwarp-nodata">{{optUp.textNoMore}}</view>
+			</view>
+		</scroll-view>
 		
-		<!-- 空布局 -->
-		<view v-if="optEmpty&&isShowEmpty" :class="{'mescroll-empty':true,'empty-fixed':optEmpty.fixed}" :style="{'z-index':optEmpty.zIndex,'top':optEmpty.top}">
-			<image v-if="optEmpty.icon" class="empty-icon" :src="optEmpty.icon" mode="widthFix" />
-			<view v-if="optEmpty.tip" class="empty-tip">{{optEmpty.tip}}</view>
-			<view v-if="optEmpty.btnText" class="empty-btn" @click="emptyClick">{{optEmpty.btnText}}</view>
-		</view>
-
-		<!-- 上拉加载区域 -->
-		<view v-if="optUp" class="mescroll-upwarp">
-			<!-- 加载中.. -->
-			<template v-if="isUpLoading">
-				<view class="upwarp-progress mescroll-rotate"></view>
-				<view class="upwarp-tip">{{optUp.textLoading}}</view>
-			</template>
-			<!-- 无数据 -->
-			<view v-if="isUpNoMore" class="upwarp-nodata">{{optUp.textNoMore}}</view>
-		</view>
-
-		<!-- 回到顶部按钮 -->
+		<!-- 回到顶部按钮 (fixed元素,需写在scroll-view外面,防止滚动的时候抖动)-->
 		<image v-if="optToTop" class="mescroll-totop" :class="{'mescroll-fade-in':isShowToTop}" :src="optToTop.src" mode="widthFix" @click="toTopClick" />
-	</scroll-view>
+	</view>
 </template>
 
 <script>
