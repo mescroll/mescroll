@@ -43,6 +43,7 @@ MeScroll.prototype.extendDownScroll = function(optDown) {
 		isLock: false, // 是否锁定下拉刷新,默认false;
 		isBoth: true, // 下拉刷新时,如果滑动到列表底部是否可以同时触发上拉加载;默认true,两者可同时触发;
 		offset: 80, // 在列表顶部,下拉大于80px,松手即可触发下拉刷新的回调
+		fps: 25, // 下拉节流,1秒处理25次, 40ms处理1次
 		inOffsetRate: 1, // 在列表顶部,下拉的距离小于offset时,改变下拉区域高度比例;值小于1且越接近0,高度变化越小,表现为越往下越难拉
 		outOffsetRate: 0.2, // 在列表顶部,下拉的距离大于offset时,改变下拉区域高度比例;值小于1且越接近0,高度变化越小,表现为越往下越难拉
 		bottomOffset: 20, // 当手指touchmove位置在距离body底部20px范围内的时候结束上拉刷新,避免Webview嵌套导致touchend事件不执行
@@ -150,9 +151,19 @@ MeScroll.prototype.touchstartEvent = function(e) {
 
 /* 列表touchmove事件 */
 MeScroll.prototype.touchmoveEvent = function(e) {
+	if (!this.optDown.use) return;
 	if (!this.startPoint) return;
 	let me = this;
-
+	
+	// 节流
+	let t = new Date().getTime();
+	if(me.moveTime && t - me.moveTime < me.moveTimeDiff){ // 小于节流时间,则不处理
+		return;
+	}else{
+		me.moveTime = t
+		me.moveTimeDiff = 1000/me.optDown.fps
+	}
+	
 	let scrollTop = me.getScrollTop(); // 当前滚动条的距离
 	let curPoint = me.getPoint(e); // 当前点
 
@@ -181,7 +192,7 @@ MeScroll.prototype.touchmoveEvent = function(e) {
 				return;
 			}
 
-			me.preventDefault(e); // 这里只能通过配置pages.json的style.app-plus.bounce为"none"来禁止浏览器的bounce
+			me.preventDefault(e); // 阻止默认事件
 
 			let diff = curPoint.y - me.lastPoint.y; // 和上次比,移动的距离 (大于0向下,小于0向上)
 
@@ -218,9 +229,10 @@ MeScroll.prototype.touchmoveEvent = function(e) {
 
 /* 列表touchend事件 */
 MeScroll.prototype.touchendEvent = function(e) {
-	let me = this;
+	if (!this.optDown.use) return;
 	// 如果下拉区域高度已改变,则需重置回来
-	if (me.optDown.use && me.isMoveDown) {
+	if (this.isMoveDown) {
+		let me = this;
 		if (me.downHight >= me.optDown.offset) {
 			// 符合触发刷新的条件
 			me.triggerDownScroll();
@@ -612,5 +624,6 @@ MeScroll.prototype.setBodyHeight = function(h) {
 MeScroll.prototype.preventDefault = function(e) {
 	// cancelable:是否可以被禁用; defaultPrevented:是否已经被禁用
 	// if (e && e.cancelable && !e.defaultPrevented) e.preventDefault()
+	// 只能通过配置pages.json的style.app-plus.bounce为"none"来禁止app的bounce
 	e && e.preventDefault()
 }
