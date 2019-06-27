@@ -4,26 +4,6 @@
  * http://www.mescroll.com
  */
 
-page{
-	height: 100%;
-	-webkit-overflow-scrolling: touch;
-}
-
-.mescroll-uni-warp,
-.mescroll-uni{
-	height: 100%;
-}
-
-/* 定位的方式固定高度 */
-.mescroll-uni.mescroll-uni-fixed{
-	position: fixed;
-	top: var(--window-top);
-	left: 0;
-	right: 0;
-	bottom: var(--window-bottom);
-	height: auto;
-}
-
 /* 下拉刷新区域 */
 .mescroll-downwarp {
 	position: relative;

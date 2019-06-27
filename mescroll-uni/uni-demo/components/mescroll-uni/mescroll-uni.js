@@ -327,7 +327,7 @@ MeScroll.prototype.scroll = function(e) {
 	let scrollTop = e.scrollTop;
 
 	// 顶部按钮的显示隐藏
-	if (me.optUp.toTop.src) {
+	if (scrollTop > 0 && me.optUp.toTop.src) {
 		if (scrollTop >= me.optUp.toTop.offset) {
 			me.showTopBtn();
 		} else {
@@ -611,5 +611,6 @@ MeScroll.prototype.setBodyHeight = function(h) {
 /* 阻止浏览器默认滚动事件 */
 MeScroll.prototype.preventDefault = function(e) {
 	// cancelable:是否可以被禁用; defaultPrevented:是否已经被禁用
-	if (e && e.cancelable && !e.defaultPrevented) e.preventDefault()
+	// if (e && e.cancelable && !e.defaultPrevented) e.preventDefault()
+	e && e.preventDefault()
 }

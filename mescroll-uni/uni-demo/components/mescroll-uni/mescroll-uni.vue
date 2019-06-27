@@ -1,39 +1,37 @@
 <template>
-	<view class="mescroll-uni-warp">
-		<scroll-view :class="{'mescroll-uni':true, 'mescroll-uni-fixed':fixed}" :style="{'padding-top':padTop,'padding-bottom':padBottom}" :lower-threshold="upOffset" :scroll-top="scrollTop" :scroll-with-animation="scrollAnim" @scroll="scroll" @scrolltolower="scrolltolower" @touchstart="touchstartEvent" @touchmove="touchmoveEvent" @touchend="touchendEvent" @touchcancel="touchendEvent" :scroll-y='true' :enable-back-to-top="true">
-			<!-- 下拉加载区域 (部分css样式需写成style,否则编译到浏览器会丢失,坐等HBuilderX优化编译器..)-->
-			<view v-if="optDown" class="mescroll-downwarp" :class="{'mescroll-downwarp-reset':isDownReset}" :style="{'height': downHight+'px', 'position': 'relative', 'overflow': 'hidden', '-webkit-transition': isDownReset?'height 300ms':''}">
-				<view class="downwarp-content" style="text-align: center;position: absolute;left: 0;bottom: 0;width: 100%;padding: 20upx 0;">
-					<view class="downwarp-progress" :style="{'transform':'rotate(' + downRotate + 'deg)'}" :class="{'mescroll-rotate':isDownLoading}"></view>
-					<view class="downwarp-tip">{{downText}}</view>
-				</view>
+	<scroll-view class="mescroll-uni" :style="{'height': height,'padding-top':padTop,'padding-bottom':padBottom}" :lower-threshold="upOffset" :scroll-top="scrollTop" :scroll-with-animation="scrollAnim" @scroll="scroll" @scrolltolower="scrolltolower" @touchstart="touchstartEvent" @touchmove="touchmoveEvent" @touchend="touchendEvent" @touchcancel="touchendEvent" :scroll-y='true' :enable-back-to-top="true">
+		<!-- 下拉加载区域 (部分css样式需写成style,否则编译到浏览器会丢失,坐等HBuilderX优化编译器..)-->
+		<view v-if="optDown" class="mescroll-downwarp" :class="{'mescroll-downwarp-reset':isDownReset}" :style="{'height': downHight+'px', 'position': 'relative', 'overflow': 'hidden', '-webkit-transition': isDownReset?'height 300ms':''}">
+			<view class="downwarp-content" style="text-align: center;position: absolute;left: 0;bottom: 0;width: 100%;padding: 20upx 0;">
+				<view class="downwarp-progress" :style="{'transform':'rotate(' + downRotate + 'deg)'}" :class="{'mescroll-rotate':isDownLoading}"></view>
+				<view class="downwarp-tip">{{downText}}</view>
 			</view>
-			
-			<!-- 列表内容 -->
-			<slot></slot>
-			
-			<!-- 空布局 -->
-			<view v-if="optEmpty&&isShowEmpty" :class="{'mescroll-empty':true,'empty-fixed':optEmpty.fixed}" :style="{'z-index':optEmpty.zIndex,'top':optEmpty.top}">
-				<image v-if="optEmpty.icon" class="empty-icon" :src="optEmpty.icon" mode="widthFix" />
-				<view v-if="optEmpty.tip" class="empty-tip">{{optEmpty.tip}}</view>
-				<view v-if="optEmpty.btnText" class="empty-btn" @click="emptyClick">{{optEmpty.btnText}}</view>
-			</view>
+		</view>
 		
-			<!-- 上拉加载区域 -->
-			<view v-if="optUp" class="mescroll-upwarp">
-				<!-- 加载中.. -->
-				<template v-if="isUpLoading">
-					<view class="upwarp-progress mescroll-rotate"></view>
-					<view class="upwarp-tip">{{optUp.textLoading}}</view>
-				</template>
-				<!-- 无数据 -->
-				<view v-if="isUpNoMore" class="upwarp-nodata">{{optUp.textNoMore}}</view>
-			</view>
-		</scroll-view>
+		<!-- 列表内容 -->
+		<slot></slot>
+		
+		<!-- 空布局 -->
+		<view v-if="optEmpty&&isShowEmpty" :class="{'mescroll-empty':true,'empty-fixed':optEmpty.fixed}" :style="{'z-index':optEmpty.zIndex,'top':optEmpty.top}">
+			<image v-if="optEmpty.icon" class="empty-icon" :src="optEmpty.icon" mode="widthFix" />
+			<view v-if="optEmpty.tip" class="empty-tip">{{optEmpty.tip}}</view>
+			<view v-if="optEmpty.btnText" class="empty-btn" @click="emptyClick">{{optEmpty.btnText}}</view>
+		</view>
+	
+		<!-- 上拉加载区域 -->
+		<view v-if="optUp" class="mescroll-upwarp">
+			<!-- 加载中.. -->
+			<template v-if="isUpLoading">
+				<view class="upwarp-progress mescroll-rotate"></view>
+				<view class="upwarp-tip">{{optUp.textLoading}}</view>
+			</template>
+			<!-- 无数据 -->
+			<view v-if="isUpNoMore" class="upwarp-nodata">{{optUp.textNoMore}}</view>
+		</view>
 		
 		<!-- 回到顶部按钮 (fixed元素,需写在scroll-view外面,防止滚动的时候抖动)-->
 		<image v-if="optToTop" class="mescroll-totop" :class="{'mescroll-fade-in':isShowToTop}" :src="optToTop.src" mode="widthFix" @click="toTopClick" />
-	</view>
+	</scroll-view>
 </template>
 
 <script>
@@ -46,6 +44,7 @@
 		data() {
 			return {
 				mescroll: null,
+				height: '100%',
 				downHight: 0, //下拉刷新: 容器高度
 				downRotate: 0, //下拉刷新: 圆形进度条旋转的角度
 				downText: '', //下拉刷新: 提示的文本
@@ -63,13 +62,7 @@
 			down: Object, // 下拉刷新的参数配置
 			up: Object, // 上拉加载的参数配置
 			top: [String,Number],  // padding-top的数值,单位upx. 目的是使下拉布局往下偏移
-			bottom: [String,Number],  // padding-bottom的数值,单位upx. 目的是使上拉布局往上偏移
-			fixed: { // 是否通过fixe固定mescroll的高度, 默认true
-				type: Boolean,
-				default(){
-					return true
-				}
-			}
+			bottom: [String,Number]  // padding-bottom的数值,单位upx. 目的是使上拉布局往上偏移
 		},
 		computed: {
 			// 下拉刷新的配置
@@ -221,9 +214,10 @@
 			// init回调mescroll对象
 			vm.$emit('init', vm.mescroll);
 			
-			// 设置mescroll实例对象的body高度,使down的bottomOffset生效
+			// 设置mescroll实例对象的body高度
 			uni.getSystemInfo({
 				success(res) {
+					vm.height = res.windowHeight + 'px';
 					vm.mescroll.setBodyHeight(res.windowHeight);
 				}
 			});
@@ -245,10 +239,6 @@
 				}
 			})
 			
-			// #ifdef MP
-			// 小程序的outOffsetRate需为1,否则下拉会抖动
-			vm.mescroll.optDown.outOffsetRate = 1;
-			// #endif
 		}
 	}
 </script>
