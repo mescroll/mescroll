@@ -4,6 +4,10 @@
  * http://www.mescroll.com
  */
 
+.mescroll-uni{
+	box-sizing: border-box; /* 避免设置padding出现双滚动条的问题 */
+}
+
 /* 下拉刷新区域 */
 .mescroll-downwarp {
 	position: relative;
