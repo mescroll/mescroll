@@ -1,5 +1,5 @@
 <template>
-	<mescroll-uni :down="downOption" @down="downCallback" :up="upOption" @up="upCallback" @init="mescrollInit" @emptyclick="emptyClick" @topclick="topClick">
+	<mescroll-uni :down="downOption" @down="downCallback" :up="upOption" @up="upCallback" @init="mescrollInit" @emptyclick="emptyClick" @topclick="topClick" @scroll="scroll">
 		<!--轮播-->
 		<swiper autoplay="true" interval="3000" duration="300" circular="true">
             <swiper-item>
@@ -79,10 +79,11 @@
 						fixed: false, // 是否使用fixed定位,默认false; 配置fixed为true,以下的top和zIndex才生效
 						top: "35%", // fixed定位的top值 (完整的单位值,如 "35%"; "300upx")
 						zIndex: 99 // fixed定位z-index值
-					}
+					},
+					onScroll: true // 是否监听滚动事件
 				},
 				pdList: [], //列表数据
-				tabType: 0 // 菜单
+				tabType: 0, // 菜单
 			}
 		},
 		onUnload(){
@@ -138,6 +139,10 @@
 			// 点击回到顶部按钮的回调
 			topClick(){
 				console.log('点击了回到顶部按钮');
+			},
+			// 滚动事件 (需在up配置onScroll:true才生效)
+			scroll(mescroll){
+				console.log('当前滚动条的位置:' + mescroll.scrollTop + ', 是否向上滑:'+mescroll.isScrollUp)
 			},
 			// 切换菜单
 			changeTab (type) {
