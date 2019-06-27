@@ -4,11 +4,14 @@
  * http://www.mescroll.com
  */
 
-body {
-  -webkit-overflow-scrolling: touch;/*使iOS列表滑动流畅*/
+page {
+	height: 100%;
+	-webkit-overflow-scrolling: touch; /*使iOS列表滑动流畅*/
 }
 
-.mescroll-uni{
+.mescroll-uni {
+	height: 100%;
+	overflow-y: auto;
 	box-sizing: border-box; /* 避免设置padding出现双滚动条的问题 */
 }
 
@@ -106,7 +109,8 @@ body {
 	padding: 40upx;
 	text-align: center;
 }
-.mescroll-empty.empty-fixed{
+
+.mescroll-empty.empty-fixed {
 	z-index: 99;
 	position: fixed;
 	top: 20%;
