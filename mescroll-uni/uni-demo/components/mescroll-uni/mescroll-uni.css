@@ -4,6 +4,10 @@
  * http://www.mescroll.com
  */
 
+body {
+  -webkit-overflow-scrolling: touch;/*使iOS列表滑动流畅*/
+}
+
 .mescroll-uni{
 	box-sizing: border-box; /* 避免设置padding出现双滚动条的问题 */
 }
