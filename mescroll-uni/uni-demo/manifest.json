@@ -6,8 +6,8 @@
     "versionCode" : "100",
     "transformPx" : false,
     "app-plus" : {
-		 /* 5+App特有相关 */
-		"usingComponents" : true,
+        /* 5+App特有相关 */
+        "usingComponents" : true,
         "modules" : {},
         /* 模块配置 */
         "distribute" : {
@@ -53,6 +53,6 @@
         "setting" : {
             "urlCheck" : true
         },
-		"usingComponents": true
+        "usingComponents" : true
     }
 }
