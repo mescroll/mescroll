@@ -1,5 +1,5 @@
 <template>
-	<view :style="{'padding-top':padTop,'padding-bottom':padBottom}" @touchstart="touchstartEvent" @touchmove="touchmoveEvent" @touchend="touchendEvent" @touchcancel="touchendEvent">
+	<scroll-view class="mescroll-uni" :style="{'height': height,'padding-top':padTop,'padding-bottom':padBottom}" :lower-threshold="upOffset" :scroll-top="scrollTop" :scroll-with-animation="scrollAnim" @scroll="scroll" @scrolltolower="scrolltolower" @touchstart="touchstartEvent" @touchmove="touchmoveEvent" @touchend="touchendEvent" @touchcancel="touchendEvent" :scroll-y='scrollAble' :enable-back-to-top="true">
 		<!-- 下拉加载区域 -->
 		<view v-if="optDown" class="mescroll-downwarp" :class="{'mescroll-downwarp-reset':isDownReset}" :style="{'height': downHight+'px', 'position': 'relative', 'overflow': 'hidden', '-webkit-transition': isDownReset?'height 300ms':''}">
 			<view class="downwarp-content">
@@ -31,7 +31,7 @@
 
 		<!-- 回到顶部按钮 -->
 		<image v-if="optToTop" class="mescroll-totop" :class="{'mescroll-fade-in':isShowToTop}" :src="optToTop.src" mode="widthFix" @click="toTopClick" />
-	</view>
+	</scroll-view>
 </template>
 
 <script>
@@ -51,6 +51,10 @@
 				isUpNoMore: false, // 上拉加载: 是否显示 "-- END --"
 				isShowEmpty: false, // 是否显示空布局
 				isShowToTop: false, // 是否显示回到顶部按钮
+				height: '100%', // mescroll的高度
+				scrollAble: true, // 是否禁止下滑 (下拉时禁止,避免抖动)
+				scrollTop: 0, // 滚动条的位置
+				scrollAnim: false, // 是否开启滚动动画
 				downLoadHeight:0 // 下拉刷新进度的高度,模拟下拉时小人被拉出的感觉
 			}
 		},
@@ -79,14 +83,28 @@
 			},
 			// padding-top的数值,单位upx,需转成px. 目的是使下拉布局往下偏移
 			padTop(){
-				return uni.upx2px(Number(this.top) || 0)+'px';
+				return this.top ? uni.upx2px(Number(this.top))+'px' : 0;
 			},
 			// padding-bottom的数值,单位upx,需转成px 目的是使上拉布局往上偏移
 			padBottom(){
-				return uni.upx2px(Number(this.bottom) || 0)+'px';
+				return this.bottom ? uni.upx2px(Number(this.bottom))+'px' : 0;
+			},
+			// 距底部多远时（单位px），触发 scrolltolower 事件
+			upOffset(){
+				return this.mescroll ? this.mescroll.optUp.offset : 50;
 			}
 		},
 		methods: {
+			//注册滚动到底部的事件,用于上拉加载
+			scrolltolower() {
+				this.mescroll && this.mescroll.scrolltolower();
+			},
+			//注册列表滚动事件,用于下拉刷新
+			scroll(e) {
+				this.mescroll && this.mescroll.scroll(e.detail, ()=>{
+					this.$emit('scroll', this.mescroll) // 此时可直接通过 this.mescroll.scrollTop获取滚动条位置; this.mescroll.isScrollUp获取是否向上滑动
+				})
+			},
 			//注册列表touchstart事件,用于下拉刷新
 			touchstartEvent(e) {
 				this.mescroll && this.mescroll.touchstartEvent(e);
@@ -106,11 +124,8 @@
 			// 点击回到顶部的按钮回调
 			toTopClick(){
 				this.isShowToTop = false; // 回到顶部按钮需要先隐藏,再执行回到顶部,避免闪动
-				uni.pageScrollTo({ // 执行回到顶部
-					scrollTop: 0,
-					duration: this.mescroll.optUp.toTop.duration
-				});
-				this.$emit('topclick',this.mescroll) // 派发点击回到顶部按钮的回调
+				this.mescroll.scrollTo(0, this.mescroll.optUp.toTop.duration); // 执行回到顶部
+				this.$emit('topclick', this.mescroll); // 派发点击回到顶部按钮的回调
 			}
 		},
 		// 编译到H5,不会执行onReady,只执行mounted
@@ -122,11 +137,13 @@
 				down: {
 					inOffset(mescroll) {
 						// 下拉的距离进入offset范围内那一刻的回调
+						vm.scrollAble = false; // 禁止下拉,避免抖动
 						vm.isDownReset = false;
 						vm.isDownLoading = false;
 					},
 					outOffset(mescroll) {
 						// 下拉的距离大于offset那一刻的回调
+						vm.scrollAble = false; // 禁止下拉,避免抖动
 						vm.isDownReset = false;
 						vm.isDownLoading = true;
 						vm.downLoadHeight="50px";
@@ -139,11 +156,13 @@
 					},
 					showLoading(mescroll, downHight) {
 						// 显示下拉刷新进度的回调
+						vm.scrollAble = true; // 开启下拉
 						vm.isDownReset = true;
 						vm.isDownLoading = true; 
 						vm.downHight = downHight;
 					},
 					endDownScroll(mescroll) {
+						vm.scrollAble = true; // 开启下拉
 						vm.isDownReset = true;
 						vm.isDownLoading = false;
 						vm.downHight = 0;
@@ -203,9 +222,27 @@
 			// 设置mescroll实例对象的body高度,使down的bottomOffset生效
 			uni.getSystemInfo({
 				success(res) {
+					vm.height = res.windowHeight + 'px';
 					vm.mescroll.setBodyHeight(res.windowHeight);
 				}
 			});
+			
+			// 因为使用的是scrollview,这里需自定义scrollTo
+			vm.mescroll.resetScrollTo((y, t)=>{
+				let curY = vm.mescroll.getScrollTop()
+				if (t === 0) {
+					vm.scrollAnim = false;
+					vm.scrollTop = curY;
+					vm.$nextTick(function(){
+						vm.scrollTop = y
+					})
+				} else{
+					vm.scrollAnim = true;
+					vm.mescroll.getStep(curY, y, step=>{
+						vm.scrollTop = step
+					}, t)
+				}
+			})
 		}
 	}
 </script>

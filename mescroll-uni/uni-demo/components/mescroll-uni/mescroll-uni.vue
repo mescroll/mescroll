@@ -44,8 +44,6 @@
 		data() {
 			return {
 				mescroll: null, // mescroll实例
-				height: '100%', // mescroll的高度
-				scrollAble: true, // 是否禁止下滑 (下拉时禁止,避免抖动)
 				downHight: 0, //下拉刷新: 容器高度
 				downRotate: 0, //下拉刷新: 圆形进度条旋转的角度
 				downText: '', //下拉刷新: 提示的文本
@@ -55,6 +53,8 @@
 				isUpNoMore: false, // 上拉加载: 是否显示 "-- END --"
 				isShowEmpty: false, // 是否显示空布局
 				isShowToTop: false, // 是否显示回到顶部按钮
+				height: '100%', // mescroll的高度
+				scrollAble: true, // 是否禁止下滑 (下拉时禁止,避免抖动)
 				scrollTop: 0, // 滚动条的位置
 				scrollAnim: false // 是否开启滚动动画
 			}
@@ -159,15 +159,15 @@
 						// 显示下拉刷新进度的回调
 						vm.scrollAble = true; // 开启下拉 (自定义mescroll组件时,此行不可删)
 						vm.isDownReset = true; // 重置高度 (自定义mescroll组件时,此行不可删)
-						vm.downHight = downHight; // 设置下拉区域的高度 (自定义mescroll组件时,此行不可删)
 						vm.isDownLoading = true;// 显示加载中
+						vm.downHight = downHight; // 设置下拉区域的高度 (自定义mescroll组件时,此行不可删)
 						vm.downText = mescroll.optDown.textLoading; // 设置文本
 					},
 					endDownScroll(mescroll) {
 						vm.scrollAble = true;// 开启下拉 (自定义mescroll组件时,此行不可删)
 						vm.isDownReset = true;// 重置高度 (自定义mescroll组件时,此行不可删)
-						vm.downHight = 0; // 设置下拉区域的高度 (自定义mescroll组件时,此行不可删)
 						vm.isDownLoading = false; // 不显示加载中
+						vm.downHight = 0; // 设置下拉区域的高度 (自定义mescroll组件时,此行不可删)
 					},
 					// 派发下拉刷新的回调
 					callback: function(mescroll){
@@ -221,7 +221,7 @@
 			// init回调mescroll对象
 			vm.$emit('init', vm.mescroll);
 			
-			// 设置mescroll实例对象的body高度
+			// 设置mescroll实例对象的body高度,使down的bottomOffset生效
 			uni.getSystemInfo({
 				success(res) {
 					vm.height = res.windowHeight + 'px';
