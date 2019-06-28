@@ -11,8 +11,6 @@
             "path" : "pages/base/list-news",
             "style" : {
 				"navigationBarTitleText" : "list-news",
-				"enablePullDownRefresh" : false, // 不开启下拉刷新, 默认就是false
-				"onReachBottomDistance" : 100, // 页面上拉触底事件触发时距页面底部距离, 默认 50
 				"app-plus" : {
 					"bounce" : "none" // 取消iOS回弹,避免和下拉刷新冲突 (小程序无法取消)
 				}
@@ -22,8 +20,7 @@
             "path" : "pages/base/list-products",
             "style" : {
 				"navigationBarTitleText" : "list-products",
-				"enablePullDownRefresh" : false, // 不开启下拉刷新
-				"onReachBottomDistance" : 100, // 页面上拉触底事件触发时距页面底部距离
+				// "enablePullDownRefresh" : false, // 不开启下拉刷新, 默认就是false
 				"app-plus" : {
 					"bounce" : "none" // 取消iOS回弹,避免和下拉刷新冲突 (小程序无法取消)
 				}
@@ -33,8 +30,7 @@
             "path" : "pages/base/mescroll-options",
             "style" : {
 				"navigationBarTitleText" : "mescroll-options",
-				"enablePullDownRefresh" : false, // 不开启下拉刷新
-				"onReachBottomDistance" : 100, // 页面上拉触底事件触发时距页面底部距离
+				// "enablePullDownRefresh" : false, // 不开启下拉刷新, 默认就是false
 				"app-plus" : {
 					"bounce" : "none" // 取消iOS回弹,避免和下拉刷新冲突 (小程序无法取消)
 				}
@@ -44,8 +40,7 @@
             "path" : "pages/base/list-mescroll-one",
             "style" : {
 				"navigationBarTitleText" : "list-mescroll-one",
-				"enablePullDownRefresh" : false, // 不开启下拉刷新
-				"onReachBottomDistance" : 100, // 页面上拉触底事件触发时距页面底部距离
+				// "enablePullDownRefresh" : false, // 不开启下拉刷新, 默认就是false
 				"app-plus" : {
 					"bounce" : "none" // 取消iOS回弹,避免和下拉刷新冲突 (小程序无法取消)
 				}
@@ -55,8 +50,7 @@
             "path" : "pages/base/list-mescroll-more",
             "style" : {
 				"navigationBarTitleText" : "list-mescroll-more",
-				"enablePullDownRefresh" : false, // 不开启下拉刷新
-				"onReachBottomDistance" : 100, // 页面上拉触底事件触发时距页面底部距离
+				// "enablePullDownRefresh" : false, // 不开启下拉刷新, 默认就是false
 				"app-plus" : {
 					"bounce" : "none" // 取消iOS回弹,避免和下拉刷新冲突 (小程序无法取消)
 				}
@@ -66,19 +60,27 @@
             "path" : "pages/base/list-search",
             "style" : {
 				"navigationBarTitleText" : "list-search",
-				"enablePullDownRefresh" : false, // 不开启下拉刷新
-				"onReachBottomDistance" : 100, // 页面上拉触底事件触发时距页面底部距离
+				// "enablePullDownRefresh" : false, // 不开启下拉刷新, 默认就是false
 				"app-plus" : {
 					"bounce" : "none" // 取消iOS回弹,避免和下拉刷新冲突 (小程序无法取消)
 				}
 			}
         },
         {
+            "path" : "pages/intermediate/mescroll-swiper",
+            "style" : {
+				"navigationBarTitleText" : "轮播菜单导航 mescroll-swiper.vue",
+				// "enablePullDownRefresh" : false, // 不开启下拉刷新, 默认就是false
+				"app-plus" : {
+					"bounce" : "none" // 取消iOS回弹,避免和下拉刷新冲突 (小程序无法取消)
+				}
+			}
+        },
+		{
             "path" : "pages/intermediate/beibei",
             "style" : {
 				"navigationBarTitleText" : "贝贝 mescroll-beibei.vue",
-				"enablePullDownRefresh" : false, // 不开启下拉刷新
-				"onReachBottomDistance" : 100, // 页面上拉触底事件触发时距页面底部距离
+				// "enablePullDownRefresh" : false, // 不开启下拉刷新, 默认就是false
 				"app-plus" : {
 					"bounce" : "none" // 取消iOS回弹,避免和下拉刷新冲突 (小程序无法取消)
 				}
@@ -88,8 +90,7 @@
             "path" : "pages/intermediate/xinlang",
             "style" : {
 				"navigationBarTitleText" : "新浪微博 mescroll-xinlang.vue",
-				"enablePullDownRefresh" : false, // 不开启下拉刷新
-				"onReachBottomDistance" : 100, // 页面上拉触底事件触发时距页面底部距离
+				// "enablePullDownRefresh" : false, // 不开启下拉刷新, 默认就是false
 				"app-plus" : {
 					"bounce" : "none" // 取消iOS回弹,避免和下拉刷新冲突 (小程序无法取消)
 				}
@@ -99,8 +100,7 @@
             "path" : "pages/senior/meituan",
             "style" : {
 				"navigationBarTitleText" : "美团 mescroll-meituan.vue",
-				"enablePullDownRefresh" : false, // 不开启下拉刷新
-				"onReachBottomDistance" : 100, // 页面上拉触底事件触发时距页面底部距离
+				// "enablePullDownRefresh" : false, // 不开启下拉刷新, 默认就是false
 				"app-plus" : {
 					"bounce" : "none" // 取消iOS回弹,避免和下拉刷新冲突 (小程序无法取消)
 				}
@@ -110,8 +110,7 @@
             "path" : "pages/senior/meitunmama",
             "style" : {
 				"navigationBarTitleText" : "美囤妈妈 mescroll-meitun.vue",
-				"enablePullDownRefresh" : false, // 不开启下拉刷新
-				"onReachBottomDistance" : 100, // 页面上拉触底事件触发时距页面底部距离
+				// "enablePullDownRefresh" : false, // 不开启下拉刷新, 默认就是false
 				"app-plus" : {
 					"bounce" : "none" // 取消iOS回弹,避免和下拉刷新冲突 (小程序无法取消)
 				}
@@ -121,5 +120,15 @@
     "globalStyle" : {
         "navigationBarTextStyle" : "black",
         "navigationBarBackgroundColor" : "#fff"
-    }
+    },
+	"condition" : { //模式配置，仅开发期间生效
+		"current": 0, //当前激活的模式(list 的索引项)
+		"list": [
+			{
+				"name": "", //模式名称
+				"path": "", //启动页面，必选
+				"query": "" //启动参数，在页面的onLoad函数里面得到
+			}
+		]
+	}
 }
