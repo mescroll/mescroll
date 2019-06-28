@@ -1,6 +1,6 @@
 <template>
 	<view class="mescroll-uni-warp">
-		<scroll-view :class="{'mescroll-uni':true, 'mescroll-uni-fixed':fixed}" :style="{'top':fixedTop,'bottom':fixedBottom}" :lower-threshold="upOffset" :scroll-top="scrollTop" :scroll-with-animation="scrollAnim" @scroll="scroll" @scrolltolower="scrolltolower" @touchstart="touchstartEvent" @touchmove="touchmoveEvent" @touchend="touchendEvent" @touchcancel="touchendEvent" :scroll-y='scrollAble' :enable-back-to-top="true">
+		<scroll-view :class="{'mescroll-uni':true, 'mescroll-uni-fixed':fixed}" :style="{'padding-top':padTop,'padding-bottom':padBottom,'top':fixedTop,'bottom':fixedBottom}" :lower-threshold="upOffset" :scroll-top="scrollTop" :scroll-with-animation="scrollAnim" @scroll="scroll" @scrolltolower="scrolltolower" @touchstart="touchstartEvent" @touchmove="touchmoveEvent" @touchend="touchendEvent" @touchcancel="touchendEvent" :scroll-y='scrollAble' :enable-back-to-top="true">
 			<!-- 下拉加载区域 -->
 			<view v-if="optDown" class="mescroll-downwarp" :class="{'mescroll-downwarp-reset':isDownReset}" :style="{'height': downHight+'px', 'position': 'relative', 'overflow': 'hidden', '-webkit-transition': isDownReset?'height 300ms':''}">
 				<view class="downwarp-content" style="text-align: center;position: absolute;left: 0;bottom: 0;width: 100%;padding: 20upx 0;">
@@ -92,13 +92,25 @@
 			optToTop() {
 				return this.mescroll ? this.mescroll.optUp.toTop : null;
 			},
-			// fixed定位的top数值,单位upx,需转成px. 目的是使下拉布局往下偏移
-			fixedTop(){
-				return (uni.upx2px(Number(this.top||0)) + this.windowTop) + 'px'
+			// top数值,单位upx,需转成px. 目的是使下拉布局往下偏移
+			numTop(){
+				return uni.upx2px(Number(this.top||0))
 			},
-			// fixed定位的bottom数值,单位upx,需转成px 目的是使上拉布局往上偏移
+			fixedTop(){
+				return this.fixed ? (this.numTop + this.windowTop) + 'px' : 0
+			},
+			padTop(){
+				return !this.fixed ? this.numTop + 'px' : 0
+			},
+			// bottom数值,单位upx,需转成px 目的是使上拉布局往上偏移
+			numBottom(){
+				return uni.upx2px(Number(this.bottom||0))
+			},
 			fixedBottom(){
-				return (uni.upx2px(Number(this.bottom||0)) + this.windowBottom) + 'px'
+				return this.fixed ? (this.numBottom + this.windowBottom) + 'px' : 0
+			},
+			padBottom(){
+				return !this.fixed ? this.numBottom + 'px' : 0
 			},
 			// 距底部多远时（单位px），触发 scrolltolower 事件
 			upOffset(){
