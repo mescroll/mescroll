@@ -32,7 +32,7 @@
 		border-bottom: 1upx solid #eee;
 	}
 	.pd-li .pd-img{
-		position: absolute;
+		position: absolute !important; /*编译到H5,在list-mescroll-more的案例中需加上!important,解决tab切换过快定位失效的问题*/
 		left: 36upx;
 		top: 20upx;
 		width: 160upx;
