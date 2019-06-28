@@ -43,7 +43,7 @@ MeScroll.prototype.extendDownScroll = function(optDown) {
 		isLock: false, // 是否锁定下拉刷新,默认false;
 		isBoth: true, // 下拉刷新时,如果滑动到列表底部是否可以同时触发上拉加载;默认true,两者可同时触发;
 		offset: 80, // 在列表顶部,下拉大于80px,松手即可触发下拉刷新的回调
-		fps: 25, // 下拉节流,1秒处理25次 (值越大每秒刷新频率越高)
+		fps: 40, // 下拉节流 (值越大每秒刷新频率越高)
 		inOffsetRate: 1, // 在列表顶部,下拉的距离小于offset时,改变下拉区域高度比例;值小于1且越接近0,高度变化越小,表现为越往下越难拉
 		outOffsetRate: 0.2, // 在列表顶部,下拉的距离大于offset时,改变下拉区域高度比例;值小于1且越接近0,高度变化越小,表现为越往下越难拉
 		bottomOffset: 20, // 当手指touchmove位置在距离body底部20px范围内的时候结束上拉刷新,避免Webview嵌套导致touchend事件不执行
@@ -80,7 +80,7 @@ MeScroll.prototype.extendUpScroll = function(optUp) {
 			size: 10, // 每页数据的数量
 			time: null // 加载第一页数据服务器返回的时间; 防止用户翻页时,后台新增了数据从而导致下一页数据重复;
 		},
-		fps: 25, // 上拉节流,1秒处理25次 (值越大每秒刷新频率越高)
+		fps: 40, // 上拉节流 (值越大每秒刷新频率越高)
 		noMoreSize: 5, // 如果列表已无数据,可设置列表的总数量要大于等于5条才显示无更多数据;避免列表数据过少(比如只有一条数据),显示无更多数据会不好看
 		offset: 100, // 距底部多远时,触发upCallback
 		textLoading: '加载中 ...', // 加载中的提示文本
