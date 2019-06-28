@@ -233,8 +233,8 @@
 			// 设置高度
 			uni.getSystemInfo({
 				success(res) {
-					vm.windowTop = res.windowTop; // 修正偏移的位置
-					vm.windowBottom = res.windowBottom; // 修正偏移的位置
+					if(res.windowTop) vm.windowTop = res.windowTop; // 修正app和H5的top值
+					if(res.windowBottom) vm.windowBottom = res.windowBottom; // 修正app和H5的bottom值
 					vm.mescroll.setBodyHeight(res.windowHeight); // 使down的bottomOffset生效
 				}
 			});
