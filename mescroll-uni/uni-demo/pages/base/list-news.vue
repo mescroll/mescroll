@@ -78,11 +78,11 @@
 				//延时一秒,模拟联网
 				setTimeout(function() {
 					try {
-						var newArr = [];
+						let newArr = [];
 						if (pageNum == 0) {
 							//此处模拟下拉刷新返回的数据
-							var id=new Date().getTime();
-							var newObj = {
+							let id=new Date().getTime();
+							let newObj = {
 								id:id,
 								title: "【新增新闻" + id + "】 标题",
 								content: "新增新闻的内容"
@@ -90,9 +90,9 @@
 							newArr.push(newObj);
 						} else {
 							//此处模拟上拉加载返回的数据
-							for (var i = 0; i < pageSize; i++) {
-								var upIndex = (pageNum - 1) * pageSize + i + 1;
-								var newObj = {
+							for (let i = 0; i < pageSize; i++) {
+								let upIndex = (pageNum - 1) * pageSize + i + 1;
+								let newObj = {
 									id:upIndex,
 									title: "【新闻" + upIndex + "】 标题标题标题标题标题",
 									content: "内容内容内容内容内容内容内容内容内容"

@@ -72,10 +72,10 @@
 				//延时一秒,模拟联网
 				setTimeout(()=> {
 					try{
-						var data = this.dataTag==1 ? pdlistNor : pdlistEdit;
+						let data = this.dataTag==1 ? pdlistNor : pdlistEdit;
 						//模拟分页数据
-						var listData=[];
-						for (var i = (pageNum-1)*pageSize; i < pageNum*pageSize; i++) {
+						let listData=[];
+						for (let i = (pageNum-1)*pageSize; i < pageNum*pageSize; i++) {
 							if(i==data.length) break;
 							listData.push(data[i]);
 						}

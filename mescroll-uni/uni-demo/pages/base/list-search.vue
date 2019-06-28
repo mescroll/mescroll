@@ -85,15 +85,15 @@
 				setTimeout(()=> {
 					try{
 						//模拟服务器接口的搜索
-						var data=[];
-						for (var i = 0; i < mockData.length; i++) {
+						let data=[];
+						for (let i = 0; i < mockData.length; i++) {
 							if (mockData[i].pdName.indexOf(curWord)!=-1) {
 								data.push(mockData[i]);
 							}
 						}
 						//模拟服务器接口的分页
-						var listData=[];
-						for (var i = (pageNum-1)*pageSize; i < pageNum*pageSize; i++) {
+						let listData=[];
+						for (let i = (pageNum-1)*pageSize; i < pageNum*pageSize; i++) {
 							if(i==data.length) break;
 							listData.push(data[i]);
 						}

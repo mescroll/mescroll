@@ -91,31 +91,31 @@
 				//延时一秒,模拟联网
 				setTimeout(()=> {
 					try{
-						var listData = []
+						let listData = []
 						// tabType 全部商品0; 奶粉1; 面膜2; 图书3;
 						if (this.tabType === 0) {
 							// 全部商品 (模拟分页数据)
-							for (var i = (pageNum - 1) * pageSize; i < pageNum * pageSize; i++) {
+							for (let i = (pageNum - 1) * pageSize; i < pageNum * pageSize; i++) {
 								if (i === mockData.length) break
 								listData.push(mockData[i])
 							}
 						} else if (this.tabType === 1) {
 							// 奶粉
-							for (var n = 0; n < mockData.length; n++) {
+							for (let n = 0; n < mockData.length; n++) {
 								if (mockData[n].pdName.indexOf('奶粉') !== -1) {
 									listData.push(mockData[n])
 								}
 							}
 						}else if (this.tabType === 2) {
 							// 面膜
-							for (var j = 0; j < mockData.length; j++) {
+							for (let j = 0; j < mockData.length; j++) {
 								if (mockData[j].pdName.indexOf('面膜') !== -1) {
 									listData.push(mockData[j])
 								}
 							}
 						} else if (this.tabType === 2) {
 							// 图书
-							for (var k = 0; k < mockData.length; k++) {
+							for (let k = 0; k < mockData.length; k++) {
 								if (mockData[k].pdName.indexOf('图书') !== -1) {
 									listData.push(mockData[k])
 								}
