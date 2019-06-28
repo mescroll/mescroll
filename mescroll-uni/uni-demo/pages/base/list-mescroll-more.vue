@@ -15,7 +15,7 @@
 		<!--注意: 不能写成 <template v-if="tabType==0">, 不能用template和v-if  -->
 		<view v-show="tabType==0">
 			<!-- top是指mescroll的padding-top的数值,单位upx. 目的是使下拉布局往下偏移,不然会被悬浮菜单遮住 -->
-			<mescroll-uni top="120" :down="getDownOption(0)" :up="getUpOption()" @down="downCallback" @up="upCallback" @init="mescrollInit0">
+			<mescroll-uni top="120" :down="getDownOption(0)" :up="getUpOption(0)" @down="downCallback" @up="upCallback" @init="mescrollInit0">
 				<swiper autoplay="true" interval="3000" duration="300" circular="true">
 					<swiper-item>
 						<image style="width: 100%" src="http://www.mescroll.com/img/swiper1.jpg" mode="widthFix"/>
@@ -31,7 +31,7 @@
 		<!-- 奶粉 -->
 		<!--注意: 不能写成 <template v-if="tabType==1">, 不能用template和v-if  -->
 		<view v-show="tabType==1">
-			<mescroll-uni top="120" :down="getDownOption(1)" :up="getUpOption()" @down="downCallback" @up="upCallback" @init="mescrollInit1">
+			<mescroll-uni top="120" :down="getDownOption(1)" :up="getUpOption(1)" @down="downCallback" @up="upCallback" @init="mescrollInit1">
 				<pd-list :list="tab1.list"></pd-list>
 			</mescroll-uni>
 		</view>	
@@ -39,7 +39,7 @@
 		<!-- 面膜 -->
 		<!--注意: 不能写成 <template v-if="tabType==2">, 不能用template和v-if  -->
 		<view v-show="tabType==2">
-			<mescroll-uni top="120" :down="getDownOption(2)" :up="getUpOption()" @down="downCallback" @up="upCallback" @init="mescrollInit2">
+			<mescroll-uni top="120" :down="getDownOption(2)" :up="getUpOption(2)" @down="downCallback" @up="upCallback" @init="mescrollInit2">
 				<pd-list :list="tab2.list"></pd-list>
 			</mescroll-uni>
 		</view>
@@ -47,7 +47,7 @@
 		<!-- 图书 -->
 		<!--注意: 不能写成 <template v-if="tabType==3"> , 不能用template和v-if -->
 		<view v-show="tabType==3">
-			<mescroll-uni top="120" :down="getDownOption(3)" :up="getUpOption()" @down="downCallback" @up="upCallback" @init="mescrollInit3" @emptyclick="emptyClick">
+			<mescroll-uni top="120" :down="getDownOption(3)" :up="getUpOption(3)" @down="downCallback" @up="upCallback" @init="mescrollInit3" @emptyclick="emptyClick">
 				<pd-list :list="tab3.list"></pd-list>
 			</mescroll-uni>
 		</view>	
@@ -97,7 +97,7 @@
 					auto:tabType==0, // 第一个mescroll传入true,列表自动加载
 				}
 			},
-			getUpOption(){
+			getUpOption(tabType){
 				return  {
 					auto:false,
 					// page: {
@@ -125,7 +125,7 @@
 			/*上拉加载的回调: mescroll携带page的参数, 其中num:当前页 从1开始, size:每页数据条数,默认10 */
 			upCallback(mescroll) {
 				if(this.tabType!=mescroll.tabType){
-					mescroll.endErr(0); // 只处理当前页的回调,避免tab切换过快,触发的回调和当前页不一致的问题(传0,不处理回弹)
+					mescroll.endErr(); // 只处理当前页的回调,避免tab切换过快,触发的回调和当前页不一致的问题
 					return;
 				}
 				if (mescroll.tabType==0) {
@@ -310,36 +310,5 @@
 	.top-warp .nav .active{
 		border-bottom: 2upx solid #FF6990;
 		color: #FF6990;
-	}
-	
-	/*展示上拉加载的数据列表*/
-	.data-li{
-		position: relative;
-		height: 160upx;
-		padding: 20upx 16upx 20upx 240upx;
-		border-bottom: 1upx solid #eee;
-	}
-	.data-li .pd-img{
-		position: absolute;
-		left: 36upx;
-		top: 20upx;
-		width: 160upx;
-		height: 160upx;
-	}
-	.data-li .pd-name{
-		font-size: 26upx;
-		line-height: 40upx;
-		height: 80upx;
-		margin-bottom: 20upx;
-		overflow: hidden;
-	}
-	.data-li .pd-price{
-		font-size: 26upx;
-		color: red;
-	}
-	.data-li .pd-sold{
-		font-size: 24upx;
-		margin-left: 16upx;
-		color: gray;
 	}
 </style>

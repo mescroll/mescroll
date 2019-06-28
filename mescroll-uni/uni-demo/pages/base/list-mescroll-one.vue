@@ -12,7 +12,7 @@
 		</view>
 		
 		<!-- top是指mescroll的padding-top的数值,单位upx. 目的是使下拉布局往下偏移,不然会被悬浮菜单遮住 -->
-		<mescroll-uni top="120" :up="upOption" @up="upCallback" @down="downCallback" @init="mescrollInit" @emptyclick="emptyClick">
+		<mescroll-uni top="120" :up="upOption" @up="upCallback" @init="mescrollInit" @emptyclick="emptyClick">
 			<!-- 数据列表 -->
 			<pd-list :list="pdList"></pd-list>
 		</mescroll-uni>
@@ -51,10 +51,6 @@
 			// mescroll组件初始化的回调,可获取到mescroll对象
 			mescrollInit(mescroll) {
 				this.mescroll = mescroll;
-			},
-			// 下拉刷新的回调
-			downCallback(mescroll){
-				mescroll.resetUpScroll() // 重置列表为第一页 (自动执行 mescroll.num=1, 再触发upCallback方法 )
 			},
 			/*上拉加载的回调: mescroll携带page的参数, 其中num:当前页 从1开始, size:每页数据条数,默认10 */
 			upCallback(mescroll) {
@@ -167,36 +163,5 @@
 	.top-warp .nav .active{
 		border-bottom: 2upx solid #FF6990;
 		color: #FF6990;
-	}
-	
-	/*展示上拉加载的数据列表*/
-	.data-li{
-		position: relative;
-		height: 160upx;
-		padding: 20upx 16upx 20upx 240upx;
-		border-bottom: 1upx solid #eee;
-	}
-	.data-li .pd-img{
-		position: absolute;
-		left: 36upx;
-		top: 20upx;
-		width: 160upx;
-		height: 160upx;
-	}
-	.data-li .pd-name{
-		font-size: 26upx;
-		line-height: 40upx;
-		height: 80upx;
-		margin-bottom: 20upx;
-		overflow: hidden;
-	}
-	.data-li .pd-price{
-		font-size: 26upx;
-		color: red;
-	}
-	.data-li .pd-sold{
-		font-size: 24upx;
-		margin-left: 16upx;
-		color: gray;
 	}
 </style>

@@ -86,9 +86,6 @@
 				tabType: 0, // 菜单
 			}
 		},
-		onUnload(){
-			this.mescroll=null;
-		},
 		methods: {
 			// mescroll组件初始化的回调,可获取到mescroll对象
 			mescrollInit(mescroll) {
@@ -118,7 +115,7 @@
 					//方法三(推荐): 您有其他方式知道是否有下一页 hasNext
 					//mescroll.endSuccess(curPageData.length, hasNext); //必传参数(当前页的数据个数, 是否有下一页true/false)
 
-					//方法四 (不推荐),会存在一个小问题:比如列表共有20条数据,每页加载10条,共2页.如果只根据当前页的数据个数判断,则需翻到第三页才会知道无更多数据,如果传了hasNext,则翻到第二页即可显示无更多数据.
+					//方法四 (不推荐),会存在一个小问题:比如列表共有20条数据,每页加载10条,共2页.如果只根据当前页的数据个数判断,则需翻到第三页才会知道无更多数据
 					mescroll.endSuccess(curPageData.length);
 
 					//设置列表数据
@@ -212,36 +209,5 @@
 	.nav .active{
 		border-bottom: 2upx solid #FF6990;
 		color: #FF6990;
-	}
-	
-	/*展示上拉加载的数据列表*/
-	.data-li{
-		position: relative;
-		height: 160upx;
-		padding: 20upx 16upx 20upx 240upx;
-		border-bottom: 1upx solid #eee;
-	}
-	.data-li .pd-img{
-		position: absolute;
-		left: 36upx;
-		top: 20upx;
-		width: 160upx;
-		height: 160upx;
-	}
-	.data-li .pd-name{
-		font-size: 26upx;
-		line-height: 40upx;
-		height: 80upx;
-		margin-bottom: 20upx;
-		overflow: hidden;
-	}
-	.data-li .pd-price{
-		font-size: 26upx;
-		color: red;
-	}
-	.data-li .pd-sold{
-		font-size: 24upx;
-		margin-left: 16upx;
-		color: gray;
 	}
 </style>

@@ -1,5 +1,5 @@
 <template>
-	<mescroll-uni :down="downOption" @down="downCallback" :up="upOption" @up="upCallback" @init="mescrollInit">
+	<mescroll-uni :down="downOption" @down="downCallback" @up="upCallback" @init="mescrollInit">
 		<view class="notice">本Demo的下拉刷新: 添加新数据到列表顶部</view>
 		<view class="news-li" v-for="news in dataList" :key="news.id">
 			<view>{{news.title}}</view>
@@ -20,13 +20,6 @@
 				mescroll: null, //mescroll实例对象
 				downOption: {
 					auto: false //是否在初始化后,自动执行下拉回调callback; 默认true
-				},
-				upOption: {
-					// auto: true, //是否在初始化后,自动执行上拉回调callback; 默认true
-					// page: {
-					// 	num: 0, // 当前页码,默认0,回调之前会加1,即callback(page)会从1开始
-					// 	size: 10 // 每页数据的数量
-					// }
 				},
 				dataList: []
 			}
@@ -66,7 +59,7 @@
 					//方法三(推荐): 您有其他方式知道是否有下一页 hasNext
 					//mescroll.endSuccess(curPageData.length, hasNext); //必传参数(当前页的数据个数, 是否有下一页true/false)
 
-					//方法四 (不推荐),会存在一个小问题:比如列表共有20条数据,每页加载10条,共2页.如果只根据当前页的数据个数判断,则需翻到第三页才会知道无更多数据,如果传了hasNext,则翻到第二页即可显示无更多数据.
+					//方法四 (不推荐),会存在一个小问题:比如列表共有20条数据,每页加载10条,共2页.如果只根据当前页的数据个数判断,则需翻到第三页才会知道无更多数据.
 					mescroll.endSuccess(curPageData.length);
 
 					//设置列表数据

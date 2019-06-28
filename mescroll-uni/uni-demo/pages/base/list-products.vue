@@ -1,5 +1,5 @@
 <template>
-	<mescroll-uni @down="downCallback" @up="upCallback" @init="mescrollInit">
+	<mescroll-uni @up="upCallback" @init="mescrollInit">
 		<view class="notice-warp">
 			<view class="notice">商品的名称价格销量随时会变动,也可能会下架删除</view>
 			<view class="notice">所以本Demo的下拉刷新会重置列表数据</view>
@@ -13,7 +13,7 @@
 	import MescrollUni from "@/components/mescroll-uni/mescroll-uni.vue";
 	import PdList from "@/components/other/pd-list.vue";
 	// 模拟数据
-	import pdlist from "@/common/pdlist.js";
+	import pdlistNor from "@/common/pdlist.js";
 	import pdlistEdit from "@/common/pdlist-edit.js";
 	
 	export default {
@@ -32,10 +32,6 @@
 			// mescroll组件初始化的回调,可获取到mescroll对象
 			mescrollInit(mescroll) {
 				this.mescroll = mescroll;
-			},
-			/*下拉刷新的回调*/
-			downCallback(mescroll){
-				mescroll.resetUpScroll() // 重置列表为第一页 (自动执行 mescroll.num=1, 再触发upCallback方法 )
 			},
 			/*上拉加载的回调: mescroll携带page的参数, 其中num:当前页 从1开始, size:每页数据条数,默认10 */
 			upCallback(mescroll) {
@@ -56,7 +52,7 @@
 					//方法三(推荐): 您有其他方式知道是否有下一页 hasNext
 					//mescroll.endSuccess(curPageData.length, hasNext); //必传参数(当前页的数据个数, 是否有下一页true/false)
 
-					//方法四 (不推荐),会存在一个小问题:比如列表共有20条数据,每页加载10条,共2页.如果只根据当前页的数据个数判断,则需翻到第三页才会知道无更多数据,如果传了hasNext,则翻到第二页即可显示无更多数据.
+					//方法四 (不推荐),会存在一个小问题:比如列表共有20条数据,每页加载10条,共2页.如果只根据当前页的数据个数判断,则需翻到第三页才会知道无更多数据
 					mescroll.endSuccess(curPageData.length);
 
 					//设置列表数据
@@ -76,7 +72,7 @@
 				//延时一秒,模拟联网
 				setTimeout(()=> {
 					try{
-						var data = this.dataTag==1 ? pdlist : pdlistEdit;
+						var data = this.dataTag==1 ? pdlistNor : pdlistEdit;
 						//模拟分页数据
 						var listData=[];
 						for (var i = (pageNum-1)*pageSize; i < pageNum*pageSize; i++) {
@@ -116,36 +112,5 @@
 	}
 	.notice-warp .btn-change:active{
 		opacity: .5;
-	}
-	
-	/*展示上拉加载的数据列表*/
-	.data-li{
-		position: relative;
-		height: 160upx;
-		padding: 20upx 16upx 20upx 240upx;
-		border-bottom: 1upx solid #eee;
-	}
-	.data-li .pd-img{
-		position: absolute;
-		left: 36upx;
-		top: 20upx;
-		width: 160upx;
-		height: 160upx;
-	}
-	.data-li .pd-name{
-		font-size: 26upx;
-		line-height: 40upx;
-		height: 80upx;
-		margin-bottom: 20upx;
-		overflow: hidden;
-	}
-	.data-li .pd-price{
-		font-size: 26upx;
-		color: red;
-	}
-	.data-li .pd-sold{
-		font-size: 24upx;
-		margin-left: 16upx;
-		color: gray;
 	}
 </style>
