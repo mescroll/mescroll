@@ -44,15 +44,8 @@
 		
 		
 		<view class="group-title">senior demos 高级案例</view>
-		
-		<navigator url="/pages/senior/meitunmama">
-			<view class="demo-li">仿【美囤妈妈】下拉刷新上拉加载<text class="demo-tip">自定义mescroll组件</text></view>
-		</navigator>
-		
-		<navigator url="/pages/senior/meituan">
-			<view class="demo-li">仿【美团】下拉刷新上拉加载<text class="demo-tip">自定义mescroll组件</text></view>
-		</navigator>
-		
+		<view class="demo-li" style="color: #666">仿【美囤妈妈】下拉刷新上拉加载<text class="demo-tip">整理中...</text></view>
+		<view class="demo-li" style="color: #666">仿【美团】下拉刷新上拉加载<text class="demo-tip">整理中...</text></view>
 		<view class="demo-li" style="color: #666">仿【京东】下拉刷新上拉加载<text class="demo-tip">整理中...</text></view>
 		<view class="demo-li" style="color: #666">仿【淘宝】下拉刷新上拉加载<text class="demo-tip">整理中...</text></view>
 	</view>

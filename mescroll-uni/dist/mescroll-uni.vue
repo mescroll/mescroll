@@ -1,5 +1,5 @@
 <template>
-	<view class="mescroll-uni" :style="{'padding-top':padTop,'padding-bottom':padBottom}" @touchstart="touchstartEvent" @touchmove="touchmoveEvent" @touchend="touchendEvent" @touchcancel="touchendEvent">
+	<scroll-view class="mescroll-uni" :style="{'height': height,'padding-top':padTop,'padding-bottom':padBottom}" :lower-threshold="upOffset" :scroll-top="scrollTop" :scroll-with-animation="scrollAnim" @scroll="scroll" @scrolltolower="scrolltolower" @touchstart="touchstartEvent" @touchmove="touchmoveEvent" @touchend="touchendEvent" @touchcancel="touchendEvent" :scroll-y='scrollAble' :enable-back-to-top="true">
 		<!-- 下拉加载区域 (部分css样式需写成style,否则编译到浏览器会丢失,坐等HBuilderX优化编译器..)-->
 		<view v-if="optDown" class="mescroll-downwarp" :class="{'mescroll-downwarp-reset':isDownReset}" :style="{'height': downHight+'px', 'position': 'relative', 'overflow': 'hidden', '-webkit-transition': isDownReset?'height 300ms':''}">
 			<view class="downwarp-content" style="text-align: center;position: absolute;left: 0;bottom: 0;width: 100%;padding: 20upx 0;">
@@ -17,7 +17,7 @@
 			<view v-if="optEmpty.tip" class="empty-tip">{{optEmpty.tip}}</view>
 			<view v-if="optEmpty.btnText" class="empty-btn" @click="emptyClick">{{optEmpty.btnText}}</view>
 		</view>
-
+	
 		<!-- 上拉加载区域 -->
 		<view v-if="optUp" class="mescroll-upwarp">
 			<!-- 加载中.. -->
@@ -28,10 +28,10 @@
 			<!-- 无数据 -->
 			<view v-if="isUpNoMore" class="upwarp-nodata">{{optUp.textNoMore}}</view>
 		</view>
-
-		<!-- 回到顶部按钮 -->
+		
+		<!-- 回到顶部按钮 (fixed元素,需写在scroll-view外面,防止滚动的时候抖动)-->
 		<image v-if="optToTop" class="mescroll-totop" :class="{'mescroll-fade-in':isShowToTop}" :src="optToTop.src" mode="widthFix" @click="toTopClick" />
-	</view>
+	</scroll-view>
 </template>
 
 <script>
@@ -43,7 +43,7 @@
 	export default {
 		data() {
 			return {
-				mescroll: null,
+				mescroll: null, // mescroll实例
 				downHight: 0, //下拉刷新: 容器高度
 				downRotate: 0, //下拉刷新: 圆形进度条旋转的角度
 				downText: '', //下拉刷新: 提示的文本
@@ -52,7 +52,11 @@
 				isUpLoading: false, // 上拉加载: 是否显示 "加载中..."
 				isUpNoMore: false, // 上拉加载: 是否显示 "-- END --"
 				isShowEmpty: false, // 是否显示空布局
-				isShowToTop: false // 是否显示回到顶部按钮
+				isShowToTop: false, // 是否显示回到顶部按钮
+				height: '100%', // mescroll的高度
+				scrollAble: true, // 是否禁止下滑 (下拉时禁止,避免抖动)
+				scrollTop: 0, // 滚动条的位置
+				scrollAnim: false // 是否开启滚动动画
 			}
 		},
 		props: {
@@ -80,14 +84,28 @@
 			},
 			// padding-top的数值,单位upx,需转成px. 目的是使下拉布局往下偏移
 			padTop(){
-				return uni.upx2px(Number(this.top) || 0)+'px';
+				return this.top ? uni.upx2px(Number(this.top))+'px' : 0;
 			},
 			// padding-bottom的数值,单位upx,需转成px 目的是使上拉布局往上偏移
 			padBottom(){
-				return uni.upx2px(Number(this.bottom) || 0)+'px';
+				return this.bottom ? uni.upx2px(Number(this.bottom))+'px' : 0;
+			},
+			// 距底部多远时（单位px），触发 scrolltolower 事件
+			upOffset(){
+				return this.mescroll ? this.mescroll.optUp.offset : 50;
 			}
 		},
 		methods: {
+			//注册滚动到底部的事件,用于上拉加载
+			scrolltolower() {
+				this.mescroll && this.mescroll.scrolltolower();
+			},
+			//注册列表滚动事件,用于下拉刷新
+			scroll(e) {
+				this.mescroll && this.mescroll.scroll(e.detail, ()=>{
+					this.$emit('scroll', this.mescroll) // 此时可直接通过 this.mescroll.scrollTop获取滚动条位置; this.mescroll.isScrollUp获取是否向上滑动
+				})
+			},
 			//注册列表touchstart事件,用于下拉刷新
 			touchstartEvent(e) {
 				this.mescroll && this.mescroll.touchstartEvent(e);
@@ -120,12 +138,14 @@
 				down: {
 					inOffset(mescroll) {
 						// 下拉的距离进入offset范围内那一刻的回调
+						vm.scrollAble = false; // 禁止下拉,避免抖动 (自定义mescroll组件时,此行不可删)
 						vm.isDownReset = false; // 不重置高度 (自定义mescroll组件时,此行不可删)
 						vm.isDownLoading = false; // 不显示加载中
 						vm.downText = mescroll.optDown.textInOffset; // 设置文本
 					},
 					outOffset(mescroll) {
 						// 下拉的距离大于offset那一刻的回调
+						vm.scrollAble = false; // 禁止下拉,避免抖动 (自定义mescroll组件时,此行不可删)
 						vm.isDownReset = false; // 不重置高度 (自定义mescroll组件时,此行不可删)
 						vm.isDownLoading = false; // 不显示加载中
 						vm.downText = mescroll.optDown.textOutOffset; // 设置文本
@@ -137,12 +157,14 @@
 					},
 					showLoading(mescroll, downHight) {
 						// 显示下拉刷新进度的回调
+						vm.scrollAble = true; // 开启下拉 (自定义mescroll组件时,此行不可删)
 						vm.isDownReset = true; // 重置高度 (自定义mescroll组件时,此行不可删)
 						vm.isDownLoading = true;// 显示加载中
 						vm.downHight = downHight; // 设置下拉区域的高度 (自定义mescroll组件时,此行不可删)
 						vm.downText = mescroll.optDown.textLoading; // 设置文本
 					},
 					endDownScroll(mescroll) {
+						vm.scrollAble = true;// 开启下拉 (自定义mescroll组件时,此行不可删)
 						vm.isDownReset = true;// 重置高度 (自定义mescroll组件时,此行不可删)
 						vm.isDownLoading = false; // 不显示加载中
 						vm.downHight = 0; // 设置下拉区域的高度 (自定义mescroll组件时,此行不可删)
@@ -198,13 +220,32 @@
 			vm.mescroll = new MeScroll(myOption);
 			// init回调mescroll对象
 			vm.$emit('init', vm.mescroll);
-
+			
 			// 设置mescroll实例对象的body高度,使down的bottomOffset生效
 			uni.getSystemInfo({
 				success(res) {
+					vm.height = res.windowHeight + 'px';
 					vm.mescroll.setBodyHeight(res.windowHeight);
 				}
 			});
+			
+			// 因为使用的是scrollview,这里需自定义scrollTo
+			vm.mescroll.resetScrollTo((y, t)=>{
+				let curY = vm.mescroll.getScrollTop()
+				if (t === 0) {
+					vm.scrollAnim = false;
+					vm.scrollTop = curY;
+					vm.$nextTick(function(){
+						vm.scrollTop = y
+					})
+				} else{
+					vm.scrollAnim = true;
+					vm.mescroll.getStep(curY, y, step=>{
+						vm.scrollTop = step
+					}, t)
+				}
+			})
+			
 		}
 	}
 </script>

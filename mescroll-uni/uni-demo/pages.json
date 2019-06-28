@@ -95,26 +95,6 @@
 					"bounce" : "none" // 取消iOS回弹,避免和下拉刷新冲突 (小程序无法取消)
 				}
 			}
-        },
-        {
-            "path" : "pages/senior/meituan",
-            "style" : {
-				"navigationBarTitleText" : "美团 mescroll-meituan.vue",
-				// "enablePullDownRefresh" : false, // 不开启下拉刷新, 默认就是false
-				"app-plus" : {
-					"bounce" : "none" // 取消iOS回弹,避免和下拉刷新冲突 (小程序无法取消)
-				}
-			}
-        },
-        {
-            "path" : "pages/senior/meitunmama",
-            "style" : {
-				"navigationBarTitleText" : "美囤妈妈 mescroll-meitun.vue",
-				// "enablePullDownRefresh" : false, // 不开启下拉刷新, 默认就是false
-				"app-plus" : {
-					"bounce" : "none" // 取消iOS回弹,避免和下拉刷新冲突 (小程序无法取消)
-				}
-			}
         }
     ],
     "globalStyle" : {

@@ -1,16 +1,21 @@
-/*! mescroll-uni
- * version 1.0.3
- * 2019-06-12 文举
+/* mescroll-uni
+ * version 1.1.0
+ * 2019-06-26
  * http://www.mescroll.com
  */
 
-page,
-.mescroll-uni{
+page {
 	height: 100%;
-	-webkit-overflow-scrolling: touch;
+	-webkit-overflow-scrolling: touch; /*使iOS列表滑动流畅*/
 }
 
-/*下拉刷新区域*/
+.mescroll-uni {
+	height: 100%;
+	overflow-y: auto;
+	box-sizing: border-box; /* 避免设置padding出现双滚动条的问题 */
+}
+
+/* 下拉刷新区域 */
 .mescroll-downwarp {
 	position: relative;
 	width: 100%;
@@ -19,7 +24,7 @@ page,
 	text-align: center;
 }
 
-/*下拉刷新--内容区,定位于区域底部*/
+/* 下拉刷新--内容区,定位于区域底部 */
 .mescroll-downwarp .downwarp-content {
 	position: absolute;
 	left: 0;
@@ -30,7 +35,7 @@ page,
 	text-align: center;
 }
 
-/*上拉加载区域*/
+/* 上拉加载区域 */
 .mescroll-upwarp {
 	min-height: 60upx;
 	padding: 30upx 0;
@@ -38,7 +43,7 @@ page,
 	clear: both;
 }
 
-/*下拉刷新,上拉加载--提示文本*/
+/* 下拉刷新,上拉加载--提示文本 */
 .mescroll-downwarp .downwarp-tip,
 .mescroll-upwarp .upwarp-tip,
 .mescroll-upwarp .upwarp-nodata {
@@ -53,7 +58,7 @@ page,
 	margin-left: 16upx;
 }
 
-/*下拉刷新,上拉加载--旋转进度条*/
+/* 下拉刷新,上拉加载--旋转进度条 */
 .mescroll-downwarp .downwarp-progress,
 .mescroll-upwarp .upwarp-progress {
 	display: inline-block;
@@ -65,13 +70,13 @@ page,
 	vertical-align: middle;
 }
 
-/*下拉刷新--高度重置的过渡动画*/
+/* 下拉刷新--高度重置的过渡动画 */
 .mescroll-downwarp-reset {
 	-webkit-transition: height 300ms;
 	transition: height 300ms;
 }
 
-/*旋转动画*/
+/* 旋转动画 */
 .mescroll-rotate {
 	-webkit-animation: mescrollRotate 0.6s linear infinite;
 	animation: mescrollRotate 0.6s linear infinite;
@@ -97,14 +102,15 @@ page,
 	}
 }
 
-/*无任何数据的空布局*/
+/* 无任何数据的空布局 */
 .mescroll-empty {
 	box-sizing: border-box;
 	width: 100%;
 	padding: 40upx;
 	text-align: center;
 }
-.mescroll-empty.empty-fixed{
+
+.mescroll-empty.empty-fixed {
 	z-index: 99;
 	position: fixed;
 	top: 20%;
@@ -136,7 +142,7 @@ page,
 	opacity: .75;
 }
 
-/*回到顶部的按钮*/
+/* 回到顶部的按钮 */
 .mescroll-totop {
 	z-index: 9990;
 	position: fixed;
@@ -148,7 +154,7 @@ page,
 	opacity: 0;
 }
 
-/*显示动画--淡入*/
+/* 显示动画--淡入 */
 .mescroll-lazy-in,
 .mescroll-fade-in {
 	-webkit-animation: mescrollFadeIn .3s linear forwards;
@@ -175,7 +181,7 @@ page,
 	}
 }
 
-/*隐藏动画--淡出*/
+/* 隐藏动画--淡出 */
 .mescroll-fade-out {
 	pointer-events: none;
 	-webkit-animation: mescrollFadeOut .5s linear forwards;
