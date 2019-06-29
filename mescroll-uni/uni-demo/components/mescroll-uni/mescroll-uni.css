@@ -22,6 +22,7 @@ page {
 
 /* 定位的方式固定高度 */
 .mescroll-uni.mescroll-uni-fixed{
+	z-index: 1;
 	position: fixed;
 	top: 0;
 	left: 0;
