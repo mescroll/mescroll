@@ -1,5 +1,5 @@
 <template>
-	<mescroll-uni @up="upCallback" @init="mescrollInit">
+	<mescroll-uni @down="downCallback" @up="upCallback">
 		<view class="notice-warp">
 			<view class="notice">商品的名称价格销量随时会变动,也可能会下架删除</view>
 			<view class="notice">所以本Demo的下拉刷新会重置列表数据</view>
@@ -23,15 +23,17 @@
 		},
 		data() {
 			return {
-				mescroll: null, //mescroll实例对象
 				pdList: [], // 数据列表
 				dataTag: 1  // dataTag=2,模拟加载编辑后的数据
 			}
 		},
 		methods: {
-			// mescroll组件初始化的回调,可获取到mescroll对象
-			mescrollInit(mescroll) {
-				this.mescroll = mescroll;
+			/*下拉刷新的回调 */
+			downCallback(mescroll) {
+				// 这里加载你想下拉刷新的数据, 比如刷新轮播数据
+				// loadSwiper();
+				// 下拉刷新的回调,默认重置上拉加载列表为第一页 (自动执行 mescroll.num=1, 再触发upCallback方法 )
+				mescroll.resetUpScroll()
 			},
 			/*上拉加载的回调: mescroll携带page的参数, 其中num:当前页 从1开始, size:每页数据条数,默认10 */
 			upCallback(mescroll) {

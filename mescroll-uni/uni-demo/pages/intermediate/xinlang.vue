@@ -4,7 +4,7 @@
 		<image class="header" src="http://www.mescroll.com/img/xinlang/header.jpg" mode="aspectFit"/>
 		<view :style="{'top':top}" class="download-tip">1条新微博</view>
 		
-		<mescroll-uni top="100" bottom="100" :down="downOption" @down="downCallback" @up="upCallback" @init="mescrollInit">
+		<mescroll-uni top="100" bottom="100" :down="downOption" @down="downCallback" @up="upCallback">
 			<!-- 新增的微博 -->
 			<view class="news-li" v-for="news in addList" :key="news.id">
 				<view>{{news.title}}</view>
@@ -34,7 +34,6 @@
 		},
 		data() {
 			return {
-				mescroll: null, //mescroll实例对象
 				downOption:{
 					auto:false,//是否在初始化完毕之后自动执行下拉回调callback; 默认true
 				},
@@ -44,18 +43,14 @@
 			}
 		},
 		methods: {
-			// mescroll组件初始化的回调,可获取到mescroll对象
-			mescrollInit(mescroll) {
-				this.mescroll = mescroll;
-			},
 			/*下拉刷新的回调 */
-			downCallback(){
+			downCallback(mescroll){
 				//加载轮播数据..
 				//...
 				//加载列表数据
 				this.getListDataFromNet(0, 1, (curPageData)=>{
 					//联网成功的回调,隐藏下拉刷新的状态
-					this.mescroll.endSuccess();
+					mescroll.endSuccess();
 					//添加新数据到顶部
 					this.addList.unshift(curPageData[0]);
 					//显示提示
@@ -71,7 +66,7 @@
 					},2000);
 				}, ()=>{
 					//联网失败的回调,隐藏下拉刷新的状态
-					this.mescroll.endErr();
+					mescroll.endErr();
 				});
 			},
 			/*上拉加载的回调: mescroll携带page的参数, 其中num:当前页 从1开始, size:每页数据条数,默认10 */

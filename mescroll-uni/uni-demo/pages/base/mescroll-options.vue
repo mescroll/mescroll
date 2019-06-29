@@ -1,5 +1,5 @@
 <template>
-	<mescroll-uni :down="downOption" @down="downCallback" :up="upOption" @up="upCallback" @init="mescrollInit" @emptyclick="emptyClick" @topclick="topClick" @scroll="scroll">
+	<mescroll-uni :down="downOption" @down="downCallback" :up="upOption" @up="upCallback" @emptyclick="emptyClick" @topclick="topClick" @scroll="scroll" @init="mescrollInit">
 		<!--轮播-->
 		<swiper autoplay="true" interval="3000" duration="300" circular="true">
             <swiper-item>

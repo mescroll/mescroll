@@ -1,5 +1,5 @@
 <template>
-	<mescroll-uni :down="downOption" :up="upOption" @up="upCallback" @init="mescrollInit">
+	<mescroll-uni :down="downOption" @down="downCallback" :up="upOption" @up="upCallback" @init="mescrollInit">
 		<view class="item">
 			<text class="tip">热门搜索:</text>
 			<text class="hot-word" @click="curWord='奶粉'">奶粉</text>
@@ -57,6 +57,11 @@
 			// mescroll组件初始化的回调,可获取到mescroll对象
 			mescrollInit(mescroll) {
 				this.mescroll = mescroll;
+			},
+			/*下拉刷新的回调 */
+			downCallback(mescroll) {
+				// 下拉刷新的回调,默认重置上拉加载列表为第一页 (自动执行 mescroll.num=1, 再触发upCallback方法 )
+				mescroll.resetUpScroll()
 			},
 			/*上拉加载的回调: mescroll携带page的参数, 其中num:当前页 从1开始, size:每页数据条数,默认10 */
 			upCallback(mescroll) {

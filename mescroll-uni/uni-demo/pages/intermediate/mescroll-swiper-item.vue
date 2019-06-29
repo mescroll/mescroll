@@ -1,6 +1,6 @@
 <template>
 	<!-- swiper中的transfrom会使fixed失效,此时需设置fixed为false,而top会自动使用padding-top -->
-	<mescroll-uni :fixed="false" top="60" :down="downOption" @down="downCallback" :up="upOption" @up="upCallback" @init="mescrollInit" @emptyclick="emptyClick">
+	<mescroll-uni :fixed="false" top="60" :down="downOption" @down="downCallback" :up="upOption" @up="upCallback" @emptyclick="emptyClick" @init="mescrollInit">
 		<!-- 数据列表 -->
 		<pd-list :list="pdList"></pd-list>
 	</mescroll-uni>

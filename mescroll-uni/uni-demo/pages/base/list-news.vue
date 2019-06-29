@@ -1,5 +1,5 @@
 <template>
-	<mescroll-uni :down="downOption" @down="downCallback" @up="upCallback" @init="mescrollInit">
+	<mescroll-uni :down="downOption" @down="downCallback" @up="upCallback">
 		<view class="notice">本Demo的下拉刷新: 添加新数据到列表顶部</view>
 		<view class="news-li" v-for="news in dataList" :key="news.id">
 			<view>{{news.title}}</view>
@@ -17,7 +17,6 @@
 		},
 		data() {
 			return {
-				mescroll: null, //mescroll实例对象
 				downOption: {
 					auto: false //是否在初始化后,自动执行下拉回调callback; 默认true
 				},
@@ -25,10 +24,6 @@
 			}
 		},
 		methods: {
-			// mescroll组件初始化的回调,可获取到mescroll对象
-			mescrollInit(mescroll) {
-				this.mescroll = mescroll;
-			},
 			/*下拉刷新的回调 */
 			downCallback(mescroll) {
 				//联网加载数据
