@@ -6,6 +6,7 @@
 
 page {
 	height: 100%;
+	box-sizing: border-box; /* 避免设置padding出现双滚动条的问题 */
 	-webkit-overflow-scrolling: touch; /*使iOS列表滑动流畅*/
 }
 
@@ -28,7 +29,8 @@ page {
 	left: 0;
 	right: 0;
 	bottom: 0;
-	height: auto;
+	width: auto; /* 使right生效 */
+	height: auto; /* 使bottom生效 */
 }
 
 /* 下拉刷新区域 */
