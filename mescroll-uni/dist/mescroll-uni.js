@@ -1,6 +1,6 @@
 /* mescroll-uni
  * version 1.1.0
- * 2019-06-26
+ * 2019-07-01 wenju
  * http://www.mescroll.com
  */
 
@@ -82,7 +82,7 @@ MeScroll.prototype.extendUpScroll = function(optUp) {
 		},
 		fps: 40, // 上拉节流 (值越大每秒刷新频率越高)
 		noMoreSize: 5, // 如果列表已无数据,可设置列表的总数量要大于等于5条才显示无更多数据;避免列表数据过少(比如只有一条数据),显示无更多数据会不好看
-		offset: 100, // 距底部多远时,触发upCallback
+		offset: 80, // 距底部多远时,触发upCallback
 		textLoading: '加载中 ...', // 加载中的提示文本
 		textNoMore: '-- END --', // 没有更多数据的提示文本
 		inited: null, // 初始化完毕的回调
