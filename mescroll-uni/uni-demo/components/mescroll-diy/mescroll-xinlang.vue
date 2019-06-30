@@ -28,7 +28,7 @@
 					<view class="upwarp-tip">{{optUp.textLoading}}</view>
 				</template>
 				<!-- 无数据 -->
-				<view v-if="isUpNoMore" class="upwarp-nodata">{{optUp.textNoMore}}</view>
+				<view v-if="!isDownLoading && isUpNoMore" class="upwarp-nodata">{{optUp.textNoMore}}</view>
 			</view>
 		</scroll-view>
 	
