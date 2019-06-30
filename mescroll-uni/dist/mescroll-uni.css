@@ -9,10 +9,26 @@ page {
 	-webkit-overflow-scrolling: touch; /*使iOS列表滑动流畅*/
 }
 
+.mescroll-uni-warp{
+	height: 100%;
+}
+
 .mescroll-uni {
 	height: 100%;
+	min-height: 200upx;
 	overflow-y: auto;
 	box-sizing: border-box; /* 避免设置padding出现双滚动条的问题 */
+}
+
+/* 定位的方式固定高度 */
+.mescroll-uni.mescroll-uni-fixed{
+	z-index: 1;
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	height: auto;
 }
 
 /* 下拉刷新区域 */
