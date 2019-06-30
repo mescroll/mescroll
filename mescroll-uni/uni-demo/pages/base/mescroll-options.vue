@@ -1,5 +1,5 @@
 <template>
-	<mescroll-uni :down="downOption" @down="downCallback" :up="upOption" @up="upCallback" @emptyclick="emptyClick" @topclick="topClick" @scroll="scroll" @init="mescrollInit">
+	<mescroll-uni :down="downOption" @down="downCallback" :up="upOption" @up="upCallback" :fixed="true" @emptyclick="emptyClick" @topclick="topClick" @scroll="scroll" @init="mescrollInit">
 		<!--轮播-->
 		<swiper autoplay="true" interval="3000" duration="300" circular="true">
             <swiper-item>
@@ -25,10 +25,6 @@
 	import PdList from "@/components/other/pd-list.vue";
 	import mockData from "@/common/pdlist.js"; // 模拟数据
 	
-	// 您可以修改 /components/mescroll-uni/mescroll-uni-option.js的全局配置, 快速自定义自己的下拉组件
-	// npm安装的, 可以直接修改 /node_modules/mescroll-uni/mescroll-uni-option.js
-	// 在具体的页面中,您可以配置downOption 和 upOption 实现具体界面的自定义
-	
 	export default {
 		components: {
 			MescrollUni,
@@ -44,6 +40,7 @@
 					isLock: false, // 是否锁定下拉刷新,默认false;
 					isBoth: true, // 下拉刷新时,如果滑动到列表底部是否可以同时触发上拉加载;默认true,两者可同时触发;
 					offset: 80, // 在列表顶部,下拉大于80upx,松手即可触发下拉刷新的回调
+					fps: 40, // 下拉节流 (值越大每秒刷新频率越高)
 					inOffsetRate: 1, // 在列表顶部,下拉的距离小于offset时,改变下拉区域高度比例;值小于1且越接近0,高度变化越小,表现为越往下越难拉
 					outOffsetRate: 0.2, // 在列表顶部,下拉的距离大于offset时,改变下拉区域高度比例;值小于1且越接近0,高度变化越小,表现为越往下越难拉
 					bottomOffset: 20, // 当手指touchmove位置在距离body底部20upx范围内的时候结束上拉刷新,避免Webview嵌套导致touchend事件不执行
@@ -62,7 +59,9 @@
 						size: 10, // 每页数据的数量
 						time: null // 加载第一页数据服务器返回的时间; 防止用户翻页时,后台新增了数据从而导致下一页数据重复;
 					},
+					fps: 40, // 上拉节流 (值越大每秒刷新频率越高)
 					noMoreSize: 3, // 如果列表已无数据,可设置列表的总数量要大于等于5条才显示无更多数据;避免列表数据过少(比如只有一条数据),显示无更多数据会不好看
+					offset: 80, // 距底部多远时,触发upCallback
 					textLoading: '加载中 ...', // 加载中的提示文本
 					textNoMore: '-- END --', // 没有更多数据的提示文本
 					toTop: {
@@ -80,7 +79,7 @@
 						top: "35%", // fixed定位的top值 (完整的单位值,如 "35%"; "300upx")
 						zIndex: 99 // fixed定位z-index值
 					},
-					onScroll: true // 是否监听滚动事件
+					onScroll: true // 是否监听滚动事件, 默认false (配置为true时,可@scroll="scroll"获取到滚动条位置和方向)
 				},
 				pdList: [], //列表数据
 				tabType: 0, // 菜单
