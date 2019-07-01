@@ -263,7 +263,7 @@
 					})
 				} else{
 					vm.scrollAnim = true;
-					vm.mescroll.getStep(curY, y, step=>{
+					vm.mescroll.getStep(curY, y, step=>{ // 此写法可支持配置t
 						vm.scrollTop = step
 					}, t)
 				}
