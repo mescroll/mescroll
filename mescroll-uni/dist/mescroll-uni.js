@@ -172,7 +172,7 @@ MeScroll.prototype.touchmoveEvent = function(e) {
 
 	let moveY = curPoint.y - me.startPoint.y; // 和起点比,移动的距离,大于0向下拉,小于0向上拉
 	// (向下拉&&在顶部) scroll-view在滚动时不会触发touchmove,当触顶/底/左/右时,才会触发touchmove
-	if (moveY > 0 && scrollTop === me.startTop) { // scroll-view滚动到顶部时,scrollTop不一定为0, 暂时不根据scrollTop<=0判断
+	if (moveY > 0 && (scrollTop <= 0 || scrollTop === me.startTop)) { // scroll-view滚动到顶部时,scrollTop不一定为0; 在iOS的APP中scrollTop可能为负数,不一定和startTop相等
 
 		// 可下拉的条件
 		if (me.optDown.use && !me.inTouchend && !me.isDownScrolling && !me.optDown.isLock && (!me.isUpScrolling || (me.isUpScrolling &&

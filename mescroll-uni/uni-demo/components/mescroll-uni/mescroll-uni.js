@@ -1,6 +1,6 @@
 /* mescroll-uni
- * version 1.1.0
- * 2019-07-01 wenju
+ * version 1.1.1
+ * 2019-07-16 wenju
  * http://www.mescroll.com
  */
 
@@ -146,6 +146,7 @@ MeScroll.prototype.touchstartEvent = function(e) {
 	let me = this;
 
 	me.startPoint = me.getPoint(e); // 记录起点
+	me.startTop = me.getScrollTop(); // 记录此时的滚动条位置
 	me.lastPoint = me.startPoint; // 重置上次move的点
 	me.maxTouchmoveY = me.getBodyHeight() - me.optDown.bottomOffset; // 手指触摸的最大范围(写在touchstart避免body获取高度为0的情况)
 	me.inTouchend = false; // 标记不是touchend
@@ -170,9 +171,8 @@ MeScroll.prototype.touchmoveEvent = function(e) {
 	let curPoint = me.getPoint(e); // 当前点
 
 	let moveY = curPoint.y - me.startPoint.y; // 和起点比,移动的距离,大于0向下拉,小于0向上拉
-
-	// (向下拉&&在顶部)
-	if (moveY > 0 && scrollTop <= 0) {
+	// (向下拉&&在顶部) scroll-view在滚动时不会触发touchmove,当触顶/底/左/右时,才会触发touchmove
+	if (moveY > 0 && (scrollTop <= 0 || scrollTop === me.startTop)) { // scroll-view滚动到顶部时,scrollTop不一定为0; 在iOS的APP中scrollTop可能为负数,不一定和startTop相等
 
 		// 可下拉的条件
 		if (me.optDown.use && !me.inTouchend && !me.isDownScrolling && !me.optDown.isLock && (!me.isUpScrolling || (me.isUpScrolling &&
@@ -437,6 +437,7 @@ MeScroll.prototype.resetUpScroll = function(isShowLoading) {
 		this.num = page.num; // 把最新的页数赋值在mescroll上,避免对page的影响
 		this.size = page.size; // 把最新的页码赋值在mescroll上,避免对page的影响
 		this.time = page.time; // 把最新的页码赋值在mescroll上,避免对page的影响
+		this.optUp.hasNext = true; // 标记还有下一页
 		this.optUp.callback && this.optUp.callback(this); // 执行上拉回调
 	}
 }
