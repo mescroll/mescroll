@@ -2,7 +2,7 @@
 	<view class="mescroll-uni-warp">
 		<scroll-view :class="{'mescroll-uni':true, 'mescroll-uni-fixed':fixed}" :style="{'padding-top':padTop,'padding-bottom':padBottom,'top':fixedTop,'bottom':fixedBottom}" :lower-threshold="upOffset" :scroll-top="scrollTop" :scroll-with-animation="scrollAnim" @scroll="scroll" @scrolltolower="scrolltolower" @touchstart="touchstartEvent" @touchmove="touchmoveEvent" @touchend="touchendEvent" @touchcancel="touchendEvent" :scroll-y='scrollAble' :enable-back-to-top="true">
 			<!-- 下拉加载区域 (部分css样式需写成style,否则编译到浏览器会丢失,坐等HBuilderX优化编译器..)-->
-			<view v-if="optDown" class="mescroll-downwarp" :class="{'mescroll-downwarp-reset':isDownReset}" :style="{'height': downHight+'px', 'position': 'relative', 'overflow': 'hidden', '-webkit-transition': isDownReset?'height 300ms':''}">
+			<view v-if="optDown&&optDown.use" class="mescroll-downwarp" :class="{'mescroll-downwarp-reset':isDownReset}" :style="{'height': downHight+'px', 'position': 'relative', 'overflow': 'hidden', '-webkit-transition': isDownReset?'height 300ms':''}">
 				<view class="downwarp-content" style="text-align: center;position: absolute;left: 0;bottom: 0;width: 100%;padding: 20upx 0;">
 					<view class="downwarp-progress" :style="{'transform':'rotate(' + downRotate + 'deg)'}" :class="{'mescroll-rotate':isDownLoading}"></view>
 					<view class="downwarp-tip">{{downText}}</view>
@@ -20,7 +20,7 @@
 			</view>
 		
 			<!-- 上拉加载区域 -->
-			<view v-if="optUp" class="mescroll-upwarp">
+			<view v-if="optUp&&optUp.use" class="mescroll-upwarp">
 				<!-- 加载中.. -->
 				<template v-if="isUpLoading">
 					<view class="upwarp-progress mescroll-rotate"></view>
@@ -66,8 +66,8 @@
 		props: {
 			down: Object, // 下拉刷新的参数配置
 			up: Object, // 上拉加载的参数配置
-			top: [String,Number],  // padding-top的数值,单位upx. 目的是使下拉布局往下偏移
-			bottom: [String,Number],  // padding-bottom的数值,单位upx. 目的是使上拉布局往上偏移
+			top: [String,Number],  // 下拉布局往下偏移的数值, 已默认单位为upx.
+			bottom: [String,Number],  // 上拉布局往上偏移的数值, 已默认单位为upx.
 			fixed: { // 是否通过fixed固定mescroll的高度, 默认true
 				type: Boolean,
 				default(){
