@@ -43,6 +43,7 @@ MeScroll.prototype.extendDownScroll = function(optDown) {
 		isLock: false, // 是否锁定下拉刷新,默认false;
 		isBoth: true, // 下拉刷新时,如果滑动到列表底部是否可以同时触发上拉加载;默认true,两者可同时触发;
 		offset: 80, // 在列表顶部,下拉大于80px,松手即可触发下拉刷新的回调
+		startTop: 100, // scroll-view滚动到顶部时,此时的scroll-top不一定为0, 此值用于控制最大的误差
 		fps: 40, // 下拉节流 (值越大每秒刷新频率越高)
 		inOffsetRate: 1, // 在列表顶部,下拉的距离小于offset时,改变下拉区域高度比例;值小于1且越接近0,高度变化越小,表现为越往下越难拉
 		outOffsetRate: 0.2, // 在列表顶部,下拉的距离大于offset时,改变下拉区域高度比例;值小于1且越接近0,高度变化越小,表现为越往下越难拉
@@ -172,7 +173,7 @@ MeScroll.prototype.touchmoveEvent = function(e) {
 
 	let moveY = curPoint.y - me.startPoint.y; // 和起点比,移动的距离,大于0向下拉,小于0向上拉
 	// (向下拉&&在顶部) scroll-view在滚动时不会触发touchmove,当触顶/底/左/右时,才会触发touchmove
-	if (moveY > 0 && (scrollTop <= 0 || scrollTop === me.startTop)) { // scroll-view滚动到顶部时,scrollTop不一定为0; 在iOS的APP中scrollTop可能为负数,不一定和startTop相等
+	if (moveY > 0 && (scrollTop <= 0 || (scrollTop <= me.optDown.startTop && scrollTop === me.startTop))) { // scroll-view滚动到顶部时,scrollTop不一定为0; 在iOS的APP中scrollTop可能为负数,不一定和startTop相等
 
 		// 可下拉的条件
 		if (me.optDown.use && !me.inTouchend && !me.isDownScrolling && !me.optDown.isLock && (!me.isUpScrolling || (me.isUpScrolling &&
