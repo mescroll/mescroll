@@ -505,17 +505,15 @@
       me.preScrollY = scrollTop;
 
       // 如果没有在加载中
-      if (!me.isUpScrolling && (!me.isDownScrolling || (me.isDownScrolling && me.optDown.isBoth))) {
+      if (isUp && !me.isUpScrolling && me.optUp.hasNext && !me.optUp.isLock && (!me.isDownScrolling || (me.isDownScrolling && me.optDown.isBoth))) {
         // offsetheight 列表高度(内容+内边距+边框),滚动条在边框之内,所以使用clientHeight即可
         // clientHeight 列表高度(内容+内边距),不含列表边框
         // scrollHeight 列表内容撑开的高度
-        if (!me.optUp.isLock && me.optUp.hasNext) {
-          var toBottom = me.getScrollHeight() - me.getClientHeight() - scrollTop; // 滚动条距离底部的距离
-          if (toBottom <= me.optUp.offset && isUp) {
-            // 如果滚动条距离底部指定范围内且向上滑,则执行上拉加载回调
-            me.triggerUpScroll();
-          }
-        }
+		var toBottom = me.getScrollHeight() - me.getClientHeight() - scrollTop; // 滚动条距离底部的距离
+		if (toBottom <= me.optUp.offset) {
+			// 如果滚动条距离底部指定范围内且向上滑,则执行上拉加载回调
+			me.triggerUpScroll();
+		}
       }
 
       // 顶部按钮的显示隐藏
