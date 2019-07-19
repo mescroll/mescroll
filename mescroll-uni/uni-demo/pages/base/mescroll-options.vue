@@ -36,11 +36,11 @@
 				downOption: {
 					use: true, // 是否启用下拉刷新; 默认true
 					auto: true, // 是否在初始化完毕之后自动执行下拉刷新的回调; 默认true
-					autoShowLoading: true, // 如果设置auto=true(在初始化完毕之后自动执行下拉刷新的回调),那么是否显示下拉刷新的进度; 默认false
+					autoShowLoading: false, // 如果设置auto=true(在初始化完毕之后自动执行下拉刷新的回调),那么是否显示下拉刷新的进度; 默认false
 					isLock: false, // 是否锁定下拉刷新,默认false;
-					isBoth: true, // 下拉刷新时,如果滑动到列表底部是否可以同时触发上拉加载;默认true,两者可同时触发;
 					offset: 80, // 在列表顶部,下拉大于80upx,松手即可触发下拉刷新的回调
 					fps: 40, // 下拉节流 (值越大每秒刷新频率越高)
+					supply: 150, // 补帧动画的过渡时长 (只对android小程序生效,用于解决android小程序下拉卡顿的问题)
 					inOffsetRate: 1, // 在列表顶部,下拉的距离小于offset时,改变下拉区域高度比例;值小于1且越接近0,高度变化越小,表现为越往下越难拉
 					outOffsetRate: 0.2, // 在列表顶部,下拉的距离大于offset时,改变下拉区域高度比例;值小于1且越接近0,高度变化越小,表现为越往下越难拉
 					bottomOffset: 20, // 当手指touchmove位置在距离body底部20upx范围内的时候结束上拉刷新,避免Webview嵌套导致touchend事件不执行
@@ -59,7 +59,6 @@
 						size: 10, // 每页数据的数量
 						time: null // 加载第一页数据服务器返回的时间; 防止用户翻页时,后台新增了数据从而导致下一页数据重复;
 					},
-					fps: 40, // 上拉节流 (值越大每秒刷新频率越高)
 					noMoreSize: 3, // 如果列表已无数据,可设置列表的总数量要大于等于5条才显示无更多数据;避免列表数据过少(比如只有一条数据),显示无更多数据会不好看
 					offset: 80, // 距底部多远时,触发upCallback
 					textLoading: '加载中 ...', // 加载中的提示文本
@@ -138,7 +137,7 @@
 			},
 			// 滚动事件 (需在up配置onScroll:true才生效)
 			scroll(mescroll){
-				console.log('当前滚动条的位置:' + mescroll.scrollTop + ', 是否向上滑:'+mescroll.isScrollUp)
+				console.log('mescroll元素id: '+mescroll.viewId+' , 滚动内容高度:'+mescroll.getScrollHeight() + ', mescroll高度:'+mescroll.getClientHeight() + ', 滚动条位置:'+mescroll.getScrollTop() + ', 距离底部:'+mescroll.getScrollBottom() + ', 是否向上滑:'+mescroll.isScrollUp)
 			},
 			// 切换菜单
 			changeTab (type) {

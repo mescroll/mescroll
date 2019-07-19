@@ -11,7 +11,7 @@
 			</view>
 		</view>
 		
-		<!-- top是指mescroll的padding-top的数值,单位upx. 目的是使下拉布局往下偏移,不然会被悬浮菜单遮住 -->
+		<!-- top="xxx"下拉布局往下偏移,防止被悬浮菜单遮住 -->
 		<mescroll-uni top="120" @down="downCallback" :up="upOption" @up="upCallback" @emptyclick="emptyClick" @init="mescrollInit">
 			<!-- 数据列表 -->
 			<pd-list :list="pdList"></pd-list>

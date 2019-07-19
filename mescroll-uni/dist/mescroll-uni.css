@@ -1,6 +1,6 @@
 /* mescroll-uni
- * version 1.1.1
- * 2019-07-16 wenju
+ * version 1.1.2
+ * 2019-07-19 wenju
  * http://www.mescroll.com
  */
 
@@ -88,12 +88,6 @@ page {
 	vertical-align: middle;
 }
 
-/* 下拉刷新--高度重置的过渡动画 */
-.mescroll-downwarp-reset {
-	-webkit-transition: height 300ms;
-	transition: height 300ms;
-}
-
 /* 旋转动画 */
 .mescroll-rotate {
 	-webkit-animation: mescrollRotate 0.6s linear infinite;
@@ -163,7 +157,7 @@ page {
 /* 回到顶部的按钮 */
 .mescroll-totop {
 	z-index: 9990;
-	position: fixed;
+	position: fixed !important; /* 避免编译到H5,在多mescroll中定位失效 */
 	right: 20upx;
 	bottom: 120upx;
 	width: 72upx;
