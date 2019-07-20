@@ -147,7 +147,14 @@
 						let view = uni.createSelectorQuery().in(this).select('#'+this.viewId);
 						view.boundingClientRect(data => {
 							this.isExec = false;
-							this.mescroll.setClientHeight(data.height);
+							if(data){
+								this.mescroll.setClientHeight(data.height);
+							}else if(this.clientNum!=3){ // 极少部分情况,可能dom还未渲染完毕,递归获取,最多重试3次
+								this.clientNum = this.clientNum == null ? 1 : this.clientNum+1;
+								setTimeout(()=>{
+									this.setClientHeight()
+								},this.clientNum*100)
+							}
 						}).exec();
 					})
 				}
