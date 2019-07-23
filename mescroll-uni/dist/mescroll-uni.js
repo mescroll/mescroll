@@ -1,12 +1,12 @@
 /* mescroll-uni
- * version 1.1.2
- * 2019-07-19 wenju
+ * version 1.1.4
+ * 2019-07-23 wenju
  * http://www.mescroll.com
  */
 
 export default function MeScroll(options) {
 	let me = this;
-	me.version = '1.1.2'; // mescroll版本号
+	me.version = '1.1.4'; // mescroll版本号
 	me.options = options || {}; // 配置
 
 	me.isDownScrolling = false; // 是否在执行下拉刷新的回调
@@ -114,7 +114,12 @@ MeScroll.extend = function(userOption, defaultOption) {
 	if (!userOption) return defaultOption;
 	for (let key in defaultOption) {
 		if (userOption[key] == null) {
-			userOption[key] = defaultOption[key];
+			let def = defaultOption[key];
+			if (def !=null && typeof def === 'object') {
+				userOption[key] = MeScroll.extend({}, def); // 深度匹配
+			} else{
+				userOption[key] = def;
+			}
 		} else if (typeof userOption[key] === 'object') {
 			MeScroll.extend(userOption[key], defaultOption[key]); // 深度匹配
 		}
