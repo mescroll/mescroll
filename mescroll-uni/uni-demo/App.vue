@@ -13,4 +13,5 @@
 </script>
 
 <style>
+	page{background-color: #fff}
 </style>

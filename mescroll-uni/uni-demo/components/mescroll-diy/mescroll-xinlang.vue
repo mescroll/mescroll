@@ -246,10 +246,8 @@
 			}
 
 			MeScroll.extend(diyOption, GlobalOption); // 混入全局的配置
-			let myOption = MeScroll.extend({
-				'down': vm.down ? JSON.parse(JSON.stringify(vm.down)) : vm.down, // 深拷贝,避免对props的影响
-				'up': vm.up ? JSON.parse(JSON.stringify(vm.up)) : vm.up // 深拷贝,避免对props的影响
-			}, diyOption); // 混入具体界面的配置
+			let myOption = JSON.parse(JSON.stringify({'down': vm.down,'up': vm.up})) // 深拷贝,避免对props的影响
+			MeScroll.extend(myOption, diyOption); // 混入具体界面的配置
 			
 			// 初始化MeScroll对象
 			vm.mescroll = new MeScroll(myOption);
