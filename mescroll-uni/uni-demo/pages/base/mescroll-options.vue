@@ -54,6 +54,7 @@
 					auto: true, // 是否在初始化完毕之后自动执行上拉加载的回调; 默认true
 					isLock: false, // 是否锁定上拉加载,默认false;
 					isBoth: true, // 上拉加载时,如果滑动到列表顶部是否可以同时触发下拉刷新;默认true,两者可同时触发;
+					isBounce: false, // 默认禁止橡皮筋的回弹效果, 必读事项: http://www.mescroll.com/qa.html?v=190725#q25
 					page: {
 						num: 0, // 当前页码,默认0,回调之前会加1,即callback(page)会从1开始
 						size: 10, // 每页数据的数量
