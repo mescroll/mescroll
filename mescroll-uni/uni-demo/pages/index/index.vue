@@ -30,6 +30,10 @@
 		
 		<view class="group-title">intermediate demos 中级案例</view>
 		
+		<navigator url="/pages/base/sticky">
+			<view class="demo-li">sticky<text class="demo-tip">吸顶悬浮</text></view>
+		</navigator>
+		
 		<navigator url="/pages/intermediate/mescroll-swiper">
 			<view class="demo-li">mescroll-swiper<text class="demo-tip">轮播菜单导航</text></view>
 		</navigator>
