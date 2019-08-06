@@ -31,7 +31,11 @@
 		<view class="group-title">intermediate demos 中级案例</view>
 		
 		<navigator url="/pages/base/sticky">
-			<view class="demo-li">sticky<text class="demo-tip">吸顶悬浮</text></view>
+			<view class="demo-li">sticky<text class="demo-tip">吸顶悬浮 (切换菜单,刷新列表)</text></view>
+		</navigator>
+		
+		<navigator url="/pages/base/sticky-data">
+			<view class="demo-li">sticky-data<text class="demo-tip">吸顶悬浮 (切换菜单,缓存数据)</text></view>
 		</navigator>
 		
 		<navigator url="/pages/intermediate/mescroll-swiper">

@@ -15,7 +15,7 @@
 		        </swiper-item>
 		    </swiper>
 			
-			<view class="demo-tip">每次切换菜单都刷新列表数据</view>
+			<view class="demo-tip">列表只初始化一次,切换菜单缓存数据</view>
 			
 			<!-- 菜单 (在mescroll-uni中不能使用fixed,否则iOS滚动时会抖动, 所以需在mescroll-uni之外存在一个一样的菜单) -->
 			<view id="tabInList">
@@ -43,14 +43,24 @@
 		data() {
 			return {
 				mescroll: null, //mescroll实例对象
-				pdList: [], // 数据列表
 				upOption: {
 					onScroll: true // 是否监听滚动事件, 默认false (配置为true时,可@scroll="scroll"获取到滚动条位置和方向)
 				},
-				tabs:[{name:'全部'}, {name:'母婴'}, {name:'图书'}],
+				tabs:[
+					{name:'全部', pdList: null, num:1, y:0, curPageLen:0, hasNext:true},
+					{name:'母婴', pdList: null, num:1, y:0, curPageLen:0, hasNext:true},
+					{name:'图书', pdList: null, num:1, y:0, curPageLen:0, hasNext:true}
+					],
 				tabIndex: 0, // 当前菜单下标
+				preIndex: 0, // 前一个菜单下标
 				navTop: null, // nav距离到顶部的距离 (如计算不准确,可直接写死某个值)
 				isShowSticky: false // 是否悬浮
+			}
+		},
+		computed: {
+			// 列表数据
+			pdList() {
+				return this.tabs[this.tabIndex].pdList
 			}
 		},
 		methods: {
@@ -75,14 +85,23 @@
 				this.getListDataFromNet(mescroll.num, mescroll.size, (curPageData)=>{
 					//联网成功的回调
 					console.log("mescroll.num=" + mescroll.num + ", mescroll.size=" + mescroll.size + ", curPageData.length=" + curPageData.length);
-
+					
+					// 当前tab数据
+					let curTab = this.tabs[this.tabIndex]
+					
 					//设置列表数据
-					if(mescroll.num == 1) this.pdList = []; //如果是第一页需手动制空列表
-					this.pdList=this.pdList.concat(curPageData); //追加新数据
+					if(mescroll.num == 1) curTab.pdList = []; //如果是第一页需手动制空列表
+					curTab.pdList=curTab.pdList.concat(curPageData); //追加新数据
 					
 					// 数据渲染完毕再隐藏加载状态
 					this.$nextTick(()=>{
+						// 需先隐藏加载状态
 						mescroll.endSuccess(curPageData.length);
+						// 再记录当前页的数据
+						curTab.num = mescroll.num; // 页码
+						curTab.curPageLen = curPageData.length; // 当前页长
+						curTab.hasNext = mescroll.optUp.hasNext; // 是否还有下一页
+						
 						// 设置nav到顶部的距离 (需根据自身的情况获取navTop的值, 这里放到列表数据渲染完毕之后)
 						// 也可以放到onReady里面,或者菜单顶部的数据(轮播等)加载完毕之后..
 						if(!this.navTop) this.setNavTop()
@@ -122,8 +141,24 @@
 			},
 			// 切换菜单
 			changeTab (index) {
-				this.isChangeTab = true;
-				this.mescroll.resetUpScroll()
+				// 记录前一个菜单的数据
+				let preTab = this.tabs[this.preIndex]
+				preTab.y = this.mescroll.getScrollTop(); // 滚动条位置
+				this.preIndex = index;
+				// 当前菜单的数据
+				let curTab = this.tabs[index]
+				if (!curTab.pdList) {
+					// 没有初始化,则初始化
+					this.isChangeTab = true;
+					this.mescroll.resetUpScroll()
+				} else{
+					// 初始化过,则恢复之前的列表数据
+					this.mescroll.setPageNum(curTab.num + 1); // 恢复当前页码
+					this.mescroll.endSuccess(curTab.curPageLen, curTab.hasNext); // 恢复是否有下一页或显示空布局
+					this.$nextTick(()=>{
+						this.mescroll.scrollTo(curTab.y, 0) // 恢复滚动条的位置
+					})
+				}
 			},
 			
 			/*联网加载列表数据

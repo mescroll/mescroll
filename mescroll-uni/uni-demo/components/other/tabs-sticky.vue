@@ -1,18 +1,14 @@
 <!-- 悬浮菜单 <tabs-sticky v-model="index" :fixed="false" @change="changeTab"></tabs-sticky> -->
 <template>
 	<view class="tabs-sticky" :class="{'tabs-fixed': fixed}">
-		<view class="tab" v-for="(tab, i) in tabs" :key="i" :class="{active: value==i}" @click="changeTab(i)">{{tab}}</view>
+		<view class="tab" v-for="(tab, i) in tabs" :key="i" :class="{active: value==i}" @click="changeTab(i)">{{tab.name}}</view>
 	</view>
 </template>
 
 <script>
 	export default {
-		data() {
-			return {
-				tabs: ['全部', '奶粉', '图书'] // 菜单
-			}
-		},
 		props:{
+			tabs: Array, // 菜单 [{name:'全部'},{name:'母婴'},{name:'图书'}]
 			value: { // 当前菜单下标 (使用v-model语法糖: 1.props需为value; 2.需回调input事件)
 				type: Number,
 				default(){
