@@ -1,7 +1,6 @@
 // mescroll 全局配置
 const GlobalOption = {
 	down: {
-		supply: 200, // 补帧动画的过渡时长 (只对android小程序生效,用于解决android小程序下拉卡顿的问题)
 		offset: 80 // 在列表顶部,下拉大于80upx,松手即可触发下拉刷新的回调
 	},
 	up: {

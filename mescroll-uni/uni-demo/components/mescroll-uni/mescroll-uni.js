@@ -1,12 +1,12 @@
 /* mescroll-uni
- * version 1.1.5
- * 2019-07-25 wenju
+ * version 1.1.6
+ * 2019-10-15 wenju
  * http://www.mescroll.com
  */
 
 export default function MeScroll(options) {
 	let me = this;
-	me.version = '1.1.5'; // mescroll版本号
+	me.version = '1.1.6'; // mescroll版本号
 	me.options = options || {}; // 配置
 
 	me.isDownScrolling = false; // 是否在执行下拉刷新的回调
@@ -44,7 +44,6 @@ MeScroll.prototype.extendDownScroll = function(optDown) {
 		offset: 80, // 在列表顶部,下拉大于80px,松手即可触发下拉刷新的回调
 		startTop: 100, // scroll-view滚动到顶部时,此时的scroll-top不一定为0, 此值用于控制最大的误差
 		fps: 40, // 下拉节流 (值越大每秒刷新频率越高)
-		supply: 200, // 补帧动画的过渡时长 (只对android小程序生效,用于解决android小程序下拉卡顿的问题)
 		inOffsetRate: 1, // 在列表顶部,下拉的距离小于offset时,改变下拉区域高度比例;值小于1且越接近0,高度变化越小,表现为越往下越难拉
 		outOffsetRate: 0.2, // 在列表顶部,下拉的距离大于offset时,改变下拉区域高度比例;值小于1且越接近0,高度变化越小,表现为越往下越难拉
 		bottomOffset: 20, // 当手指touchmove位置在距离body底部20px范围内的时候结束上拉刷新,避免Webview嵌套导致touchend事件不执行

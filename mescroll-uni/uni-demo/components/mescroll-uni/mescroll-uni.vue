@@ -2,22 +2,25 @@
 	<view class="mescroll-uni-warp">
 		<scroll-view :id="viewId" class="mescroll-uni" :class="{'mescroll-uni-fixed':fixed}" :style="{'padding-top':padTop,'padding-bottom':padBottom,'top':fixedTop,'bottom':fixedBottom}" :scroll-top="scrollTop" :scroll-with-animation="scrollAnim" @scroll="scroll" @touchstart="touchstartEvent" @touchmove="touchmoveEvent" @touchend="touchendEvent" @touchcancel="touchendEvent" :scroll-y='scrollAble' :throttle="mescroll.optUp.onScroll==null" :enable-back-to-top="true">
 			<!-- 下拉加载区域-->
-			<view v-if="mescroll.optDown.use" class="mescroll-downwarp" :style="{'height': downHight, 'transition': supplyHeight}">
+			<view v-if="mescroll.optDown.use" class="mescroll-downwarp" :style="{'transform': 'translateY('+downHight+')', 'transition': transition}">
 				<view class="downwarp-content">
-					<view class="downwarp-progress" :class="{'mescroll-rotate':isDownLoading}" :style="{'transform':downRotate, 'transition': supplyAll}"></view>
+					<view class="downwarp-progress" :class="{'mescroll-rotate':isDownLoading}" :style="{'transform':downRotate}"></view>
 					<view class="downwarp-tip">{{downText}}</view>
 				</view>
 			</view>
 			
-			<!-- 列表内容 -->
-			<slot></slot>
-			
-			<!-- 空布局 -->
-			<view v-if="isShowEmpty" class="mescroll-empty" :class="{'empty-fixed':optEmpty.fixed}" :style="{'z-index':optEmpty.zIndex,'top':optEmpty.top}">
-				<image v-if="optEmpty.icon" class="empty-icon" :src="optEmpty.icon" mode="widthFix" />
-				<view v-if="optEmpty.tip" class="empty-tip">{{optEmpty.tip}}</view>
-				<view v-if="optEmpty.btnText" class="empty-btn" @click="emptyClick">{{optEmpty.btnText}}</view>
+			<view :style="{'transform': 'translateY('+downHight+')', 'transition': transition}">
+				<!-- 列表内容 -->
+				<slot></slot>
+				
+				<!-- 空布局 -->
+				<view v-if="isShowEmpty" class="mescroll-empty" :class="{'empty-fixed':optEmpty.fixed}" :style="{'z-index':optEmpty.zIndex,'top':optEmpty.top}">
+					<image v-if="optEmpty.icon" class="empty-icon" :src="optEmpty.icon" mode="widthFix" />
+					<view v-if="optEmpty.tip" class="empty-tip">{{optEmpty.tip}}</view>
+					<view v-if="optEmpty.btnText" class="empty-btn" @click="emptyClick">{{optEmpty.btnText}}</view>
+				</view>
 			</view>
+			
 		
 			<!-- 上拉加载区域 -->
 			<view v-if="mescroll.optUp.use" class="mescroll-upwarp">
@@ -51,7 +54,6 @@
 				downHight: 0, //下拉刷新: 容器高度
 				downRotate: 0, //下拉刷新: 圆形进度条旋转的角度
 				downText: '', //下拉刷新: 提示的文本
-				isAnimSupply: false, //下拉刷新: 是否启用补帧动画
 				isDownReset: false, //下拉刷新: 是否显示重置的过渡动画
 				isDownLoading: false, //下拉刷新: 是否显示加载中
 				isUpLoading: false, // 上拉加载: 是否显示 "加载中..."
@@ -102,12 +104,9 @@
 			optEmpty() {
 				return this.mescroll.optUp.empty
 			},
-			// 补帧动画
-			supplyHeight(){
-				return this.isDownReset ? 'height 300ms' : this.isAnimSupply ? 'height '+this.mescroll.optDown.supply+'ms' : ''
-			},
-			supplyAll(){
-				return this.isAnimSupply ? 'all '+this.mescroll.optDown.supply+'ms' : ''
+			// 过渡
+			transition(){
+				return this.isDownReset ? 'transform 300ms' : ''
 			}
 		},
 		methods: {
@@ -139,7 +138,7 @@
 				this.mescroll.scrollTo(0, this.mescroll.optUp.toTop.duration); // 执行回到顶部
 				this.$emit('topclick', this.mescroll); // 派发点击回到顶部按钮的回调
 			},
-			// 更新滚动区域的高度
+			// 更新滚动区域的高度 (使内容不满屏和到底,都可继续翻页)
 			setClientHeight(){
 				if(this.mescroll.getClientHeight(true) === 0 && !this.isExec){
 					this.isExec = true; // 避免多次获取
@@ -278,11 +277,6 @@
 					}, t)
 				}
 			})
-			
-			// android小程序touchmove触发频率低,需开启补帧动画
-			// #ifdef MP
-			if(uni.getSystemInfoSync().platform === 'android') vm.isAnimSupply = true;
-			// #endif
 		},
 		mounted() {
 			// 设置容器的高度

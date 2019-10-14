@@ -5,7 +5,6 @@ const GlobalOption = {
 		textInOffset: '下拉刷新', // 下拉的距离在offset范围内的提示文本
 		textOutOffset: '释放更新', // 下拉的距离大于offset范围的提示文本
 		textLoading: '加载中 ...', // 加载中的提示文本
-		supply: 200, // 补帧动画的过渡时长 (只对android小程序生效,用于解决android小程序下拉卡顿的问题)
 		offset: 80 // 在列表顶部,下拉大于80upx,松手即可触发下拉刷新的回调
 	},
 	up: {
