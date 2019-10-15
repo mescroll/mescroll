@@ -552,6 +552,12 @@ MeScroll.prototype.endErr = function() {
 	}
 }
 
+/* 锁定上拉加载:isLock=ture,null锁定;isLock=false解锁 */
+MeScroll.prototype.lockUpScroll = function (isLock) {
+	if (isLock == null) isLock = true;
+	this.optUp.isLock = isLock;
+}
+  
 /* 显示空布局 */
 MeScroll.prototype.showEmpty = function() {
 	this.optUp.empty.use && this.optUp.empty.onShow && this.optUp.empty.onShow(true)
