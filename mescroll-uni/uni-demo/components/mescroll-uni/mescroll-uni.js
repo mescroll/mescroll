@@ -434,7 +434,6 @@ MeScroll.prototype.resetUpScroll = function(isShowLoading) {
 		this.prePageTime = page.time; // 缓存重置前的时间,加载失败可退回
 		page.num = this.startNum; // 重置为第一页
 		page.time = null; // 重置时间为空
-		this.setScrollHeight(0); // 重置内容高度为0
 		if (!this.isDownScrolling && isShowLoading !== false) { // 如果不是下拉刷新触发的resetUpScroll并且不配置列表静默更新,则显示进度;
 			if (isShowLoading == null) {
 				this.removeEmpty(); // 移除空布局
