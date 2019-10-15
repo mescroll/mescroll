@@ -1,16 +1,16 @@
 <template>
 	<view class="mescroll-uni-warp">
 		<scroll-view :id="viewId" class="mescroll-uni" :class="{'mescroll-uni-fixed':fixed}" :style="{'padding-top':padTop,'padding-bottom':padBottom,'top':fixedTop,'bottom':fixedBottom}" :scroll-top="scrollTop" :scroll-with-animation="scrollAnim" @scroll="scroll" @touchstart="touchstartEvent" @touchmove="touchmoveEvent" @touchend="touchendEvent" @touchcancel="touchendEvent" :scroll-y='scrollAble' :throttle="mescroll.optUp.onScroll==null" :enable-back-to-top="true">
-			<!-- 下拉加载区域 -->
-			<view v-if="mescroll.optDown.use" class="mescroll-downwarp" :style="{'transform': 'translateY('+downHight+')', 'transition': transition}">
-				<view class="downwarp-content">
-					<view v-if="isDownLoading" class="downwarp-progress"></view>
-					<view v-if="!isDownLoading" class="downwarp-arrow" :style="{'transform':downRotate}"></view>
-					<view class="downwarp-tip">{{downText}}</view>
+			<view :style="{'transform': translateY, 'transition': transition}">
+				<!-- 下拉加载区域 -->
+				<view v-if="mescroll.optDown.use" class="mescroll-downwarp">
+					<view class="downwarp-content">
+						<view v-if="isDownLoading" class="downwarp-progress"></view>
+						<view v-if="!isDownLoading" class="downwarp-arrow" :style="{'transform':downRotate}"></view>
+						<view class="downwarp-tip">{{downText}}</view>
+					</view>
 				</view>
-			</view>
-
-			<view :style="{'transform': 'translateY('+downHight+')', 'transition': transition}">
+				
 				<!-- 列表内容 -->
 				<slot></slot>
 				
@@ -20,17 +20,17 @@
 					<view v-if="optEmpty.tip" class="empty-tip">{{optEmpty.tip}}</view>
 					<view v-if="optEmpty.btnText" class="empty-btn" @click="emptyClick">{{optEmpty.btnText}}</view>
 				</view>
-			</view>
-
-			<!-- 上拉加载区域 -->
-			<view v-if="mescroll.optUp.use" class="mescroll-upwarp">
-				<!-- 加载中.. -->
-				<template v-if="isUpLoading">
-					<view class="upwarp-progress mescroll-rotate"></view>
-					<view class="upwarp-tip">{{mescroll.optUp.textLoading}}</view>
-				</template>
-				<!-- 无数据 -->
-				<view v-if="!isDownLoading && isUpNoMore" class="upwarp-nodata">{{mescroll.optUp.textNoMore}}</view>
+				
+				<!-- 上拉加载区域 -->
+				<view v-if="mescroll.optUp.use" class="mescroll-upwarp">
+					<!-- 加载中.. -->
+					<template v-if="isUpLoading">
+						<view class="upwarp-progress mescroll-rotate"></view>
+						<view class="upwarp-tip">{{mescroll.optUp.textLoading}}</view>
+					</template>
+					<!-- 无数据 -->
+					<view v-if="!isDownLoading && isUpNoMore" class="upwarp-nodata">{{mescroll.optUp.textNoMore}}</view>
+				</view>
 			</view>
 		</scroll-view>
 	
@@ -104,8 +104,11 @@
 				return this.mescroll.optUp.empty
 			},
 			// 过渡
-			transition(){
+			transition() {
 				return this.isDownReset ? 'transform 300ms' : ''
+			},
+			translateY() {
+				return this.downHight > 0 ? 'translateY(' + this.downHight + 'px)' : '' // transform会使fixed失效,需注意把fixed元素写在mescroll之外
 			}
 		},
 		methods: {
@@ -183,14 +186,14 @@
 					},
 					onMoving(mescroll, rate, downHight) {
 						// 下拉过程中的回调,滑动过程一直在执行; rate下拉区域当前高度与指定距离的比值(inOffset: rate<1; outOffset: rate>=1); downHight当前下拉区域的高度
-						vm.downHight = downHight+'px'; // 设置下拉区域的高度 (自定义mescroll组件时,此行不可删)
+						vm.downHight = downHight; // 设置下拉区域的高度 (自定义mescroll组件时,此行不可删)
 					},
 					showLoading(mescroll, downHight) {
 						// 显示下拉刷新进度的回调
 						vm.scrollAble = true; // 开启下拉 (自定义mescroll组件时,此行不可删)
 						vm.isDownReset = true; // 重置高度 (自定义mescroll组件时,此行不可删)
 						vm.isDownLoading = true;// 显示加载中
-						vm.downHight = downHight+'px'; // 设置下拉区域的高度 (自定义mescroll组件时,此行不可删)
+						vm.downHight = downHight; // 设置下拉区域的高度 (自定义mescroll组件时,此行不可删)
 						vm.downText = mescroll.optDown.textLoading; // 设置文本
 						vm.downRotate = 0; // 旋转到0
 					},

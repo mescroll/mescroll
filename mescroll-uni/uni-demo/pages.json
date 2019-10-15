@@ -11,6 +11,7 @@
             "path" : "pages/base/list-news",
             "style" : {
 				"navigationBarTitleText" : "list-news",
+				"disableScroll": true, // 禁止滚动, 解决scroll-view在Android小程序卡顿的问题
 				// "enablePullDownRefresh" : false, // 不开启下拉刷新, 默认就是false
 				"app-plus" : {
 					"bounce" : "none" // 取消iOS回弹,避免和下拉刷新冲突 (小程序无法取消)
@@ -21,6 +22,7 @@
             "path" : "pages/base/list-products",
             "style" : {
 				"navigationBarTitleText" : "list-products",
+				"disableScroll": true, // 禁止滚动, 解决scroll-view在Android小程序卡顿的问题
 				// "enablePullDownRefresh" : false, // 不开启下拉刷新, 默认就是false
 				"app-plus" : {
 					"bounce" : "none" // 取消iOS回弹,避免和下拉刷新冲突 (小程序无法取消)
@@ -31,6 +33,7 @@
             "path" : "pages/base/mescroll-options",
             "style" : {
 				"navigationBarTitleText" : "mescroll-options",
+				"disableScroll": true, // 禁止滚动, 解决scroll-view在Android小程序卡顿的问题
 				// "enablePullDownRefresh" : false, // 不开启下拉刷新, 默认就是false
 				"app-plus" : {
 					"bounce" : "none" // 取消iOS回弹,避免和下拉刷新冲突 (小程序无法取消)
@@ -41,6 +44,7 @@
 		    "path" : "pages/base/sticky",
 		    "style" : {
 				"navigationBarTitleText" : "sticky吸顶悬浮 (切换刷新列表)",
+				"disableScroll": true, // 禁止滚动, 解决scroll-view在Android小程序卡顿的问题
 				// "enablePullDownRefresh" : false, // 不开启下拉刷新, 默认就是false
 				"app-plus" : {
 					"bounce" : "none" // 取消iOS回弹,避免和下拉刷新冲突 (小程序无法取消)
@@ -51,6 +55,7 @@
 		    "path" : "pages/base/sticky-data",
 		    "style" : {
 				"navigationBarTitleText" : "sticky吸顶悬浮 (缓存列表数据)",
+				"disableScroll": true, // 禁止滚动, 解决scroll-view在Android小程序卡顿的问题
 				// "enablePullDownRefresh" : false, // 不开启下拉刷新, 默认就是false
 				"app-plus" : {
 					"bounce" : "none" // 取消iOS回弹,避免和下拉刷新冲突 (小程序无法取消)
@@ -61,6 +66,7 @@
             "path" : "pages/base/list-mescroll-one",
             "style" : {
 				"navigationBarTitleText" : "list-mescroll-one",
+				"disableScroll": true, // 禁止滚动, 解决scroll-view在Android小程序卡顿的问题
 				// "enablePullDownRefresh" : false, // 不开启下拉刷新, 默认就是false
 				"app-plus" : {
 					"bounce" : "none" // 取消iOS回弹,避免和下拉刷新冲突 (小程序无法取消)
@@ -71,6 +77,7 @@
             "path" : "pages/base/list-mescroll-more",
             "style" : {
 				"navigationBarTitleText" : "list-mescroll-more",
+				"disableScroll": true, // 禁止滚动, 解决scroll-view在Android小程序卡顿的问题
 				// "enablePullDownRefresh" : false, // 不开启下拉刷新, 默认就是false
 				"app-plus" : {
 					"bounce" : "none" // 取消iOS回弹,避免和下拉刷新冲突 (小程序无法取消)
@@ -81,6 +88,7 @@
             "path" : "pages/base/list-search",
             "style" : {
 				"navigationBarTitleText" : "list-search",
+				"disableScroll": true, // 禁止滚动, 解决scroll-view在Android小程序卡顿的问题
 				// "enablePullDownRefresh" : false, // 不开启下拉刷新, 默认就是false
 				"app-plus" : {
 					"bounce" : "none" // 取消iOS回弹,避免和下拉刷新冲突 (小程序无法取消)
@@ -91,6 +99,7 @@
             "path" : "pages/intermediate/mescroll-swiper",
             "style" : {
 				"navigationBarTitleText" : "轮播菜单导航 mescroll-swiper.vue",
+				"disableScroll": true, // 禁止滚动, 解决scroll-view在Android小程序卡顿的问题
 				// "enablePullDownRefresh" : false, // 不开启下拉刷新, 默认就是false
 				"app-plus" : {
 					"bounce" : "none" // 取消iOS回弹,避免和下拉刷新冲突 (小程序无法取消)
@@ -101,6 +110,7 @@
             "path" : "pages/intermediate/beibei",
             "style" : {
 				"navigationBarTitleText" : "贝贝 mescroll-beibei.vue",
+				"disableScroll": true, // 禁止滚动, 解决scroll-view在Android小程序卡顿的问题
 				// "enablePullDownRefresh" : false, // 不开启下拉刷新, 默认就是false
 				"app-plus" : {
 					"bounce" : "none" // 取消iOS回弹,避免和下拉刷新冲突 (小程序无法取消)
@@ -111,6 +121,7 @@
             "path" : "pages/intermediate/xinlang",
             "style" : {
 				"navigationBarTitleText" : "新浪微博 mescroll-xinlang.vue",
+				"disableScroll": true, // 禁止滚动, 解决scroll-view在Android小程序卡顿的问题
 				// "enablePullDownRefresh" : false, // 不开启下拉刷新, 默认就是false
 				"app-plus" : {
 					"bounce" : "none" // 取消iOS回弹,避免和下拉刷新冲突 (小程序无法取消)

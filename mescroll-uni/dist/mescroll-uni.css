@@ -1,12 +1,11 @@
 /* mescroll-uni
- * version 1.1.6
+ * version 1.1.7
  * 2019-10-15 wenju
  * http://www.mescroll.com
  */
 
 page {
 	height: 100%;
-	overflow-y: hidden; /* 避免Android真机touchmove触发频率低 */
 	box-sizing: border-box; /* 避免设置padding出现双滚动条的问题 */
 	-webkit-overflow-scrolling: touch; /*使iOS列表滑动流畅*/
 }
@@ -128,7 +127,7 @@ page {
 
 .mescroll-empty.empty-fixed {
 	z-index: 99;
-	position: fixed;
+	position: fixed; /*transform会使fixed失效,最终会降级为absolute */
 	top: 20%;
 	left: 0;
 }

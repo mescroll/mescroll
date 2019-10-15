@@ -40,7 +40,6 @@
 					isLock: false, // 是否锁定下拉刷新,默认false;
 					offset: 80, // 在列表顶部,下拉大于80upx,松手即可触发下拉刷新的回调
 					fps: 40, // 下拉节流 (值越大每秒刷新频率越高)
-					supply: 150, // 补帧动画的过渡时长 (只对android小程序生效,用于解决android小程序下拉卡顿的问题)
 					inOffsetRate: 1, // 在列表顶部,下拉的距离小于offset时,改变下拉区域高度比例;值小于1且越接近0,高度变化越小,表现为越往下越难拉
 					outOffsetRate: 0.2, // 在列表顶部,下拉的距离大于offset时,改变下拉区域高度比例;值小于1且越接近0,高度变化越小,表现为越往下越难拉
 					bottomOffset: 20, // 当手指touchmove位置在距离body底部20upx范围内的时候结束上拉刷新,避免Webview嵌套导致touchend事件不执行

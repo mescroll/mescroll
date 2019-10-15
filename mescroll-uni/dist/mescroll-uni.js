@@ -1,12 +1,12 @@
 /* mescroll-uni
- * version 1.1.6
+ * version 1.1.7
  * 2019-10-15 wenju
  * http://www.mescroll.com
  */
 
 export default function MeScroll(options) {
 	let me = this;
-	me.version = '1.1.6'; // mescroll版本号
+	me.version = '1.1.7'; // mescroll版本号
 	me.options = options || {}; // 配置
 
 	me.isDownScrolling = false; // 是否在执行下拉刷新的回调
@@ -301,6 +301,7 @@ MeScroll.prototype.endDownScroll = function() {
 		me.downHight = 0;
 		me.isDownScrolling = false;
 		me.optDown.endDownScroll && me.optDown.endDownScroll(me);
+		me.setScrollHeight(0) // 重置滚动区域,使数据不满屏时仍可检查触发翻页
 	}
 	// 结束下拉刷新时的回调
 	let delay = 0;
@@ -373,7 +374,7 @@ MeScroll.prototype.triggerUpScroll = function(isCheck) {
 		// 是否校验在底部; 默认不校验
 		if (isCheck === true) {
 			let canUp = false;
-			// 还有下一页 && 没有锁定 && (不在下拉中 || 支持同时上下拉)
+			// 还有下一页 && 没有锁定 && 不在下拉中
 			if (this.optUp.hasNext && !this.optUp.isLock && !this.isDownScrolling) {
 				if (this.getScrollBottom() <= this.optUp.offset) { // 到底部
 					canUp = true; // 标记可上拉
@@ -552,12 +553,6 @@ MeScroll.prototype.endErr = function() {
 	}
 }
 
-/* 锁定上拉加载:isLock=ture,null锁定;isLock=false解锁 */
-MeScroll.prototype.lockUpScroll = function (isLock) {
-	if (isLock == null) isLock = true;
-	this.optUp.isLock = isLock;
-}
-  
 /* 显示空布局 */
 MeScroll.prototype.showEmpty = function() {
 	this.optUp.empty.use && this.optUp.empty.onShow && this.optUp.empty.onShow(true)
