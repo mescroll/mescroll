@@ -22,11 +22,11 @@
 
 				<!-- 上拉加载区域 -->
 				<view v-if="mescroll.optUp.use" class="mescroll-upwarp">
-					<!-- 加载中.. -->
-					<template v-if="isUpLoading">
+					<!-- 加载中 (此处不能用v-if,否则android小程序快速上拉可能会不断触发上拉回调) -->
+					<view v-show="isUpLoading">
 						<view class="upwarp-progress mescroll-rotate"></view>
 						<view class="upwarp-tip">{{mescroll.optUp.textLoading}}</view>
-					</template>
+					</view>
 					<!-- 无数据 -->
 					<view v-if="!isDownLoading && isUpNoMore" class="upwarp-nodata">{{mescroll.optUp.textNoMore}}</view>
 				</view>

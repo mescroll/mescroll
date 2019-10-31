@@ -1,12 +1,12 @@
 /* mescroll-uni
- * version 1.1.7
- * 2019-10-15 wenju
+ * version 1.1.8
+ * 2019-11-01 wenju
  * http://www.mescroll.com
  */
 
 export default function MeScroll(options) {
 	let me = this;
-	me.version = '1.1.7'; // mescroll版本号
+	me.version = '1.1.8'; // mescroll版本号
 	me.options = options || {}; // 配置
 
 	me.isDownScrolling = false; // 是否在执行下拉刷新的回调
@@ -258,6 +258,12 @@ MeScroll.prototype.touchendEvent = function(e) {
 
 /* 根据点击滑动事件获取第一个手指的坐标 */
 MeScroll.prototype.getPoint = function(e) {
+	if (!e) {
+		return {
+			x: 0,
+			y: 0
+		}
+	}
 	if (e.touches && e.touches[0]) {
 		return {
 			x: e.touches[0].pageX,
