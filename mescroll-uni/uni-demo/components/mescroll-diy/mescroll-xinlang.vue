@@ -1,6 +1,6 @@
 <template>
 	<view class="mescroll-uni-warp">
-		<scroll-view :id="viewId" class="mescroll-uni" :class="{'mescroll-uni-fixed':fixed}" :style="{'padding-top':padTop,'padding-bottom':padBottom,'top':fixedTop,'bottom':fixedBottom}" :scroll-top="scrollTop" :scroll-with-animation="scrollAnim" @scroll="scroll" @touchstart="touchstartEvent" @touchmove="touchmoveEvent" @touchend="touchendEvent" @touchcancel="touchendEvent" :scroll-y='scrollAble' :throttle="mescroll.optUp.onScroll==null" :enable-back-to-top="true">
+		<scroll-view :id="viewId" class="mescroll-uni" :class="{'mescroll-uni-fixed':isFixed}" :style="{'height':scrollHeight,'padding-top':padTop,'padding-bottom':padBottom,'padding-bottom':padBottomConstant,'padding-bottom':padBottomEnv,'top':fixedTop,'bottom':fixedBottom,'bottom':fixedBottomConstant,'bottom':fixedBottomEnv}" :scroll-top="scrollTop" :scroll-with-animation="scrollAnim" @scroll="scroll" @touchstart="touchstartEvent" @touchmove="touchmoveEvent" @touchend="touchendEvent" @touchcancel="touchendEvent" :scroll-y='scrollAble' :throttle="mescroll.optUp.onScroll==null" :enable-back-to-top="true">
 			<view :style="{'transform': translateY, 'transition': transition}">
 				<!-- 下拉加载区域 -->
 				<view v-if="mescroll.optDown.use" class="mescroll-downwarp">
@@ -15,11 +15,7 @@
 				<slot></slot>
 				
 				<!-- 空布局 -->
-				<view v-if="isShowEmpty" class="mescroll-empty" :class="{'empty-fixed':optEmpty.fixed}" :style="{'z-index':optEmpty.zIndex,'top':optEmpty.top}">
-					<image v-if="optEmpty.icon" class="empty-icon" :src="optEmpty.icon" mode="widthFix" />
-					<view v-if="optEmpty.tip" class="empty-tip">{{optEmpty.tip}}</view>
-					<view v-if="optEmpty.btnText" class="empty-btn" @click="emptyClick">{{optEmpty.btnText}}</view>
-				</view>
+				<mescroll-empty v-if="isShowEmpty" :option="mescroll.optUp.empty" @emptyclick="emptyClick"></mescroll-empty>
 				
 				<!-- 上拉加载区域 -->
 				<view v-if="mescroll.optUp.use" class="mescroll-upwarp">
@@ -35,7 +31,7 @@
 		</scroll-view>
 	
 		<!-- 回到顶部按钮 (fixed元素,需写在scroll-view外面,防止滚动的时候抖动)-->
-		<image v-if="mescroll.optUp.toTop.src" class="mescroll-totop" :class="{'mescroll-fade-in':isShowToTop}" :src="mescroll.optUp.toTop.src" mode="widthFix" @click="toTopClick" />
+		<mescroll-top v-model="isShowToTop" :option="mescroll.optUp.toTop" @click="toTopClick"></mescroll-top>
 	</view>
 </template>
 
@@ -44,8 +40,16 @@
 	import MeScroll from '../mescroll-uni/mescroll-uni.js';
 	// 引入全局配置
 	import GlobalOption from './mescroll-xinlang-option.js';
+	// 引入空布局组件
+	import MescrollEmpty from '../mescroll-uni/components/mescroll-empty.vue';
+	// 引入回到顶部组件
+	import MescrollTop from '../mescroll-uni/components/mescroll-top.vue';
 
 	export default {
+		components: {
+			MescrollEmpty,
+			MescrollTop
+		},
 		data() {
 			return {
 				mescroll: null,
@@ -63,45 +67,72 @@
 				scrollTop: 0, // 滚动条的位置
 				scrollAnim: false, // 是否开启滚动动画
 				windowTop: 0, // 可使用窗口的顶部位置
-				windowBottom: 0 // 可使用窗口的底部位置
+				windowBottom: 0, // 可使用窗口的底部位置
+				windowHeight: 0, // 可使用窗口的高度
+				statusBarHeight: 0 // 状态栏高度
 			}
 		},
 		props: {
-			down: Object,
-			up: Object,
-			top: [String,Number],  // 下拉布局往下偏移的数值, 已默认单位为upx.
-			bottom: [String,Number],  // 上拉布局往上偏移的数值, 已默认单位为upx.
+			down: Object, // 下拉刷新的参数配置
+			up: Object, // 上拉加载的参数配置
+			top: [String, Number], // 下拉布局往下的偏移量 (支持20, "20rpx", "20px", "20%"格式的值, 其中纯数字则默认单位rpx, 百分比则相对于windowHeight)
+			topbar: Boolean, // top的偏移量是否加上状态栏高度, 默认false (使用场景:取消原生导航栏时,配置此项可自动加上状态栏高度的偏移量)
+			bottom: [String, Number], // 上拉布局往上的偏移量 (支持20, "20rpx", "20px", "20%"格式的值, 其中纯数字则默认单位rpx, 百分比则相对于windowHeight)
+			safearea: Boolean, // bottom的偏移量是否加上底部安全区的距离, 默认false (需要适配iPhoneX时使用,此项值对回到顶部按钮生效)
 			fixed: { // 是否通过fixed固定mescroll的高度, 默认true
 				type: Boolean,
-				default(){
+				default () {
 					return true
 				}
-			}
+			},
+			height: [String, Number] // 指定mescroll的高度, 此项有值,则不使用fixed. (支持20, "20rpx", "20px", "20%"格式的值, 其中纯数字则默认单位rpx, 百分比则相对于windowHeight)
 		},
 		computed: {
-			// top数值,单位upx,需转成px. 目的是使下拉布局往下偏移
-			numTop(){
-				return uni.upx2px(Number(this.top||0))
+			// 是否使用fixed定位 (当height有值,则不使用)
+			isFixed(){
+				return !this.height && this.fixed
 			},
-			fixedTop(){
-				return this.fixed ? (this.numTop + this.windowTop) + 'px' : 0
+			// mescroll的高度
+			scrollHeight(){
+				if (this.isFixed) {
+					return "auto"
+				} else if(this.height){
+					return this.toPx(this.height) + 'px'
+				}else{
+					return "100%"
+				}
 			},
-			padTop(){
-				return !this.fixed ? this.numTop + 'px' : 0
+			// 下拉布局往下偏移的距离 (px)
+			numTop() {
+				return this.toPx(this.top) + (this.topbar ? this.statusBarHeight : 0)
 			},
-			// bottom数值,单位upx,需转成px 目的是使上拉布局往上偏移
-			numBottom(){
-				return uni.upx2px(Number(this.bottom||0))
+			fixedTop() {
+				return this.isFixed ? (this.numTop + this.windowTop) + 'px' : 0
 			},
-			fixedBottom(){
-				return this.fixed ? (this.numBottom + this.windowBottom) + 'px' : 0
+			padTop() {
+				return !this.isFixed ? this.numTop + 'px' : 0
 			},
-			padBottom(){
-				return !this.fixed ? this.numBottom + 'px' : 0
+			// 上拉布局往上偏移 (px)
+			numBottom() {
+				return this.toPx(this.bottom)
 			},
-			// 空布局的配置
-			optEmpty() {
-				return this.mescroll.optUp.empty
+			fixedBottom() {
+				return this.isFixed ? (this.numBottom + this.windowBottom) + 'px' : 0
+			},
+			fixedBottomConstant(){
+				return this.safearea ? "calc("+this.fixedBottom+" + constant(safe-area-inset-bottom))" : this.fixedBottom
+			},
+			fixedBottomEnv(){
+				return this.safearea ? "calc("+this.fixedBottom+" + env(safe-area-inset-bottom))" : this.fixedBottom
+			},
+			padBottom() {
+				return !this.isFixed ? this.numBottom + 'px' : 0
+			},
+			padBottomConstant(){
+				return this.safearea ? "calc("+this.padBottom+" + constant(safe-area-inset-bottom))" : this.padBottom
+			},
+			padBottomEnv(){
+				return this.safearea ? "calc("+this.padBottom+" + env(safe-area-inset-bottom))" : this.padBottom
 			},
 			// 过渡
 			transition() {
@@ -112,6 +143,25 @@
 			}
 		},
 		methods: {
+			//number,rpx,upx,px,% --> px的数值
+			toPx(num){
+				if(typeof num === "string"){
+					if (num.indexOf('px') !== -1) {
+						if(num.indexOf('rpx') !== -1) { // "10rpx"
+							num = num.replace('rpx', '');
+						} else if(num.indexOf('upx') !== -1) { // "10upx"
+							num = num.replace('upx', '');
+						} else { // "10px"
+							return Number(num.replace('px', ''))
+						}
+					}else if (num.indexOf('%') !== -1){
+						// 传百分比,则相对于windowHeight,传"10%"则等于windowHeight的10%
+						let rate = Number(num.replace("%","")) / 100
+						return this.windowHeight * rate
+					}
+				}
+				return num ? uni.upx2px(Number(num)) : 0
+			},
 			//注册列表滚动事件,用于下拉刷新
 			scroll(e) {
 				this.mescroll.scroll(e.detail, ()=>{
@@ -136,7 +186,6 @@
 			},
 			// 点击回到顶部的按钮回调
 			toTopClick(){
-				this.isShowToTop = false; // 回到顶部按钮需要先隐藏,再执行回到顶部,避免闪动
 				this.mescroll.scrollTo(0, this.mescroll.optUp.toTop.duration); // 执行回到顶部
 				this.$emit('topclick', this.mescroll); // 派发点击回到顶部按钮的回调
 			},
@@ -257,30 +306,34 @@
 			vm.$emit('init', vm.mescroll);
 
 			// 设置高度
-			uni.getSystemInfo({
-				success(res) {
-					if(res.windowTop) vm.windowTop = res.windowTop; // 修正app和H5的top值
-					if(res.windowBottom) vm.windowBottom = res.windowBottom; // 修正app和H5的bottom值
-					vm.mescroll.setBodyHeight(res.windowHeight); // 使down的bottomOffset生效
-				}
-			});
+			const sys = uni.getSystemInfoSync();
+			if(sys.windowTop) vm.windowTop = sys.windowTop;
+			if(sys.windowBottom) vm.windowBottom = sys.windowBottom;
+			if(sys.windowHeight) vm.windowHeight = sys.windowHeight;
+			if(sys.statusBarHeight) vm.statusBarHeight = sys.statusBarHeight;
+			// 使down的bottomOffset生效
+			vm.mescroll.setBodyHeight(sys.windowHeight);
 			
 			// 因为使用的是scrollview,这里需自定义scrollTo
-			vm.mescroll.resetScrollTo((y, t)=>{
+			vm.mescroll.resetScrollTo((y, t) => {
 				let curY = vm.mescroll.getScrollTop()
-				if (t === 0) {
-					vm.scrollAnim = false;
+				vm.scrollAnim = (t !== 0); // t为0,则不使用动画过渡
+				if (t === 0 || t === 300) { // 当t使用默认配置的300时,则使用系统自带的动画过渡
 					vm.scrollTop = curY;
-					vm.$nextTick(function(){
+					vm.$nextTick(function() {
 						vm.scrollTop = y
 					})
-				} else{
-					vm.scrollAnim = true;
-					vm.mescroll.getStep(curY, y, step=>{
+				} else {
+					vm.mescroll.getStep(curY, y, step => { // 此写法可支持配置t
 						vm.scrollTop = step
 					}, t)
 				}
 			})
+			
+			// 具体的界面如果不配置up.toTop.safearea,则取mescroll-uni.vue的safearea值
+			if(vm.up && vm.up.toTop && vm.up.toTop.safearea!=null){}else{
+				vm.mescroll.optUp.toTop.safearea = vm.safearea
+			}
 		},
 		mounted() {
 			// 设置容器的高度

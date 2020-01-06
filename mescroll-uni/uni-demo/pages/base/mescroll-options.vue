@@ -39,7 +39,7 @@
 					autoShowLoading: false, // 如果设置auto=true(在初始化完毕之后自动执行下拉刷新的回调),那么是否显示下拉刷新的进度; 默认false
 					isLock: false, // 是否锁定下拉刷新,默认false;
 					offset: 80, // 在列表顶部,下拉大于80upx,松手即可触发下拉刷新的回调
-					fps: 40, // 下拉节流 (值越大每秒刷新频率越高)
+					fps: 80, // 下拉节流 (值越大每秒刷新频率越高)
 					inOffsetRate: 1, // 在列表顶部,下拉的距离小于offset时,改变下拉区域高度比例;值小于1且越接近0,高度变化越小,表现为越往下越难拉
 					outOffsetRate: 0.2, // 在列表顶部,下拉的距离大于offset时,改变下拉区域高度比例;值小于1且越接近0,高度变化越小,表现为越往下越难拉
 					bottomOffset: 20, // 当手指touchmove位置在距离body底部20upx范围内的时候结束上拉刷新,避免Webview嵌套导致touchend事件不执行
@@ -67,7 +67,14 @@
 						// 回到顶部按钮,需配置src才显示
 						src: "http://www.mescroll.com/img/mescroll-totop.png", // 图片路径
 						offset: 1000, // 列表滚动多少距离才显示回到顶部按钮,默认1000
-						duration: 300 // 回到顶部的动画时长,默认300ms
+						duration: 300, // 回到顶部的动画时长,默认300ms (当值为0或300则使用系统自带回到顶部,更流畅; 其他值则通过step模拟,部分机型可能不够流畅,所以非特殊情况不建议修改此项)
+						zIndex: 9990, // fixed定位z-index值
+						left: null, // 到左边的距离, 默认null. 此项有值时,right不生效. (支持20, "20rpx", "20px", "20%"格式的值, 其中纯数字则默认单位rpx)
+						right: 20, // 到右边的距离, 默认20 (支持20, "20rpx", "20px", "20%"格式的值, 其中纯数字则默认单位rpx)
+						bottom: 120, // 到底部的距离, 默认120 (支持20, "20rpx", "20px", "20%"格式的值, 其中纯数字则默认单位rpx)
+						safearea: false, // bottom的偏移量是否加上底部安全区的距离, 默认false, 需要适配iPhoneX时使用 (具体的界面如果不配置此项,则取mescroll-uni.vue的safearea值)
+						width: 72, // 回到顶部图标的宽度, 默认72 (支持20, "20rpx", "20px", "20%"格式的值, 其中纯数字则默认单位rpx)
+						radius: "50%" // 圆角, 默认"50%" (支持20, "20rpx", "20px", "20%"格式的值, 其中纯数字则默认单位rpx)
 					},
 					empty: {
 						use: true, // 是否显示空布局

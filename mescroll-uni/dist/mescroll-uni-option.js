@@ -16,8 +16,10 @@ const GlobalOption = {
 		toTop: {
 			// 回到顶部按钮,需配置src才显示
 			src: "http://www.mescroll.com/img/mescroll-totop.png?v=1", // 图片路径 (建议放入static目录, 如 /static/img/mescroll-totop.png )
-			offset: 1000, // 列表滚动多少距离才显示回到顶部按钮,默认1000
-			duration: 300, // 回到顶部的动画时长,默认300ms
+			offset: 1000, // 列表滚动多少距离才显示回到顶部按钮,默认1000px
+			right: 20, // 到右边的距离, 默认20 (支持"20rpx", "20px", "20%"格式的值, 纯数字则默认单位rpx)
+			bottom: 120, // 到底部的距离, 默认120 (支持"20rpx", "20px", "20%"格式的值, 纯数字则默认单位rpx)
+			width: 72 // 回到顶部图标的宽度, 默认72 (支持"20rpx", "20px", "20%"格式的值, 纯数字则默认单位rpx)
 		},
 		empty: {
 			use: true, // 是否显示空布局

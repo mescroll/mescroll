@@ -1,12 +1,12 @@
 /* mescroll-uni
- * version 1.1.8
- * 2019-11-01 wenju
+ * version 1.2.0
+ * 2020-01-06 wenju
  * http://www.mescroll.com
  */
 
 export default function MeScroll(options) {
 	let me = this;
-	me.version = '1.1.8'; // mescroll版本号
+	me.version = '1.2.0'; // mescroll版本号
 	me.options = options || {}; // 配置
 
 	me.isDownScrolling = false; // 是否在执行下拉刷新的回调
@@ -43,7 +43,7 @@ MeScroll.prototype.extendDownScroll = function(optDown) {
 		isLock: false, // 是否锁定下拉刷新,默认false;
 		offset: 80, // 在列表顶部,下拉大于80px,松手即可触发下拉刷新的回调
 		startTop: 100, // scroll-view滚动到顶部时,此时的scroll-top不一定为0, 此值用于控制最大的误差
-		fps: 40, // 下拉节流 (值越大每秒刷新频率越高)
+		fps: 80, // 下拉节流 (值越大每秒刷新频率越高)
 		inOffsetRate: 1, // 在列表顶部,下拉的距离小于offset时,改变下拉区域高度比例;值小于1且越接近0,高度变化越小,表现为越往下越难拉
 		outOffsetRate: 0.2, // 在列表顶部,下拉的距离大于offset时,改变下拉区域高度比例;值小于1且越接近0,高度变化越小,表现为越往下越难拉
 		bottomOffset: 20, // 当手指touchmove位置在距离body底部20px范围内的时候结束上拉刷新,避免Webview嵌套导致touchend事件不执行
@@ -91,11 +91,18 @@ MeScroll.prototype.extendUpScroll = function(optUp) {
 		hideUpScroll: null, // 隐藏上拉加载的回调
 		toTop: {
 			// 回到顶部按钮,需配置src才显示
-			src: null, // 图片路径,默认null (建议写成网络图,不必考虑相对路径)
+			src: null, // 图片路径,默认null (绝对路径或网络图)
 			offset: 1000, // 列表滚动多少距离才显示回到顶部按钮,默认1000
-			duration: 300, // 回到顶部的动画时长,默认300ms
+			duration: 300, // 回到顶部的动画时长,默认300ms (当值为0或300则使用系统自带回到顶部,更流畅; 其他值则通过step模拟,部分机型可能不够流畅,所以非特殊情况不建议修改此项)
 			btnClick: null, // 点击按钮的回调
-			onShow: null // 是否显示的回调
+			onShow: null, // 是否显示的回调
+			zIndex: 9990, // fixed定位z-index值
+			left: null, // 到左边的距离, 默认null. 此项有值时,right不生效. (支持20, "20rpx", "20px", "20%"格式的值, 其中纯数字则默认单位rpx)
+			right: 20, // 到右边的距离, 默认20 (支持20, "20rpx", "20px", "20%"格式的值, 其中纯数字则默认单位rpx)
+			bottom: 120, // 到底部的距离, 默认120 (支持20, "20rpx", "20px", "20%"格式的值, 其中纯数字则默认单位rpx)
+			safearea: false, // bottom的偏移量是否加上底部安全区的距离, 默认false, 需要适配iPhoneX时使用 (具体的界面如果不配置此项,则取mescroll-uni.vue的safearea值)
+			width: 72, // 回到顶部图标的宽度, 默认72 (支持20, "20rpx", "20px", "20%"格式的值, 其中纯数字则默认单位rpx)
+			radius: "50%" // 圆角, 默认"50%" (支持20, "20rpx", "20px", "20%"格式的值, 其中纯数字则默认单位rpx)
 		},
 		empty: {
 			use: true, // 是否显示空布局
@@ -103,7 +110,10 @@ MeScroll.prototype.extendUpScroll = function(optUp) {
 			tip: '~ 暂无相关数据 ~', // 提示
 			btnText: '', // 按钮
 			btnClick: null, // 点击按钮的回调
-			onShow: null // 是否显示的回调
+			onShow: null, // 是否显示的回调
+			fixed: false, // 是否使用fixed定位,默认false; 配置fixed为true,以下的top和zIndex才生效
+			top: "35%", // fixed定位的top值 (完整的单位值,如 "35%"; "300upx")
+			zIndex: 99 // fixed定位z-index值
 		},
 		onScroll: false // 是否监听滚动事件
 	})
@@ -168,7 +178,7 @@ MeScroll.prototype.touchmoveEvent = function(e) {
 		return;
 	} else {
 		me.moveTime = t
-		me.moveTimeDiff = 1000 / me.optDown.fps
+		if(!me.moveTimeDiff) me.moveTimeDiff = 1000 / me.optDown.fps
 	}
 
 	let scrollTop = me.getScrollTop(); // 当前滚动条的距离
@@ -184,13 +194,8 @@ MeScroll.prototype.touchmoveEvent = function(e) {
 				me.optUp.isBoth))) {
 
 			// 下拉的角度是否在配置的范围内
-			let x = Math.abs(me.lastPoint.x - curPoint.x);
-			let y = Math.abs(me.lastPoint.y - curPoint.y);
-			let z = Math.sqrt(x * x + y * y);
-			if (z !== 0) {
-				let angle = Math.asin(y / z) / Math.PI * 180; // 两点之间的角度,区间 [0,90]
-				if (angle < me.optDown.minAngle) return; // 如果小于配置的角度,则不往下执行下拉刷新
-			}
+			let angle = me.getAngle(me.lastPoint, curPoint); // 两点之间的角度,区间 [0,90]
+			if (angle < me.optDown.minAngle) return; // 如果小于配置的角度,则不往下执行下拉刷新
 
 			// 如果手指的位置超过配置的距离,则提前结束下拉,避免Webview嵌套导致touchend无法触发
 			if (me.maxTouchmoveY > 0 && curPoint.y >= me.maxTouchmoveY) {
@@ -251,8 +256,15 @@ MeScroll.prototype.touchendEvent = function(e) {
 		this.isMoveDown = false;
 	} else if (this.getScrollTop() === this.startTop) { // 到顶/左/右/底的滑动事件
 		let isScrollUp = this.getPoint(e).y - this.startPoint.y < 0; // 和起点比,移动的距离,大于0向下拉,小于0向上拉
-		// 上滑 && 检查并触发上拉
-		isScrollUp && this.triggerUpScroll(true);
+		// 上滑
+		if (isScrollUp) {
+			// 需检查滑动的角度
+			let angle = this.getAngle(this.getPoint(e), this.startPoint); // 两点之间的角度,区间 [0,90]
+			if (angle > 80) {
+				// 检查并触发上拉
+				this.triggerUpScroll(true);
+			}
+		}
 	}
 }
 
@@ -280,6 +292,18 @@ MeScroll.prototype.getPoint = function(e) {
 			y: e.clientY
 		}
 	}
+}
+
+/* 计算两点之间的角度: 区间 [0,90]*/
+MeScroll.prototype.getAngle = function(p1, p2) {
+	let x = Math.abs(p1.x - p2.x);
+	let y = Math.abs(p1.y - p2.y);
+	let z = Math.sqrt(x * x + y * y);
+	let angle = 0;
+	if (z !== 0) {
+		angle = Math.asin(y / z) / Math.PI * 180;
+	}
+	return angle
 }
 
 /* 触发下拉刷新 */
@@ -323,6 +347,12 @@ MeScroll.prototype.endDownScroll = function() {
 MeScroll.prototype.lockDownScroll = function(isLock) {
 	if (isLock == null) isLock = true;
 	this.optDown.isLock = isLock;
+}
+
+/* 锁定上拉加载:isLock=ture,null锁定;isLock=false解锁 */
+MeScroll.prototype.lockUpScroll = function(isLock) {
+	if (isLock == null) isLock = true;
+	this.optUp.isLock = isLock;
 }
 
 /* -------初始化上拉加载------- */
