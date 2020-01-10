@@ -85,7 +85,7 @@
 						top: "35%", // fixed定位的top值 (完整的单位值,如 "35%"; "300upx")
 						zIndex: 99 // fixed定位z-index值
 					},
-					onScroll: true // 是否监听滚动事件, 默认false (配置为true时,可@scroll="scroll"获取到滚动条位置和方向)
+					onScroll: false // 是否监听滚动事件, 默认false (配置为true时,可@scroll="scroll"获取到滚动条位置和方向; 注意监听列表滚动是非常耗性能的,很容易出现卡顿,非特殊情况不要配置此项)
 				},
 				pdList: [], //列表数据
 				tabType: 0, // 菜单
