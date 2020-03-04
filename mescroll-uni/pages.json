@@ -1,0 +1,115 @@
+{
+    "pages" : [
+        //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+        {
+            "path" : "pages/index/index",
+            "style" : {
+                "navigationBarTitleText" : "mescroll"
+            }
+        },
+        {
+            "path" : "pages/base/list-news",
+            "style" : {
+				"navigationBarTitleText" : "list-news"
+			}
+        },
+        {
+            "path" : "pages/base/list-products",
+            "style" : {
+				"navigationBarTitleText" : "list-products"
+			}
+        },
+        {
+            "path" : "pages/base/mescroll-options",
+            "style" : {
+				"navigationBarTitleText" : "mescroll-options"
+			}
+        },
+		{
+		    "path" : "pages/base/sticky",
+		    "style" : {
+				"navigationBarTitleText" : "sticky吸顶悬浮 (切换刷新列表)"
+			}
+		},
+		{
+		    "path" : "pages/base/sticky-data",
+		    "style" : {
+				"navigationBarTitleText" : "sticky吸顶悬浮 (缓存列表数据)"
+			}
+		},
+        {
+            "path" : "pages/base/mescroll-comp",
+            "style" : {
+				"navigationBarTitleText" : "mescroll-body写在子组件"
+			}
+        },
+		{
+            "path" : "pages/base/mescroll-one",
+            "style" : {
+				"navigationBarTitleText" : "mescroll-one"
+			}
+        },
+        {
+            "path" : "pages/base/mescroll-more",
+            "style" : {
+				"navigationBarTitleText" : "mescroll-more"
+			}
+        },
+        {
+            "path" : "pages/base/list-search",
+            "style" : {
+				"navigationBarTitleText" : "list-search"
+			}
+        },
+		{
+		    "path" : "pages/base/mescroll-native",
+		    "style" : {
+				"navigationBarTitleText" : "mescroll-native",
+				"enablePullDownRefresh" : true // 开启系统自带的下拉刷新
+				//ifdef MP 支持条件编译,如您可以配置小程序端使用系统自带的,其他平台使用mescroll的下拉样式
+				//"enablePullDownRefresh" : true
+				//endif
+				//ifndef MP
+				//"enablePullDownRefresh" : false
+				//endif
+			}
+		},
+        {
+            "path" : "pages/intermediate/mescroll-swiper",
+            "style" : {
+				"navigationBarTitleText" : "轮播菜单导航 mescroll-swiper.vue",
+				"disableScroll": true, // 禁止滚动, 解决scroll-view在Android小程序卡顿的问题
+				// "enablePullDownRefresh" : false, // 不开启下拉刷新, 默认就是false
+				"app-plus" : {
+					"bounce" : "none" // 取消iOS回弹,避免和下拉刷新冲突 (小程序无法取消)
+				}
+			}
+        },
+		{
+            "path" : "pages/intermediate/beibei",
+            "style" : {
+				"navigationBarTitleText" : "贝贝 mescroll-beibei.vue"
+			}
+        },
+        {
+            "path" : "pages/intermediate/xinlang",
+            "style" : {
+				"navigationBarTitleText" : "新浪微博 mescroll-xinlang.vue"
+			}
+        }
+    ],
+    "globalStyle" : {
+        "navigationBarTextStyle" : "black",
+        "navigationBarBackgroundColor" : "#fff"
+    },
+	"condition" : { //模式配置，仅开发期间生效
+		"current": 0, //当前激活的模式(list 的索引项)
+		"list": [
+			{
+				"name": "", //模式名称
+				"path": "", //启动页面，必选
+				"query": "" //启动参数，在页面的onLoad函数里面得到
+			}
+		]
+	}
+}

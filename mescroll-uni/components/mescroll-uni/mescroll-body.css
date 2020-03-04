@@ -1,0 +1,10 @@
+page {
+	-webkit-overflow-scrolling: touch; /* 使iOS滚动流畅 */
+}
+
+.mescroll-body {
+	position: relative; /* 下拉刷新区域相对自身定位 */
+	height: auto; /* 不可固定高度,否则overflow: hidden, 可通过设置最小高度使列表不满屏仍可下拉*/
+	overflow: hidden; /* 遮住顶部下拉刷新区域 */
+	box-sizing: border-box; /* 避免设置padding出现双滚动条的问题 */
+}
