@@ -1,6 +1,6 @@
 <!-- 下拉刷新区域 -->
 <template>
-	<view v-if="mOption.use" class="mescroll-downwarp">
+	<view v-if="mOption.use" class="mescroll-downwarp" :style="{'background-color':mescroll.optDown.bgColor,'color':mescroll.optDown.textColor}">
 		<view class="downwarp-content">
 			<view v-if="isDownLoading" class="downwarp-progress"></view>
 			<view v-else class="downwarp-arrow" :style="{ transform: downRotate }"></view>

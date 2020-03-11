@@ -1,12 +1,12 @@
 /* mescroll
- * version 1.2.3
- * 2020-02-18 wenju
+ * version 1.2.4
+ * 2020-03-11 wenju
  * http://www.mescroll.com
  */
 
 export default function MeScroll(options, isScrollBody) {
 	let me = this;
-	me.version = '1.2.3'; // mescroll版本号
+	me.version = '1.2.4'; // mescroll版本号
 	me.options = options || {}; // 配置
 	me.isScrollBody = isScrollBody || false; // 滚动区域是否为原生页面滚动; 默认为scroll-view
 
@@ -55,6 +55,8 @@ MeScroll.prototype.extendDownScroll = function(optDown) {
 		textInOffset: '下拉刷新', // 下拉的距离在offset范围内的提示文本
 		textOutOffset: '释放更新', // 下拉的距离大于offset范围的提示文本
 		textLoading: '加载中 ...', // 加载中的提示文本
+		bgColor: "transparent", // 背景颜色 (建议在pages.json中再设置一下backgroundColorTop)
+		textColor: "gray", // 文本颜色 (当bgColor配置了颜色,而textColor未配置时,则textColor会默认为白色)
 		inited: null, // 下拉刷新初始化完毕的回调
 		inOffset: null, // 下拉的距离进入offset范围内那一刻的回调
 		outOffset: null, // 下拉的距离大于offset那一刻的回调
@@ -89,6 +91,8 @@ MeScroll.prototype.extendUpScroll = function(optUp) {
 		offset: 80, // 距底部多远时,触发upCallback
 		textLoading: '加载中 ...', // 加载中的提示文本
 		textNoMore: '-- END --', // 没有更多数据的提示文本
+		bgColor: "transparent", // 背景颜色 (建议在pages.json中再设置一下backgroundColorBottom)
+		textColor: "gray", // 文本颜色 (当bgColor配置了颜色,而textColor未配置时,则textColor会默认为白色)
 		inited: null, // 初始化完毕的回调
 		showLoading: null, // 显示加载中的回调
 		showNoMore: null, // 显示无更多数据的回调
@@ -142,11 +146,19 @@ MeScroll.extend = function(userOption, defaultOption) {
 	return userOption;
 }
 
+/* 简单判断是否配置了颜色 (非透明,非白色) */
+MeScroll.prototype.hasColor = function(color) {
+	if(!color) return false;
+	let c = color.toLowerCase();
+	return c != "#fff" && c != "#ffffff" && c != "transparent" && c != "white"
+}
+
 /* -------初始化下拉刷新------- */
 MeScroll.prototype.initDownScroll = function() {
 	let me = this;
 	// 配置参数
 	me.optDown = me.options.down || {};
+	if(!me.optDown.textColor && me.hasColor(me.optDown.bgColor)) me.optDown.textColor = "#fff"; // 当bgColor有值且textColor未设置,则textColor默认白色
 	me.extendDownScroll(me.optDown);
 	
 	// 如果是mescroll-body且配置了native,则禁止自定义的下拉刷新
@@ -180,6 +192,10 @@ MeScroll.prototype.touchstartEvent = function(e) {
 
 /* 列表touchmove事件 */
 MeScroll.prototype.touchmoveEvent = function(e) {
+	// #ifdef H5
+	window.isPreventDefault = false // 标记不需要阻止window事件
+	// #endif
+	
 	if (!this.optDown.use) return;
 	if (!this.startPoint) return;
 	let me = this;
@@ -221,7 +237,10 @@ MeScroll.prototype.touchmoveEvent = function(e) {
 				me.touchendEvent(); // 提前触发touchend
 				return;
 			}
-
+			
+			// #ifdef H5
+			window.isPreventDefault = true // 标记阻止window事件
+			// #endif
 			me.preventDefault(e); // 阻止默认事件
 
 			let diff = curPoint.y - me.lastPoint.y; // 和上次比,移动的距离 (大于0向下,小于0向上)
@@ -395,9 +414,8 @@ MeScroll.prototype.lockUpScroll = function(isLock) {
 MeScroll.prototype.initUpScroll = function() {
 	let me = this;
 	// 配置参数
-	me.optUp = me.options.up || {
-		use: false
-	};
+	me.optUp = me.options.up || {use: false}
+	if(!me.optUp.textColor && me.hasColor(me.optUp.bgColor)) me.optUp.textColor = "#fff"; // 当bgColor有值且textColor未设置,则textColor默认白色
 	me.extendUpScroll(me.optUp);
 
 	if (!me.optUp.isBounce) me.setBounce(false); // 不允许bounce时,需禁止window的touchmove事件
@@ -786,6 +804,8 @@ MeScroll.prototype.setBounce = function(isBounce) {
 		window.isSetBounce = true;
 		// 需禁止window的touchmove事件才能有效的阻止bounce
 		window.bounceTouchmove = function(e) {
+			if(!window.isPreventDefault) return; // 根据标记判断是否阻止
+			
 			let el = e.target;
 			// 当前touch的元素及父元素是否要拦截touchmove事件
 			let isPrevent = true;

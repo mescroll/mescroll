@@ -1,6 +1,6 @@
 <!-- 下拉刷新区域 -->
 <template>
-	<view v-if="mOption.use" class="mescroll-downwarp">
+	<view v-if="mOption.use" class="mescroll-downwarp" :style="{'background-color':mescroll.optDown.bgColor,'color':mescroll.optDown.textColor}">
 		<view class="downwarp-content">
 			<image class="downwarp-slogan" src="http://www.mescroll.com/img/beibei/mescroll-slogan.jpg?v=1" mode="widthFix"/>
 			<view v-if="isDownLoading" class="downwarp-loading mescroll-rotate"></view>

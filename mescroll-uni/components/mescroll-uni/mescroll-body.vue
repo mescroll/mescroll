@@ -1,11 +1,11 @@
 <template>
 	<view class="mescroll-body" :style="{'minHeight':minHeight, 'padding-top': padTop, 'padding-bottom': padBottom, 'padding-bottom': padBottomConstant, 'padding-bottom': padBottomEnv }" @touchstart="touchstartEvent" @touchmove="touchmoveEvent" @touchend="touchendEvent" @touchcancel="touchendEvent" >
-		<view class="mescroll-body-content mescroll-touch" :style="{ transform: translateY, transition: transition }">
+		<view class="mescroll-body-content" :style="{ transform: translateY, transition: transition }">
 			<!-- 下拉加载区域 (支付宝小程序子组件传参给子子组件仍报单项数据流的异常,暂时不通过mescroll-down组件实现)-->
 			<!-- <mescroll-down :option="mescroll.optDown" :type="downLoadType" :rate="downRate"></mescroll-down> -->
-			<view v-if="mescroll.optDown.use" class="mescroll-downwarp">
+			<view v-if="mescroll.optDown.use" class="mescroll-downwarp" :style="{'background-color':mescroll.optDown.bgColor,'color':mescroll.optDown.textColor}">
 				<view class="downwarp-content">
-					<view class="downwarp-progress" :class="{'mescroll-rotate': isDownLoading}" :style="{'transform': downRotate}"></view>
+					<view class="downwarp-progress" :class="{'mescroll-rotate': isDownLoading}" :style="{'border-color':mescroll.optDown.textColor, 'transform': downRotate}"></view>
 					<view class="downwarp-tip">{{downText}}</view>
 				</view>
 			</view>
@@ -18,10 +18,10 @@
 
 			<!-- 上拉加载区域 (下拉刷新时不显示, 支付宝小程序子组件传参给子子组件仍报单项数据流的异常,暂时不通过mescroll-up组件实现)-->
 			<!-- <mescroll-up v-if="mescroll.optUp.use && !isDownLoading" :option="mescroll.optUp" :type="upLoadType"></mescroll-up> -->
-			<view v-if="mescroll.optUp.use && !isDownLoading" class="mescroll-upwarp">
+			<view v-if="mescroll.optUp.use && !isDownLoading" class="mescroll-upwarp" :style="{'background-color':mescroll.optUp.bgColor,'color':mescroll.optUp.textColor}">
 				<!-- 加载中 (此处不能用v-if,否则android小程序快速上拉可能会不断触发上拉回调) -->
 				<view v-show="upLoadType===1">
-					<view class="upwarp-progress mescroll-rotate"></view>
+					<view class="upwarp-progress mescroll-rotate" :style="{'border-color':mescroll.optUp.textColor}"></view>
 					<view class="upwarp-tip">{{ mescroll.optUp.textLoading }}</view>
 				</view>
 				<!-- 无数据 -->
@@ -102,7 +102,7 @@
 			},
 			// 过渡
 			transition() {
-				return this.isDownReset ? 'transform 300ms' : '';
+				return this.isDownReset ? 'transform 300ms' : this.downTransition;
 			},
 			translateY() {
 				return this.downHight > 0 ? 'translateY(' + this.downHight + 'px)' : ''; // transform会使fixed失效,需注意把fixed元素写在mescroll之外
@@ -257,6 +257,10 @@
 			if (sys.statusBarHeight) vm.statusBarHeight = sys.statusBarHeight;
 			// 使down的bottomOffset生效
 			vm.mescroll.setBodyHeight(sys.windowHeight);
+			// mescroll-body在Android小程序下拉会卡顿,无法像mescroll-uni那样通过设置"disableScroll":true解决,只能用动画过渡缓解
+			// #ifdef MP
+			if(sys.platform == "android") vm.downTransition = 'transform 200ms'
+			// #endif
 
 			// 因为使用的是page的scroll,这里需自定义scrollTo
 			vm.mescroll.resetScrollTo((y, t) => {

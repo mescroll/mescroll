@@ -32,6 +32,8 @@
 					outOffsetRate: 0.2, // 在列表顶部,下拉的距离大于offset时,改变下拉区域高度比例;值小于1且越接近0,高度变化越小,表现为越往下越难拉
 					bottomOffset: 20, // 当手指touchmove位置在距离body底部20upx范围内的时候结束上拉刷新,避免Webview嵌套导致touchend事件不执行
 					minAngle: 45, // 向下滑动最少偏移的角度,取值区间  [0,90];默认45度,即向下滑动的角度大于45度则触发下拉;而小于45度,将不触发下拉,避免与左右滑动的轮播等组件冲突;
+					bgColor: "transparent", // 背景颜色 (建议在pages.json中再设置一下backgroundColorTop)
+					textColor: "gray", // 文本颜色 (当bgColor配置了颜色,而textColor未配置时,则textColor会默认为白色)
 					textInOffset: '下拉刷新', // 下拉的距离在offset范围内的提示文本
 					textOutOffset: '释放更新', // 下拉的距离大于offset范围的提示文本
 					textLoading: '加载中 ...' // 加载中的提示文本
@@ -49,6 +51,8 @@
 					},
 					noMoreSize: 3, // 如果列表已无数据,可设置列表的总数量要大于等于5条才显示无更多数据;避免列表数据过少(比如只有一条数据),显示无更多数据会不好看
 					offset: 80, // 距底部多远时,触发upCallback
+					bgColor: "transparent", // 背景颜色 (建议在pages.json中再设置一下backgroundColorTop)
+					textColor: "gray", // 文本颜色 (当bgColor配置了颜色,而textColor未配置时,则textColor会默认为白色)
 					textLoading: '加载中 ...', // 加载中的提示文本
 					textNoMore: '-- END --', // 没有更多数据的提示文本
 					toTop: {

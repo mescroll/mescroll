@@ -23,9 +23,9 @@
 .mescroll-downwarp .downwarp-tip {
 	display: inline-block;
 	font-size: 28rpx;
-	color: gray;
 	vertical-align: middle;
 	margin-left: 16rpx;
+	/* color: gray; 已在style设置color,此处删去*/
 }
 
 /* 下拉刷新--旋转进度条 */
@@ -35,7 +35,7 @@
 	height: 32rpx;
 	border-radius: 50%;
 	border: 2rpx solid gray;
-	border-bottom-color: transparent;
+	border-bottom-color: transparent !important; /*已在style设置border-color,此处需加 !important*/
 	vertical-align: middle;
 }
 

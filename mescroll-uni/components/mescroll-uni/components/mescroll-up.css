@@ -11,8 +11,8 @@
 .mescroll-upwarp .upwarp-nodata {
 	display: inline-block;
 	font-size: 28rpx;
-	color: gray;
 	vertical-align: middle;
+	/* color: gray; 已在style设置color,此处删去*/
 }
 
 .mescroll-upwarp .upwarp-tip {
@@ -26,7 +26,7 @@
 	height: 32rpx;
 	border-radius: 50%;
 	border: 2rpx solid gray;
-	border-bottom-color: transparent;
+	border-bottom-color: transparent !important; /*已在style设置border-color,此处需加 !important*/
 	vertical-align: middle;
 }
 
