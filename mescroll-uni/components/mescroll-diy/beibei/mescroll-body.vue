@@ -88,10 +88,10 @@
 				return this.numBottom + 'px';
 			},
 			padBottomConstant() {
-				return this.safearea ? 'calc(' + this.padBottom + ' + constant(safe-area-inset-bottom))' : this.padBottom;
+				return this.isSafearea ? 'calc(' + this.padBottom + ' + constant(safe-area-inset-bottom))' : this.padBottom;
 			},
 			padBottomEnv() {
-				return this.safearea ? 'calc(' + this.padBottom + ' + env(safe-area-inset-bottom))' : this.padBottom;
+				return this.isSafearea ? 'calc(' + this.padBottom + ' + env(safe-area-inset-bottom))' : this.padBottom;
 			},
 			// 是否为重置下拉的状态
 			isDownReset() {
@@ -257,9 +257,14 @@
 			});
 
 			// 具体的界面如果不配置up.toTop.safearea,则取本vue的safearea值
-			if (vm.up && vm.up.toTop && vm.up.toTop.safearea != null) {
-			} else {
-				vm.mescroll.optUp.toTop.safearea = vm.safearea;
+			if(sys.platform == "ios"){
+				vm.isSafearea = vm.safearea;
+				if (vm.up && vm.up.toTop && vm.up.toTop.safearea != null) {} else {
+					vm.mescroll.optUp.toTop.safearea = vm.safearea;
+				}
+			}else{
+				vm.isSafearea = false
+				vm.mescroll.optUp.toTop.safearea = false
 			}
 		}
 	};

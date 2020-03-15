@@ -31,6 +31,10 @@
 			<view class="demo-li">list-search 商品搜索<text class="demo-tip">this.mescroll.resetUpScroll()的使用</text></view>
 		</navigator>
 		
+		<navigator url="/pages/base/list-msg">
+			<view class="demo-li">list-msg 聊天记录 <text class="demo-tip">保持当前内容的位置</text></view>
+		</navigator>
+		
 		<navigator url="/pages/base/mescroll-native">
 			<view class="demo-li">mescroll-native<text class="demo-tip">系统自带的下拉刷新,性能最好</text></view>
 		</navigator>

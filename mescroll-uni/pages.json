@@ -8,11 +8,17 @@
             }
         },
         {
-            "path" : "pages/base/list-news",
+            "path" : "pages/base/list-msg",
             "style" : {
-				"navigationBarTitleText" : "list-news"
+				"navigationBarTitleText" : "list-msg"
 			}
         },
+		{
+		    "path" : "pages/base/list-news",
+		    "style" : {
+				"navigationBarTitleText" : "list-news"
+			}
+		},
         {
             "path" : "pages/base/list-products",
             "style" : {

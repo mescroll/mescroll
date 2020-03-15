@@ -1,6 +1,6 @@
 <template>
 	<view class="mescroll-uni-warp">
-		<scroll-view :id="viewId" class="mescroll-uni" :class="{'mescroll-uni-fixed':isFixed}" :style="{'height':scrollHeight,'padding-top':padTop,'padding-bottom':padBottom,'padding-bottom':padBottomConstant,'padding-bottom':padBottomEnv,'top':fixedTop,'bottom':fixedBottom,'bottom':fixedBottomConstant,'bottom':fixedBottomEnv}" :scroll-top="scrollTop" :scroll-with-animation="scrollAnim" @scroll="scroll" @touchstart="touchstartEvent" @touchmove="touchmoveEvent" @touchend="touchendEvent" @touchcancel="touchendEvent" :scroll-y='isDownReset' :enable-back-to-top="true">
+		<scroll-view :id="viewId" class="mescroll-uni" :class="{'mescroll-uni-fixed':isFixed}" :style="{'height':scrollHeight,'padding-top':padTop,'padding-bottom':padBottom,'padding-bottom':padBottomConstant,'padding-bottom':padBottomEnv,'top':fixedTop,'bottom':fixedBottom,'bottom':fixedBottomConstant,'bottom':fixedBottomEnv}" :scroll-top="scrollTop" :scroll-into-view="scrollToViewId" :scroll-with-animation="scrollAnim" @scroll="scroll" @touchstart="touchstartEvent" @touchmove="touchmoveEvent" @touchend="touchendEvent" @touchcancel="touchendEvent" :scroll-y='isDownReset' :enable-back-to-top="true">
 			<view class="mescroll-uni-content" :style="{'transform': translateY, 'transition': transition}">
 				<!-- 下拉加载区域 (支付宝小程序子组件传参给子子组件仍报单项数据流的异常,暂时不通过mescroll-down组件实现)-->
 				<!-- <mescroll-down :option="mescroll.optDown" :type="downLoadType"></mescroll-down> -->
@@ -63,7 +63,8 @@
 				windowTop: 0, // 可使用窗口的顶部位置
 				windowBottom: 0, // 可使用窗口的底部位置
 				windowHeight: 0, // 可使用窗口的高度
-				statusBarHeight: 0 // 状态栏高度
+				statusBarHeight: 0, // 状态栏高度
+				scrollToViewId: '' // 滚动到指定view的id
 			}
 		},
 		props: {
@@ -114,19 +115,19 @@
 				return this.isFixed ? (this.numBottom + this.windowBottom) + 'px' : 0
 			},
 			fixedBottomConstant(){
-				return this.safearea ? "calc("+this.fixedBottom+" + constant(safe-area-inset-bottom))" : this.fixedBottom
+				return this.isSafearea ? "calc("+this.fixedBottom+" + constant(safe-area-inset-bottom))" : this.fixedBottom
 			},
 			fixedBottomEnv(){
-				return this.safearea ? "calc("+this.fixedBottom+" + env(safe-area-inset-bottom))" : this.fixedBottom
+				return this.isSafearea ? "calc("+this.fixedBottom+" + env(safe-area-inset-bottom))" : this.fixedBottom
 			},
 			padBottom() {
 				return !this.isFixed ? this.numBottom + 'px' : 0
 			},
 			padBottomConstant(){
-				return this.safearea ? "calc("+this.padBottom+" + constant(safe-area-inset-bottom))" : this.padBottom
+				return this.isSafearea ? "calc("+this.padBottom+" + constant(safe-area-inset-bottom))" : this.padBottom
 			},
 			padBottomEnv(){
-				return this.safearea ? "calc("+this.padBottom+" + env(safe-area-inset-bottom))" : this.padBottom
+				return this.isSafearea ? "calc("+this.padBottom+" + env(safe-area-inset-bottom))" : this.padBottom
 			},
 			// 是否为重置下拉的状态
 			isDownReset(){
@@ -305,8 +306,12 @@
 
 			// 因为使用的是scrollview,这里需自定义scrollTo
 			vm.mescroll.resetScrollTo((y, t) => {
-				let curY = vm.mescroll.getScrollTop()
 				vm.scrollAnim = (t !== 0); // t为0,则不使用动画过渡
+				if(typeof y === 'string'){ // 第一个参数如果为字符串,则使用scroll-into-view
+					vm.scrollToViewId = y;
+					return;
+				}
+				let curY = vm.mescroll.getScrollTop()
 				if (t === 0 || t === 300) { // 当t使用默认配置的300时,则使用系统自带的动画过渡
 					vm.scrollTop = curY;
 					vm.$nextTick(function() {
@@ -320,8 +325,14 @@
 			})
 			
 			// 具体的界面如果不配置up.toTop.safearea,则取本vue的safearea值
-			if(vm.up && vm.up.toTop && vm.up.toTop.safearea!=null){}else{
-				vm.mescroll.optUp.toTop.safearea = vm.safearea
+			if(sys.platform == "ios"){
+				vm.isSafearea = vm.safearea;
+				if (vm.up && vm.up.toTop && vm.up.toTop.safearea != null) {} else {
+					vm.mescroll.optUp.toTop.safearea = vm.safearea;
+				}
+			}else{
+				vm.isSafearea = false
+				vm.mescroll.optUp.toTop.safearea = false
 			}
 		},
 		mounted() {
