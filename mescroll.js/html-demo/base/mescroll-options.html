@@ -121,7 +121,7 @@
 		</div>
 	</body>
 	
-	<script src="../../dist/mescroll.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../../dist/mescroll.js" type="text/javascript" charset="utf-8"></script>
 	<!--mescroll本身不依赖jq,这里为了模拟发送ajax请求-->
 	<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js" type="text/javascript" charset="utf-8"></script>
 	<script type="text/javascript" charset="utf-8">
@@ -242,7 +242,8 @@
 						btnClick: function(){//点击按钮的回调,默认null
 							alert("点击了按钮,具体逻辑自行实现");
 						},
-						supportTap: false //默认点击事件用onclick,会有300ms的延时;如果您的运行环境支持tap,则可配置true;
+						supportTap: false, //默认点击事件用onclick,会有300ms的延时;如果您的运行环境支持tap,则可配置true;
+						customId: null // 自定义空布局的id; 如果此项有值,将不使用empty所有配置;空布局的显示隐藏只控制customId元素的显示隐藏;用于完全自定义empty的场景
 					},
 					clearId: null, //加载第一页时需清空数据的列表id; 如果此项有值,将不使用clearEmptyId的值;
 					clearEmptyId: "dataList", //相当于同时设置了clearId和empty.warpId; 简化写法;默认null; 注意vue中不能配置此项

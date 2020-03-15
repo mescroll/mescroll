@@ -8,7 +8,7 @@
     <!--滑动区域 ref='mescroll'不能删, 目的是路由切换时可通过ref调用mescroll-vue组件的beforeRouteEnter方法-->
     <mescroll-vue ref="mescroll" :up="mescrollUp" @init="mescrollInit">
       <!--模拟的轮播,菜单 可在down.callback中配置刷新轮播数据-->
-      <img class="swiper" src="../../../static/mock/img/swiper.jpg"/>
+      <img class="swiper" src="/static/mock/img/swiper.jpg"/>
       <!--筛选条件; 模拟列表的重置和演示空布局的使用-->
       <div class="nav">
         <p :class="getActiveCls(0)" @click="changeTab(0)">全部</p>
@@ -18,7 +18,7 @@
       <!--展示上拉加载的数据列表-->
       <ul id="dataList" class="data-list">
         <li v-for="pd in dataList" :key="pd.id">
-          <img class="pd-img" :imgurl="pd.pdImg" src="../../../static/mock/img/loading.png"/>
+          <img class="pd-img" :imgurl="pd.pdImg" src="/static/mock/img/loading.png"/>
           <p class="pd-name">{{pd.pdName}}</p>
           <p class="pd-price">{{pd.pdPrice}} 元</p>
           <p class="pd-sold">已售{{pd.pdSold}}件</p>
@@ -33,15 +33,16 @@
 import MescrollVue from 'mescroll.js/mescroll.vue'
 // 模拟数据
 import mockData from '../../mock/pdlist'
+import MescrollMixins from '../../assets/MescrollMixins.js'
 
 export default {
   name: 'mescrollComponent',
   components: {
     MescrollVue
   },
+  mixins:[MescrollMixins],
   data () {
     return {
-      mescroll: null, // mescroll实例对象
       mescrollUp: {
         callback: this.upCallback, // 上拉回调,此处可简写; 相当于 callback: function (page, mescroll) { getListData(page); }
         page: {
@@ -69,17 +70,6 @@ export default {
       dataList: [], // 列表数据
       pdType: 0 // 菜单
     }
-  },
-  beforeRouteEnter (to, from, next) { // 如果没有配置回到顶部按钮或isBounce,则beforeRouteEnter不用写
-    next(vm => {
-      // 找到当前mescroll的ref,调用子组件mescroll-vue的beforeRouteEnter方法
-      vm.$refs.mescroll && vm.$refs.mescroll.beforeRouteEnter() // 进入路由时,滚动到原来的列表位置,恢复回到顶部按钮和isBounce的配置
-    })
-  },
-  beforeRouteLeave (to, from, next) { // 如果没有配置回到顶部按钮或isBounce,则beforeRouteLeave不用写
-    // 找到当前mescroll的ref,调用子组件mescroll-vue的beforeRouteEnter方法
-    this.$refs.mescroll && this.$refs.mescroll.beforeRouteLeave() // 退出路由时,记录列表滚动的位置,隐藏回到顶部按钮和isBounce的配置
-    next()
   },
   methods: {
     // mescroll组件初始化的回调,可获取到mescroll对象

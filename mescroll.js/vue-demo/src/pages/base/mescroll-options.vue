@@ -8,7 +8,7 @@
     <!--滑动区域-->
     <div id="mescroll" class="mescroll">
       <!--模拟的轮播,菜单 可在down.callback中配置刷新轮播数据-->
-      <img class="swiper" src="../../../static/mock/img/swiper.jpg"/>
+      <img class="swiper" src="/static/mock/img/swiper.jpg"/>
       <!--筛选条件; 模拟列表的重置和演示空布局的使用-->
       <div class="nav">
         <p :class="getActiveCls(0)" @click="changeTab(0)">全部</p>
@@ -18,7 +18,7 @@
       <!--展示上拉加载的数据列表-->
       <ul id="dataList" class="data-list">
         <li v-for="pd in dataList" :key="pd.id">
-          <img class="pd-img" :imgurl="pd.pdImg" src="../../../static/mock/img/loading.png"/>
+          <img class="pd-img" :imgurl="pd.pdImg" src="/static/mock/img/loading.png"/>
           <p class="pd-name">{{pd.pdName}}</p>
           <p class="pd-price">{{pd.pdPrice}} 元</p>
           <p class="pd-sold">已售{{pd.pdSold}}件</p>

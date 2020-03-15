@@ -15,7 +15,7 @@
       <!--展示上拉加载的数据列表-->
       <ul id="dataList" class="data-list">
         <li v-for="pd in dataList" :key="pd.id">
-          <img class="pd-img" :imgurl="pd.pdImg" src="../../../static/mock/img/loading.png"/>
+          <img class="pd-img" :imgurl="pd.pdImg" src="/static/mock/img/loading.png"/>
           <p class="pd-name">{{pd.pdName}}</p>
           <p class="pd-price">{{pd.pdPrice}} 元</p>
           <p class="pd-sold">已售{{pd.pdSold}}件</p>

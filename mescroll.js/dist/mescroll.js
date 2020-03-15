@@ -1,6 +1,6 @@
-/*! mescroll -- 精致的下拉刷新和上拉加载js框架
- * version 1.4.1
- * 2019-2-1 文举
+/* mescroll
+ * version 1.4.2
+ * 2019-08-01 wenju
  * http://www.mescroll.com
  */
 (function (name, definition) {
@@ -17,7 +17,7 @@
 })('MeScroll', function () {
   var MeScroll = function (mescrollId, options) {
     var me = this;
-    me.version = '1.4.0'; // mescroll版本号
+    me.version = '1.4.2'; // mescroll版本号
     me.isScrollBody = (!mescrollId || mescrollId === 'body'); // 滑动区域是否为body
     me.scrollDom = me.isScrollBody ? document.body : me.getDomById(mescrollId); // MeScroll的滑动区域
     if (!me.scrollDom) return;
@@ -28,11 +28,13 @@
     var isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); // 是否为ios设备
     var isPC = typeof window.orientation === 'undefined'; // 是否为PC端
     var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1;// 是否为android端
-
+    var isWx = u.toLowerCase().match(/MicroMessenger/i) == 'micromessenger'; // 是否为微信端,此处不能为===,因为match的结果可能是null或数组
+    
     me.os = {
       ios: isIOS,
       pc: isPC,
-      android: isAndroid
+      android: isAndroid,
+      wx: isWx
     }
 
     me.isDownScrolling = false; // 是否在执行下拉刷新的回调
@@ -164,8 +166,9 @@
       empty: {
         // 列表第一页无任何数据时,显示的空提示布局; 需配置warpId或clearEmptyId才生效;
         warpId: null, // 父布局的id; 如果此项有值,将不使用clearEmptyId的值;
+        customId: null, // 自定义空布局的id; 如果此项有值,将不使用empty所有配置;空布局的显示隐藏只控制customId元素的显示隐藏;用于完全自定义empty的场景
         icon: null, // 图标路径
-        tip: '暂无相关数据~', // 提示
+        tip: '~ 空空如也 ~', // 提示
         btntext: '', // 按钮
         btnClick: null, // 点击按钮的回调
         supportTap: false // 如果您的运行环境支持tap,则可配置true;
@@ -505,15 +508,17 @@
       me.preScrollY = scrollTop;
 
       // 如果没有在加载中
-      if (isUp && !me.isUpScrolling && me.optUp.hasNext && !me.optUp.isLock && (!me.isDownScrolling || (me.isDownScrolling && me.optDown.isBoth))) {
-        // offsetheight 列表高度(内容+内边距+边框),滚动条在边框之内,所以使用clientHeight即可
+      if (!me.isUpScrolling && (!me.isDownScrolling || (me.isDownScrolling && me.optDown.isBoth))) {
+        // offsetHeight 列表高度(内容+内边距+边框),滚动条在边框之内,所以使用clientHeight即可
         // clientHeight 列表高度(内容+内边距),不含列表边框
         // scrollHeight 列表内容撑开的高度
-		var toBottom = me.getScrollHeight() - me.getClientHeight() - scrollTop; // 滚动条距离底部的距离
-		if (toBottom <= me.optUp.offset) {
-			// 如果滚动条距离底部指定范围内且向上滑,则执行上拉加载回调
-			me.triggerUpScroll();
-		}
+        if (!me.optUp.isLock && me.optUp.hasNext) {
+          var toBottom = me.getScrollHeight() - me.getClientHeight() - scrollTop; // 滚动条距离底部的距离
+          if (toBottom <= me.optUp.offset && isUp) {
+            // 如果滚动条距离底部指定范围内且向上滑,则执行上拉加载回调
+            me.triggerUpScroll();
+          }
+        }
       }
 
       // 顶部按钮的显示隐藏
@@ -789,7 +794,7 @@
       me.loadFull();
 
       // 懒加载
-      me.optUp.lazyLoad.use && me.lazyLoad(16);
+      me.optUp.lazyLoad.use && me.lazyLoad(20);
     }
   }
 
@@ -833,14 +838,17 @@
   MeScroll.prototype.showEmpty = function () {
     var me = this;
     var optEmpty = me.optUp.empty; // 空布局的配置
+    if (optEmpty.customId) {
+	  // 如果是显示自定义内容 && 该customId元素存在
+      me.emptyDom = me.getDomById(optEmpty.customId);
+	  if(me.emptyDom){
+		me.emptyDom.style.display = 'block';
+		return;
+	  }
+    }
     var warpId = optEmpty.warpId || me.optUp.clearEmptyId; // 优先使用warpId
     if (warpId == null) return;
     var emptyWarp = me.getDomById(warpId) // 要显示空布局的位置
-    // 如果是手动显示自定义内容 && 该 dom 存在
-    if (optEmpty.isCustom && emptyWarp) {
-      me.emptyDom = emptyWarp;
-      return (emptyWarp.style.display = 'block');
-    }
     if (emptyWarp) {
       me.removeEmpty(); // 先移除,避免重复加入
       // 初始化无任何数据的空布局
@@ -868,11 +876,11 @@
       }
     }
   }
+
   /* 移除空布局 */
   MeScroll.prototype.removeEmpty = function () {
-    if (this.optUp.empty.isCustom && this.emptyDom) {
-      // 如果是手动显示自定义内容的话，隐藏该 dom
-      this.emptyDom.style.display = 'none'
+	if (this.optUp.empty.customId && this.emptyDom) {
+      this.emptyDom.style.display = 'none' // 隐藏自定义空布局
     } else {
       this.removeChild(this.emptyDom);
     }
