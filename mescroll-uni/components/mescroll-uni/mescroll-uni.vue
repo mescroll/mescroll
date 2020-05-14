@@ -309,7 +309,7 @@
 			vm.mescroll.viewId = vm.viewId; // 附带id
 			// init回调mescroll对象
 			vm.$emit('init', vm.mescroll);
-			
+
 			// 设置高度
 			const sys = uni.getSystemInfoSync();
 			if(sys.windowTop) vm.windowTop = sys.windowTop;
@@ -323,7 +323,17 @@
 			vm.mescroll.resetScrollTo((y, t) => {
 				vm.scrollAnim = (t !== 0); // t为0,则不使用动画过渡
 				if(typeof y === 'string'){ // 第一个参数如果为字符串,则使用scroll-into-view
-					vm.scrollToViewId = y;
+					this.$nextTick(() => { // 微信小程序scroll-view不支持slot下的scroll-into-view属性，特此hack。
+						let view = uni.createSelectorQuery().in(this).select('#' + this.viewId);
+						view.boundingClientRect(data => {
+							let diffHeight=uni.getSystemInfoSync().windowHeight-data.height
+							uni.createSelectorQuery().select(`#${y}`).boundingClientRect(function(rect){
+								y=rect.top-diffHeight
+								let curY = vm.mescroll.getScrollTop()
+								vm.scrollTop = Math.abs(y+curY)
+							}).exec()
+						}).exec();
+					})
 					return;
 				}
 				let curY = vm.mescroll.getScrollTop()
@@ -338,7 +348,7 @@
 					}, t)
 				}
 			})
-			
+
 			// 具体的界面如果不配置up.toTop.safearea,则取本vue的safearea值
 			if(sys.platform == "ios"){
 				vm.isSafearea = vm.safearea;
