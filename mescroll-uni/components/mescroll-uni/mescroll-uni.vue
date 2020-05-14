@@ -328,7 +328,7 @@
 						view.boundingClientRect(data => {
 							let diffHeight=uni.getSystemInfoSync().windowHeight-data.height
 							uni.createSelectorQuery().select(`#${y}`).boundingClientRect(function(rect){
-								y=rect.top-diffHeight
+								y=rect.top-diffHeight1
 								let curY = vm.mescroll.getScrollTop()
 								vm.scrollTop = Math.abs(y+curY)
 							}).exec()
