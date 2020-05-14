@@ -323,6 +323,7 @@
 			vm.mescroll.resetScrollTo((y, t) => {
 				vm.scrollAnim = (t !== 0); // t为0,则不使用动画过渡
 				if(typeof y === 'string'){ // 第一个参数如果为字符串,则使用scroll-into-view
+					// #ifdef MP-WEIXIN
 					this.$nextTick(() => { // 微信小程序scroll-view不支持slot下的scroll-into-view属性，特此hack。
 						let view = uni.createSelectorQuery().in(this).select('#' + this.viewId);
 						view.boundingClientRect(data => {
@@ -334,6 +335,12 @@
 							}).exec()
 						}).exec();
 					})
+					// #endif
+
+					// #ifndef MP-WEIXIN
+					vm.scrollToViewId = y;
+					// #endif
+
 					return;
 				}
 				let curY = vm.mescroll.getScrollTop()
