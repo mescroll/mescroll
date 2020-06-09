@@ -77,8 +77,9 @@
 					if(page.num == 1) this.goods = []; //如果是第一页需手动制空列表
 					this.goods=this.goods.concat(curPageData); //追加新数据
 					
-					// 数据渲染完毕再隐藏加载状态
-					this.$nextTick(()=>{
+					// 数据渲染完毕再隐藏加载状态 this.$nextTick在iOS真机不触发,需改成setTimeout
+					// this.$nextTick(()=>{
+					setTimeout(()=>{
 						this.mescroll.endSuccess(curPageData.length);
 						// 设置nav到顶部的距离 (需根据自身的情况获取navTop的值, 这里放到列表数据渲染完毕之后)
 						// 也可以放到onReady里面,或者菜单顶部的数据(轮播等)加载完毕之后..
@@ -89,7 +90,7 @@
 							uni.hideLoading();
 							if(this.isShowSticky) this.mescroll.scrollTo(this.navTop, 0)
 						}
-					})
+					},20)
 				}).catch(()=>{
 					//联网失败, 结束加载
 					this.mescroll.endErr();

@@ -90,8 +90,9 @@
 					if(page.num == 1) curTab.goods = []; //如果是第一页需手动制空列表
 					curTab.goods=curTab.goods.concat(curPageData); //追加新数据
 					
-					// 数据渲染完毕再隐藏加载状态
-					this.$nextTick(()=>{
+					// 数据渲染完毕再隐藏加载状态 this.$nextTick在iOS真机不触发,需改成setTimeout
+					// this.$nextTick(()=>{
+					setTimeout(()=>{
 						// 需先隐藏加载状态
 						this.mescroll.endSuccess(curPageData.length);
 						// 再记录当前页的数据
@@ -108,7 +109,7 @@
 							uni.hideLoading();
 							if(this.isShowSticky) this.mescroll.scrollTo(this.navTop, 0)
 						}
-					})
+					},20)
 				}).catch(()=>{
 					//联网失败, 结束加载
 					this.mescroll.endErr();
