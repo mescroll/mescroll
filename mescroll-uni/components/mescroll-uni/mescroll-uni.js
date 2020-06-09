@@ -1,12 +1,12 @@
 /* mescroll
- * version 1.2.5
- * 2020-03-15 wenju
+ * version 1.2.6
+ * 2020-06-06 wenju
  * http://www.mescroll.com
  */
 
 export default function MeScroll(options, isScrollBody) {
 	let me = this;
-	me.version = '1.2.5'; // mescroll版本号
+	me.version = '1.2.6'; // mescroll版本号
 	me.options = options || {}; // 配置
 	me.isScrollBody = isScrollBody || false; // 滚动区域是否为原生页面滚动; 默认为scroll-view
 

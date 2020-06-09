@@ -1,10 +1,14 @@
 <template>
 	<view class="mescroll-uni-warp">
 		<scroll-view :id="viewId" class="mescroll-uni" :class="{'mescroll-uni-fixed':isFixed}" :style="{'height':scrollHeight,'padding-top':padTop,'padding-bottom':padBottom,'padding-bottom':padBottomConstant,'padding-bottom':padBottomEnv,'top':fixedTop,'bottom':fixedBottom,'bottom':fixedBottomConstant,'bottom':fixedBottomEnv}" :scroll-top="scrollTop" :scroll-into-view="scrollToViewId" :scroll-with-animation="scrollAnim" @scroll="scroll" @touchstart="touchstartEvent" @touchmove="touchmoveEvent" @touchend="touchendEvent" @touchcancel="touchendEvent" :scroll-y='isDownReset' :enable-back-to-top="true">
+			
+			<!-- 顶部具名插槽 -->
+			<slot name="top"></slot>
+			
 			<view class="mescroll-uni-content" :style="{'transform': translateY, 'transition': transition}">
 				<!-- 下拉加载区域 (支付宝小程序子组件传参给子子组件仍报单项数据流的异常,暂时不通过mescroll-down组件实现)-->
 				<!-- <mescroll-down :option="mescroll.optDown" :type="downLoadType" :rate="downRate"></mescroll-down> -->
-				<view v-if="mescroll.optDown.use" class="mescroll-downwarp" :style="{'background-color':mescroll.optDown.bgColor,'color':mescroll.optDown.textColor}">
+				<view v-if="mescroll.optDown.use" class="mescroll-downwarp" :style="{'background':mescroll.optDown.bgColor,'color':mescroll.optDown.textColor}">
 					<view class="downwarp-content">
 						<view class="downwarp-progress" :class="{'mescroll-rotate': isDownLoading}" :style="{'border-color':mescroll.optDown.textColor, 'transform': downRotate}"></view>
 						<view class="downwarp-tip">{{downText}}</view>
@@ -19,7 +23,7 @@
 
 				<!-- 上拉加载区域 (下拉刷新时不显示, 支付宝小程序子组件传参给子子组件仍报单项数据流的异常,暂时不通过mescroll-up组件实现)-->
 				<!-- <mescroll-up v-if="mescroll.optUp.use && !isDownLoading" :option="mescroll.optUp" :type="upLoadType"></mescroll-up> -->
-				<view v-if="mescroll.optUp.use && !isDownLoading" class="mescroll-upwarp" :style="{'background-color':mescroll.optUp.bgColor,'color':mescroll.optUp.textColor}">
+				<view v-if="mescroll.optUp.use && !isDownLoading" class="mescroll-upwarp" :style="{'background':mescroll.optUp.bgColor,'color':mescroll.optUp.textColor}">
 					<!-- 加载中 (此处不能用v-if,否则android小程序快速上拉可能会不断触发上拉回调) -->
 					<view v-show="upLoadType===1">
 						<view class="upwarp-progress mescroll-rotate" :style="{'border-color':mescroll.optUp.textColor}"></view>
@@ -29,6 +33,10 @@
 					<view v-if="upLoadType===2" class="upwarp-nodata">{{ mescroll.optUp.textNoMore }}</view>
 				</view>
 			</view>
+			
+			<!-- 底部具名插槽 -->
+			<slot name="bottom"></slot>
+			
 		</scroll-view>
 
 		<!-- 回到顶部按钮 (fixed元素,需写在scroll-view外面,防止滚动的时候抖动)-->
