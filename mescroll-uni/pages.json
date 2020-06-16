@@ -106,6 +106,7 @@
         }
     ],
     "globalStyle" : {
+		"backgroundColorTop":"#FFFFFF", // iOS APP真机bounce回弹区域默认灰色,需重置为白色
         "navigationBarTextStyle" : "black",
         "navigationBarBackgroundColor" : "#fff"
     },

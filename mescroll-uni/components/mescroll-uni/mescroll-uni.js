@@ -1,6 +1,6 @@
 /* mescroll
  * version 1.2.6
- * 2020-06-06 wenju
+ * 2020-06-16 wenju
  * http://www.mescroll.com
  */
 

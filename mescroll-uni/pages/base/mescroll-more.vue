@@ -8,13 +8,18 @@
 		
 		<!-- 子组件 (i: 每个tab页的专属下标;  index: 当前tab的下标) -->
 		
-		<!-- 如果每个子组件布局不一样, 可拆开写 (注意ref不可重复) : -->
+		<!-- 如果每个子组件布局不一样, 可拆开写 (注意ref只能为 "mescrollItem+递增下标" 的格式) : -->
+		<!-- <home ref="mescrollItem0" :i="0" :index="tabIndex"></home>
+		<shopcart ref="mescrollItem1" :i="1" :index="tabIndex"></shopcart>
+		<user ref="mescrollItem2" :i="2" :index="tabIndex"></user> -->
+		
 		<mescroll-item ref="mescrollItem0" :i="0" :index="tabIndex"></mescroll-item>
 		<mescroll-item ref="mescrollItem1" :i="1" :index="tabIndex"></mescroll-item>
 		<mescroll-item ref="mescrollItem2" :i="2" :index="tabIndex"></mescroll-item>
 		<mescroll-item ref="mescrollItem3" :i="3" :index="tabIndex"></mescroll-item>
 		
-		<!-- 如果每个子组件布局一样, 则可使用v-for (注意v-for的ref="mescrollItem"必须是固定值, 支付宝小程序不支持此写法)-->
+		
+		<!-- 如果每个子组件布局一样, 则可使用v-for (注意v-for的ref="mescrollItem"必须是固定值; 另外支付宝小程序不支持此v-for的写法)-->
 		<!-- <mescroll-item ref="mescrollItem" v-for="(tab,i) in tabs" :key="i" :i="i" :index="tabIndex"></mescroll-item> -->
 	</view>
 </template>

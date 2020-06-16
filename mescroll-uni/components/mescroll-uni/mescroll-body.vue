@@ -1,5 +1,7 @@
 <template>
-	<view class="mescroll-body" :style="{'minHeight':minHeight, 'padding-top': padTop, 'padding-bottom': padBottom, 'padding-bottom': padBottomConstant, 'padding-bottom': padBottomEnv }" @touchstart="touchstartEvent" @touchmove="touchmoveEvent" @touchend="touchendEvent" @touchcancel="touchendEvent" >
+	<view class="mescroll-body" :style="{'minHeight':minHeight, 'padding-top': padTop, 'padding-bottom': padBottom}" @touchstart="touchstartEvent" @touchmove="touchmoveEvent" @touchend="touchendEvent" @touchcancel="touchendEvent" >
+		<!-- 状态栏 -->
+		<view v-if="topbar&&statusBarHeight" :style="{height: statusBarHeight+'px', background: topbar}"></view>
 		
 		<!-- 顶部具名插槽 -->
 		<slot name="top"></slot>
@@ -36,6 +38,14 @@
 		<!-- 底部具名插槽 -->
 		<slot name="bottom"></slot>
 		
+		<!-- 底部是否偏移TabBar的高度(仅H5端生效) -->
+		<!-- #ifdef H5 -->
+		<view v-if="windowBottom>0" :style="{height: windowBottom+'px'}"></view>
+		<!-- #endif -->
+		
+		<!-- 适配iPhoneX -->
+		<view v-if="safearea" class="mescroll-safearea"></view>
+		
 		<!-- 回到顶部按钮 (fixed元素需写在transform外面,防止降级为absolute)-->
 		<mescroll-top v-model="isShowToTop" :option="mescroll.optUp.toTop" @click="toTopClick"></mescroll-top>
 	</view>
@@ -66,15 +76,15 @@
 				isShowEmpty: false, // 是否显示空布局
 				isShowToTop: false, // 是否显示回到顶部按钮
 				windowHeight: 0, // 可使用窗口的高度
-				statusBarHeight: 0, // 状态栏高度
-				isSafearea: false // 支持安全区
+				windowBottom: 0, // 可使用窗口的底部位置
+				statusBarHeight: 0 // 状态栏高度
 			};
 		},
 		props: {
 			down: Object, // 下拉刷新的参数配置
 			up: Object, // 上拉加载的参数配置
 			top: [String, Number], // 下拉布局往下的偏移量 (支持20, "20rpx", "20px", "20%"格式的值, 其中纯数字则默认单位rpx, 百分比则相对于windowHeight)
-			topbar: Boolean, // top的偏移量是否加上状态栏高度, 默认false (使用场景:取消原生导航栏时,配置此项可自动加上状态栏高度的偏移量)
+			topbar: [Boolean, String], // top的偏移量是否加上状态栏高度, 默认false (使用场景:取消原生导航栏时,配置此项可留出状态栏的占位, 支持传入字符串背景,如色值,背景图,渐变)
 			bottom: [String, Number], // 上拉布局往上的偏移量 (支持20, "20rpx", "20px", "20%"格式的值, 其中纯数字则默认单位rpx, 百分比则相对于windowHeight)
 			safearea: Boolean, // bottom的偏移量是否加上底部安全区的距离, 默认false (需要适配iPhoneX时使用)
 			height: [String, Number] // 指定mescroll最小高度,默认windowHeight,使列表不满屏仍可下拉
@@ -86,7 +96,7 @@
 			},
 			// 下拉布局往下偏移的距离 (px)
 			numTop() {
-				return this.toPx(this.top) + (this.topbar ? this.statusBarHeight : 0);
+				return this.toPx(this.top)
 			},
 			padTop() {
 				return this.numTop + 'px';
@@ -97,12 +107,6 @@
 			},
 			padBottom() {
 				return this.numBottom + 'px';
-			},
-			padBottomConstant() {
-				return this.isSafearea ? 'calc(' + this.padBottom + ' + constant(safe-area-inset-bottom))' : this.padBottom;
-			},
-			padBottomEnv() {
-				return this.isSafearea ? 'calc(' + this.padBottom + ' + env(safe-area-inset-bottom))' : this.padBottom;
 			},
 			// 是否为重置下拉的状态
 			isDownReset() {
@@ -262,6 +266,7 @@
 			// 设置高度
 			const sys = uni.getSystemInfoSync();
 			if (sys.windowHeight) vm.windowHeight = sys.windowHeight;
+			if (sys.windowBottom) vm.windowBottom = sys.windowBottom;
 			if (sys.statusBarHeight) vm.statusBarHeight = sys.statusBarHeight;
 			// 使down的bottomOffset生效
 			vm.mescroll.setBodyHeight(sys.windowHeight);
@@ -272,21 +277,30 @@
 
 			// 因为使用的是page的scroll,这里需自定义scrollTo
 			vm.mescroll.resetScrollTo((y, t) => {
-				uni.pageScrollTo({
-					scrollTop: y,
-					duration: t
-				})
+				if(typeof y === 'string'){
+					// 滚动到指定view (y必须为元素的id,不带#)
+					setTimeout(()=>{ // 延时确保view已渲染; 不使用$nextTick
+						uni.createSelectorQuery().select('#'+y).boundingClientRect(function(rect){
+							let top = rect.top
+							top += vm.mescroll.getScrollTop()
+							uni.pageScrollTo({
+								scrollTop: top,
+								duration: t
+							})
+						}).exec()
+					},30)
+				} else{
+					// 滚动到指定位置 (y必须为数字)
+					uni.pageScrollTo({
+						scrollTop: y,
+						duration: t
+					})
+				}
 			});
 
 			// 具体的界面如果不配置up.toTop.safearea,则取本vue的safearea值
-			if(sys.platform == "ios"){
-				vm.isSafearea = vm.safearea;
-				if (vm.up && vm.up.toTop && vm.up.toTop.safearea != null) {} else {
-					vm.mescroll.optUp.toTop.safearea = vm.safearea;
-				}
-			}else{
-				vm.isSafearea = false
-				vm.mescroll.optUp.toTop.safearea = false
+			if (vm.up && vm.up.toTop && vm.up.toTop.safearea != null) {} else {
+				vm.mescroll.optUp.toTop.safearea = vm.safearea;
 			}
 		}
 	};
