@@ -20,6 +20,21 @@
 		components: {
 			GoodList
 		},
+		props:{
+			i: Number, // 每个tab页的专属下标 (除了支付宝小程序必须在这里定义, 其他平台都可不用写, 因为已在MescrollMoreItemMixin定义)
+			index: { // 当前tab的下标 (除了支付宝小程序必须在这里定义, 其他平台都可不用写, 因为已在MescrollMoreItemMixin定义)
+				type: Number,
+				default(){
+					return 0
+				}
+			},
+			tabs: { // 为了请求数据,演示用,可根据自己的项目判断是否要传
+				type: Array,
+				default(){
+					return []
+				}
+			}
+		},
 		data() {
 			return {
 				downOption:{
@@ -45,8 +60,7 @@
 			upCallback(page) {
 				// this.i: 每个tab页的专属下标
 				// this.index: 当前tab的下标
-				let wordArr = ['', '奶粉', '面膜', '图书']
-				let word = wordArr[this.i]
+				let word = this.tabs[this.i].name
 				apiSearch(page.num, page.size, word).then(curPageData=>{
 					//联网成功的回调,隐藏下拉刷新和上拉加载的状态;
 					this.mescroll.endSuccess(curPageData.length);

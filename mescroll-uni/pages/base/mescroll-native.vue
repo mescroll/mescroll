@@ -5,7 +5,7 @@
 		<view class="tip">模拟器和真机效果可能不一样,请用真机测试</view>
 		<!-- 轮播 -->
 		<!-- 菜单 -->
-		<app-tabs v-model="tabIndex" :tabs="tabs" @change="tabChange"></app-tabs>
+		<me-tabs v-model="tabIndex" :tabs="tabs" @change="tabChange"></me-tabs>
 		<!-- 数据列表 -->
 		<good-list :list="goods"></good-list>
 	</mescroll-body>
@@ -14,14 +14,12 @@
 <script>
 	import MescrollMixin from "@/components/mescroll-uni/mescroll-mixins.js";
 	import GoodList from "@/components/other/good-list.vue";
-	import AppTabs from "@/components/other/app-tabs.vue";
 	import {apiSearch} from "@/api/mock.js"
 	
 	export default {
 		mixins: [MescrollMixin], // 使用mixin (在main.js注册全局组件，内部已注册onPullDownRefresh)
 		components: {
-			GoodList,
-			AppTabs
+			GoodList
 		},
 		data() {
 			return {

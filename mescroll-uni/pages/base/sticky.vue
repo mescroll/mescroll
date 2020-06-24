@@ -3,7 +3,7 @@
 <template>
 	<view>
 		<!-- 菜单 (悬浮,预先隐藏)-->
-		<app-tabs v-if="isShowSticky" v-model="tabIndex" :fixed="true" :tabs="tabs" @change="tabChange"></app-tabs>
+		<me-tabs v-if="isShowSticky" v-model="tabIndex" :fixed="true" :tabs="tabs" @change="tabChange"></me-tabs>
 		
 		 <mescroll-body ref="mescrollRef" @init="mescrollInit" @down="downCallback" @up="upCallback" :up="upOption" @scroll="scroll" @topclick="topClick">
 			<!--轮播-->
@@ -20,7 +20,7 @@
 			
 			<!-- 菜单 (在mescroll-uni中不能使用fixed,否则iOS滚动时会抖动, 所以需在mescroll-uni之外存在一个一样的菜单) -->
 			<view id="tabInList">
-				<app-tabs v-model="tabIndex" :tabs="tabs" @change="tabChange"></app-tabs>
+				<me-tabs v-model="tabIndex" :tabs="tabs" @change="tabChange"></me-tabs>
 			</view>
 			
 			<!-- 数据列表 -->
@@ -31,14 +31,12 @@
 
 <script>
 	import MescrollMixin from "@/components/mescroll-uni/mescroll-mixins.js";
-	import AppTabs from "@/components/other/app-tabs.vue";
 	import GoodList from "@/components/other/good-list.vue";
 	import {apiSearch} from "@/api/mock.js"
 	
 	export default {
 		mixins: [MescrollMixin], // 使用mixin (在main.js注册全局组件)
 		components: {
-			AppTabs,
 			GoodList
 		},
 		data() {

@@ -2,11 +2,8 @@
 	<view class="mescroll-uni-warp">
 		<scroll-view :id="viewId" class="mescroll-uni" :class="{'mescroll-uni-fixed':isFixed}" :style="{'height':scrollHeight,'padding-top':padTop,'padding-bottom':padBottom,'top':fixedTop,'bottom':fixedBottom}" :scroll-top="scrollTop" :scroll-into-view="scrollToViewId" :scroll-with-animation="scrollAnim" @scroll="scroll" @touchstart="touchstartEvent" @touchmove="touchmoveEvent" @touchend="touchendEvent" @touchcancel="touchendEvent" :scroll-y='isDownReset' :enable-back-to-top="true">
 			<!-- 状态栏 -->
-			<view v-if="topbar&&statusBarHeight" :style="{height: statusBarHeight+'px', background: topbar}"></view>
+			<view v-if="topbar&&statusBarHeight" class="mescroll-topbar" :style="{height: statusBarHeight+'px', background: topbar}"></view>
 		
-			<!-- 顶部具名插槽 -->
-			<slot name="top"></slot>
-			
 			<view class="mescroll-uni-content" :style="{'transform': translateY, 'transition': transition}">
 				<!-- 下拉加载区域 (支付宝小程序子组件传参给子子组件仍报单项数据流的异常,暂时不通过mescroll-down组件实现)-->
 				<!-- <mescroll-down :option="mescroll.optDown" :type="downLoadType" :rate="downRate"></mescroll-down> -->
@@ -24,8 +21,8 @@
 				<mescroll-empty v-if="isShowEmpty" :option="mescroll.optUp.empty" @emptyclick="emptyClick"></mescroll-empty>
 
 				<!-- 上拉加载区域 (下拉刷新时不显示, 支付宝小程序子组件传参给子子组件仍报单项数据流的异常,暂时不通过mescroll-up组件实现)-->
-				<!-- <mescroll-up v-if="mescroll.optUp.use && !isDownLoading" :option="mescroll.optUp" :type="upLoadType"></mescroll-up> -->
-				<view v-if="mescroll.optUp.use && !isDownLoading" class="mescroll-upwarp" :style="{'background':mescroll.optUp.bgColor,'color':mescroll.optUp.textColor}">
+				<!-- <mescroll-up v-if="mescroll.optUp.use && !isDownLoading && upLoadType!==3" :option="mescroll.optUp" :type="upLoadType"></mescroll-up> -->
+				<view v-if="mescroll.optUp.use && !isDownLoading && upLoadType!==3" class="mescroll-upwarp" :style="{'background':mescroll.optUp.bgColor,'color':mescroll.optUp.textColor}">
 					<!-- 加载中 (此处不能用v-if,否则android小程序快速上拉可能会不断触发上拉回调) -->
 					<view v-show="upLoadType===1">
 						<view class="upwarp-progress mescroll-rotate" :style="{'border-color':mescroll.optUp.textColor}"></view>
@@ -36,12 +33,9 @@
 				</view>
 			</view>
 			
-			<!-- 底部具名插槽 -->
-			<slot name="bottom"></slot>
-			
-			<!-- 底部是否偏移TabBar的高度(仅H5端生效) -->
+			<!-- 底部是否偏移TabBar的高度(默认仅在H5端的tab页生效) -->
 			<!-- #ifdef H5 -->
-			<view v-if="windowBottom>0" :style="{height: windowBottom+'px'}"></view>
+			<view v-if="bottombar && windowBottom>0" class="mescroll-bottombar" :style="{height: windowBottom+'px'}"></view>
 			<!-- #endif -->
 			
 			<!-- 适配iPhoneX -->
@@ -75,7 +69,7 @@
 				downHight: 0, //下拉刷新: 容器高度
 				downRate: 0, // 下拉比率(inOffset: rate<1; outOffset: rate>=1)
 				downLoadType: 4, // 下拉刷新状态 （inOffset：1， outOffset：2， showLoading：3， endDownScroll：4）
-				upLoadType: 0, // 上拉加载状态：0（loading前），1（loading中），2（没有更多了）
+				upLoadType: 0, // 上拉加载状态：0（loading前），1（loading中），2（没有更多了,显示END文本提示），3（没有更多了,不显示END文本提示）
 				isShowEmpty: false, // 是否显示空布局
 				isShowToTop: false, // 是否显示回到顶部按钮
 				scrollTop: 0, // 滚动条的位置
@@ -98,7 +92,11 @@
 				type: Boolean,
 				default: true
 			},
-			height: [String, Number] // 指定mescroll的高度, 此项有值,则不使用fixed. (支持20, "20rpx", "20px", "20%"格式的值, 其中纯数字则默认单位rpx, 百分比则相对于windowHeight)
+			height: [String, Number], // 指定mescroll的高度, 此项有值,则不使用fixed. (支持20, "20rpx", "20px", "20%"格式的值, 其中纯数字则默认单位rpx, 百分比则相对于windowHeight)
+			bottombar:{ // 底部是否偏移TabBar的高度(默认仅在H5端的tab页生效)
+				type: Boolean,
+				default: true
+			}
 		},
 		computed: {
 			// 是否使用fixed定位 (当height有值,则不使用)
@@ -217,7 +215,11 @@
 				if (this.mescroll.getClientHeight(true) === 0 && !this.isExec) {
 					this.isExec = true; // 避免多次获取
 					this.$nextTick(() => { // 确保dom已渲染
-						let view = uni.createSelectorQuery().in(this).select('#' + this.viewId);
+						let query = uni.createSelectorQuery();
+						// #ifndef MP-ALIPAY
+						query = query.in(this) // 支付宝小程序不支持in(this),而字节跳动小程序必须写in(this), 否则都取不到值
+						// #endif
+						let view = query.select('#' + this.viewId);
 						view.boundingClientRect(data => {
 							this.isExec = false;
 							if (data) {
@@ -275,8 +277,8 @@
 						vm.upLoadType = 2;
 					},
 					// 隐藏上拉加载的回调
-					hideUpScroll() {
-						vm.upLoadType = 0;
+					hideUpScroll(mescroll) {
+						vm.upLoadType = mescroll.optUp.hasNext ? 0 : 3;
 					},
 					// 空布局
 					empty: {

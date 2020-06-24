@@ -2,6 +2,8 @@
  * mescroll-more-item的mixins, 仅在多个 mescroll-body 写在子组件时使用 (参考 mescroll-more 案例)
  */
 const MescrollMoreItemMixin = {
+	// 支付宝小程序不支持props的mixin,需写在具体的页面中
+	// #ifndef MP-ALIPAY
 	props:{
 		i: Number, // 每个tab页的专属下标
 		index: { // 当前tab的下标
@@ -11,6 +13,7 @@ const MescrollMoreItemMixin = {
 			}
 		}
 	},
+	// #endif
 	data() {
 		return {
 			downOption:{

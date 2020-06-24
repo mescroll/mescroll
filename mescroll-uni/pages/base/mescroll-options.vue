@@ -1,7 +1,19 @@
 <template>
-	 <mescroll-body ref="mescrollRef" @init="mescrollInit" :down="downOption" @down="downCallback" :up="upOption" @up="upCallback" :fixed="true" @emptyclick="emptyClick" @topclick="topClick" @scroll="scroll">
+	 <mescroll-body ref="mescrollRef" @init="mescrollInit" @down="downCallback" @up="upCallback" 
+	 :down="downOption" 
+	 :up="upOption" 
+	 :top="0" 
+	 :bottom="0" 
+	 :topbar="false" 
+	 :bottombar="true" 
+	 :fixed="true" 
+	 height="100%" 
+	 :safearea="false" 
+	 @emptyclick="emptyClick" 
+	 @topclick="topClick" 
+	 @scroll="scroll">
 		<view class="tip">展示down和up的所有配置项</view>
-		<app-tabs v-model="tabIndex" :tabs="tabs" @change="tabChange"></app-tabs>
+		<me-tabs v-model="tabIndex" :tabs="tabs" @change="tabChange"></me-tabs>
 		<good-list :list="goods"></good-list>
 	</mescroll-body>
 </template>
@@ -9,14 +21,12 @@
 <script>
 	import MescrollMixin from "@/components/mescroll-uni/mescroll-mixins.js";
 	import GoodList from "@/components/other/good-list.vue";
-	import AppTabs from "@/components/other/app-tabs.vue";
 	import {apiSearch} from "@/api/mock.js"
 	
 	export default {
 		mixins: [MescrollMixin], // 使用mixin (在main.js注册全局组件)
 		components: {
-			GoodList,
-			AppTabs
+			GoodList
 		},
 		data() {
 			return {
@@ -50,7 +60,7 @@
 						time: null // 加载第一页数据服务器返回的时间; 防止用户翻页时,后台新增了数据从而导致下一页数据重复;
 					},
 					noMoreSize: 3, // 如果列表已无数据,可设置列表的总数量要大于等于5条才显示无更多数据;避免列表数据过少(比如只有一条数据),显示无更多数据会不好看
-					offset: 80, // 距底部多远时,触发upCallback
+					offset: 80, // 距底部多远时,触发upCallback(仅mescroll-uni生效, 对于mescroll-body则需在pages.json设置"onReachBottomDistance")
 					bgColor: "transparent", // 背景颜色 (建议在pages.json中再设置一下backgroundColorTop)
 					textColor: "gray", // 文本颜色 (当bgColor配置了颜色,而textColor未配置时,则textColor会默认为白色)
 					textLoading: '加载中 ...', // 加载中的提示文本
