@@ -1,6 +1,6 @@
 <template>
 	<view class="mescroll-uni-warp">
-		<scroll-view :id="viewId" class="mescroll-uni" :class="{'mescroll-uni-fixed':isFixed}" :style="{'height':scrollHeight,'padding-top':padTop,'padding-bottom':padBottom,'top':fixedTop,'bottom':fixedBottom}" :scroll-top="scrollTop" :scroll-into-view="scrollToViewId" :scroll-with-animation="scrollAnim" @scroll="scroll" @touchstart="touchstartEvent" @touchmove="touchmoveEvent" @touchend="touchendEvent" @touchcancel="touchendEvent" :scroll-y='isDownReset' :enable-back-to-top="true">
+		<scroll-view :id="viewId" class="mescroll-uni" :class="{'mescroll-uni-fixed':isFixed}" :style="{'height':scrollHeight,'padding-top':padTop,'padding-bottom':padBottom,'top':fixedTop,'bottom':fixedBottom}" :scroll-top="scrollTop" :scroll-into-view="scrollToViewId" :scroll-with-animation="scrollAnim" @scroll="scroll" @touchstart="touchstartEvent" @touchmove="touchmoveEvent" @touchend="touchendEvent" @touchcancel="touchendEvent" :scroll-y='scrollable' :enable-back-to-top="true">
 			<!-- 状态栏 -->
 			<view v-if="topbar&&statusBarHeight" class="mescroll-topbar" :style="{height: statusBarHeight+'px', background: topbar}"></view>
 						
@@ -65,8 +65,8 @@
 				mescroll: null, // mescroll实例
 				viewId: 'id_' + Math.random().toString(36).substr(2,16), // 随机生成mescroll的id(不能数字开头,否则找不到元素)
 				downHight: 0, //下拉刷新: 容器高度
-				downLoadType: 4, // 下拉刷新状态 （inOffset：1， outOffset：2， showLoading：3， endDownScroll：4）
-				upLoadType: 0, // 上拉加载状态：0（loading前），1（loading中），2（没有更多了,显示END文本提示），3（没有更多了,不显示END文本提示）
+				downLoadType: 0, // 下拉刷新状态: 0(loading前), 1(inOffset), 2(outOffset), 3(showLoading), 4(endDownScroll)
+				upLoadType: 0, // 上拉加载状态: 0(loading前), 1loading中, 2没有更多了,显示END文本提示, 3(没有更多了,不显示END文本提示)
 				isShowEmpty: false, // 是否显示空布局
 				isShowToTop: false, // 是否显示回到顶部按钮
 				scrollTop: 0, // 滚动条的位置
@@ -112,7 +112,7 @@
 			},
 			// 下拉布局往下偏移的距离 (px)
 			numTop() {
-				return return this.toPx(this.top)
+				return this.toPx(this.top)
 			},
 			fixedTop() {
 				return this.isFixed ? (this.numTop + this.windowTop) + 'px' : 0
@@ -140,6 +140,10 @@
 			},
 			translateY() {
 				return this.downHight > 0 ? 'translateY(' + this.downHight + 'px)' : '' // transform会使fixed失效,需注意把fixed元素写在mescroll之外
+			},
+			// 列表是否可滑动
+			scrollable(){
+				return this.downLoadType===0 || this.isDownReset
 			},
 			// 是否在加载中
 			isDownLoading(){
@@ -246,6 +250,10 @@
 					endDownScroll(mescroll) {
 						vm.downLoadType = 4; // 结束下拉 (自定义mescroll组件时,此行不可删)
 						vm.downHight = 0; // 设置下拉区域的高度 (自定义mescroll组件时,此行不可删)
+						vm.downResetTimer && clearTimeout(vm.downResetTimer)
+						vm.downResetTimer = setTimeout(()=>{ // 过渡动画执行完毕后,需重置为0的状态,以便置空this.transition,避免iOS小程序列表渲染不完整
+							vm.downLoadType = 0
+						},300)
 					},
 					// 派发下拉刷新的回调
 					callback: function(mescroll) {

@@ -1,14 +1,17 @@
 <template>
-	<!-- 系统自带的下拉刷新，只能配合mescroll-body使用， 在mescroll-uni中无效 -->
-	<mescroll-body ref="mescrollRef" @init="mescrollInit" :down="downOption" @down="downCallback" :up="upOption" @up="upCallback" @emptyclick="emptyClick">
-		<view class="tip">系统自带的下拉刷新,性能最好,支持条件编译</view>
-		<view class="tip">模拟器和真机效果可能不一样,请用真机测试</view>
-		<!-- 轮播 -->
+	<view>
 		<!-- 菜单 -->
-		<me-tabs v-model="tabIndex" :tabs="tabs" @change="tabChange"></me-tabs>
-		<!-- 数据列表 -->
-		<good-list :list="goods"></good-list>
-	</mescroll-body>
+		<view class="top-warp">
+			<view class="tip">基于scroll-view,常用在浮窗弹层等局部滚动区域</view>
+			<me-tabs v-model="tabIndex" :tabs="tabs" @change="tabChange"></me-tabs>
+		</view>
+		
+		<!-- top="xxx"下拉布局往下偏移,防止被悬浮菜单遮住 -->
+		 <mescroll-uni ref="mescrollRef" @init="mescrollInit" top="120" @down="downCallback" :up="upOption" @up="upCallback" @emptyclick="emptyClick">
+			<!-- 数据列表 -->
+			<good-list :list="goods"></good-list>
+		</mescroll-uni>
+	</view>
 </template>
 
 <script>
@@ -16,22 +19,16 @@
 	import {apiSearch} from "@/api/mock.js"
 	
 	export default {
-		mixins: [MescrollMixin], // 使用mixin (在main.js注册全局组件，内部已注册onPullDownRefresh)
+		mixins: [MescrollMixin], // 使用mixin (在main.js注册全局组件)
 		data() {
 			return {
-				downOption:{
-					native: true // 必须配置此项，且需在pages.json配置"enablePullDownRefresh" : true
-					
-					// 支持条件编译,如您可以配置小程序端使用系统自带的,其他平台使用mescroll的下拉样式
-					//ifdef MP
-					// native: true
-					//endif
-					//可在mescroll-uni-option.js全局配置native的值
-				},
 				upOption:{
-					noMoreSize: 4, 
+					// page: {
+					// 	size: 10 // 每页数据的数量
+					// },
+					noMoreSize: 4, //如果列表已无数据,可设置列表的总数量要大于半页才显示无更多数据;避免列表数据过少(比如只有一条数据),显示无更多数据会不好看; 默认5
 					empty:{
-						tip: '~ 搜索无数据 ~',
+						tip: '~ 搜索无数据 ~', // 提示
 						btnText: '去看看'
 					}
 				},
@@ -73,7 +70,16 @@
 </script>
 
 <style>
-	.tip{
+	.top-warp{
+		z-index: 9990;
+		position: fixed;
+		top: --window-top; /* css变量 */
+		left: 0;
+		width: 100%;
+		height: 120upx;
+		background-color: white;
+	}
+	.top-warp .tip{
 		font-size: 28upx;
 		height: 60upx;
 		line-height: 60upx;

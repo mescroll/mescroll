@@ -11,14 +11,10 @@
 
 <script>
 	import MescrollMixin from "@/components/mescroll-uni/mescroll-mixins.js";
-	import GoodList from "@/components/other/good-list.vue";
 	import {apiGoods} from "@/api/mock.js"
 	
 	export default {
 		mixins: [MescrollMixin], // 使用mixin (在main.js注册全局组件)
-		components: {
-			GoodList
-		},
 		data() {
 			return {
 				goods: [], // 数据列表

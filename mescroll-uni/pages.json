@@ -82,9 +82,9 @@
 			}
 		},
         {
-            "path" : "pages/intermediate/mescroll-swiper",
+            "path" : "pages/base/mescroll-uni",
             "style" : {
-				"navigationBarTitleText" : "轮播菜单导航 mescroll-swiper.vue",
+				"navigationBarTitleText" : "mescroll-uni",
 				"disableScroll": true, // mescroll-uni需禁止滚动, 解决scroll-view在Android小程序卡顿的问题
 				"app-plus" : {
 					"bounce" : "none" // mescroll-uni需取消iOS回弹和安卓顶部底部的半月形阴影
@@ -92,6 +92,17 @@
 				"mp-alipay":{"allowsBounceVertical":"NO"} // mescroll-uni需取消支付宝和钉钉小程序自带的回弹
 			}
         },
+		{
+		    "path" : "pages/intermediate/mescroll-swiper",
+		    "style" : {
+				"navigationBarTitleText" : "轮播菜单导航 mescroll-swiper.vue",
+				"disableScroll": true, // mescroll-uni需禁止滚动, 解决scroll-view在Android小程序卡顿的问题
+				"app-plus" : {
+					"bounce" : "none" // mescroll-uni需取消iOS回弹和安卓顶部底部的半月形阴影
+				},
+				"mp-alipay":{"allowsBounceVertical":"NO"} // mescroll-uni需取消支付宝和钉钉小程序自带的回弹
+			}
+		},
 		{
             "path" : "pages/intermediate/beibei",
             "style" : {

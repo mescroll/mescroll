@@ -12,14 +12,10 @@
 <script>
 	import MescrollMixin from "@/components/mescroll-uni/mescroll-mixins.js";
 	import MescrollMoreItemMixin from "@/components/mescroll-uni/mixins/mescroll-more-item.js";
-	import GoodList from "@/components/other/good-list.vue";
 	import {apiSearch} from "@/api/mock.js"
 	
 	export default {
 		mixins: [MescrollMixin,MescrollMoreItemMixin], // 注意此处还需使用MescrollMoreItemMixin (必须写在MescrollMixin后面)
-		components: {
-			GoodList
-		},
 		props:{
 			i: Number, // 每个tab页的专属下标 (除了支付宝小程序必须在这里定义, 其他平台都可不用写, 因为已在MescrollMoreItemMixin定义)
 			index: { // 当前tab的下标 (除了支付宝小程序必须在这里定义, 其他平台都可不用写, 因为已在MescrollMoreItemMixin定义)

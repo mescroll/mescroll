@@ -12,14 +12,10 @@
 <script>
 	import MescrollMixin from "@/components/mescroll-uni/mescroll-mixins.js";
 	import MescrollMoreItemMixin from "@/components/mescroll-uni/mixins/mescroll-more-item.js";
-	import GoodList from "@/components/other/good-list.vue";
 	import {apiSearch} from "@/api/mock.js"
 	
 	export default {
 		mixins: [MescrollMixin,MescrollMoreItemMixin], // 注意此处还需使用MescrollMoreItemMixin (必须写在MescrollMixin后面)
-		components: {
-			GoodList
-		},
 		data() {
 			return {
 				downOption:{

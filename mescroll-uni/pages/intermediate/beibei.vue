@@ -19,14 +19,12 @@
 <script>
 	import MescrollBodyDiy from "@/components/mescroll-diy/beibei/mescroll-body.vue";
 	import MescrollMixin from "@/components/mescroll-uni/mescroll-mixins.js";
-	import GoodList from "@/components/other/good-list.vue";
 	import {apiGoods} from "@/api/mock.js"
 	
 	export default {
 		mixins: [MescrollMixin], // 使用mixin (在main.js注册全局组件)
 		components: {
-			MescrollBodyDiy, // 避免与main.js注册的全局组件名称相同,否则注册组件失效(iOS真机 APP HBuilderX2.7.9)
-			GoodList
+			MescrollBodyDiy // 避免与main.js注册的全局组件名称相同,否则注册组件失效(iOS真机 APP HBuilderX2.7.9)
 		},
 		data() {
 			return {
