@@ -39,6 +39,9 @@
 			<view class="demo-li">mescroll-native<text class="demo-tip">系统自带的下拉刷新,性能最好</text></view>
 		</navigator>
 		
+		<navigator url="/pages/base/mescroll-uni">
+			<view class="demo-li">mescroll-uni<text class="demo-tip">基于scroll-view,常用在浮窗弹层等局部区域</text></view>
+		</navigator>
 		
 		<view class="group-title">intermediate demos 中级案例</view>
 		
@@ -64,22 +67,10 @@
 		
 		
 		<view class="group-title">senior demos 高级案例</view>
-		
-		<navigator>
-			<view class="demo-li">仿【美囤妈妈】下拉刷新上拉加载<text class="demo-tip">请到官网获取</text></view>
-		</navigator>
-		
-		<navigator>
-			<view class="demo-li">仿【美团】下拉刷新上拉加载<text class="demo-tip">请到官网获取</text></view>
-		</navigator>
-		
-		<navigator>
-			<view class="demo-li">仿【京东】下拉刷新上拉加载<text class="demo-tip">请到官网获取</text></view>
-		</navigator>
-		
-		<navigator>
-			<view class="demo-li">仿【淘宝】下拉刷新上拉加载<text class="demo-tip">请到官网获取</text></view>
-		</navigator>
+		<view class="demo-li disable">仿【美囤妈妈】下拉刷新上拉加载<text class="demo-tip">请到官网获取</text></view>
+		<view class="demo-li disable">仿【美团】下拉刷新上拉加载<text class="demo-tip">请到官网获取</text></view>
+		<view class="demo-li disable">仿【京东】下拉刷新上拉加载<text class="demo-tip">请到官网获取</text></view>
+		<view class="demo-li disable">仿【淘宝】下拉刷新上拉加载<text class="demo-tip">请到官网获取</text></view>
 	</view>
 </template>
 
@@ -106,6 +97,10 @@
 		padding: 24upx;
 		border-bottom: 1upx solid #eee;
 		color: #18B4FE;
+	}
+	
+	.demo-li.disable{
+		color: gray;
 	}
 	
 	.demo-li .demo-tip {

@@ -1,6 +1,6 @@
 <template>
 	<!-- 当mescroll-body写在子组件时,父页面需引入mescroll-comp.js的mixins -->
-	<mescroll-body ref="mescrollRef" @init="mescrollInit" @down="downCallback" :down="downOption" @up="upCallback">
+	<mescroll-body ref="mescrollRef" top="80" @init="mescrollInit" @down="downCallback" @up="upCallback">
 		<!-- 数据列表 -->
 		<good-list :list="goods"></good-list>
 	</mescroll-body>
@@ -8,19 +8,12 @@
 
 <script>
 	import MescrollMixin from "@/components/mescroll-uni/mescroll-mixins.js";
-	import GoodList from "@/components/other/good-list.vue";
 	import {apiGoods} from "@/api/mock.js"
 	
 	export default {
 		mixins: [MescrollMixin], // 使用mixin (在main.js注册全局组件)
-		components: {
-			GoodList
-		},
 		data() {
 			return {
-				downOption: {
-					// native: false // 是否启用系统自带的下拉刷新,默认false; (值为true时,还需在pages配置enablePullDownRefresh:true)
-				},
 				goods: []
 			}
 		},

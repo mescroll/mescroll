@@ -1,10 +1,13 @@
 <template>
 	<view class="mescroll-uni-warp">
-		<scroll-view :id="viewId" class="mescroll-uni" :class="{'mescroll-uni-fixed':isFixed}" :style="{'height':scrollHeight,'padding-top':padTop,'padding-bottom':padBottom,'padding-bottom':padBottomConstant,'padding-bottom':padBottomEnv,'top':fixedTop,'bottom':fixedBottom,'bottom':fixedBottomConstant,'bottom':fixedBottomEnv}" :scroll-top="scrollTop" :scroll-into-view="scrollToViewId" :scroll-with-animation="scrollAnim" @scroll="scroll" @touchstart="touchstartEvent" @touchmove="touchmoveEvent" @touchend="touchendEvent" @touchcancel="touchendEvent" :scroll-y='isDownReset' :enable-back-to-top="true">
+		<scroll-view :id="viewId" class="mescroll-uni" :class="{'mescroll-uni-fixed':isFixed}" :style="{'height':scrollHeight,'padding-top':padTop,'padding-bottom':padBottom,'top':fixedTop,'bottom':fixedBottom}" :scroll-top="scrollTop" :scroll-into-view="scrollToViewId" :scroll-with-animation="scrollAnim" @scroll="scroll" @touchstart="touchstartEvent" @touchmove="touchmoveEvent" @touchend="touchendEvent" @touchcancel="touchendEvent" :scroll-y='scrollable' :enable-back-to-top="true">
+			<!-- 状态栏 -->
+			<view v-if="topbar&&statusBarHeight" class="mescroll-topbar" :style="{height: statusBarHeight+'px', background: topbar}"></view>
+			
 			<view class="mescroll-uni-content" :style="{'transform': translateY, 'transition': transition}">
 				<!-- 下拉加载区域 (支付宝小程序子组件传参给子子组件仍报单项数据流的异常,暂时不通过mescroll-down组件实现)-->
 				<!-- <mescroll-down :option="mescroll.optDown" :type="downLoadType"></mescroll-down> -->
-				<view v-if="mescroll.optDown.use" class="mescroll-downwarp" :style="{'background-color':mescroll.optDown.bgColor,'color':mescroll.optDown.textColor}">
+				<view v-if="mescroll.optDown.use" class="mescroll-downwarp" :style="{'background':mescroll.optDown.bgColor,'color':mescroll.optDown.textColor}">
 					<view class="downwarp-content">
 						<view v-if="isDownLoading" class="downwarp-progress"></view>
 						<view v-else class="downwarp-arrow" :style="{ transform: downRotate }"></view>
@@ -20,7 +23,7 @@
 
 				<!-- 上拉加载区域 (下拉刷新时不显示,支付宝小程序子组件传参给子子组件仍报单项数据流的异常,暂时不通过mescroll-up组件实现)-->
 				<!-- <mescroll-up v-if="mescroll.optUp.use && downLoadType !== 3" :option="mescroll.optUp" :type="upLoadType"></mescroll-up> -->
-				<view class="mescroll-upwarp" :style="{'background-color':mescroll.optUp.bgColor,'color':mescroll.optUp.textColor}">
+				<view class="mescroll-upwarp" :style="{'background':mescroll.optUp.bgColor,'color':mescroll.optUp.textColor}">
 					<!-- 加载中 (此处不能用v-if,否则android小程序快速上拉可能会不断触发上拉回调) -->
 					<view v-show="upLoadType===1">
 						<view class="upwarp-progress mescroll-rotate"></view>
@@ -30,6 +33,14 @@
 					<view v-if="upLoadType===2" class="upwarp-nodata">{{ mescroll.optUp.textNoMore }}</view>
 				</view>
 			</view>
+			
+			<!-- 底部是否偏移TabBar的高度(仅H5端生效) -->
+			<!-- #ifdef H5 -->
+			<view v-if="bottombar && windowBottom>0" class="mescroll-bottombar" :style="{height: windowBottom+'px'}"></view>
+			<!-- #endif -->
+			
+			<!-- 适配iPhoneX -->
+			<view v-if="safearea" class="mescroll-safearea"></view>
 		</scroll-view>
 
 		<!-- 回到顶部按钮 (fixed元素,需写在scroll-view外面,防止滚动的时候抖动)-->
@@ -51,10 +62,10 @@
 		data() {
 			return {
 				mescroll: null, // mescroll实例
-				viewId: 'id_' + Math.random().toString(36).substr(2), // 随机生成mescroll的id(不能数字开头,否则找不到元素)
+				viewId: 'id_' + Math.random().toString(36).substr(2,16), // 随机生成mescroll的id(不能数字开头,否则找不到元素)
 				downHight: 0, //下拉刷新: 容器高度
-				downLoadType: 4, // 下拉刷新状态 （inOffset：1， outOffset：2， showLoading：3， endDownScroll：4）
-				upLoadType: 0, // 上拉加载状态：0（loading前），1（loading中），2（没有更多了）
+				downLoadType: 0, // 下拉刷新状态: 0(loading前), 1(inOffset), 2(outOffset), 3(showLoading), 4(endDownScroll)
+				upLoadType: 0, // 上拉加载状态: 0(loading前), 1loading中, 2没有更多了,显示END文本提示, 3(没有更多了,不显示END文本提示)
 				isShowEmpty: false, // 是否显示空布局
 				isShowToTop: false, // 是否显示回到顶部按钮
 				scrollTop: 0, // 滚动条的位置
@@ -70,16 +81,18 @@
 			down: Object, // 下拉刷新的参数配置
 			up: Object, // 上拉加载的参数配置
 			top: [String, Number], // 下拉布局往下的偏移量 (支持20, "20rpx", "20px", "20%"格式的值, 其中纯数字则默认单位rpx, 百分比则相对于windowHeight)
-			topbar: Boolean, // top的偏移量是否加上状态栏高度, 默认false (使用场景:取消原生导航栏时,配置此项可自动加上状态栏高度的偏移量)
+			topbar: [Boolean, String], // top的偏移量是否加上状态栏高度, 默认false (使用场景:取消原生导航栏时,配置此项可留出状态栏的占位, 支持传入字符串背景,如色值,背景图,渐变)
 			bottom: [String, Number], // 上拉布局往上的偏移量 (支持20, "20rpx", "20px", "20%"格式的值, 其中纯数字则默认单位rpx, 百分比则相对于windowHeight)
 			safearea: Boolean, // bottom的偏移量是否加上底部安全区的距离, 默认false (需要适配iPhoneX时使用)
 			fixed: { // 是否通过fixed固定mescroll的高度, 默认true
 				type: Boolean,
-				default () {
-					return true
-				}
+				default: true
 			},
-			height: [String, Number] // 指定mescroll的高度, 此项有值,则不使用fixed. (支持20, "20rpx", "20px", "20%"格式的值, 其中纯数字则默认单位rpx, 百分比则相对于windowHeight)
+			height: [String, Number], // 指定mescroll的高度, 此项有值,则不使用fixed. (支持20, "20rpx", "20px", "20%"格式的值, 其中纯数字则默认单位rpx, 百分比则相对于windowHeight)
+			bottombar:{ // 底部是否偏移TabBar的高度(默认仅在H5端的tab页生效)
+				type: Boolean,
+				default: true
+			}
 		},
 		computed: {
 			// 是否使用fixed定位 (当height有值,则不使用)
@@ -98,7 +111,7 @@
 			},
 			// 下拉布局往下偏移的距离 (px)
 			numTop() {
-				return this.toPx(this.top) + (this.topbar ? this.statusBarHeight : 0)
+				return this.toPx(this.top)
 			},
 			fixedTop() {
 				return this.isFixed ? (this.numTop + this.windowTop) + 'px' : 0
@@ -113,20 +126,8 @@
 			fixedBottom() {
 				return this.isFixed ? (this.numBottom + this.windowBottom) + 'px' : 0
 			},
-			fixedBottomConstant(){
-				return this.isSafearea ? "calc("+this.fixedBottom+" + constant(safe-area-inset-bottom))" : this.fixedBottom
-			},
-			fixedBottomEnv(){
-				return this.isSafearea ? "calc("+this.fixedBottom+" + env(safe-area-inset-bottom))" : this.fixedBottom
-			},
 			padBottom() {
 				return !this.isFixed ? this.numBottom + 'px' : 0
-			},
-			padBottomConstant(){
-				return this.isSafearea ? "calc("+this.padBottom+" + constant(safe-area-inset-bottom))" : this.padBottom
-			},
-			padBottomEnv(){
-				return this.isSafearea ? "calc("+this.padBottom+" + env(safe-area-inset-bottom))" : this.padBottom
 			},
 			// 是否为重置下拉的状态
 			isDownReset(){
@@ -138,6 +139,10 @@
 			},
 			translateY() {
 				return this.downHight > 0 ? 'translateY(' + this.downHight + 'px)' : '' // transform会使fixed失效,需注意把fixed元素写在mescroll之外
+			},
+			// 列表是否可滑动
+			scrollable(){
+				return this.downLoadType===0 || this.isDownReset
 			},
 			// 是否在加载中
 			isDownLoading() {
@@ -215,7 +220,11 @@
 				if (this.mescroll.getClientHeight(true) === 0 && !this.isExec) {
 					this.isExec = true; // 避免多次获取
 					this.$nextTick(() => { // 确保dom已渲染
-						let view = uni.createSelectorQuery().in(this).select('#' + this.viewId);
+						let query = uni.createSelectorQuery();
+						// #ifndef MP-ALIPAY
+						query = query.in(this) // 支付宝小程序不支持in(this),而字节跳动小程序必须写in(this), 否则都取不到值
+						// #endif
+						let view = query.select('#' + this.viewId);
 						view.boundingClientRect(data => {
 							this.isExec = false;
 							if (data) {
@@ -255,6 +264,10 @@
 					endDownScroll(mescroll) {
 						vm.downLoadType = 4; // 结束下拉 (自定义mescroll组件时,此行不可删)
 						vm.downHight = 0; // 设置下拉区域的高度 (自定义mescroll组件时,此行不可删)
+						vm.downResetTimer && clearTimeout(vm.downResetTimer)
+						vm.downResetTimer = setTimeout(()=>{ // 过渡动画执行完毕后,需重置为0的状态,以便置空this.transition,避免iOS小程序列表渲染不完整
+							vm.downLoadType = 0
+						},300)
 					},
 					// 派发下拉刷新的回调
 					callback: function(mescroll) {
@@ -272,8 +285,8 @@
 						vm.upLoadType = 2;
 					},
 					// 隐藏上拉加载的回调
-					hideUpScroll() {
-						vm.upLoadType = 0;
+					hideUpScroll(mescroll) {
+						vm.upLoadType = mescroll.optUp.hasNext ? 0 : 3;
 					},
 					// 空布局
 					empty: {
@@ -322,7 +335,33 @@
 			vm.mescroll.resetScrollTo((y, t) => {
 				vm.scrollAnim = (t !== 0); // t为0,则不使用动画过渡
 				if(typeof y === 'string'){ // 第一个参数如果为字符串,则使用scroll-into-view
-					vm.scrollToViewId = y;
+					// #ifdef MP-WEIXIN
+					// 微信小程序暂不支持slot里面的scroll-into-view,只能计算位置实现
+					uni.createSelectorQuery().select('#'+vm.viewId).boundingClientRect(function(rect){
+						let mescrollTop = rect.top // mescroll到顶部的距离
+						uni.createSelectorQuery().select('#'+y).boundingClientRect(function(rect){
+							let curY = vm.mescroll.getScrollTop()
+							let top = rect.top - mescrollTop
+							top += curY
+							if(!vm.isFixed) top -= vm.numTop
+							vm.scrollTop = curY;
+							vm.$nextTick(function() {
+								vm.scrollTop = top
+							})
+						}).exec()
+					}).exec()
+					// #endif
+					
+					// #ifndef MP-WEIXIN
+					if (vm.scrollToViewId != y) {
+						vm.scrollToViewId = y;
+					} else{
+						vm.scrollToViewId = ''; // scrollToViewId必须变化才会生效,所以此处先置空再赋值
+						vm.$nextTick(function(){
+							vm.scrollToViewId = y;
+						})
+					}
+					// #endif
 					return;
 				}
 				let curY = vm.mescroll.getScrollTop()
@@ -339,14 +378,8 @@
 			})
 			
 			// 具体的界面如果不配置up.toTop.safearea,则取本vue的safearea值
-			if(sys.platform == "ios"){
-				vm.isSafearea = vm.safearea;
-				if (vm.up && vm.up.toTop && vm.up.toTop.safearea != null) {} else {
-					vm.mescroll.optUp.toTop.safearea = vm.safearea;
-				}
-			}else{
-				vm.isSafearea = false
-				vm.mescroll.optUp.toTop.safearea = false
+			if (vm.up && vm.up.toTop && vm.up.toTop.safearea != null) {} else {
+				vm.mescroll.optUp.toTop.safearea = vm.safearea;
 			}
 		},
 		mounted() {

@@ -1,25 +1,10 @@
 <template>
 	<view>
-		<app-tabs v-model="tabIndex" :tabs="tabs" :fixed="true"></app-tabs>
+		<!-- 当设置tab-width,指定每个tab宽度时,则不使用flex布局,改用水平滑动 -->
+		<me-tabs v-model="tabIndex" :tabs="tabs" :fixed="true" :tab-width="130"></me-tabs>
 		<swiper :style="{height: height}" :current="tabIndex" @change="swiperChange">
-			<!--全部 -->
-			<swiper-item>
-				<mescroll-item :i="0" :index="tabIndex" :tabs="tabs"></mescroll-item>
-			</swiper-item>
-			
-			<!-- 奶粉 -->
-			<swiper-item>
-				<mescroll-item :i="1" :index="tabIndex" :tabs="tabs"></mescroll-item>
-			</swiper-item>
-			
-			<!-- 面膜 -->
-			<swiper-item>
-				<mescroll-item :i="2" :index="tabIndex" :tabs="tabs"></mescroll-item>
-			</swiper-item>
-			
-			<!-- 图书 -->
-			<swiper-item>
-				<mescroll-item :i="3" :index="tabIndex" :tabs="tabs"></mescroll-item>
+			<swiper-item v-for="(tab,i) in tabs" :key="i">
+				<mescroll-item :i="i" :index="tabIndex" :tabs="tabs"></mescroll-item>
 			</swiper-item>
 		</swiper>
 	</view>
@@ -27,17 +12,15 @@
 
 <script>
 	import MescrollItem from "./mescroll-swiper-item.vue";
-	import AppTabs from "@/components/other/app-tabs.vue";
 	
 	export default {
 		components: {
-			MescrollItem,
-			AppTabs
+			MescrollItem
 		},
 		data() {
 			return {
 				height: "400px", // 需要固定swiper的高度
-				tabs: ['全部', '奶粉', '面膜', '图书'],
+				tabs: [{name:'全部'}, {name:'奶粉'}, {name:'面膜'}, {name:'图书'}, {name:'果汁'}, {name:'奶瓶'}, {name:'美素'}, {name:'花王'}, {name:'韩蜜'}],
 				tabIndex: 0 // 当前tab的下标
 			}
 		},

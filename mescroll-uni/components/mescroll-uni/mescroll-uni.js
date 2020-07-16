@@ -1,12 +1,12 @@
 /* mescroll
- * version 1.2.5
- * 2020-03-15 wenju
+ * version 1.2.8
+ * 2020-06-28 wenju
  * http://www.mescroll.com
  */
 
 export default function MeScroll(options, isScrollBody) {
 	let me = this;
-	me.version = '1.2.5'; // mescroll版本号
+	me.version = '1.2.8'; // mescroll版本号
 	me.options = options || {}; // 配置
 	me.isScrollBody = isScrollBody || false; // 滚动区域是否为原生页面滚动; 默认为scroll-view
 
@@ -22,7 +22,7 @@ export default function MeScroll(options, isScrollBody) {
 	// 自动加载
 	setTimeout(function() { // 待主线程执行完毕再执行,避免new MeScroll未初始化,在回调获取不到mescroll的实例
 		// 自动触发下拉刷新 (只有配置了down的callback才自动触发下拉刷新)
-		if (me.optDown.use && me.optDown.auto && hasDownCallback) {
+		if ((me.optDown.use || me.optDown.native) && me.optDown.auto && hasDownCallback) {
 			if (me.optDown.autoShowLoading) {
 				me.triggerDownScroll(); // 显示下拉进度,执行下拉回调
 			} else {

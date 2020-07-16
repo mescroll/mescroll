@@ -3,7 +3,7 @@
 		<!-- 菜单 -->
 		<view class="top-warp">
 			<view class="tip">每次切换菜单及时刷新列表,不缓存数据</view>
-			<app-tabs v-model="tabIndex" :tabs="tabs" @change="tabChange"></app-tabs>
+			<me-tabs v-model="tabIndex" :tabs="tabs" @change="tabChange"></me-tabs>
 		</view>
 		
 		<!-- top="xxx"下拉布局往下偏移,防止被悬浮菜单遮住 -->
@@ -16,16 +16,10 @@
 
 <script>
 	import MescrollMixin from "@/components/mescroll-uni/mescroll-mixins.js";
-	import GoodList from "@/components/other/good-list.vue";
-	import AppTabs from "@/components/other/app-tabs.vue";
 	import {apiSearch} from "@/api/mock.js"
 	
 	export default {
 		mixins: [MescrollMixin], // 使用mixin (在main.js注册全局组件)
-		components: {
-			GoodList,
-			AppTabs
-		},
 		data() {
 			return {
 				upOption:{

@@ -38,10 +38,15 @@ const MescrollMixin = {
 				if(mescrollRef) this.mescroll = mescrollRef.mescroll
 			}
 		},
-		// 下拉刷新的回调
+		// 下拉刷新的回调 (mixin默认resetUpScroll)
 		downCallback() {
-			// mixin默认resetUpScroll
-			this.mescroll.resetUpScroll()
+			if(this.mescroll.optUp.use){
+				this.mescroll.resetUpScroll()
+			}else{
+				setTimeout(()=>{
+					this.mescroll.endSuccess();
+				}, 500)
+			}
 		},
 		// 上拉加载的回调
 		upCallback() {

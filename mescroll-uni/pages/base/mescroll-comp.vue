@@ -5,7 +5,7 @@
 			<view class="notice">需通过mescroll-comp.js给子组件补充页面生命周期</view>
 		</view>
 		
-		<!-- 子组件 ( ref固定值: mescrollItem)-->
+		<!-- 第一步: 给mescroll-body的组件添加: ref="mescrollItem" (固定的,不可改,与mescroll-comp.js对应)-->
 		<mescroll-item ref="mescrollItem"></mescroll-item>
 	</view>
 </template>
@@ -15,7 +15,10 @@
 	import MescrollCompMixin from "@/components/mescroll-uni/mixins/mescroll-comp.js";
 	
 	export default {
-		mixins: [MescrollCompMixin], // 当一个页面只有一个mescroll-body写在子组件时, 则使用mescroll-comp.js; 多个则参考mescroll-more案例
+		// 第二步: 引入mescroll-comp.js
+		// 当一个页面只有1个mescroll-body写在子组件时, 则使用mescroll-comp.js补充子组件的页面生命周期
+		// 多个mescroll-body写在子组件时,则参考mescroll-more案例使用mescroll-more.js补充子组件的页面生命周期
+		mixins: [MescrollCompMixin],
 		components: {
 			MescrollItem
 		}
@@ -25,10 +28,17 @@
 <style>
 	/*说明*/
 	.notice-warp{
+		z-index: 9;
+		position: fixed;
+		top: var(--window-top);
+		left: 0;
+		width: 100%;
+		height: 80rpx;/*对应mescroll-body的top值*/
 		font-size: 26upx;
-		padding: 40upx 0;
+		padding-top: 10upx;
 		border-bottom: 1upx solid #eee;
 		text-align: center;
+		background-color: #fff;
 	}
 	.notice-warp .notice{
 		color:#555;

@@ -3,7 +3,7 @@
 	<image
 		v-if="mOption.src"
 		class="mescroll-totop"
-		:class="[value ? 'mescroll-totop-in' : 'mescroll-totop-out', {'mescroll-safe-bottom': mOption.safearea}]"
+		:class="[value ? 'mescroll-totop-in' : 'mescroll-totop-out', {'mescroll-totop-safearea': mOption.safearea}]"
 		:style="{'z-index':mOption.zIndex, 'left': left, 'right': right, 'bottom':addUnit(mOption.bottom), 'width':addUnit(mOption.width), 'border-radius':addUnit(mOption.radius)}"
 		:src="mOption.src"
 		mode="widthFix"
@@ -62,10 +62,12 @@ export default {
 	margin-bottom: var(--window-bottom); /* css变量 */
 }
 
- /* 适配 iPhoneX */
-.mescroll-safe-bottom{
-	margin-bottom: calc(var(--window-bottom) + constant(safe-area-inset-bottom)); /* window-bottom + 适配 iPhoneX */
-	margin-bottom: calc(var(--window-bottom) + env(safe-area-inset-bottom));
+/* 适配 iPhoneX */
+@supports (bottom: constant(safe-area-inset-bottom)) or (bottom: env(safe-area-inset-bottom)) {
+	.mescroll-totop-safearea {
+		margin-bottom: calc(var(--window-bottom) + constant(safe-area-inset-bottom)); /* window-bottom + 适配 iPhoneX */
+		margin-bottom: calc(var(--window-bottom) + env(safe-area-inset-bottom));
+	}
 }
 
 /* 显示 -- 淡入 */

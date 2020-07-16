@@ -3,13 +3,13 @@
 		<!-- 模拟的标题 -->
 		<image class="header" src="http://www.mescroll.com/img/beibei/header.jpg" mode="aspectFit"/>
 		
-		<mescroll-body ref="mescrollRef" @init="mescrollInit" top="180" bottom="100" @down="downCallback" @up="upCallback">
+		<mescroll-body-diy ref="mescrollRef" @init="mescrollInit" top="180" bottom="100" @down="downCallback" @up="upCallback">
 			<!-- 模拟的内容 -->
 			<image src="http://www.mescroll.com/img/beibei/beibei1.jpg" mode="widthFix"/>
 			<image src="http://www.mescroll.com/img/beibei/beibei2.jpg" mode="widthFix"/>
 			<!-- 分页的数据列表 -->
 			<good-list :list="goods"></good-list>
-		</mescroll-body>
+		</mescroll-body-diy>
 		
 		<!-- 模拟的底部 -->
 		<image class="footer" src="http://www.mescroll.com/img/beibei/footer.jpg" mode="aspectFit"/>
@@ -17,16 +17,14 @@
 </template>
 
 <script>
-	import MescrollBody from "@/components/mescroll-diy/beibei/mescroll-body.vue";
+	import MescrollBodyDiy from "@/components/mescroll-diy/beibei/mescroll-body.vue";
 	import MescrollMixin from "@/components/mescroll-uni/mescroll-mixins.js";
-	import GoodList from "@/components/other/good-list.vue";
 	import {apiGoods} from "@/api/mock.js"
 	
 	export default {
 		mixins: [MescrollMixin], // 使用mixin (在main.js注册全局组件)
 		components: {
-			MescrollBody,
-			GoodList
+			MescrollBodyDiy // 避免与main.js注册的全局组件名称相同,否则注册组件失效(iOS真机 APP HBuilderX2.7.9)
 		},
 		data() {
 			return {

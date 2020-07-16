@@ -3,7 +3,7 @@
 <template>
 	<view>
 		<!-- 菜单 (悬浮,预先隐藏)-->
-		<app-tabs v-if="isShowSticky" v-model="tabIndex" :fixed="true" :tabs="tabs" @change="tabChange"></app-tabs>
+		<me-tabs v-if="isShowSticky" v-model="tabIndex" :fixed="true" :tabs="tabs" @change="tabChange"></me-tabs>
 		
 		 <mescroll-body ref="mescrollRef" @init="mescrollInit" @down="downCallback" @up="upCallback" :up="upOption" @scroll="scroll" @topclick="topClick">
 			<!--轮播-->
@@ -20,7 +20,7 @@
 			
 			<!-- 菜单 (在mescroll-uni中不能使用fixed,否则iOS滚动时会抖动, 所以需在mescroll-uni之外存在一个一样的菜单) -->
 			<view id="tabInList">
-				<app-tabs v-model="tabIndex" :tabs="tabs" @change="tabChange"></app-tabs>
+				<me-tabs v-model="tabIndex" :tabs="tabs" @change="tabChange"></me-tabs>
 			</view>
 			
 			<!-- 数据列表 -->
@@ -31,16 +31,10 @@
 
 <script>
 	import MescrollMixin from "@/components/mescroll-uni/mescroll-mixins.js";
-	import AppTabs from "@/components/other/app-tabs.vue";
-	import GoodList from "@/components/other/good-list.vue";
 	import {apiSearch} from "@/api/mock.js"
 	
 	export default {
 		mixins: [MescrollMixin], // 使用mixin (在main.js注册全局组件)
-		components: {
-			AppTabs,
-			GoodList
-		},
 		data() {
 			return {
 				goods: [], // 数据列表
@@ -77,8 +71,9 @@
 					if(page.num == 1) this.goods = []; //如果是第一页需手动制空列表
 					this.goods=this.goods.concat(curPageData); //追加新数据
 					
-					// 数据渲染完毕再隐藏加载状态
-					this.$nextTick(()=>{
+					// 数据渲染完毕再隐藏加载状态 this.$nextTick在iOS真机不触发,需改成setTimeout
+					// this.$nextTick(()=>{
+					setTimeout(()=>{
 						this.mescroll.endSuccess(curPageData.length);
 						// 设置nav到顶部的距离 (需根据自身的情况获取navTop的值, 这里放到列表数据渲染完毕之后)
 						// 也可以放到onReady里面,或者菜单顶部的数据(轮播等)加载完毕之后..
@@ -89,7 +84,7 @@
 							uni.hideLoading();
 							if(this.isShowSticky) this.mescroll.scrollTo(this.navTop, 0)
 						}
-					})
+					},20)
 				}).catch(()=>{
 					//联网失败, 结束加载
 					this.mescroll.endErr();

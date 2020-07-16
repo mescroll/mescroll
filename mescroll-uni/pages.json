@@ -71,26 +71,38 @@
 		    "path" : "pages/base/mescroll-native",
 		    "style" : {
 				"navigationBarTitleText" : "mescroll-native",
-				"enablePullDownRefresh" : true // 开启系统自带的下拉刷新
+				"enablePullDownRefresh" : true, // 开启系统自带的下拉刷新
 				//ifdef MP 支持条件编译,如您可以配置小程序端使用系统自带的,其他平台使用mescroll的下拉样式
 				//"enablePullDownRefresh" : true
 				//endif
 				//ifndef MP
 				//"enablePullDownRefresh" : false
 				//endif
+				"mp-alipay":{"allowsBounceVertical":"YES"} // 开启支付宝和钉钉小程序自带的回弹
 			}
 		},
         {
-            "path" : "pages/intermediate/mescroll-swiper",
+            "path" : "pages/base/mescroll-uni",
             "style" : {
-				"navigationBarTitleText" : "轮播菜单导航 mescroll-swiper.vue",
-				"disableScroll": true, // 禁止滚动, 解决scroll-view在Android小程序卡顿的问题
-				// "enablePullDownRefresh" : false, // 不开启下拉刷新, 默认就是false
+				"navigationBarTitleText" : "mescroll-uni",
+				"disableScroll": true, // mescroll-uni需禁止滚动, 解决scroll-view在Android小程序卡顿的问题
 				"app-plus" : {
-					"bounce" : "none" // 取消iOS回弹,避免和下拉刷新冲突 (小程序无法取消)
-				}
+					"bounce" : "none" // mescroll-uni需取消iOS回弹和安卓顶部底部的半月形阴影
+				},
+				"mp-alipay":{"allowsBounceVertical":"NO"} // mescroll-uni需取消支付宝和钉钉小程序自带的回弹
 			}
         },
+		{
+		    "path" : "pages/intermediate/mescroll-swiper",
+		    "style" : {
+				"navigationBarTitleText" : "轮播菜单导航 mescroll-swiper.vue",
+				"disableScroll": true, // mescroll-uni需禁止滚动, 解决scroll-view在Android小程序卡顿的问题
+				"app-plus" : {
+					"bounce" : "none" // mescroll-uni需取消iOS回弹和安卓顶部底部的半月形阴影
+				},
+				"mp-alipay":{"allowsBounceVertical":"NO"} // mescroll-uni需取消支付宝和钉钉小程序自带的回弹
+			}
+		},
 		{
             "path" : "pages/intermediate/beibei",
             "style" : {
@@ -105,17 +117,9 @@
         }
     ],
     "globalStyle" : {
+		"backgroundColorTop":"#FFFFFF", // iOS APP真机bounce回弹区域默认灰色,需重置为白色
+		"mp-alipay":{"allowsBounceVertical":"NO"}, // 支付宝和钉钉小程序取消自带的回弹
         "navigationBarTextStyle" : "black",
         "navigationBarBackgroundColor" : "#fff"
-    },
-	"condition" : { //模式配置，仅开发期间生效
-		"current": 0, //当前激活的模式(list 的索引项)
-		"list": [
-			{
-				"name": "", //模式名称
-				"path": "", //启动页面，必选
-				"query": "" //启动参数，在页面的onLoad函数里面得到
-			}
-		]
-	}
+    }
 }
