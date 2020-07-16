@@ -321,7 +321,7 @@
 			vm.mescroll.viewId = vm.viewId; // 附带id
 			// init回调mescroll对象
 			vm.$emit('init', vm.mescroll);
-			
+
 			// 设置高度
 			const sys = uni.getSystemInfoSync();
 			if(sys.windowTop) vm.windowTop = sys.windowTop;
@@ -376,7 +376,7 @@
 					}, t)
 				}
 			})
-			
+
 			// 具体的界面如果不配置up.toTop.safearea,则取本vue的safearea值
 			if (vm.up && vm.up.toTop && vm.up.toTop.safearea != null) {} else {
 				vm.mescroll.optUp.toTop.safearea = vm.safearea;
