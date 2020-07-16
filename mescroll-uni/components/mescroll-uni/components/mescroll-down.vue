@@ -1,8 +1,8 @@
 <!-- 下拉刷新区域 -->
 <template>
-	<view v-if="mOption.use" class="mescroll-downwarp" :style="{'background-color':mescroll.optDown.bgColor,'color':mescroll.optDown.textColor}">
+	<view v-if="mOption.use" class="mescroll-downwarp" :style="{'background-color':mOption.bgColor,'color':mOption.textColor}">
 		<view class="downwarp-content">
-			<view class="downwarp-progress" :class="{'mescroll-rotate': isDownLoading}" :style="{'border-color':mescroll.optDown.textColor, 'transform':downRotate}"></view>
+			<view class="downwarp-progress" :class="{'mescroll-rotate': isDownLoading}" :style="{'border-color':mOption.textColor, 'transform':downRotate}"></view>
 			<view class="downwarp-tip">{{downText}}</view>
 		</view>
 	</view>

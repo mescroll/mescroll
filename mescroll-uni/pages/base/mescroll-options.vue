@@ -13,6 +13,7 @@
 	 @topclick="topClick" 
 	 @scroll="scroll">
 		<view class="tip">展示down和up的所有配置项</view>
+		<view class="tip" @click="triggerDownScroll">点此主动触发下拉刷新</view>
 		<me-tabs v-model="tabIndex" :tabs="tabs" @change="tabChange"></me-tabs>
 		<good-list :list="goods"></good-list>
 	</mescroll-body>
@@ -33,13 +34,12 @@
 					autoShowLoading: false, // 如果设置auto=true(在初始化完毕之后自动执行下拉刷新的回调),那么是否显示下拉刷新的进度; 默认false
 					isLock: false, // 是否锁定下拉刷新,默认false;
 					offset: 80, // 在列表顶部,下拉大于80upx,松手即可触发下拉刷新的回调
-					fps: 80, // 下拉节流 (值越大每秒刷新频率越高)
 					inOffsetRate: 1, // 在列表顶部,下拉的距离小于offset时,改变下拉区域高度比例;值小于1且越接近0,高度变化越小,表现为越往下越难拉
 					outOffsetRate: 0.2, // 在列表顶部,下拉的距离大于offset时,改变下拉区域高度比例;值小于1且越接近0,高度变化越小,表现为越往下越难拉
 					bottomOffset: 20, // 当手指touchmove位置在距离body底部20upx范围内的时候结束上拉刷新,避免Webview嵌套导致touchend事件不执行
 					minAngle: 45, // 向下滑动最少偏移的角度,取值区间  [0,90];默认45度,即向下滑动的角度大于45度则触发下拉;而小于45度,将不触发下拉,避免与左右滑动的轮播等组件冲突;
-					bgColor: "transparent", // 背景颜色 (建议在pages.json中再设置一下backgroundColorTop)
-					textColor: "gray", // 文本颜色 (当bgColor配置了颜色,而textColor未配置时,则textColor会默认为白色)
+					bgColor: "#E75A7C", // 背景颜色 (建议在pages.json中再设置一下backgroundColorTop)
+					textColor: "#fff", // 文本颜色 (当bgColor配置了颜色,而textColor未配置时,则textColor会默认为白色)
 					textInOffset: '下拉刷新', // 下拉的距离在offset范围内的提示文本
 					textOutOffset: '释放更新', // 下拉的距离大于offset范围的提示文本
 					textLoading: '加载中 ...' // 加载中的提示文本
@@ -49,7 +49,6 @@
 					auto: true, // 是否在初始化完毕之后自动执行上拉加载的回调; 默认true
 					isLock: false, // 是否锁定上拉加载,默认false;
 					isBoth: true, // 上拉加载时,如果滑动到列表顶部是否可以同时触发下拉刷新;默认true,两者可同时触发;
-					isBounce: false, // 默认禁止橡皮筋的回弹效果, 必读事项: http://www.mescroll.com/qa.html?v=190725#q25
 					page: {
 						num: 0, // 当前页码,默认0,回调之前会加1,即callback(page)会从1开始
 						size: 10, // 每页数据的数量
@@ -145,6 +144,10 @@
 			tabChange() {
 				this.goods = []// 先置空列表,显示加载进度
 				this.mescroll.resetUpScroll() // 再刷新列表数据
+			},
+			// 主动触发下拉刷新
+			triggerDownScroll(){
+				this.mescroll.triggerDownScroll()
 			}
 		},
 		// mescroll-body的滚动事件是页面的滚动事件

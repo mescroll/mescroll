@@ -9,10 +9,10 @@
 			<!--轮播-->
 			<swiper style="min-height: 300rpx" autoplay="true" interval="3000" duration="300" circular="true">
 		        <swiper-item>
-		            <image style="width: 100%" src="http://www.mescroll.com/img/swiper1.jpg" mode="widthFix"/>
+		            <image style="width: 100%;height: auto;" src="http://www.mescroll.com/img/swiper1.jpg" mode="widthFix"/>
 		        </swiper-item>
 				<swiper-item>
-		            <image style="width: 100%" src="http://www.mescroll.com/img/swiper2.jpg" mode="widthFix"/>
+		            <image style="width: 100%;height: auto;" src="http://www.mescroll.com/img/swiper2.jpg" mode="widthFix"/>
 		        </swiper-item>
 		    </swiper>
 			

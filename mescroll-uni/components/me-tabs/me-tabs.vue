@@ -35,7 +35,7 @@
 			tabWidth: Number, // 每个tab的宽度,默认不设置值,为flex平均分配; 如果指定宽度,则不使用flex,每个tab居左,超过则水平滑动(单位默认rpx)
 			height: { // 高度,单位rpx
 				type: Number,
-				default: 60
+				default: 64
 			}
 		},
 		data() {
@@ -150,6 +150,7 @@
 				text-align: center;
 				box-sizing: border-box;
 				&.active{
+					font-weight: bold;
 					color: red;
 				}
 			}
@@ -173,22 +174,13 @@
 		.tabs-line{
 			z-index: 1;
 			position: absolute;
-			bottom: 32rpx; // 至少与.tabs-item的padding-bottom一致,才能保证在底部边缘
+			bottom: 30rpx; // 至少与.tabs-item的padding-bottom一致,才能保证在底部边缘
 			width: 50rpx;
-			height: 4rpx;
+			height: 6rpx;
 			transform: translateX(-50%);
 			border-radius: 4rpx;
 			transition: left .3s;
 			background: red;
-		}
-		
-		// 隐藏滚动条 (部分机型,部分小程序平台不支持此方式隐藏, 仍需通过tabs-item撑开高度,再配合me-tabs的overflow-y: hidden的方式隐藏)
-		::-webkit-scrollbar {
-			display: none;
-			width: 0 !important;
-			height: 0 !important;
-			-webkit-appearance: none;
-			background: transparent;
 		}
 	}
 </style>

@@ -1,6 +1,7 @@
 /* 上拉加载区域 */
 .mescroll-upwarp {
-	min-height: 60rpx;
+	box-sizing: border-box;
+	min-height: 110rpx;
 	padding: 30rpx 0;
 	text-align: center;
 	clear: both;

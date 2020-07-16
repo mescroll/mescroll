@@ -3,7 +3,7 @@
 	<mescroll-body ref="mescrollRef" @init="mescrollInit" :down="downOption" @down="downCallback" :up="upOption" @up="upCallback" @emptyclick="emptyClick">
 		<view class="tip">系统自带的下拉刷新,性能最好,支持条件编译</view>
 		<view class="tip">模拟器和真机效果可能不一样,请用真机测试</view>
-		<!-- 轮播 -->
+		<view class="tip" @click="triggerDownScroll">点此主动触发下拉刷新</view>
 		<!-- 菜单 -->
 		<me-tabs v-model="tabIndex" :tabs="tabs" @change="tabChange"></me-tabs>
 		<!-- 数据列表 -->
@@ -67,6 +67,11 @@
 			tabChange() {
 				this.goods = []// 先置空列表,显示加载进度
 				this.mescroll.resetUpScroll() // 再刷新列表数据
+			},
+			
+			// 主动触发下拉刷新
+			triggerDownScroll(){
+				this.mescroll.triggerDownScroll()
 			}
 		}
 	}

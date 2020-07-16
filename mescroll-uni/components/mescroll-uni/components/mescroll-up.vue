@@ -1,9 +1,9 @@
 <!-- 上拉加载区域 -->
 <template>
-	<view class="mescroll-upwarp" :style="{'background-color':mescroll.optUp.bgColor,'color':mescroll.optUp.textColor}">
+	<view class="mescroll-upwarp" :style="{'background-color':mOption.bgColor,'color':mOption.textColor}">
 		<!-- 加载中 (此处不能用v-if,否则android小程序快速上拉可能会不断触发上拉回调) -->
 		<view v-show="isUpLoading">
-			<view class="upwarp-progress mescroll-rotate" :style="{'border-color':mescroll.optUp.textColor}"></view>
+			<view class="upwarp-progress mescroll-rotate" :style="{'border-color':mOption.textColor}"></view>
 			<view class="upwarp-tip">{{ mOption.textLoading }}</view>
 		</view>
 		<!-- 无数据 -->

@@ -16,7 +16,7 @@
 		</navigator>
 		
 		<navigator url="/pages/base/mescroll-comp">
-			<view class="demo-li">mescroll-body写在子组件中的示例</view>
+			<view class="demo-li">mescroll-body写在子组件中 <text class="demo-tip">需引mescroll-comp.js</text></view>
 		</navigator>
 		
 		<navigator url="/pages/base/mescroll-one">
@@ -41,6 +41,14 @@
 		
 		<navigator url="/pages/base/mescroll-uni">
 			<view class="demo-li">mescroll-uni<text class="demo-tip">基于scroll-view,常用在浮窗弹层等局部区域</text></view>
+		</navigator>
+		
+		<navigator url="/pages/base/mescroll-uni-part">
+			<view class="demo-li">mescroll-uni-part<text class="demo-tip">mescroll-uni用flex实现局部区域滚动</text></view>
+		</navigator>
+		
+		<navigator url="/pages/base/mescroll-body-part">
+			<view class="demo-li">mescroll-body-part<text class="demo-tip">mescroll-body实现"局部区域"滚动</text></view>
 		</navigator>
 		
 		<view class="group-title">intermediate demos 中级案例</view>

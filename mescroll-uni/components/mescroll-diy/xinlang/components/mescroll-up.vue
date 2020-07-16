@@ -1,6 +1,6 @@
 <!-- 上拉加载区域 -->
 <template>
-	<view class="mescroll-upwarp" :style="{'background':mescroll.optUp.bgColor,'color':mescroll.optUp.textColor}">
+	<view class="mescroll-upwarp" :style="{'background':mOption.bgColor,'color':mOption.textColor}">
 		<!-- 加载中 (此处不能用v-if,否则android小程序快速上拉可能会不断触发上拉回调) -->
 		<view v-show="isUpLoading">
 			<view class="upwarp-progress mescroll-rotate"></view>

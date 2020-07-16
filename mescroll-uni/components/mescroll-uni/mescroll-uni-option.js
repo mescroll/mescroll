@@ -14,7 +14,6 @@ const GlobalOption = {
 		textLoading: '加载中 ...', // 加载中的提示文本
 		textNoMore: '-- END --', // 没有更多数据的提示文本
 		offset: 80, // 距底部多远时,触发upCallback
-		isBounce: false, // 默认禁止橡皮筋的回弹效果, 必读事项: http://www.mescroll.com/qa.html?v=190725#q25
 		toTop: {
 			// 回到顶部按钮,需配置src才显示
 			src: "http://www.mescroll.com/img/mescroll-totop.png?v=1", // 图片路径 (建议放入static目录, 如 /static/img/mescroll-totop.png )

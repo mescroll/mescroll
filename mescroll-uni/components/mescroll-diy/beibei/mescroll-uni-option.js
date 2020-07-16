@@ -2,7 +2,7 @@
 const GlobalOption = {
 	down: {
 		// 其他down的配置参数也可以写,这里只展示了常用的配置:
-		offset: uni.upx2px(130), // 在列表顶部,下拉大于130upx,松手即可触发下拉刷新的回调
+		offset: uni.upx2px(140), // 在列表顶部,下拉大于140upx,松手即可触发下拉刷新的回调
 		native: false // 是否使用系统自带的下拉刷新; 默认false; 仅在mescroll-body生效 (值为true时,还需在pages配置enablePullDownRefresh:true;详请参考mescroll-native的案例)
 	},
 	up: {
@@ -10,7 +10,6 @@ const GlobalOption = {
 		textLoading: '加载中 ...', // 加载中的提示文本
 		textNoMore: '-- END --', // 没有更多数据的提示文本
 		offset: 80, // 距底部多远时,触发upCallback
-		isBounce: false, // 默认禁止橡皮筋的回弹效果, 必读事项: http://www.mescroll.com/qa.html?v=190725#q25
 		toTop: {
 			// 回到顶部按钮,需配置src才显示
 			src: "http://www.mescroll.com/img/mescroll-totop.png?v=1", // 图片路径 (建议放入static目录, 如 /static/img/mescroll-totop.png )

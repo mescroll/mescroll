@@ -89,7 +89,7 @@ export function apiSearch(pageNum, pageSize, keyword) {
 					// 模拟关键词搜索
 					if(keyword=="母婴") keyword="婴"; // 为这个关键词展示多几条数据
 					for (let i = 0; i < goods.length; i++) {
-						if (goods[i].pdName.indexOf(keyword) !== -1) {
+						if (goods[i].goodName.indexOf(keyword) !== -1) {
 							list.push(goods[i])
 						}
 					}

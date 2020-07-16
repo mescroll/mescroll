@@ -1,6 +1,6 @@
 <template>
 	<!-- 当mescroll-body写在子组件时,父页面需引入mescroll-comp.js的mixins -->
-	<mescroll-body ref="mescrollRef" top="80" @init="mescrollInit" @down="downCallback" @up="upCallback">
+	<mescroll-body ref="mescrollRef" top="100" @init="mescrollInit" @down="downCallback" @up="upCallback">
 		<!-- 数据列表 -->
 		<good-list :list="goods"></good-list>
 	</mescroll-body>

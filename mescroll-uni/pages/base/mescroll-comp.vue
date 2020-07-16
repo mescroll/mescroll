@@ -33,7 +33,7 @@
 		top: var(--window-top);
 		left: 0;
 		width: 100%;
-		height: 80rpx;/*对应mescroll-body的top值*/
+		height: 100rpx;/*对应mescroll-body的top值*/
 		font-size: 26upx;
 		padding-top: 10upx;
 		border-bottom: 1upx solid #eee;

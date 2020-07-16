@@ -90,7 +90,7 @@
 </script>
 
 <style>
-	image{width: 100%;vertical-align: bottom;will-change: transform}
+	image{width: 100%;vertical-align: bottom;height:auto}
 	.header{z-index: 9900;position: fixed;top: --window-top;left: 0;height: 100upx;background: #fff;}
 	.footer{z-index: 9900;position: fixed;bottom: 0;left: 0;height: 100upx;background: white;}
 	

@@ -14,4 +14,12 @@
 
 <style>
 	page{background-color: #fff}
+	
+	view,
+	text,
+	image,
+	input,
+	textarea {
+		box-sizing: border-box;
+	}
 </style>

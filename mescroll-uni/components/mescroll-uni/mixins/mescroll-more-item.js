@@ -35,10 +35,10 @@ const MescrollMoreItemMixin = {
 		}
 	},
 	methods: {
-		// mescroll组件初始化的回调,可获取到mescroll对象
+		// mescroll组件初始化的回调,可获取到mescroll对象 (覆盖mescroll-mixins.js的mescrollInit, 为了标记isInit)
 		mescrollInit(mescroll) {
 			this.mescroll = mescroll;
-			this.mescrollInitByRef && this.mescrollInitByRef(); // 兼容字节跳动小程序 (mescroll-mixins.js)
+			this.mescrollInitByRef && this.mescrollInitByRef(); // 兼容字节跳动小程序
 			// 自动加载当前tab的数据
 			if(this.i === this.index){
 				this.isInit = true; // 标记为true

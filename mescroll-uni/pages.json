@@ -28,7 +28,8 @@
         {
             "path" : "pages/base/mescroll-options",
             "style" : {
-				"navigationBarTitleText" : "mescroll-options"
+				"navigationBarTitleText" : "mescroll-options",
+				"backgroundColorTop": "#E75A7C" // iOS APP真机bounce回弹区域颜色
 			}
         },
 		{
@@ -67,6 +68,23 @@
 				"navigationBarTitleText" : "list-search"
 			}
         },
+		{
+		    "path" : "pages/base/mescroll-uni-part",
+		    "style" : {
+				"navigationBarTitleText" : "mescroll-uni-part",
+				"disableScroll": true, // mescroll-uni需禁止滚动, 解决scroll-view在Android小程序卡顿的问题
+				"app-plus" : {
+					"bounce" : "none" // mescroll-uni需取消iOS回弹和安卓顶部底部的半月形阴影
+				},
+				"mp-alipay":{"allowsBounceVertical":"NO"} // mescroll-uni需取消支付宝和钉钉小程序自带的回弹
+			}
+		},
+		{
+		    "path" : "pages/base/mescroll-body-part",
+		    "style" : {
+				"navigationBarTitleText" : "mescroll-body-part"
+			}
+		},
 		{
 		    "path" : "pages/base/mescroll-native",
 		    "style" : {

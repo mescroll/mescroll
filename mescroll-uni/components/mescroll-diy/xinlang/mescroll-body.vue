@@ -1,13 +1,23 @@
 <template>
-	<view class="mescroll-body" :style="{'minHeight':minHeight, 'padding-top': padTop, 'padding-bottom': padBottom }" @touchstart="touchstartEvent" @touchmove="touchmoveEvent" @touchend="touchendEvent" @touchcancel="touchendEvent" >
+	<view 
+		class="mescroll-body mescroll-render-touch" 
+		:style="{'minHeight':minHeight, 'padding-top': padTop, 'padding-bottom': padBottom}" 
+		@touchstart="wxsBiz.touchstartEvent" 
+		@touchmove="wxsBiz.touchmoveEvent" 
+		@touchend="wxsBiz.touchendEvent" 
+		@touchcancel="wxsBiz.touchendEvent"
+		:change:prop="wxsBiz.propObserver"
+		:prop="wxsProp"
+		>
+		
 		<!-- 状态栏 -->
 		<view v-if="topbar&&statusBarHeight" class="mescroll-topbar" :style="{height: statusBarHeight+'px', background: topbar}"></view>
 		
-		<view class="mescroll-body-content" :style="{ transform: translateY, transition: transition }">
+		<view class="mescroll-body-content mescroll-wxs-content" :style="{ transform: translateY, transition: transition }" :change:prop="wxsBiz.callObserver" :prop="callProp">
 			<!-- 下拉加载区域 (支付宝小程序子组件传参给子子组件仍报单项数据流的异常,暂时不通过mescroll-down组件实现)-->
 			<!-- <mescroll-down :option="mescroll.optDown" :type="downLoadType"></mescroll-down> -->
 			<view v-if="mescroll.optDown.use" class="mescroll-downwarp" :style="{'background':mescroll.optDown.bgColor,'color':mescroll.optDown.textColor}">
-				<view class="downwarp-content">
+				<view class="downwarp-content" :change:prop="renderBiz.propObserver" :prop="wxsProp">
 					<view v-if="isDownLoading" class="downwarp-progress"></view>
 					<view v-else class="downwarp-arrow" :style="{ transform: downRotate }"></view>
 					<view class="downwarp-tip">{{ downText }}</view>
@@ -46,13 +56,30 @@
 	</view>
 </template>
 
+<!-- 微信小程序, app, h5使用wxs -->
+<!-- #ifdef MP-WEIXIN || APP-PLUS || H5-->
+<script src="../../mescroll-uni/wxs/wxs.wxs" module="wxsBiz" lang="wxs"></script>
+<!-- #endif -->
+
+<!-- app, h5使用renderjs -->
+<!-- #ifdef APP-PLUS || H5 -->
+<script module="renderBiz" lang="renderjs">
+	import renderBiz from '../../mescroll-uni/wxs/renderjs.js';
+	export default {
+		mixins: [renderBiz]
+	}
+</script>
+<!-- #endif -->
+
 <script>
 	import MeScroll from '../../mescroll-uni/mescroll-uni.js';
 	import GlobalOption from '../../mescroll-uni/mescroll-uni-option.js';
 	import MescrollEmpty from '../../mescroll-uni/components/mescroll-empty.vue';
 	import MescrollTop from '../../mescroll-uni/components/mescroll-top.vue';
+	import WxsMixin from '../../mescroll-uni/wxs/mixins.js';
 
 	export default {
+		mixins: [WxsMixin],
 		components: {
 			MescrollEmpty,
 			MescrollTop
@@ -61,7 +88,7 @@
 			return {
 				mescroll: null, // mescroll实例
 				downHight: 0, //下拉刷新: 容器高度
-				downLoadType: 4, // 下拉刷新状态 （inOffset：1， outOffset：2， showLoading：3， endDownScroll：4）
+				downLoadType: 0, // 下拉刷新状态: 0(loading前), 1(inOffset), 2(outOffset), 3(showLoading), 4(endDownScroll)
 				upLoadType: 0, // 上拉加载状态：0（loading前），1（loading中），2（没有更多了,显示END文本提示），3（没有更多了,不显示END文本提示）
 				isShowEmpty: false, // 是否显示空布局
 				isShowToTop: false, // 是否显示回到顶部按钮
@@ -108,7 +135,7 @@
 			},
 			// 过渡
 			transition() {
-				return this.isDownReset ? 'transform 300ms' : this.downTransition;
+				return this.isDownReset ? 'transform 300ms' : '';
 			},
 			translateY() {
 				return this.downHight > 0 ? 'translateY(' + this.downHight + 'px)' : ''; // transform会使fixed失效,需注意把fixed元素写在mescroll之外
@@ -123,6 +150,7 @@
 			},
 			// 文本提示
 			downText() {
+				if(!this.mescroll) return "";
 				switch (this.downLoadType) {
 					case 1:
 						return this.mescroll.optDown.textInOffset;
@@ -160,18 +188,6 @@
 				}
 				return num ? uni.upx2px(Number(num)) : 0;
 			},
-			//注册列表touchstart事件,用于下拉刷新
-			touchstartEvent(e) {
-				this.mescroll.touchstartEvent(e);
-			},
-			//注册列表touchmove事件,用于下拉刷新
-			touchmoveEvent(e) {
-				this.mescroll.touchmoveEvent(e);
-			},
-			//注册列表touchend事件,用于下拉刷新
-			touchendEvent(e) {
-				this.mescroll.touchendEvent(e);
-			},
 			// 点击空布局的按钮回调
 			emptyClick() {
 				this.$emit('emptyclick', this.mescroll);
@@ -189,10 +205,10 @@
 			let diyOption = {
 				// 下拉刷新的配置
 				down: {
-					inOffset(mescroll) {
+					inOffset() {
 						vm.downLoadType = 1; // 下拉的距离进入offset范围内那一刻的回调 (自定义mescroll组件时,此行不可删)
 					},
-					outOffset(mescroll) {
+					outOffset() {
 						vm.downLoadType = 2; // 下拉的距离大于offset那一刻的回调 (自定义mescroll组件时,此行不可删)
 					},
 					onMoving(mescroll, rate, downHight) {
@@ -203,9 +219,13 @@
 						vm.downLoadType = 3; // 显示下拉刷新进度的回调 (自定义mescroll组件时,此行不可删)
 						vm.downHight = downHight; // 设置下拉区域的高度 (自定义mescroll组件时,此行不可删)
 					},
-					endDownScroll(mescroll) {
+					endDownScroll() {
 						vm.downLoadType = 4; // 结束下拉 (自定义mescroll组件时,此行不可删)
 						vm.downHight = 0; // 设置下拉区域的高度 (自定义mescroll组件时,此行不可删)
+						if(vm.downResetTimer) {clearTimeout(vm.downResetTimer); vm.downResetTimer = null} // 移除重置倒计时
+						vm.downResetTimer = setTimeout(()=>{ // 过渡动画执行完毕后,需重置为0的状态,避免下次inOffset不及时显示textInOffset
+							if(vm.downLoadType === 4) vm.downLoadType = 0
+						},300)
 					},
 					// 派发下拉刷新的回调
 					callback: function(mescroll) {
@@ -248,12 +268,7 @@
 			};
 
 			MeScroll.extend(diyOption, GlobalOption); // 混入全局的配置
-			let myOption = JSON.parse(
-				JSON.stringify({
-					down: vm.down,
-					up: vm.up
-				})
-			); // 深拷贝,避免对props的影响
+			let myOption = JSON.parse(JSON.stringify({down: vm.down,up: vm.up})); // 深拷贝,避免对props的影响
 			MeScroll.extend(myOption, diyOption); // 混入具体界面的配置
 
 			// 初始化MeScroll对象
@@ -268,10 +283,6 @@
 			if (sys.statusBarHeight) vm.statusBarHeight = sys.statusBarHeight;
 			// 使down的bottomOffset生效
 			vm.mescroll.setBodyHeight(sys.windowHeight);
-			// mescroll-body在Android小程序下拉会卡顿,无法像mescroll-uni那样通过设置"disableScroll":true解决,只能用动画过渡缓解
-			// #ifdef MP
-			if(sys.platform == "android") vm.downTransition = 'transform 200ms'
-			// #endif
 			
 			// 因为使用的是page的scroll,这里需自定义scrollTo
 			vm.mescroll.resetScrollTo((y, t) => {

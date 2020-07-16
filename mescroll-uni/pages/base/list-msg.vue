@@ -24,7 +24,6 @@
 			return {
 				downOption:{
 					autoShowLoading: true, // 显示下拉刷新的进度条
-					minAngle: 70, // 增大触发下拉刷新的角度
 					textColor: "#FF8095" // 下拉刷新的文本颜色
 				},
 				upOption: {
@@ -107,8 +106,8 @@
 		.msg-warp{
 			width: 50%;
 			display: inline-block;
-			padding: 32rpx;
-			border-radius: 50rpx;
+			padding: 30rpx;
+			border-radius: 30rpx;
 			background-color: #FF8095;
 			color: #fff;
 			.msg-title{
@@ -117,7 +116,7 @@
 				text-align: left;
 			}
 			.msg-content{
-				font-size: 28rpx;
+				font-size: 26rpx;
 				margin-top: 10rpx;
 				text-align: left;
 			}
