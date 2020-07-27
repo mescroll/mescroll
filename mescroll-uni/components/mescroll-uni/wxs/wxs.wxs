@@ -11,8 +11,9 @@ var me = {}
 me.onMoving = function (ins, rate, downHight){
 	ins.requestAnimationFrame(function () {
 		ins.selectComponent('.mescroll-wxs-content').setStyle({
-			transform: 'translateY(' + downHight + 'px)',
-			transition: ''
+			'will-change': 'transform', // 可解决下拉过程中, image和swiper脱离文档流的问题
+			'transform': 'translateY(' + downHight + 'px)',
+			'transition': ''
 		})
 		// 环形进度条
 		var progress = ins.selectComponent('.mescroll-wxs-progress')
@@ -25,8 +26,9 @@ me.showLoading = function (ins){
 	me.downHight = me.optDown.offset
 	ins.requestAnimationFrame(function () {
 		ins.selectComponent('.mescroll-wxs-content').setStyle({
-			transform: 'translateY(' + me.downHight + 'px)',
-			transition: 'transform 300ms'
+			'will-change': 'auto',
+			'transform': 'translateY(' + me.downHight + 'px)',
+			'transition': 'transform 300ms'
 		})
 	})
 }
@@ -37,8 +39,9 @@ me.endDownScroll = function (ins){
 	me.isDownScrolling = false;
 	ins.requestAnimationFrame(function () {
 		ins.selectComponent('.mescroll-wxs-content').setStyle({
-			transform: 'translateY(0)', // 不可以写空串,否则scroll-view渲染不完整 (延时350ms会调clearTransform置空)
-			transition: 'transform 300ms'
+			'will-change': 'auto',
+			'transform': 'translateY(0)', // 不可以写空串,否则scroll-view渲染不完整 (延时350ms会调clearTransform置空)
+			'transition': 'transform 300ms'
 		})
 	})
 }
@@ -47,8 +50,9 @@ me.endDownScroll = function (ins){
 me.clearTransform = function (ins){
 	ins.requestAnimationFrame(function () {
 		ins.selectComponent('.mescroll-wxs-content').setStyle({
-			transform: '',
-			transition: ''
+			'will-change': '',
+			'transform': '',
+			'transition': ''
 		})
 	})
 }
@@ -90,8 +94,6 @@ function callObserver(callProp, oldValue, ins) {
  * touch事件
  */
 function touchstartEvent(e, ins) {
-	if (me.disabled()) return true;
-	
 	me.downHight = 0; // 下拉的距离
 	me.startPoint = me.getPoint(e); // 记录起点
 	me.startTop = me.getScrollTop(); // 记录此时的滚动条位置
@@ -179,7 +181,6 @@ function touchmoveEvent(e, ins) {
 }
 
 function touchendEvent(e, ins) {
-	if (me.disabled()) return true;
 	// 如果下拉区域高度已改变,则需重置回来
 	if (me.isMoveDown) {
 		if (me.downHight >= me.optDown.offset) {

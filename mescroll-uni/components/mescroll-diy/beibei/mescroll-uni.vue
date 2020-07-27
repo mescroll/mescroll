@@ -16,7 +16,7 @@
 					<!-- 下拉加载区域 (支付宝小程序子组件传参给子子组件仍报单项数据流的异常,暂时不通过mescroll-down组件实现)-->
 					<!-- <mescroll-down :option="mescroll.optDown" :type="downLoadType"></mescroll-down> -->
 					<view v-if="mescroll.optDown.use" class="mescroll-downwarp" :style="{'background':mescroll.optDown.bgColor,'color':mescroll.optDown.textColor}">
-						<view class="downwarp-content" :change:prop="renderBiz.propObserver" :prop="wxsProp">
+						<view class="downwarp-content">
 							<image class="downwarp-slogan" src="http://www.mescroll.com/img/beibei/mescroll-slogan.jpg?v=1" mode="widthFix"/>
 							<view v-if="isDownLoading" class="downwarp-loading mescroll-rotate"></view>
 							<view v-else class="downwarp-progress" :style="{'transform':downRotate}"></view>
@@ -55,6 +55,11 @@
 
 		<!-- 回到顶部按钮 (fixed元素,需写在scroll-view外面,防止滚动的时候抖动)-->
 		<mescroll-top v-model="isShowToTop" :option="mescroll.optUp.toTop" @click="toTopClick"></mescroll-top>
+
+		<!-- #ifdef MP-WEIXIN || APP-PLUS || H5 -->
+		<!-- renderjs的数据载体,不可写在mescroll-downwarp内部,避免use为false时,载体丢失,无法更新数据 -->
+		<view :change:prop="renderBiz.propObserver" :prop="wxsProp"></view>
+		<!-- #endif -->
 	</view>
 </template>
 

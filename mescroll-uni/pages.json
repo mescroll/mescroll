@@ -35,13 +35,25 @@
 		{
 		    "path" : "pages/base/sticky",
 		    "style" : {
-				"navigationBarTitleText" : "sticky吸顶悬浮 (切换刷新列表)"
+				"navigationBarTitleText" : "sticky吸顶悬浮 (切换刷新列表,原生css实现)"
 			}
 		},
 		{
 		    "path" : "pages/base/sticky-data",
 		    "style" : {
-				"navigationBarTitleText" : "sticky吸顶悬浮 (缓存列表数据)"
+				"navigationBarTitleText" : "sticky吸顶悬浮 (缓存列表数据,原生css实现)"
+			}
+		},
+		{
+		    "path" : "pages/base/sticky-scroll",
+		    "style" : {
+				"navigationBarTitleText" : "sticky吸顶悬浮 (切换刷新列表,监听滚动实现)"
+			}
+		},
+		{
+		    "path" : "pages/base/sticky-scroll-data",
+		    "style" : {
+				"navigationBarTitleText" : "sticky吸顶悬浮 (缓存列表数据,监听滚动实现)"
 			}
 		},
         {
