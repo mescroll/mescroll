@@ -1,7 +1,7 @@
 <!-- 商品列表组件 <good-list :list="xx"></good-list> -->
 <template>
 	<view class="good-list">
-		<view class="good-li" v-for="good in list" :key="good.id">
+		<view :id="'good'+good.id" class="good-li" v-for="good in list" :key="good.id">
 			<image class="good-img" :src="good.goodImg" mode="widthFix"/>
 			<view class="flex-item">
 				<view class="good-name">{{good.goodName}}</view>

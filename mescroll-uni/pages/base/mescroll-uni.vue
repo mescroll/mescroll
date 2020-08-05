@@ -3,13 +3,22 @@
 		<!-- 菜单 -->
 		<view class="top-warp">
 			<view class="tip">基于scroll-view,常用在浮窗弹层等局部滚动区域</view>
+			<view class="tip" @click="triggerDownScroll">点此主动触发下拉刷新</view>
+			<view class="tip" @click="scrollToY(200)">点此测试滚动到指定位置 (如: 200px)</view>
+			<!-- 滚动到本页元素,只需普通的id或class选择器即可 -->
+			<view class="tip" @click="scrollIntoView('#anchorPoint')">点此测试滚动到指定view (元素在本页)</view>
+			<!-- 滚动到子组件,小程序必须用'跨自定义组件的后代选择器' -->
+			<view class="tip" @click="scrollIntoView('.good-comp >>> #good2')">点此测试滚动到指定view (元素在子组件)</view>
 			<me-tabs v-model="tabIndex" :tabs="tabs" @change="tabChange"></me-tabs>
 		</view>
 		
 		<!-- top="xxx"下拉布局往下偏移,防止被悬浮菜单遮住 -->
-		 <mescroll-uni ref="mescrollRef" @init="mescrollInit" top="120" @down="downCallback" :up="upOption" @up="upCallback" @emptyclick="emptyClick">
+		 <mescroll-uni ref="mescrollRef" @init="mescrollInit" top="365" @down="downCallback" :up="upOption" @up="upCallback" @emptyclick="emptyClick">
+			<!-- 大海报 -->
+			<image id="anchorPoint" v-if="tabIndex==0" src="http://www.mescroll.com/img/taobao/taobao3.jpg" mode="widthFix" style="width: 100%"/>
+			 
 			<!-- 数据列表 -->
-			<good-list :list="goods"></good-list>
+			<good-list class="good-comp" :list="goods"></good-list>
 		</mescroll-uni>
 	</view>
 </template>
@@ -64,6 +73,22 @@
 			tabChange() {
 				this.goods = []// 先置空列表,显示加载进度
 				this.mescroll.resetUpScroll() // 再刷新列表数据
+			},
+			
+			// 主动触发下拉刷新
+			triggerDownScroll(){
+				this.mescroll.scrollTo(0, 0)
+				this.mescroll.triggerDownScroll()
+			},
+			// 滚动到指定位置,传数字 (单位px)
+			scrollToY(y){
+				// this.mescroll.scrollTo(y) // 过渡动画时长默认300ms
+				this.mescroll.scrollTo(y, 0) // 无过渡动画
+			},
+			// 滚动到指定view,传view的id
+			scrollIntoView(viewId){
+				// this.mescroll.scrollTo(viewId) // 过渡动画时长默认300ms
+				this.mescroll.scrollTo(viewId, 0) // 无过渡动画
 			}
 		}
 	}
@@ -76,7 +101,7 @@
 		top: --window-top; /* css变量 */
 		left: 0;
 		width: 100%;
-		height: 120upx;
+		height: 365upx;
 		background-color: white;
 	}
 	.top-warp .tip{

@@ -69,6 +69,10 @@
 			<view class="demo-li">sticky-scroll-data吸顶悬浮<text class="demo-tip">切换tab缓存数据,监听滚动实现</text></view>
 		</navigator>
 		
+		<navigator url="/pages/base/sticky-uni">
+			<view class="demo-li">sticky-uni吸顶悬浮<text class="demo-tip">测试mescroll-uni使用sticky</text></view>
+		</navigator>
+		
 		<navigator url="/pages/intermediate/mescroll-swiper">
 			<view class="demo-li">mescroll-swiper<text class="demo-tip">轮播菜单导航</text></view>
 		</navigator>

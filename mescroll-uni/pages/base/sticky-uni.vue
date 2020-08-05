@@ -1,9 +1,6 @@
-<!-- 菜单悬浮的原理: 通过给菜单添加position:sticky实现, 用法超简单, 仅APP端的低端机不兼容 https://caniuse.com/#feat=css-sticky -->
 <template>
 	<view>
-		<!-- 对于mescroll-body: 需设置:sticky="true", 此应避免在mescroll-body标签前面加其他非定位的元素, 否则下拉区域会被挤出, 无法会隐藏.-->
-		<!-- 对于mescroll-uni: 则无需设置:sticky="true", 无其他限制和要求 -->
-		<mescroll-body :sticky="true" ref="mescrollRef" @init="mescrollInit" @down="downCallback" @up="upCallback">
+		<mescroll-uni ref="mescrollRef" @init="mescrollInit" @down="downCallback" @up="upCallback">
 			<swiper style="min-height: 300rpx" autoplay="true" interval="3000" duration="300" circular="true">
 				<swiper-item>
 					<image style="width: 100%;height: auto;" src="http://www.mescroll.com/img/swiper1.jpg" mode="widthFix"/>
@@ -14,10 +11,10 @@
 			</swiper>
 			
 			<view class="demo-tip">
-				<view>每次切换菜单,都刷新列表数据</view>
-				<view>吸顶通过给菜单加position:sticky实现, 用法简单</view>
-				<view>小程序和微信h5端: 低端机sticky也可生效, 可放心使用</view>
-				<view>APP端: 仅部分低端机无效,若要兼容则参考sticky-scroll</view>
+				<view>仅测试mescroll-uni使用sticky的情况</view>
+				<view>与mescroll-body使用的区别:</view>
+				<view>1. mescroll-uni 无需配置 :sticky="true"</view>
+				<view>2. sticky的top 无需考虑var(--window-top)</view>
 			</view>
 			
 			<!-- sticky吸顶悬浮的菜单, 父元素必须是 mescroll -->
@@ -27,10 +24,7 @@
 			
 			<!-- 数据列表 -->
 			<good-list :list="goods"></good-list>
-		</mescroll-body>
-		
-		<!-- 此处可以写其他fixed定位元素 -->
-		<!-- <view></view> -->
+		</mescroll-uni>
 	</view>
 </template>
 
@@ -87,16 +81,8 @@
 	.sticky-tabs{
 		z-index: 990;
 		position: sticky;
-		top: var(--window-top);
+		top: 0;
 		background-color: #fff;
-	}
-	
-	// 使用mescroll-uni,则top为0
-	.mescroll-uni,
-	/deep/.mescroll-uni{
-		.sticky-tabs{
-			top: 0;
-		}
 	}
 	
 	.demo-tip{

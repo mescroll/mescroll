@@ -56,6 +56,12 @@
 				"navigationBarTitleText" : "sticky吸顶悬浮 (缓存列表数据,监听滚动实现)"
 			}
 		},
+		{
+		    "path" : "pages/base/sticky-uni",
+		    "style" : {
+				"navigationBarTitleText" : "sticky吸顶悬浮 (mescroll-uni使用sticky)"
+			}
+		},
         {
             "path" : "pages/base/mescroll-comp",
             "style" : {

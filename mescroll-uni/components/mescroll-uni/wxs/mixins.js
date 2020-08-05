@@ -21,7 +21,7 @@ const WxsMixin = {
 			},
 			
 			// 不用wxs的平台使用此处的wxsBiz对象,抹平wxs的写法 (微信小程序和APP使用的wxsBiz对象是./wxs/wxs.wxs)
-			// #ifndef MP-WEIXIN || APP-PLUS || H5
+			// #ifndef MP-WEIXIN || MP-QQ || APP-PLUS || H5
 			wxsBiz: {
 				//注册列表touchstart事件,用于下拉刷新
 				touchstartEvent: e=> {
@@ -79,7 +79,7 @@ const WxsMixin = {
 		}
 	},
 	mounted() {
-		// #ifdef MP-WEIXIN || APP-PLUS || H5
+		// #ifdef MP-WEIXIN || MP-QQ || APP-PLUS || H5
 		// 配置主动触发wxs显示加载进度的回调
 		this.mescroll.optDown.afterLoading = ()=>{
 			this.callProp = {callType: "showLoading", t: Date.now()} // 触发wxs的方法 (值改变才触发更新)

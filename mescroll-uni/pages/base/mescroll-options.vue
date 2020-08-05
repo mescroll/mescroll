@@ -1,5 +1,5 @@
 <template>
-	 <mescroll-body ref="mescrollRef" @init="mescrollInit" @down="downCallback" @up="upCallback" 
+	<mescroll-body ref="mescrollRef" @init="mescrollInit" @down="downCallback" @up="upCallback" 
 	 :down="downOption" 
 	 :up="upOption" 
 	 :top="0" 
@@ -12,10 +12,20 @@
 	 @emptyclick="emptyClick" 
 	 @topclick="topClick" 
 	 @scroll="scroll">
+	 
 		<view class="tip">展示down和up的所有配置项</view>
 		<view class="tip" @click="triggerDownScroll">点此主动触发下拉刷新</view>
+		<view class="tip" @click="scrollToY(200)">点此测试滚动到指定位置 (如: 200px)</view>
+		<!-- 滚动到本页元素,只需普通的id或class选择器即可 -->
+		<view class="tip" @click="scrollIntoView('#anchorPoint')" id="anchorPoint">点此测试滚动到指定view (元素在本页)</view>
+		<!-- 滚动到子组件,小程序必须用'跨自定义组件的后代选择器' -->
+		<view class="tip" @click="scrollIntoView('.good-comp >>> #good2')">点此测试滚动到指定view (元素在子组件)</view>
+		
+		<!-- tab组件 -->
 		<me-tabs v-model="tabIndex" :tabs="tabs" @change="tabChange"></me-tabs>
-		<good-list :list="goods"></good-list>
+		
+		<!-- 商品组件 -->
+		<good-list class="good-comp" :list="goods"></good-list>
 	</mescroll-body>
 </template>
 
@@ -148,6 +158,16 @@
 			// 主动触发下拉刷新
 			triggerDownScroll(){
 				this.mescroll.triggerDownScroll()
+			},
+			// 滚动到指定位置,传数字 (单位px)
+			scrollToY(y){
+				// this.mescroll.scrollTo(y) // 过渡动画时长默认300ms
+				this.mescroll.scrollTo(y, 0) // 无过渡动画
+			},
+			// 滚动到指定view,传view的id
+			scrollIntoView(viewId){
+				// this.mescroll.scrollTo(viewId) // 过渡动画时长默认300ms
+				this.mescroll.scrollTo(viewId, 0) // 无过渡动画
 			}
 		},
 		// mescroll-body的滚动事件是页面的滚动事件

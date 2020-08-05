@@ -2,6 +2,7 @@
 	<view 
 		class="mescroll-body mescroll-render-touch" 
 		:style="{'minHeight':minHeight, 'padding-top': padTop, 'padding-bottom': padBottom}" 
+		:class="{'mescorll-sticky': sticky}"
 		@touchstart="wxsBiz.touchstartEvent" 
 		@touchmove="wxsBiz.touchmoveEvent" 
 		@touchend="wxsBiz.touchendEvent" 
@@ -55,15 +56,15 @@
 		<!-- 回到顶部按钮 (fixed元素需写在transform外面,防止降级为absolute)-->
 		<mescroll-top v-model="isShowToTop" :option="mescroll.optUp.toTop" @click="toTopClick"></mescroll-top>
 
-		<!-- #ifdef MP-WEIXIN || APP-PLUS || H5 -->
+		<!-- #ifdef MP-WEIXIN || MP-QQ || APP-PLUS || H5 -->
 		<!-- renderjs的数据载体,不可写在mescroll-downwarp内部,避免use为false时,载体丢失,无法更新数据 -->
 		<view :change:prop="renderBiz.propObserver" :prop="wxsProp"></view>
 		<!-- #endif -->
 	</view>
 </template>
 
-<!-- 微信小程序, app, h5使用wxs -->
-<!-- #ifdef MP-WEIXIN || APP-PLUS || H5-->
+<!-- 微信小程序, QQ小程序, app, h5使用wxs -->
+<!-- #ifdef MP-WEIXIN || MP-QQ || APP-PLUS || H5 -->
 <script src="../../mescroll-uni/wxs/wxs.wxs" module="wxsBiz" lang="wxs"></script>
 <!-- #endif -->
 
@@ -114,7 +115,8 @@
 			bottombar:{ // 底部是否偏移TabBar的高度(默认仅在H5端的tab页生效)
 				type: Boolean,
 				default: true
-			}
+			},
+			sticky: Boolean // 是否支持sticky,默认false; 当值配置true时,需避免在mescroll-body标签前面加非定位的元素,否则下拉区域无法会隐藏
 		},
 		computed: {
 			// mescroll最小高度,默认windowHeight,使列表不满屏仍可下拉
@@ -276,10 +278,40 @@
 
 			// 因为使用的是page的scroll,这里需自定义scrollTo
 			vm.mescroll.resetScrollTo((y, t) => {
-				uni.pageScrollTo({
-					scrollTop: y,
-					duration: t
-				})
+				if(typeof y === 'string'){
+					// 滚动到指定view (y为css选择器)
+					setTimeout(()=>{ // 延时确保view已渲染; 不使用$nextTick
+						let selector;
+						if(y.indexOf('#')==-1 && y.indexOf('.')==-1){
+							selector = '#'+y // 不带#和. 则默认为id选择器
+						}else{
+							selector = y
+							// #ifdef APP-PLUS || H5 || MP-ALIPAY || MP-DINGTALK
+							if(y.indexOf('>>>')!=-1){ // 不支持跨自定义组件的后代选择器 (转为普通的选择器即可跨组件查询)
+								selector = y.split('>>>')[1].trim()
+							}
+							// #endif
+						}
+						uni.createSelectorQuery().select(selector).boundingClientRect(function(rect){
+							if (rect) {
+								let top = rect.top
+								top += vm.mescroll.getScrollTop()
+								uni.pageScrollTo({
+									scrollTop: top,
+									duration: t
+								})
+							} else{
+								console.error(selector + ' does not exist');
+							}
+						}).exec()
+					},30)
+				} else{
+					// 滚动到指定位置 (y必须为数字)
+					uni.pageScrollTo({
+						scrollTop: y,
+						duration: t
+					})
+				}
 			});
 
 			// 具体的界面如果不配置up.toTop.safearea,则取本vue的safearea值

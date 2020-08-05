@@ -5,6 +5,11 @@
 	box-sizing: border-box; /* 避免设置padding出现双滚动条的问题 */
 }
 
+/* 使sticky生效: 父元素不能overflow:hidden或者overflow:auto属性 */
+.mescroll-body.mescorll-sticky{
+	overflow: unset !important
+}
+
 /* 适配 iPhoneX */
 @supports (bottom: constant(safe-area-inset-bottom)) or (bottom: env(safe-area-inset-bottom)) {
 	.mescroll-safearea {

@@ -3,7 +3,7 @@
  */
 const MescrollMoreItemMixin = {
 	// 支付宝小程序不支持props的mixin,需写在具体的页面中
-	// #ifndef MP-ALIPAY
+	// #ifndef MP-ALIPAY || MP-DINGTALK
 	props:{
 		i: Number, // 每个tab页的专属下标
 		index: { // 当前tab的下标

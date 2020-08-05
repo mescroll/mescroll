@@ -1,6 +1,6 @@
 <template>
 	<view class="mescroll-uni-warp">
-		<scroll-view :id="viewId" class="mescroll-uni" :class="{'mescroll-uni-fixed':isFixed}" :style="{'height':scrollHeight,'padding-top':padTop,'padding-bottom':padBottom,'top':fixedTop,'bottom':fixedBottom}" :scroll-top="scrollTop" :scroll-into-view="scrollToViewId" :scroll-with-animation="scrollAnim" @scroll="scroll" :scroll-y='scrollable' :enable-back-to-top="true">
+		<scroll-view :id="viewId" class="mescroll-uni" :class="{'mescroll-uni-fixed':isFixed}" :style="{'height':scrollHeight,'padding-top':padTop,'padding-bottom':padBottom,'top':fixedTop,'bottom':fixedBottom}" :scroll-top="scrollTop" :scroll-with-animation="scrollAnim" @scroll="scroll" :scroll-y='scrollable' :enable-back-to-top="true">
 			<view class="mescroll-uni-content mescroll-render-touch"
 			@touchstart="wxsBiz.touchstartEvent" 
 			@touchmove="wxsBiz.touchmoveEvent" 
@@ -53,15 +53,15 @@
 		<!-- 回到顶部按钮 (fixed元素,需写在scroll-view外面,防止滚动的时候抖动)-->
 		<mescroll-top v-model="isShowToTop" :option="mescroll.optUp.toTop" @click="toTopClick"></mescroll-top>
 		
-		<!-- #ifdef MP-WEIXIN || APP-PLUS || H5 -->
+		<!-- #ifdef MP-WEIXIN || MP-QQ || APP-PLUS || H5 -->
 		<!-- renderjs的数据载体,不可写在mescroll-downwarp内部,避免use为false时,载体丢失,无法更新数据 -->
 		<view :change:prop="renderBiz.propObserver" :prop="wxsProp"></view>
 		<!-- #endif -->
 	</view>
 </template>
 
-<!-- 微信小程序, app, h5使用wxs -->
-<!-- #ifdef MP-WEIXIN || APP-PLUS || H5-->
+<!-- 微信小程序, QQ小程序, app, h5使用wxs -->
+<!-- #ifdef MP-WEIXIN || MP-QQ || APP-PLUS || H5 -->
 <script src="./wxs/wxs.wxs" module="wxsBiz" lang="wxs"></script>
 <!-- #endif -->
 
@@ -108,8 +108,7 @@
 				windowTop: 0, // 可使用窗口的顶部位置
 				windowBottom: 0, // 可使用窗口的底部位置
 				windowHeight: 0, // 可使用窗口的高度
-				statusBarHeight: 0, // 状态栏高度
-				scrollToViewId: '' // 滚动到指定view的id
+				statusBarHeight: 0 // 状态栏高度
 			}
 		},
 		props: {
@@ -239,12 +238,7 @@
 				if (this.mescroll.getClientHeight(true) === 0 && !this.isExec) {
 					this.isExec = true; // 避免多次获取
 					this.$nextTick(() => { // 确保dom已渲染
-						let query = uni.createSelectorQuery();
-						// #ifndef MP-ALIPAY
-						query = query.in(this) // 支付宝小程序不支持in(this),而字节跳动小程序必须写in(this), 否则都取不到值
-						// #endif
-						let view = query.select('#' + this.viewId);
-						view.boundingClientRect(data => {
+						this.getClientInfo(data=>{
 							this.isExec = false;
 							if (data) {
 								this.mescroll.setClientHeight(data.height);
@@ -254,9 +248,20 @@
 									this.setClientHeight()
 								}, this.clientNum * 100)
 							}
-						}).exec();
+						})
 					})
 				}
+			},
+			// 获取滚动区域的信息
+			getClientInfo(success){
+				let query = uni.createSelectorQuery();
+				// #ifndef MP-ALIPAY || MP-DINGTALK
+				query = query.in(this) // 支付宝小程序不支持in(this),而字节跳动小程序必须写in(this), 否则都取不到值
+				// #endif
+				let view = query.select('#' + this.viewId);
+				view.boundingClientRect(data => {
+					success(data)
+				}).exec();
 			}
 		},
 		// 使用created初始化mescroll对象; 如果用mounted部分css样式编译到H5会失效
@@ -351,34 +356,36 @@
 			// 因为使用的是scrollview,这里需自定义scrollTo
 			vm.mescroll.resetScrollTo((y, t) => {
 				vm.scrollAnim = (t !== 0); // t为0,则不使用动画过渡
-				if(typeof y === 'string'){ // 第一个参数如果为字符串,则使用scroll-into-view
-					// #ifdef MP-WEIXIN
-					// 微信小程序暂不支持slot里面的scroll-into-view,只能计算位置实现
-					uni.createSelectorQuery().select('#'+vm.viewId).boundingClientRect(function(rect){
+				if(typeof y === 'string'){
+					// 小程序不支持slot里面的scroll-into-view, 统一使用计算的方式实现
+					vm.getClientInfo(function(rect){
 						let mescrollTop = rect.top // mescroll到顶部的距离
-						uni.createSelectorQuery().select('#'+y).boundingClientRect(function(rect){
-							let curY = vm.mescroll.getScrollTop()
-							let top = rect.top - mescrollTop
-							top += curY
-							if(!vm.isFixed) top -= vm.numTop
-							vm.scrollTop = curY;
-							vm.$nextTick(function() {
-								vm.scrollTop = top
-							})
+						let selector;
+						if(y.indexOf('#')==-1 && y.indexOf('.')==-1){
+							selector = '#'+y // 不带#和. 则默认为id选择器
+						}else{
+							selector = y
+							// #ifdef APP-PLUS || H5 || MP-ALIPAY || MP-DINGTALK
+							if(y.indexOf('>>>')!=-1){ // 不支持跨自定义组件的后代选择器 (转为普通的选择器即可跨组件查询)
+								selector = y.split('>>>')[1].trim()
+							}
+							// #endif
+						}
+						uni.createSelectorQuery().select(selector).boundingClientRect(function(rect){
+							if (rect) {
+								let curY = vm.mescroll.getScrollTop()
+								let top = rect.top - mescrollTop
+								top += curY
+								if(!vm.isFixed) top -= vm.numTop
+								vm.scrollTop = curY;
+								vm.$nextTick(function() {
+									vm.scrollTop = top
+								})
+							} else{
+								console.error(selector + ' does not exist');
+							}
 						}).exec()
-					}).exec()
-					// #endif
-					
-					// #ifndef MP-WEIXIN
-					if (vm.scrollToViewId != y) {
-						vm.scrollToViewId = y;
-					} else{
-						vm.scrollToViewId = ''; // scrollToViewId必须变化才会生效,所以此处先置空再赋值
-						vm.$nextTick(function(){
-							vm.scrollToViewId = y;
-						})
-					}
-					// #endif
+					})
 					return;
 				}
 				let curY = vm.mescroll.getScrollTop()

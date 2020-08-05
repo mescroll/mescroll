@@ -1,30 +1,37 @@
 <!-- 菜单悬浮的原理: 通过给菜单添加position:sticky实现, 用法超简单, 仅APP端的低端机不兼容 https://caniuse.com/#feat=css-sticky -->
 <template>
-	<mescroll-body ref="mescrollRef" @init="mescrollInit" @down="downCallback" @up="upCallback">
-		<swiper style="min-height: 300rpx" autoplay="true" interval="3000" duration="300" circular="true">
-			<swiper-item>
-				<image style="width: 100%;height: auto;" src="http://www.mescroll.com/img/swiper1.jpg" mode="widthFix"/>
-			</swiper-item>
-			<swiper-item>
-				<image style="width: 100%;height: auto;" src="http://www.mescroll.com/img/swiper2.jpg" mode="widthFix"/>
-			</swiper-item>
-		</swiper>
+	<view>
+		<!-- 对于mescroll-body: 需设置:sticky="true", 此应避免在mescroll-body标签前面加其他非定位的元素, 否则下拉区域会被挤出, 无法会隐藏.-->
+		<!-- 对于mescroll-uni: 则无需设置:sticky="true", 无其他限制和要求 -->
+		<mescroll-body :sticky="true" ref="mescrollRef" @init="mescrollInit" @down="downCallback" @up="upCallback">
+			<swiper style="min-height: 300rpx" autoplay="true" interval="3000" duration="300" circular="true">
+				<swiper-item>
+					<image style="width: 100%;height: auto;" src="http://www.mescroll.com/img/swiper1.jpg" mode="widthFix"/>
+				</swiper-item>
+				<swiper-item>
+					<image style="width: 100%;height: auto;" src="http://www.mescroll.com/img/swiper2.jpg" mode="widthFix"/>
+				</swiper-item>
+			</swiper>
+			
+			<view class="demo-tip">
+				<view>列表只初始化一次,切换菜单缓存数据</view>
+				<view>吸顶通过给菜单加position:sticky实现, 用法简单</view>
+				<view>小程序,微信h5端: 低端机sticky也可生效, 可放心使用</view>
+				<view>APP端: 仅部分低端机无效,若要兼容则参考sticky-scroll</view>
+			</view>
+			
+			<!-- sticky吸顶悬浮的菜单, 父元素必须是 mescroll -->
+			<view class="sticky-tabs">
+				<me-tabs v-model="tabIndex" :tabs="tabs" @change="tabChange"></me-tabs>
+			</view>
+			
+			<!-- 数据列表 -->
+			<good-list :list="goods"></good-list>
+		</mescroll-body>
 		
-		<view class="demo-tip">
-			<view>列表只初始化一次,切换菜单缓存数据</view>
-			<view>吸顶通过给菜单加position:sticky实现, 用法简单</view>
-			<view>小程序,微信h5端: 低端机sticky也可生效, 可放心使用</view>
-			<view>APP端: 仅部分低端机无效,若要兼容则参考sticky-scroll</view>
-		</view>
-		
-		<!-- 菜单 -->
-		<view class="sticky-tabs">
-			<me-tabs v-model="tabIndex" :tabs="tabs" @change="tabChange"></me-tabs>
-		</view>
-		
-		<!-- 数据列表 -->
-		<good-list :list="goods"></good-list>
-	</mescroll-body>
+		<!-- 此处可以写其他fixed定位元素 -->
+		<!-- <view></view> -->
+	</view>
 </template>
 
 <script>
@@ -106,16 +113,11 @@
 <style lang="scss">
 	/*
 	sticky生效条件：
-	1、父元素不能overflow:hidden或者overflow:auto属性。
+	1、父元素不能overflow:hidden或者overflow:auto属性。(mescroll-body设置:sticky="true"即可, mescroll-uni本身没有设置overflow)
 	2、必须指定top、bottom、left、right4个值之一，否则只会处于相对定位
 	3、父元素的高度不能低于sticky元素的高度
-	4、sticky元素仅在其父元素内生效
+	4、sticky元素仅在其父元素内生效,所以父元素必须是 mescroll
 	*/
-	.mescroll-body,
-	/deep/.mescroll-body{
-		overflow: unset !important; // 重置了mescroll-body的overflow之后,应避免在mescroll-body标签前面加其他元素,否则下拉区域无法会隐藏. 应尽量像本示例一样,mescroll-body当做根元素即可
-	}
-	
 	.sticky-tabs{
 		z-index: 990;
 		position: sticky;
