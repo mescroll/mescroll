@@ -79,7 +79,7 @@
 
 <script>
 	import MeScroll from '../../mescroll-uni/mescroll-uni.js';
-	import GlobalOption from '../../mescroll-uni/mescroll-uni-option.js';
+	import GlobalOption from './mescroll-uni-option.js';
 	import MescrollEmpty from '../../mescroll-uni/components/mescroll-empty.vue';
 	import MescrollTop from '../../mescroll-uni/components/mescroll-top.vue';
 	import WxsMixin from '../../mescroll-uni/wxs/mixins.js';
@@ -166,7 +166,7 @@
 					case 3:
 						return this.mescroll.optDown.textLoading;
 					case 4:
-						return this.mescroll.optDown.textLoading;
+						return this.mescroll.isDownEndSuccess ? this.mescroll.optDown.textSuccess : this.mescroll.isDownEndSuccess==false ? this.mescroll.optDown.textErr : this.mescroll.optDown.textInOffset;
 					default:
 						return this.mescroll.optDown.textInOffset;
 				}
@@ -225,6 +225,10 @@
 					showLoading(mescroll, downHight) {
 						vm.downLoadType = 3; // 显示下拉刷新进度的回调 (自定义mescroll组件时,此行不可删)
 						vm.downHight = downHight; // 设置下拉区域的高度 (自定义mescroll组件时,此行不可删)
+					},
+					beforeEndDownScroll(mescroll){
+						vm.downLoadType = 4; 
+						return mescroll.optDown.beforeEndDelay // 延时结束的时长
 					},
 					endDownScroll() {
 						vm.downLoadType = 4; // 结束下拉 (自定义mescroll组件时,此行不可删)

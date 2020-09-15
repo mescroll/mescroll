@@ -1,7 +1,7 @@
 /*
 本地模拟接口请求, 仅demo演示用.
 实际项目以您服务器接口返回的数据为准,无需本地处理分页.
-请参考官方写法: http://www.mescroll.com/uni.html?v=20200210#tagUpCallback
+请参考官方写法: https://www.mescroll.com/uni.html?v=20200210#tagUpCallback
 * */
 
 // 模拟数据

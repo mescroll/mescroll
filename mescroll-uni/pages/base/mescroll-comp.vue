@@ -1,4 +1,5 @@
 <template>
+	<!-- 注: 本示例仅演示mescroll-body写在一层子组件的情况, 其实同样适用mescroll-body写在子子..子组件的情况, 只需每一层都要写上第一步和第二步的代码即可 -->
 	 <view>
 		<view class="notice-warp">
 			<view class="notice">mescroll-body是原生页面的滚动,子组件无页面生命周期</view>
@@ -11,13 +12,12 @@
 </template>
 
 <script>
-	import MescrollItem from "./mescroll-comp-item.vue";
-	import MescrollCompMixin from "@/components/mescroll-uni/mixins/mescroll-comp.js";
+	import MescrollItem from "./mescroll-comp-item.vue"; // 一个mescroll-body写在子组件的情况
+	// import MescrollItem from "./mescroll-more.vue"; // 多个mescroll-body写在子组件的情况
 	
+	// 第二步: 引入mescroll-comp.js
+	import MescrollCompMixin from "@/components/mescroll-uni/mixins/mescroll-comp.js";
 	export default {
-		// 第二步: 引入mescroll-comp.js
-		// 当一个页面只有1个mescroll-body写在子组件时, 则使用mescroll-comp.js补充子组件的页面生命周期
-		// 多个mescroll-body写在子组件时,则参考mescroll-more案例使用mescroll-more.js补充子组件的页面生命周期
 		mixins: [MescrollCompMixin],
 		components: {
 			MescrollItem

@@ -1,29 +1,47 @@
 /**
- * mescroll-body写在子组件时,需通过mescroll的mixins补充子组件缺少的生命周期:
- * 当一个页面只有一个mescroll-body写在子组件时, 则使用mescroll-comp.js (参考 mescroll-comp 案例)
- * 当一个页面有多个mescroll-body写在子组件时, 则使用mescroll-more.js (参考 mescroll-more 案例)
+ * mescroll-body写在子组件时, 需通过mescroll的mixins补充子组件缺少的生命周期
  */
 const MescrollMoreMixin = {
 	data() {
 		return {
-			tabIndex: 0 // 当前tab下标
+			tabIndex: 0, // 当前tab下标
+			mescroll: {
+				onPageScroll: e=>{
+					this.handlePageScroll(e)
+				},
+				onReachBottom: ()=>{
+					this.handleReachBottom()
+				},
+				onPullDownRefresh: ()=>{
+					this.handlePullDownRefresh()
+				}
+			}
 		}
 	},
 	// 因为子组件无onPageScroll和onReachBottom的页面生命周期，需在页面传递进到子组件
 	onPageScroll(e) {
-		let mescroll = this.getMescroll(this.tabIndex);
-		mescroll && mescroll.onPageScroll(e);
+		this.handlePageScroll(e)
 	},
 	onReachBottom() {
-		let mescroll = this.getMescroll(this.tabIndex);
-		mescroll && mescroll.onReachBottom();
+		this.handleReachBottom()
 	},
 	// 当down的native: true时, 还需传递此方法进到子组件
 	onPullDownRefresh(){
-		let mescroll = this.getMescroll(this.tabIndex);
-		mescroll && mescroll.onPullDownRefresh();
+		this.handlePullDownRefresh()
 	},
 	methods:{
+		handlePageScroll(e){
+			let mescroll = this.getMescroll(this.tabIndex);
+			mescroll && mescroll.onPageScroll(e);
+		},
+		handleReachBottom(){
+			let mescroll = this.getMescroll(this.tabIndex);
+			mescroll && mescroll.onReachBottom();
+		},
+		handlePullDownRefresh(){
+			let mescroll = this.getMescroll(this.tabIndex);
+			mescroll && mescroll.onPullDownRefresh();
+		},
 		// 根据下标获取对应子组件的mescroll
 		getMescroll(i){
 			if(!this.mescrollItems) this.mescrollItems = [];

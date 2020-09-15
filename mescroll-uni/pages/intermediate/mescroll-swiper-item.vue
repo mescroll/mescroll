@@ -3,7 +3,8 @@
 	swiper中的transfrom会使fixed失效,此时用height="100%"固定高度; 
 	swiper中无法触发mescroll-mixins.js的onPageScroll和onReachBottom方法,只能用mescroll-uni,不能用mescroll-body
 	-->
-	 <mescroll-uni ref="mescrollRef" @init="mescrollInit" height="100%" top="60" :down="downOption" @down="downCallback" :up="upOption" @up="upCallback" @emptyclick="emptyClick">
+	<!-- ref动态生成: 字节跳动小程序编辑器不支持一个页面存在相同的ref (如不考虑字节跳动小程序可固定值为 ref="mescrollRef") -->
+	 <mescroll-uni :ref="'mescrollRef'+i" @init="mescrollInit" height="100%" top="60" :down="downOption" @down="downCallback" :up="upOption" @up="upCallback" @emptyclick="emptyClick">
 		<!-- 数据列表 -->
 		<good-list :list="goods"></good-list>
 	</mescroll-uni>

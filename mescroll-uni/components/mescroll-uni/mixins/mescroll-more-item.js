@@ -35,6 +35,14 @@ const MescrollMoreItemMixin = {
 		}
 	},
 	methods: {
+		// 以ref的方式初始化mescroll对象 (兼容字节跳动小程序)
+		mescrollInitByRef() {
+			if(!this.mescroll || !this.mescroll.resetUpScroll){
+				// 字节跳动小程序编辑器不支持一个页面存在相同的ref, 多mescroll的ref需动态生成, 格式为'mescrollRef下标'
+				let mescrollRef = this.$refs.mescrollRef || this.$refs['mescrollRef'+this.i];
+				if(mescrollRef) this.mescroll = mescrollRef.mescroll
+			}
+		},
 		// mescroll组件初始化的回调,可获取到mescroll对象 (覆盖mescroll-mixins.js的mescrollInit, 为了标记isInit)
 		mescrollInit(mescroll) {
 			this.mescroll = mescroll;

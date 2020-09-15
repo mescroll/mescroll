@@ -24,6 +24,10 @@
 		<!-- tab组件 -->
 		<me-tabs v-model="tabIndex" :tabs="tabs" @change="tabChange"></me-tabs>
 		
+		<!-- 视频请尽量使用me-video组件 (video在APP中是原生组件, 真机APP端下拉渲染不及时.) -->
+		<!-- 使用me-video组件, 未播放时自动展示image封面, 播放时才显示video, 提高性能; 当加上 :mescroll="mescroll"之后, 如果播放中执行下拉,会自动隐藏视频,显示封面,避免视频下拉悬浮错位(仅APP端这样处理) -->
+		<me-video v-if="tabIndex==0" :mescroll="mescroll" poster="https://vkceyugu.cdn.bspapp.com/VKCEYUGU-mescroll/2e3cd7a0-f31a-11ea-81ea-f115fe74321c.png" src="https://vkceyugu.cdn.bspapp.com/VKCEYUGU-mescroll/2ae5d090-f26e-11ea-81ea-f115fe74321c.mp4"></me-video>
+		
 		<!-- 商品组件 -->
 		<good-list class="good-comp" :list="goods"></good-list>
 	</mescroll-body>
@@ -72,7 +76,7 @@
 					textNoMore: '-- END --', // 没有更多数据的提示文本
 					toTop: {
 						// 回到顶部按钮,需配置src才显示
-						src: "http://www.mescroll.com/img/mescroll-totop.png", // 图片路径
+						src: "https://www.mescroll.com/img/mescroll-totop.png", // 图片路径
 						offset: 1000, // 列表滚动多少距离才显示回到顶部按钮,默认1000
 						duration: 300, // 回到顶部的动画时长,默认300ms (当值为0或300则使用系统自带回到顶部,更流畅; 其他值则通过step模拟,部分机型可能不够流畅,所以非特殊情况不建议修改此项)
 						zIndex: 9990, // fixed定位z-index值
@@ -85,7 +89,7 @@
 					},
 					empty: {
 						use: true, // 是否显示空布局
-						icon: "http://www.mescroll.com/img/mescroll-empty.png", // 图标路径
+						icon: "https://www.mescroll.com/img/mescroll-empty.png", // 图标路径
 						tip: '~ 暂无相关数据 ~', // 提示
 						btnText: '去逛逛 >', // 按钮
 						fixed: false, // 是否使用fixed定位,默认false; 配置fixed为true,以下的top和zIndex才生效 (transform会使fixed失效,最终会降级为absolute)

@@ -15,7 +15,7 @@
 		<!-- top="xxx"下拉布局往下偏移,防止被悬浮菜单遮住 -->
 		 <mescroll-uni ref="mescrollRef" @init="mescrollInit" top="365" @down="downCallback" :up="upOption" @up="upCallback" @emptyclick="emptyClick">
 			<!-- 大海报 -->
-			<image id="anchorPoint" v-if="tabIndex==0" src="http://www.mescroll.com/img/taobao/taobao3.jpg" mode="widthFix" style="width: 100%"/>
+			<image id="anchorPoint" v-if="tabIndex==0" src="https://www.mescroll.com/img/taobao/taobao3.jpg" mode="widthFix" style="width: 100%"/>
 			 
 			<!-- 数据列表 -->
 			<good-list class="good-comp" :list="goods"></good-list>

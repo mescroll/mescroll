@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<!-- 模拟的标题 -->
-		<image class="header" src="http://www.mescroll.com/img/xinlang/header.jpg" mode="aspectFit"/>
+		<image class="header" src="https://www.mescroll.com/img/xinlang/header.jpg" mode="aspectFit"/>
 		<view :style="{'top':top}" class="download-tip">1条新微博</view>
 		
 		<mescroll-body-diy ref="mescrollRef" @init="mescrollInit" top="100" bottom="100" :down="downOption" @down="downCallback" @up="upCallback">
@@ -11,7 +11,7 @@
 				<view class="new-content">{{news.content}}</view>
 			</view>
 			<!-- 模拟的内容 -->
-			<image src="http://www.mescroll.com/img/xinlang/xinlang1.jpg" mode="widthFix"/>
+			<image src="https://www.mescroll.com/img/xinlang/xinlang1.jpg" mode="widthFix"/>
 			<!-- 分页的数据 -->
 			<view class="news-li" v-for="news in dataList" :key="news.id">
 				<view>{{news.title}}</view>
@@ -20,7 +20,7 @@
 		</mescroll-body-diy>
 		
 		<!-- 模拟的底部 -->
-		<image class="footer" src="http://www.mescroll.com/img/xinlang/footer.jpg" mode="aspectFit"/>
+		<image class="footer" src="https://www.mescroll.com/img/xinlang/footer.jpg" mode="aspectFit"/>
 	</view>
 </template>
 

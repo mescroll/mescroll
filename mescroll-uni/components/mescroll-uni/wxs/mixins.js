@@ -66,6 +66,10 @@ const WxsMixin = {
 			}else if(msg.type === 'setLoadType'){
 				// 设置inOffset,outOffset的状态
 				this.downLoadType = msg.downLoadType
+				// 状态挂载到mescroll对象, 以便在其他组件中使用, 比如<me-video>中
+				this.$set(this.mescroll, 'downLoadType', this.downLoadType)
+				// 重置是否加载成功的状态
+				this.$set(this.mescroll, 'isDownEndSuccess', null)
 			}else if(msg.type === 'triggerDownScroll'){
 				// 主动触发下拉刷新
 				this.mescroll.triggerDownScroll();
@@ -87,11 +91,14 @@ const WxsMixin = {
 		// 配置主动触发wxs隐藏加载进度的回调
 		this.mescroll.optDown.afterEndDownScroll = ()=>{
 			this.callProp = {callType: "endDownScroll", t: Date.now()} // 触发wxs的方法 (值改变才触发更新)
+			let delay = 300 + (this.mescroll.optDown.beforeEndDelay || 0)
 			setTimeout(()=>{
 				if(this.downLoadType === 4 || this.downLoadType === 0){
 					this.callProp = {callType: "clearTransform", t: Date.now()} // 触发wxs的方法 (值改变才触发更新)
 				}
-			},320)
+				// 状态挂载到mescroll对象, 以便在其他组件中使用, 比如<me-video>中
+				this.$set(this.mescroll, 'downLoadType', this.downLoadType)
+			}, delay)
 		}
 		// 初始化wxs的数据
 		this.wxsCall({type: 'setWxsProp'})

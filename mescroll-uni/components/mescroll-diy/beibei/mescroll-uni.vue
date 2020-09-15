@@ -1,6 +1,6 @@
 <template>
 	<view class="mescroll-uni-warp">
-		<scroll-view :id="viewId" class="mescroll-uni" :class="{'mescroll-uni-fixed':isFixed}" :style="{'height':scrollHeight,'padding-top':padTop,'padding-bottom':padBottom,'top':fixedTop,'bottom':fixedBottom}" :scroll-top="scrollTop" :scroll-with-animation="scrollAnim" @scroll="scroll" :scroll-y='scrollable' :enable-back-to-top="true">
+		<scroll-view :id="viewId" class="mescroll-uni" :class="{'mescroll-uni-fixed':isFixed}" :style="{'height':scrollHeight,'padding-top':padTop,'padding-bottom':padBottom,'top':fixedTop,'bottom':fixedBottom}" :scroll-top="scrollTop" :scroll-with-animation="scrollAnim" @scroll="scroll" :scroll-y='scrollable' :enable-back-to-top="true" :throttle="false">
 			<view class="mescroll-uni-content mescroll-render-touch"
 			@touchstart="wxsBiz.touchstartEvent" 
 			@touchmove="wxsBiz.touchmoveEvent" 
@@ -17,7 +17,7 @@
 					<!-- <mescroll-down :option="mescroll.optDown" :type="downLoadType"></mescroll-down> -->
 					<view v-if="mescroll.optDown.use" class="mescroll-downwarp" :style="{'background':mescroll.optDown.bgColor,'color':mescroll.optDown.textColor}">
 						<view class="downwarp-content">
-							<image class="downwarp-slogan" src="http://www.mescroll.com/img/beibei/mescroll-slogan.jpg?v=1" mode="widthFix"/>
+							<image class="downwarp-slogan" src="https://www.mescroll.com/img/beibei/mescroll-slogan.jpg?v=1" mode="widthFix"/>
 							<view v-if="isDownLoading" class="downwarp-loading mescroll-rotate"></view>
 							<view v-else class="downwarp-progress" :style="{'transform':downRotate}"></view>
 							<view class="downwarp-mascot"></view>

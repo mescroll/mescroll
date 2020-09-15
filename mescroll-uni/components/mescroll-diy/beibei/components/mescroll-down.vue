@@ -2,7 +2,7 @@
 <template>
 	<view v-if="mOption.use" class="mescroll-downwarp" :style="{'background':mOption.bgColor,'color':mOption.textColor}">
 		<view class="downwarp-content">
-			<image class="downwarp-slogan" src="http://www.mescroll.com/img/beibei/mescroll-slogan.jpg?v=1" mode="widthFix"/>
+			<image class="downwarp-slogan" src="https://www.mescroll.com/img/beibei/mescroll-slogan.jpg?v=1" mode="widthFix"/>
 			<view v-if="isDownLoading" class="downwarp-loading mescroll-rotate"></view>
 			<view v-else class="downwarp-progress" :style="{'transform':downRotate}"></view>
 			<view class="downwarp-mascot"></view>

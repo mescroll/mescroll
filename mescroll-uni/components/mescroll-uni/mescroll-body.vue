@@ -27,7 +27,7 @@
 			<slot></slot>
 
 			<!-- 空布局 -->
-			<slot name="empty" v-if="isShowEmpty"><mescroll-empty :option="mescroll.optUp.empty" @emptyclick="emptyClick"></mescroll-empty></slot>
+			<mescroll-empty v-if="isShowEmpty" :option="mescroll.optUp.empty" @emptyclick="emptyClick"></mescroll-empty>
 
 			<!-- 上拉加载区域 (下拉刷新时不显示, 支付宝小程序子组件传参给子子组件仍报单项数据流的异常,暂时不通过mescroll-up组件实现)-->
 			<!-- <mescroll-up v-if="mescroll.optUp.use && !isDownLoading && upLoadType!==3" :option="mescroll.optUp" :type="upLoadType"></mescroll-up> -->
@@ -166,7 +166,7 @@
 					case 1: return this.mescroll.optDown.textInOffset;
 					case 2: return this.mescroll.optDown.textOutOffset;
 					case 3: return this.mescroll.optDown.textLoading;
-					case 4: return this.mescroll.optDown.textLoading;
+					case 4: return this.mescroll.isDownEndSuccess ? this.mescroll.optDown.textSuccess : this.mescroll.isDownEndSuccess==false ? this.mescroll.optDown.textErr : this.mescroll.optDown.textInOffset;
 					default: return this.mescroll.optDown.textInOffset;
 				}
 			}
@@ -225,6 +225,10 @@
 					showLoading(mescroll, downHight) {
 						vm.downLoadType = 3; // 显示下拉刷新进度的回调 (自定义mescroll组件时,此行不可删)
 						vm.downHight = downHight; // 设置下拉区域的高度 (自定义mescroll组件时,此行不可删)
+					},
+					beforeEndDownScroll(mescroll){
+						vm.downLoadType = 4; 
+						return mescroll.optDown.beforeEndDelay // 延时结束的时长
 					},
 					endDownScroll() {
 						vm.downLoadType = 4; // 结束下拉 (自定义mescroll组件时,此行不可删)

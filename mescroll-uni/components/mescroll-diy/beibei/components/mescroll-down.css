@@ -15,7 +15,7 @@
 	background-size: contain;
 	background-repeat: no-repeat;
 	background-position: center;
-	background-image: url(http://www.mescroll.com/img/beibei/mescroll-progress.png);
+	background-image: url(https://www.mescroll.com/img/beibei/mescroll-progress.png);
 	transition: all 300ms;
 }
 /*下拉刷新--进度条*/
@@ -39,9 +39,9 @@
 	animation: animMascot .6s steps(1,end) infinite;
 }
 @keyframes animMascot {
-	0% {background-image: url(http://www.mescroll.com/img/beibei/mescroll-bb1.png)}
-	25% {background-image: url(http://www.mescroll.com/img/beibei/mescroll-bb2.png)}
-	50% {background-image: url(http://www.mescroll.com/img/beibei/mescroll-bb3.png)}
-	75% {background-image: url(http://www.mescroll.com/img/beibei/mescroll-bb4.png)}
-	100% {background-image: url(http://www.mescroll.com/img/beibei/mescroll-bb1.png)}
+	0% {background-image: url(https://www.mescroll.com/img/beibei/mescroll-bb1.png)}
+	25% {background-image: url(https://www.mescroll.com/img/beibei/mescroll-bb2.png)}
+	50% {background-image: url(https://www.mescroll.com/img/beibei/mescroll-bb3.png)}
+	75% {background-image: url(https://www.mescroll.com/img/beibei/mescroll-bb4.png)}
+	100% {background-image: url(https://www.mescroll.com/img/beibei/mescroll-bb1.png)}
 }

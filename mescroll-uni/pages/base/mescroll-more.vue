@@ -23,7 +23,6 @@
 		<mescroll-item ref="mescrollItem6" :i="6" :index="tabIndex" :tabs="tabs"></mescroll-item>
 		<mescroll-item ref="mescrollItem7" :i="7" :index="tabIndex" :tabs="tabs"></mescroll-item>
 		<mescroll-item ref="mescrollItem8" :i="8" :index="tabIndex" :tabs="tabs"></mescroll-item>
-		<mescroll-item ref="mescrollItem9" :i="9" :index="tabIndex" :tabs="tabs"></mescroll-item>
 		
 		
 		<!-- 如果每个子组件布局一样, 则可使用v-for (注意v-for的ref="mescrollItem"必须是固定值; 另外支付宝小程序不支持此v-for的写法)-->
@@ -45,6 +44,14 @@
 				tabs: [{name:'全部'}, {name:'奶粉'}, {name:'面膜'}, {name:'图书'}, {name:'果汁'}, {name:'奶瓶'}, {name:'美素'}, {name:'花王'}, {name:'韩蜜'}],
 				tabIndex: 0 // 当前tab下标,必须与mescroll-more.js对应,所以tabIndex是固定变量,不可以改为其他的名字
 			}
+		},
+		onShow() {
+			// 返回刷新: https://www.mescroll.com/uni.html#note 第二点
+			// if(this.canReset){
+			// 	let curMescroll = this.getMescroll(this.tabIndex)
+			// 	curMescroll && curMescroll.resetUpScroll()
+			// }
+			// this.canReset = true
 		}
 	}
 </script>

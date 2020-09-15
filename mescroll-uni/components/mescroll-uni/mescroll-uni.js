@@ -1,12 +1,12 @@
 /* mescroll
- * version 1.3.2
- * 2020-08-05 wenju
- * http://www.mescroll.com
+ * version 1.3.3
+ * 2020-09-15 wenju
+ * https://www.mescroll.com
  */
 
 export default function MeScroll(options, isScrollBody) {
 	let me = this;
-	me.version = '1.3.2'; // mescroll版本号
+	me.version = '1.3.3'; // mescroll版本号
 	me.options = options || {}; // 配置
 	me.isScrollBody = isScrollBody || false; // 滚动区域是否为原生页面滚动; 默认为scroll-view
 
@@ -56,6 +56,9 @@ MeScroll.prototype.extendDownScroll = function(optDown) {
 		textInOffset: '下拉刷新', // 下拉的距离在offset范围内的提示文本
 		textOutOffset: '释放更新', // 下拉的距离大于offset范围的提示文本
 		textLoading: '加载中 ...', // 加载中的提示文本
+		textSuccess: '加载成功', // 加载成功的文本
+		textErr: '加载失败', // 加载失败的文本
+		beforeEndDelay: 100, // 延时结束的时长 (显示加载成功/失败的时长)
 		bgColor: "transparent", // 背景颜色 (建议在pages.json中再设置一下backgroundColorTop)
 		textColor: "gray", // 文本颜色 (当bgColor配置了颜色,而textColor未配置时,则textColor会默认为白色)
 		inited: null, // 下拉刷新初始化完毕的回调
@@ -90,7 +93,7 @@ MeScroll.prototype.extendUpScroll = function(optUp) {
 			time: null // 加载第一页数据服务器返回的时间; 防止用户翻页时,后台新增了数据从而导致下一页数据重复;
 		},
 		noMoreSize: 5, // 如果列表已无数据,可设置列表的总数量要大于等于5条才显示无更多数据;避免列表数据过少(比如只有一条数据),显示无更多数据会不好看
-		offset: 80, // 距底部多远时,触发upCallback
+		offset: 150, // 距底部多远时,触发upCallback,仅mescroll-uni生效 ( mescroll-body配置的是pages.json的 onReachBottomDistance )
 		textLoading: '加载中 ...', // 加载中的提示文本
 		textNoMore: '-- END --', // 没有更多数据的提示文本
 		bgColor: "transparent", // 背景颜色 (建议在pages.json中再设置一下backgroundColorBottom)
@@ -235,6 +238,7 @@ MeScroll.prototype.touchmoveEvent = function(e) {
 			if (me.downHight < me.optDown.offset) {
 				if (me.movetype !== 1) {
 					me.movetype = 1; // 加入标记,保证只执行一次
+					me.isDownEndSuccess = null; // 重置是否加载成功的状态 (wxs执行的是wxs.wxs)
 					me.optDown.inOffset && me.optDown.inOffset(me); // 进入指定距离范围内那一刻的回调,只执行一次
 					me.isMoveDown = true; // 标记下拉区域高度改变,在touchend重置回来
 				}
@@ -385,7 +389,10 @@ MeScroll.prototype.endDownScroll = function() {
 	}
 	// 结束下拉刷新时的回调
 	let delay = 0;
-	if (me.optDown.beforeEndDownScroll) delay = me.optDown.beforeEndDownScroll(me); // 结束下拉刷新的延时,单位ms
+	if (me.optDown.beforeEndDownScroll) {
+		delay = me.optDown.beforeEndDownScroll(me); // 结束下拉刷新的延时,单位ms
+		if(me.isDownEndSuccess == null) delay = 0; // 没有执行加载中,则不延时
+	}
 	if (typeof delay === 'number' && delay > 0) {
 		setTimeout(endScroll, delay);
 	} else {
@@ -605,7 +612,10 @@ MeScroll.prototype.endBySize = function(dataSize, totalSize, systime) {
 MeScroll.prototype.endSuccess = function(dataSize, hasNext, systime) {
 	let me = this;
 	// 结束下拉刷新
-	if (me.isDownScrolling) me.endDownScroll();
+	if (me.isDownScrolling) {
+		me.isDownEndSuccess = true
+		me.endDownScroll();
+	}
 
 	// 结束上拉加载
 	if (me.optUp.use) {
@@ -651,6 +661,7 @@ MeScroll.prototype.endSuccess = function(dataSize, hasNext, systime) {
 MeScroll.prototype.endErr = function(errDistance) {
 	// 结束下拉,回调失败重置回原来的页码和时间
 	if (this.isDownScrolling) {
+		this.isDownEndSuccess = false
 		let page = this.optUp.page;
 		if (page && this.prePageNum) {
 			page.num = this.prePageNum;

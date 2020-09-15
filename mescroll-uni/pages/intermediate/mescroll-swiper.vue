@@ -4,7 +4,7 @@
 		<me-tabs v-model="tabIndex" :tabs="tabs" :fixed="true" :tab-width="130"></me-tabs>
 		<swiper :style="{height: height}" :current="tabIndex" @change="swiperChange">
 			<swiper-item v-for="(tab,i) in tabs" :key="i">
-				<mescroll-item :i="i" :index="tabIndex" :tabs="tabs"></mescroll-item>
+				<mescroll-item ref="mescrollItem" :i="i" :index="tabIndex" :tabs="tabs"></mescroll-item>
 			</swiper-item>
 		</swiper>
 	</view>
@@ -28,11 +28,28 @@
 			// 轮播菜单
 			swiperChange(e){
 				this.tabIndex = e.detail.current
-			}
+			},
+			// 获取指定下标的mescroll对象
+			// getMescroll(i){
+			// 	let mescrollItems = this.$refs.mescrollItem;
+			// 	if(mescrollItems){
+			// 		let item = mescrollItems[i]
+			// 		if(item) return item.mescroll
+			// 	}
+			// 	return null
+			// }
 		},
 		onLoad() {
 			// 需要固定swiper的高度
 			this.height = uni.getSystemInfoSync().windowHeight + 'px'
+		},
+		onShow() {
+			// 返回刷新: https://www.mescroll.com/uni.html#note 第二点
+			// if(this.canReset){
+			// 	let curMescroll = this.getMescroll(this.tabIndex)
+			// 	curMescroll && curMescroll.resetUpScroll()
+			// }
+			// this.canReset = true
 		}
 	}
 </script>
