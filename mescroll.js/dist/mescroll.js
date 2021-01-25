@@ -961,10 +961,12 @@
     }
     me.isScrollTo = true; // 标记在滑动中,阻止列表的触摸事件
     me.scrollDom.style.webkitOverflowScrolling = 'auto';
+	me.scrollDom.style.overflow = "hidden"; // 避免iOS惯性滚动的影响
     me.getStep(star, end, function (step) {
       me.setScrollTop(step);
       if (step === end) {
         me.scrollDom.style.webkitOverflowScrolling = 'touch';
+		me.scrollDom.style.overflow = "auto";
         me.isScrollTo = false;
       }
     }, t)
