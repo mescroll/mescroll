@@ -70,6 +70,7 @@
       autoShowLoading: false, // 如果设置auto=true(在初始化完毕之后自动执行下拉刷新的回调),那么是否显示下拉刷新的进度; 默认false
       isLock: false, // 是否锁定下拉刷新,默认false;
       isBoth: false, // 下拉刷新时,如果滑动到列表底部是否可以同时触发上拉加载;默认false,两者不可同时触发;
+      isBounce: false, // 是否允许下拉回弹，有些情况下比如mescroll滑动到顶部需要继续带动整个外层body滑动，而默认情况下在mescroll顶部位置下拉时阻止了浏览器默认行为
       offset: 80, // 在列表顶部,下拉大于80px,松手即可触发下拉刷新的回调
       inOffsetRate: 1, // 在列表顶部,下拉的距离小于offset时,改变下拉区域高度比例;值小于1且越接近0,高度变化越小,表现为越往下越难拉
       outOffsetRate: 0.2, // 在列表顶部,下拉的距离大于offset时,改变下拉区域高度比例;值小于1且越接近0,高度变化越小,表现为越往下越难拉
@@ -268,7 +269,9 @@
       if (moveY > 0) {
         // 在顶部
         if (scrollTop <= 0) {
-          me.preventDefault(e); // 阻止浏览器默认的滚动,避免触发bounce
+          if (!me.optDown.isBounce) {
+            me.preventDefault(e); // 阻止浏览器默认的滚动,避免触发bounce
+          }
 
           // 可下拉的条件
           if (me.optDown.use && !me.inTouchend && !me.isDownScrolling && !me.optDown.isLock && (!me.isUpScrolling || (me.isUpScrolling && me.optUp.isBoth))) {
