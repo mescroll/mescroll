@@ -13,10 +13,9 @@ const MescrollCompMixin = {
 	onPullDownRefresh(){
 		this.handlePullDownRefresh()
 	},
-	// mescroll-body写在子子子...组件的情况 (多级)
 	data() {
 		return {
-			mescroll: {
+			mescroll: { // mescroll-body写在子子子...组件的情况 (多级)
 				onPageScroll: e=>{
 					this.handlePageScroll(e)
 				},

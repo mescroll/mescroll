@@ -5,7 +5,7 @@ const MescrollMoreMixin = {
 	data() {
 		return {
 			tabIndex: 0, // 当前tab下标
-			mescroll: {
+			mescroll: { // mescroll-body写在子子子...组件的情况 (多级)
 				onPageScroll: e=>{
 					this.handlePageScroll(e)
 				},

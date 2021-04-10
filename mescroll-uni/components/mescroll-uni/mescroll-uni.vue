@@ -87,11 +87,50 @@
 	// 引入兼容wxs(含renderjs)写法的mixins
 	import WxsMixin from './wxs/mixins.js';
 	
+	/**
+	 * mescroll-uni 嵌在页面某个区域的下拉刷新和上拉加载组件, 如嵌在弹窗,浮层,swiper中...
+	 * @property {Object} down 下拉刷新的参数配置
+	 * @property {Object} up 上拉加载的参数配置
+	 * @property {Object} i18n 国际化的参数配置
+	 * @property {String, Number} top 下拉布局往下的偏移量 (支持20, "20rpx", "20px", "20%"格式的值, 其中纯数字则默认单位rpx, 百分比则相对于windowHeight)
+	 * @property {Boolean, String} topbar 偏移量top是否加上状态栏高度, 默认false (使用场景:取消原生导航栏时,配置此项可留出状态栏的占位, 支持传入字符串背景,如色值,背景图,渐变)
+	 * @property {String, Number} bottom 上拉布局往上的偏移量 (支持20, "20rpx", "20px", "20%"格式的值, 其中纯数字则默认单位rpx, 百分比则相对于windowHeight)
+	 * @property {Boolean} safearea 偏移量bottom是否加上底部安全区的距离, 默认false (需要适配iPhoneX时使用)
+	 * @property {Boolean} fixed 是否通过fixed固定mescroll的高度, 默认true
+	 * @property {String, Number} height 指定mescroll的高度, 此项有值,则不使用fixed. (支持20, "20rpx", "20px", "20%"格式的值, 其中纯数字则默认单位rpx, 百分比则相对于windowHeight)
+	 * @property {Boolean} bottombar 底部是否偏移TabBar的高度 (仅在H5端的tab页生效)
+	 * @event {Function} init 初始化完成的回调 
+	 * @event {Function} down 下拉刷新的回调
+	 * @event {Function} up 上拉加载的回调 
+	 * @event {Function} emptyclick 点击empty配置的btnText按钮回调
+	 * @event {Function} topclick 点击回到顶部的按钮回调
+	 * @event {Function} scroll 滚动监听 (需在 up 配置 onScroll:true 才生效)
+	 * @example <mescroll-uni ref="mescrollRef" @init="mescrollInit" @down="downCallback" @up="upCallback"> ... </mescroll-uni>
+	 */
 	export default {
+		name: 'mescroll-uni',
 		mixins: [WxsMixin],
 		components: {
 			MescrollEmpty,
 			MescrollTop
+		},
+		props: {
+			down: Object,
+			up: Object,
+			i18n: Object,
+			top: [String, Number],
+			topbar: [Boolean, String],
+			bottom: [String, Number],
+			safearea: Boolean,
+			fixed: {
+				type: Boolean,
+				default: true
+			},
+			height: [String, Number],
+			bottombar:{
+				type: Boolean,
+				default: true
+			}
 		},
 		data() {
 			return {
@@ -109,23 +148,6 @@
 				windowBottom: 0, // 可使用窗口的底部位置
 				windowHeight: 0, // 可使用窗口的高度
 				statusBarHeight: 0 // 状态栏高度
-			}
-		},
-		props: {
-			down: Object, // 下拉刷新的参数配置
-			up: Object, // 上拉加载的参数配置
-			top: [String, Number], // 下拉布局往下的偏移量 (支持20, "20rpx", "20px", "20%"格式的值, 其中纯数字则默认单位rpx, 百分比则相对于windowHeight)
-			topbar: [Boolean, String], // top的偏移量是否加上状态栏高度, 默认false (使用场景:取消原生导航栏时,配置此项可留出状态栏的占位, 支持传入字符串背景,如色值,背景图,渐变)
-			bottom: [String, Number], // 上拉布局往上的偏移量 (支持20, "20rpx", "20px", "20%"格式的值, 其中纯数字则默认单位rpx, 百分比则相对于windowHeight)
-			safearea: Boolean, // bottom的偏移量是否加上底部安全区的距离, 默认false (需要适配iPhoneX时使用)
-			fixed: { // 是否通过fixed固定mescroll的高度, 默认true
-				type: Boolean,
-				default: true
-			},
-			height: [String, Number], // 指定mescroll的高度, 此项有值,则不使用fixed. (支持20, "20rpx", "20px", "20%"格式的值, 其中纯数字则默认单位rpx, 百分比则相对于windowHeight)
-			bottombar:{ // 底部是否偏移TabBar的高度(默认仅在H5端的tab页生效)
-				type: Boolean,
-				default: true
 			}
 		},
 		computed: {
@@ -338,13 +360,19 @@
 				}
 			}
 
-			MeScroll.extend(diyOption, GlobalOption); // 混入全局的配置
+			let i18nType = uni.getStorageSync("mescroll-i18n") || GlobalOption.i18n.type // 当前语言
+			let i18nOption = {type: i18nType} // 国际化配置
+			MeScroll.extend(i18nOption, vm.i18n) // 具体页面的国际化配置
+			MeScroll.extend(i18nOption, GlobalOption.i18n) // 全局的国际化配置
+			MeScroll.extend(diyOption, i18nOption[i18nType]); // 混入国际化配置
+			MeScroll.extend(diyOption, {down:GlobalOption.down, up:GlobalOption.up}); // 混入全局的配置
 			let myOption = JSON.parse(JSON.stringify({'down': vm.down,'up': vm.up})) // 深拷贝,避免对props的影响
 			MeScroll.extend(myOption, diyOption); // 混入具体界面的配置
 
 			// 初始化MeScroll对象
 			vm.mescroll = new MeScroll(myOption);
 			vm.mescroll.viewId = vm.viewId; // 附带id
+			vm.mescroll.i18n = i18nOption; // 挂载语言包
 			// init回调mescroll对象
 			vm.$emit('init', vm.mescroll);
 			
@@ -409,10 +437,33 @@
 			if (vm.up && vm.up.toTop && vm.up.toTop.safearea != null) {} else {
 				vm.mescroll.optUp.toTop.safearea = vm.safearea;
 			}
+			
+			// 全局配置监听
+			uni.$on("setMescrollGlobalOption", options=>{
+				if(!options) return;
+				let i18nType = options.i18n ? options.i18n.type : null
+				if(i18nType && vm.mescroll.i18n.type != i18nType){
+					vm.mescroll.i18n.type = i18nType
+					uni.setStorageSync("mescroll-i18n", i18nType)
+					MeScroll.extend(options, vm.mescroll.i18n[i18nType])
+				}
+				if(options.down){
+					let down = MeScroll.extend({}, options.down)
+					vm.mescroll.optDown = MeScroll.extend(down, vm.mescroll.optDown)
+				}
+				if(options.up){
+					let up = MeScroll.extend({}, options.up)
+					vm.mescroll.optUp = MeScroll.extend(up, vm.mescroll.optUp)
+				}
+			})
 		},
 		mounted() {
 			// 设置容器的高度
 			this.setClientHeight()
+		},
+		destroyed() {
+			// 注销全局配置监听
+			uni.$off("setMescrollGlobalOption")
 		}
 	}
 </script>

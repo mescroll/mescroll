@@ -1,12 +1,12 @@
 /* mescroll
- * version 1.3.3
- * 2020-09-15 wenju
+ * version 1.3.5
+ * 2021-04-10 wenju
  * https://www.mescroll.com
  */
 
 export default function MeScroll(options, isScrollBody) {
 	let me = this;
-	me.version = '1.3.3'; // mescroll版本号
+	me.version = '1.3.5'; // mescroll版本号
 	me.options = options || {}; // 配置
 	me.isScrollBody = isScrollBody || false; // 滚动区域是否为原生页面滚动; 默认为scroll-view
 
@@ -58,7 +58,7 @@ MeScroll.prototype.extendDownScroll = function(optDown) {
 		textLoading: '加载中 ...', // 加载中的提示文本
 		textSuccess: '加载成功', // 加载成功的文本
 		textErr: '加载失败', // 加载失败的文本
-		beforeEndDelay: 100, // 延时结束的时长 (显示加载成功/失败的时长)
+		beforeEndDelay: 0, // 延时结束的时长 (显示加载成功/失败的时长, android小程序设置此项结束下拉会卡顿, 配置后请注意测试)
 		bgColor: "transparent", // 背景颜色 (建议在pages.json中再设置一下backgroundColorTop)
 		textColor: "gray", // 文本颜色 (当bgColor配置了颜色,而textColor未配置时,则textColor会默认为白色)
 		inited: null, // 下拉刷新初始化完毕的回调
