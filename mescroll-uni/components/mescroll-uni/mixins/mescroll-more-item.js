@@ -28,10 +28,7 @@ const MescrollMoreItemMixin = {
 	watch:{
 		// 监听下标的变化
 		index(val){
-			if (this.i === val && !this.isInit) {
-				this.isInit = true; // 标记为true
-				this.mescroll && this.mescroll.triggerDownScroll();
-			}
+			if (this.i === val && !this.isInit) this.mescrollTrigger()
 		}
 	},
 	methods: {
@@ -49,10 +46,20 @@ const MescrollMoreItemMixin = {
 			this.mescrollInitByRef && this.mescrollInitByRef(); // 兼容字节跳动小程序
 			// 自动加载当前tab的数据
 			if(this.i === this.index){
-				this.isInit = true; // 标记为true
-				this.mescroll.triggerDownScroll();
+				this.mescrollTrigger()
 			}
 		},
+		// 主动触发加载
+		mescrollTrigger(){
+			this.isInit = true; // 标记为true
+			if (this.mescroll) {
+				if (this.mescroll.optDown.use) {
+					this.mescroll.triggerDownScroll();
+				} else{
+					this.mescroll.triggerUpScroll();
+				}
+			}
+		}
 	}
 }
 

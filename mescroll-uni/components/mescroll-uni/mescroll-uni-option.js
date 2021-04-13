@@ -24,8 +24,6 @@ const GlobalOption = {
 	},
 	// 国际化配置
 	i18n: {
-		// 当前语言
-		type: "zh",
 		// 中文
 		zh: {
 			down: {

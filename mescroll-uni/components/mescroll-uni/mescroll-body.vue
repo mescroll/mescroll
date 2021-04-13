@@ -82,6 +82,8 @@
 	import GlobalOption from './mescroll-uni-option.js';
 	// 引入空布局组件
 	import MescrollEmpty from './components/mescroll-empty.vue';
+	// 引入国际化工具类
+	import mescrollI18n from './mescroll-i18n.js';
 	// 引入回到顶部组件
 	import MescrollTop from './components/mescroll-top.vue';
 	// 引入兼容wxs(含renderjs)写法的mixins
@@ -301,7 +303,7 @@
 				}
 			};
 			
-			let i18nType = uni.getStorageSync("mescroll-i18n") || GlobalOption.i18n.type // 当前语言
+			let i18nType = mescrollI18n.getType() // 当前语言类型
 			let i18nOption = {type: i18nType} // 国际化配置
 			MeScroll.extend(i18nOption, vm.i18n) // 具体页面的国际化配置
 			MeScroll.extend(i18nOption, GlobalOption.i18n) // 全局的国际化配置
@@ -374,7 +376,7 @@
 				let i18nType = options.i18n ? options.i18n.type : null
 				if(i18nType && vm.mescroll.i18n.type != i18nType){
 					vm.mescroll.i18n.type = i18nType
-					uni.setStorageSync("mescroll-i18n", i18nType)
+					mescrollI18n.setType(i18nType)
 					MeScroll.extend(options, vm.mescroll.i18n[i18nType])
 				}
 				if(options.down){

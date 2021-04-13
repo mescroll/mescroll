@@ -82,6 +82,8 @@
 	import GlobalOption from './mescroll-uni-option.js';
 	// 引入空布局组件
 	import MescrollEmpty from './components/mescroll-empty.vue';
+	// 引入国际化工具类
+	import mescrollI18n from './mescroll-i18n.js';
 	// 引入回到顶部组件
 	import MescrollTop from './components/mescroll-top.vue';
 	// 引入兼容wxs(含renderjs)写法的mixins
@@ -99,6 +101,7 @@
 	 * @property {Boolean} fixed 是否通过fixed固定mescroll的高度, 默认true
 	 * @property {String, Number} height 指定mescroll的高度, 此项有值,则不使用fixed. (支持20, "20rpx", "20px", "20%"格式的值, 其中纯数字则默认单位rpx, 百分比则相对于windowHeight)
 	 * @property {Boolean} bottombar 底部是否偏移TabBar的高度 (仅在H5端的tab页生效)
+	 * @property {Boolean} disableScroll 是否禁止滚动, 默认false
 	 * @event {Function} init 初始化完成的回调 
 	 * @event {Function} down 下拉刷新的回调
 	 * @event {Function} up 上拉加载的回调 
@@ -130,7 +133,8 @@
 			bottombar:{
 				type: Boolean,
 				default: true
-			}
+			},
+			disableScroll: Boolean
 		},
 		data() {
 			return {
@@ -198,6 +202,7 @@
 			},
 			// 列表是否可滑动
 			scrollable(){
+				if(this.disableScroll) return false
 				return this.downLoadType===0 || this.isDownReset
 			},
 			// 是否在加载中
@@ -360,7 +365,7 @@
 				}
 			}
 
-			let i18nType = uni.getStorageSync("mescroll-i18n") || GlobalOption.i18n.type // 当前语言
+			let i18nType = mescrollI18n.getType() // 当前语言类型
 			let i18nOption = {type: i18nType} // 国际化配置
 			MeScroll.extend(i18nOption, vm.i18n) // 具体页面的国际化配置
 			MeScroll.extend(i18nOption, GlobalOption.i18n) // 全局的国际化配置
@@ -444,7 +449,7 @@
 				let i18nType = options.i18n ? options.i18n.type : null
 				if(i18nType && vm.mescroll.i18n.type != i18nType){
 					vm.mescroll.i18n.type = i18nType
-					uni.setStorageSync("mescroll-i18n", i18nType)
+					mescrollI18n.setType(i18nType)
 					MeScroll.extend(options, vm.mescroll.i18n[i18nType])
 				}
 				if(options.down){

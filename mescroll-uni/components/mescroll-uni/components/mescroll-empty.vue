@@ -1,21 +1,22 @@
-<!--空布局
+<!--空布局:
 
 可作为独立的组件, 不使用mescroll的页面也能单独引入, 以便APP全局统一管理:
 import MescrollEmpty from '@/components/mescroll-uni/components/mescroll-empty.vue';
 <mescroll-empty v-if="isShowEmpty" :option="optEmpty" @emptyclick="emptyClick"></mescroll-empty>
-
 -->
 <template>
 	<view class="mescroll-empty" :class="{ 'empty-fixed': option.fixed }" :style="{ 'z-index': option.zIndex, top: option.top }">
 		<view> <image v-if="icon" class="empty-icon" :src="icon" mode="widthFix" /> </view>
 		<view v-if="tip" class="empty-tip">{{ tip }}</view>
-		<view v-if="option.btnText" class="empty-btn" @click="emptyClick">{{ option.btnText }}</view>
+		<view v-if="btnText" class="empty-btn" @click="emptyClick">{{ btnText }}</view>
 	</view>
 </template>
 
 <script>
 // 引入全局配置
 import GlobalOption from './../mescroll-uni-option.js';
+// 引入国际化工具类
+import mescrollI18n from './../mescroll-i18n.js';
 export default {
 	props: {
 		// empty的配置项: 默认为GlobalOption.up.empty
@@ -30,11 +31,38 @@ export default {
 	computed: {
 		// 图标
 		icon() {
-			return this.option.icon == null ? GlobalOption.up.empty.icon : this.option.icon; // 此处不使用短路求值, 用于支持传空串不显示图标
+			if (this.option.icon != null) { // 此处不使用短路求值, 用于支持传空串不显示图标
+				return this.option.icon
+			} else{
+				let i18nType = mescrollI18n.getType() // 国际化配置
+				if (this.option.i18n) {
+					return this.option.i18n[i18nType].icon
+				} else{
+					return GlobalOption.i18n[i18nType].up.empty.icon || GlobalOption.up.empty.icon
+				}
+			}
 		},
 		// 文本提示
 		tip() {
-			return this.option.tip == null ? GlobalOption.up.empty.tip : this.option.tip; // 此处不使用短路求值, 用于支持传空串不显示文本提示
+			if (this.option.tip != null) { // 支持传空串不显示文本提示
+				return this.option.tip
+			} else{
+				let i18nType = mescrollI18n.getType() // 国际化配置
+				if (this.option.i18n) {
+					return this.option.i18n[i18nType].tip
+				} else{
+					return GlobalOption.i18n[i18nType].up.empty.tip || GlobalOption.up.empty.tip
+				}
+			}
+		},
+		// 按钮文本
+		btnText() {
+			if (this.option.i18n) {
+				let i18nType = mescrollI18n.getType() // 国际化配置
+				return this.option.i18n[i18nType].btnText
+			} else{
+				return this.option.btnText
+			}
 		}
 	},
 	methods: {
