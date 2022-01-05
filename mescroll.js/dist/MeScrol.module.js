@@ -4,6 +4,13 @@
  * http://www.mescroll.com
  */
 
+/** @Todos
+ * #PC端问题
+ *  下拉刷新，鼠标滚动的支持
+ * #移动端（只在IOS 15上测试过，前端业余爱好者）
+ *  下拉列表部分input无法输入？？
+ */
+
 
 // @示例
 // import MeScroll from "./MeScrol.module.js";
@@ -31,23 +38,19 @@ export default class MeScroll {
         if (!this.scrollDom) return;
 
         this.options = options || {}; // 配置
+        const hasDownCallback = this.options.down && this.options.down.callback; // 是否配置了down的callback
 
         const u = navigator.userAgent;
-        const isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); // 是否为ios设备
-        const isPC = typeof window.orientation === 'undefined'; // 是否为PC端
-        const isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1;// 是否为android端
-        const isWx = u.toLowerCase().match(/MicroMessenger/i) == 'micromessenger'; // 是否为微信端,此处不能为===,因为match的结果可能是null或数组
-
         this.os = {
-            ios: isIOS,
-            pc: isPC,
-            android: isAndroid,
-            wx: isWx
+            ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/),
+            pc: typeof window.orientation === 'undefined',
+            android: u.indexOf('Android') > -1 || u.indexOf('Adr') > -1,
+            wx: u.toLowerCase().match(/MicroMessenger/i) == 'micromessenger'
         }
 
         this.isDownScrolling = false; // 是否在执行下拉刷新的回调
         this.isUpScrolling = false; // 是否在执行上拉加载的回调
-        const hasDownCallback = this.options.down && this.options.down.callback; // 是否配置了down的callback
+        
 
         // 初始化下拉刷新
         this.initDownScroll();
