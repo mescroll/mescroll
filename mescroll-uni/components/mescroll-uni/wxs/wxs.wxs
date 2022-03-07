@@ -63,6 +63,7 @@ me.clearTransform = function (ins){
  * 监听逻辑层数据的变化 (实时更新数据)
  */
 function propObserver(wxsProp) {
+	if(!wxsProp) return
 	me.optDown = wxsProp.optDown
 	me.scrollTop = wxsProp.scrollTop
 	me.bodyHeight = wxsProp.bodyHeight
