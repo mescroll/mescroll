@@ -51,7 +51,7 @@
 		</scroll-view>
 
 		<!-- 回到顶部按钮 (fixed元素,需写在scroll-view外面,防止滚动的时候抖动)-->
-		<mescroll-top v-model="isShowToTop" :option="mescroll.optUp.toTop" @click="toTopClick"></mescroll-top>
+		<mescroll-top :value="isShowToTop" :option="mescroll.optUp.toTop" @click="toTopClick"></mescroll-top>
 		
 		<!-- #ifdef MP-WEIXIN || MP-QQ || APP-PLUS || H5 -->
 		<!-- renderjs的数据载体,不可写在mescroll-downwarp内部,避免use为false时,载体丢失,无法更新数据 -->
