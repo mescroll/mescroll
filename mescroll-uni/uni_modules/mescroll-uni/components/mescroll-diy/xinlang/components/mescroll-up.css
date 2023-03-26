@@ -1,0 +1,32 @@
+/*上拉加载--旋转进度条*/
+.mescroll-upwarp .upwarp-progress {
+	width: 36px;
+	height: 36px;
+	border: none;
+	margin: auto;
+	background-size: contain;
+	animation: progressRotate 0.6s steps(6, start) infinite;
+}
+@keyframes progressRotate {
+	0% {
+		background-image: url(https://www.mescroll.com/img/xinlang/mescroll-progress1.png);
+	}
+	16% {
+		background-image: url(https://www.mescroll.com/img/xinlang/mescroll-progress2.png);
+	}
+	32% {
+		background-image: url(https://www.mescroll.com/img/xinlang/mescroll-progress3.png);
+	}
+	48% {
+		background-image: url(https://www.mescroll.com/img/xinlang/mescroll-progress4.png);
+	}
+	64% {
+		background-image: url(https://www.mescroll.com/img/xinlang/mescroll-progress5.png);
+	}
+	80% {
+		background-image: url(https://www.mescroll.com/img/xinlang/mescroll-progress6.png);
+	}
+	100% {
+		background-image: url(https://www.mescroll.com/img/xinlang/mescroll-progress1.png);
+	}
+}

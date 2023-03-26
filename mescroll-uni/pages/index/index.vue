@@ -3,12 +3,8 @@
 		
 		<view class="group-title">base demos 基础案例</view>
 		
-		<navigator url="/pages/base/list-news">
-			<view class="demo-li">list-news 新闻列表 <text class="demo-tip">下拉刷新添加数据到列表顶部</text></view>
-		</navigator>
-		
 		<navigator url="/pages/base/list-products">
-			<view class="demo-li">list-products 商品列表 <text class="demo-tip">下拉刷新重置列表数据</text></view>
+			<view class="demo-li">mescroll 极简示例 <text class="demo-tip">大部分情况就是这么用</text></view>
 		</navigator>
 		
 		<navigator url="/pages/base/mescroll-options">
@@ -31,9 +27,10 @@
 			<view class="demo-li">list-search 商品搜索<text class="demo-tip">this.mescroll.resetUpScroll()的使用</text></view>
 		</navigator>
 		
-		<navigator url="/pages/base/list-msg">
-			<view class="demo-li">list-msg 聊天记录 <text class="demo-tip">保持当前内容的位置</text></view>
+		<navigator url="/pages/base/list-news">
+			<view class="demo-li">list-news 新闻列表 <text class="demo-tip">下拉刷新添加数据到列表顶部</text></view>
 		</navigator>
+		
 		
 		<navigator url="/pages/base/mescroll-native">
 			<view class="demo-li">mescroll-native<text class="demo-tip">系统自带的下拉刷新,性能最好</text></view>
@@ -43,38 +40,54 @@
 			<view class="demo-li">mescroll-uni<text class="demo-tip">基于scroll-view,常用在浮窗弹层等局部区域</text></view>
 		</navigator>
 		
-		<navigator url="/pages/base/mescroll-uni-part">
-			<view class="demo-li">mescroll-uni-part<text class="demo-tip">mescroll-uni用flex实现局部区域滚动</text></view>
+		<navigator url="/pages/base/mescroll-empty">
+			<view class="demo-li">mescroll-empty<text class="demo-tip">空布局的单独使用</text></view>
 		</navigator>
 		
-		<navigator url="/pages/base/mescroll-body-part">
-			<view class="demo-li">mescroll-body-part<text class="demo-tip">mescroll-body实现"局部区域"滚动</text></view>
+		<navigator url="/pages/base/mescroll-i18n">
+			<view class="demo-li">mescroll-i18n<text class="demo-tip">语言国际化</text></view>
 		</navigator>
 		
 		<view class="group-title">intermediate demos 中级案例</view>
 		
-		<navigator url="/pages/base/sticky">
+		<navigator url="/pages/intermediate/list-msg">
+			<view class="demo-li">list-msg 聊天记录 <text class="demo-tip">保持当前内容的位置</text></view>
+		</navigator>
+		
+		<navigator url="/pages/intermediate/mescroll-uni-part">
+			<view class="demo-li">mescroll-uni-part<text class="demo-tip">mescroll-uni用flex实现局部区域滚动</text></view>
+		</navigator>
+		
+		<navigator url="/pages/intermediate/mescroll-body-part">
+			<view class="demo-li">mescroll-body-part<text class="demo-tip">mescroll-body实现"局部区域"滚动</text></view>
+		</navigator>
+		
+		<navigator url="/pages/intermediate/sticky">
 			<view class="demo-li">sticky吸顶悬浮<text class="demo-tip">切换菜单刷新列表, 原生css实现</text></view>
 		</navigator>
 		
-		<navigator url="/pages/base/sticky-data">
+		<navigator url="/pages/intermediate/sticky-data">
 			<view class="demo-li">sticky-data吸顶悬浮<text class="demo-tip">切换菜单缓存数据, 原生css实现</text></view>
 		</navigator>
 		
-		<navigator url="/pages/base/sticky-scroll">
+		<navigator url="/pages/intermediate/sticky-scroll">
 			<view class="demo-li">sticky-scroll吸顶悬浮<text class="demo-tip">切换tab刷新列表,监听滚动实现</text></view>
 		</navigator>
 		
-		<navigator url="/pages/base/sticky-scroll-data">
+		<navigator url="/pages/intermediate/sticky-scroll-data">
 			<view class="demo-li">sticky-scroll-data吸顶悬浮<text class="demo-tip">切换tab缓存数据,监听滚动实现</text></view>
 		</navigator>
 		
-		<navigator url="/pages/base/sticky-uni">
+		<navigator url="/pages/intermediate/sticky-uni">
 			<view class="demo-li">sticky-uni吸顶悬浮<text class="demo-tip">测试mescroll-uni使用sticky</text></view>
 		</navigator>
 		
 		<navigator url="/pages/intermediate/mescroll-swiper">
 			<view class="demo-li">mescroll-swiper<text class="demo-tip">轮播菜单导航</text></view>
+		</navigator>
+		
+		<navigator url="/pages/intermediate/mescroll-swiper-sticky">
+			<view class="demo-li">mescroll-swiper-sticky<text class="demo-tip">吸顶轮播菜单导航</text></view>
 		</navigator>
 		
 		<navigator url="/pages/intermediate/beibei">

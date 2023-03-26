@@ -1,5 +1,5 @@
 <template>
-	<mescroll-body ref="mescrollRef" @init="mescrollInit" @down="downCallback" @up="upCallback" 
+	<mescroll-body @init="mescrollInit" @down="downCallback" @up="upCallback" 
 	 :down="downOption" 
 	 :up="upOption" 
 	 :top="0" 
@@ -9,6 +9,7 @@
 	 :fixed="true" 
 	 height="100%" 
 	 :safearea="false" 
+	 :sticky="true"
 	 @emptyclick="emptyClick" 
 	 @topclick="topClick" 
 	 @scroll="scroll">
@@ -21,8 +22,10 @@
 		<!-- 滚动到子组件,小程序必须用'跨自定义组件的后代选择器' -->
 		<view class="tip" @click="scrollIntoView('.good-comp >>> #good2')">点此测试滚动到指定view (元素在子组件)</view>
 		
-		<!-- tab组件 -->
-		<me-tabs v-model="tabIndex" :tabs="tabs" @change="tabChange"></me-tabs>
+		<!-- sticky吸顶悬浮的菜单 (父元素必须是 mescroll, 且mescroll配置:sticky="true") -->
+		<view class="sticky-tabs">
+			<me-tabs v-model="tabIndex" :tabs="tabs" @change="tabChange"></me-tabs>
+		</view>
 		
 		<!-- 视频请尽量使用me-video组件 (video在APP中是原生组件, 真机APP端下拉渲染不及时.) -->
 		<!-- 使用me-video组件, 未播放时自动展示image封面, 播放时才显示video, 提高性能; 当加上 :mescroll="mescroll"之后, 如果播放中执行下拉,会自动隐藏视频,显示封面,避免视频下拉悬浮错位(仅APP端这样处理) -->
@@ -34,11 +37,11 @@
 </template>
 
 <script>
-	import MescrollMixin from "@/components/mescroll-uni/mescroll-mixins.js";
-	import {apiSearch} from "@/api/mock.js"
+	import MescrollMixin from "@/uni_modules/mescroll-uni/components/mescroll-uni/mescroll-mixins.js";
+	import {apiGoods} from "@/api/mock.js"
 	
 	export default {
-		mixins: [MescrollMixin], // 使用mixin (在main.js注册全局组件)
+		mixins: [MescrollMixin], // 使用mixin
 		data() {
 			return {
 				downOption: {
@@ -52,6 +55,7 @@
 					outOffsetRate: 0.2, // 在列表顶部,下拉的距离大于offset时,改变下拉区域高度比例;值小于1且越接近0,高度变化越小,表现为越往下越难拉
 					bottomOffset: 20, // 当手指touchmove位置在距离body底部20upx范围内的时候结束上拉刷新,避免Webview嵌套导致touchend事件不执行
 					minAngle: 45, // 向下滑动最少偏移的角度,取值区间  [0,90];默认45度,即向下滑动的角度大于45度则触发下拉;而小于45度,将不触发下拉,避免与左右滑动的轮播等组件冲突;
+					beforeEndDelay: 0, // 延时结束的时长 (显示加载成功/失败的时长, android小程序设置此项结束下拉会卡顿, 配置后请注意测试)
 					bgColor: "#E75A7C", // 背景颜色 (建议在pages.json中再设置一下backgroundColorTop)
 					textColor: "#fff", // 文本颜色 (当bgColor配置了颜色,而textColor未配置时,则textColor会默认为白色)
 					textInOffset: '下拉刷新', // 下拉的距离在offset范围内的提示文本
@@ -99,7 +103,7 @@
 					onScroll: true // 是否监听滚动事件, 默认false, 仅mescroll-uni生效; mescroll-body直接声明onPageScroll (配置为true时,可@scroll="scroll"获取到滚动条位置和方向; 注意监听列表滚动是非常耗性能的,很容易出现卡顿,非特殊情况不要配置此项)
 				},
 				goods: [], //列表数据
-				tabs: ['全部', '奶粉', '图书'],
+				tabs: [{name:'全部',type:'xx'}, {name:'奶粉',type:'xx'}, {name:'图书',type:'xx'}],
 				tabIndex: 0 // tab下标
 			}
 		},
@@ -114,26 +118,27 @@
 			/*上拉加载的回调: 其中page.num:当前页 从1开始, page.size:每页数据条数,默认10 */
 			upCallback(page) {
 				//联网加载数据
-				let keyword = this.tabs[this.tabIndex]
-				apiSearch(page.num, page.size, keyword).then(curPageData=>{
+				let curTab = this.tabs[this.tabIndex]
+				let keyword = curTab.name // 具体项目中,您可能取的是tab中的type,status等字段
+				apiGoods(page.num, page.size, keyword).then(res=>{
 					//联网成功的回调,隐藏下拉刷新和上拉加载的状态;
 					//mescroll会根据传的参数,自动判断列表如果无任何数据,则提示空;列表无下一页数据,则提示无更多数据;
 
 					//方法一(推荐): 后台接口有返回列表的总页数 totalPage
-					//this.mescroll.endByPage(curPageData.length, totalPage); //必传参数(当前页的数据个数, 总页数)
+					//this.mescroll.endByPage(res.list.length, res.totalPage); //必传参数(当前页的数据个数, 总页数)
 
 					//方法二(推荐): 后台接口有返回列表的总数据量 totalSize
-					//this.mescroll.endBySize(curPageData.length, totalSize); //必传参数(当前页的数据个数, 总数据量)
+					//this.mescroll.endBySize(res.list.length, res.totalSize); //必传参数(当前页的数据个数, 总数据量)
 
 					//方法三(推荐): 您有其他方式知道是否有下一页 hasNext
-					//this.mescroll.endSuccess(curPageData.length, hasNext); //必传参数(当前页的数据个数, 是否有下一页true/false)
+					//this.mescroll.endSuccess(res.list.length, res.hasNext); //必传参数(当前页的数据个数, 是否有下一页true/false)
 
 					//方法四 (不推荐),会存在一个小问题:比如列表共有20条数据,每页加载10条,共2页.如果只根据当前页的数据个数判断,则需翻到第三页才会知道无更多数据
-					this.mescroll.endSuccess(curPageData.length);
+					this.mescroll.endSuccess(res.list.length);
 
 					//设置列表数据
 					if(page.num == 1) this.goods = []; //如果是第一页需手动制空列表
-					this.goods=this.goods.concat(curPageData); //追加新数据
+					this.goods=this.goods.concat(res.list); //追加新数据
 					
 				}).catch(()=>{
 					//联网失败, 结束加载
@@ -187,5 +192,12 @@
 		height: 60upx;
 		line-height: 60upx;
 		text-align: center;
+	}
+	
+	.sticky-tabs{
+		z-index: 990;
+		position: sticky;
+		top: var(--window-top);
+		background-color: #fff;
 	}
 </style>

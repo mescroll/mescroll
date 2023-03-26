@@ -15,11 +15,11 @@
 </template>
 
 <script>
-	import MescrollMixin from "@/components/mescroll-uni/mescroll-mixins.js";
+	import MescrollMixin from "@/uni_modules/mescroll-uni/components/mescroll-uni/mescroll-mixins.js";
 	import {apiMsgList} from "@/api/mock.js"
 	
 	export default {
-		mixins: [MescrollMixin], // 使用mixin (在main.js注册全局组件)
+		mixins: [MescrollMixin], // 使用mixin
 		data() {
 			return {
 				downOption:{

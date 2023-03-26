@@ -4,7 +4,7 @@
 		<image class="header" src="https://www.mescroll.com/img/xinlang/header.jpg" mode="aspectFit"/>
 		<view :style="{'top':top}" class="download-tip">1条新微博</view>
 		
-		<mescroll-body-diy ref="mescrollRef" @init="mescrollInit" top="100" bottom="100" :down="downOption" @down="downCallback" @up="upCallback">
+		<mescroll-body-diy @init="mescrollInit" top="100" bottom="100" :down="downOption" @down="downCallback" @up="upCallback">
 			<!-- 新增的微博 -->
 			<view class="news-li" v-for="news in addList" :key="news.id">
 				<view>{{news.title}}</view>
@@ -25,12 +25,12 @@
 </template>
 
 <script>
-	import MescrollBodyDiy from "@/components/mescroll-diy/xinlang/mescroll-body.vue";
-	import MescrollMixin from "@/components/mescroll-uni/mescroll-mixins.js";
+	import MescrollBodyDiy from "@/uni_modules/mescroll-uni/components/mescroll-diy/xinlang/mescroll-body.vue";
+	import MescrollMixin from "@/uni_modules/mescroll-uni/components/mescroll-uni/mescroll-mixins.js";
 	import {apiWeiboList} from "@/api/mock.js"
 	
 	export default {
-		mixins: [MescrollMixin], // 使用mixin (在main.js注册全局组件)
+		mixins: [MescrollMixin], // 使用mixin
 		components: {
 			MescrollBodyDiy, // 避免与main.js注册的全局组件名称相同,否则注册组件失效(iOS真机 APP HBuilderX2.7.9)
 		},

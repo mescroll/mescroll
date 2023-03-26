@@ -1,5 +1,5 @@
 <template>
-	 <mescroll-body ref="mescrollRef" @init="mescrollInit" @down="downCallback" :up="upOption" @up="upCallback">
+	 <mescroll-body @init="mescrollInit" @down="downCallback" :up="upOption" @up="upCallback">
 		<view class="item">
 			<text class="tip">热门搜索:</text>
 			<text class="hot-word" @click="doSearch('奶粉')">奶粉</text>
@@ -15,11 +15,11 @@
 </template>
 
 <script>
-	import MescrollMixin from "@/components/mescroll-uni/mescroll-mixins.js";
-	import {apiSearch} from "@/api/mock.js"
+	import MescrollMixin from "@/uni_modules/mescroll-uni/components/mescroll-uni/mescroll-mixins.js";
+	import {apiGoods} from "@/api/mock.js"
 	
 	export default {
-		mixins: [MescrollMixin], // 使用mixin (在main.js注册全局组件)
+		mixins: [MescrollMixin], // 使用mixin
 		data() {
 			return {
 				upOption: {
@@ -52,17 +52,18 @@
 				this.curWord = word
 				this.goods = []; // 先清空列表,显示加载进度
 				this.mescroll.resetUpScroll();
+				// this.mescroll.hideUpScroll() // 不显示进度条
 			},
 			/*上拉加载的回调: 其中page.num:当前页 从1开始, page.size:每页数据条数,默认10 */
 			upCallback(page) {
 				//联网加载数据
-				apiSearch(page.num, page.size, this.curWord).then(curPageData=>{
+				apiGoods(page.num, page.size, this.curWord).then(res=>{
 					//联网成功的回调,隐藏下拉刷新和上拉加载的状态;
-					this.mescroll.endSuccess(curPageData.length);
+					this.mescroll.endSuccess(res.list.length);
 					//如果是第一页需手动制空列表
 					if(page.num == 1) this.goods = [];
 					//追加新数据
-					this.goods=this.goods.concat(curPageData);
+					this.goods=this.goods.concat(res.list);
 				}).catch(()=>{
 					//联网失败, 结束加载
 					this.mescroll.endErr();

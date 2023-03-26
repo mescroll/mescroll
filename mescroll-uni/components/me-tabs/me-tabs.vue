@@ -1,6 +1,6 @@
 <!-- tab组件: <me-tabs v-model="tabIndex" :tabs="tabs" @change="tabChange"></me-tabs> -->
 <template>
-	<view class="me-tabs" :class="{'tabs-fixed': fixed}" :style="{height: tabHeightVal}">
+	<view class="me-tabs" :class="{'tabs-fixed': fixed}" :style="{height: tabHeightVal, top:topFixed, 'margin-top':topMargin}">
 		<scroll-view v-if="tabs.length" :id="viewId" :scroll-left="scrollLeft" scroll-x scroll-with-animation :scroll-animation-duration="300">
 			<view class="tabs-item" :class="{'tabs-flex':!isScroll, 'tabs-scroll':isScroll}">
 				<!-- tab -->
@@ -36,12 +36,18 @@
 			height: { // 高度,单位rpx
 				type: Number,
 				default: 64
+			},
+			top: { // 顶部偏移的距离,默认单位rpx (当fixed=true时,已加上windowTop)
+				type: Number,
+				default: 0
 			}
 		},
 		data() {
 			return {
 				viewId: 'id_' + Math.random().toString(36).substr(2,16),
-				scrollLeft: 0
+				scrollLeft: 0,
+				windowWidth: 0,
+				windowTop: 0
 			}
 		},
 		computed: {
@@ -66,16 +72,35 @@
 				} else{
 					return 100/this.tabs.length*(this.value + 1) - 100/(this.tabs.length*2) + '%'
 				}
+			},
+			topFixed(){
+				return this.fixed ? this.windowTop + uni.upx2px(this.top) + 'px' : 0
+			},
+			topMargin(){
+				return this.fixed ? 0 : this.top + 'rpx'
 			}
 		},
 		watch: {
 			tabs() {
-				this.warpWidth = null; // 重新计算容器宽度
-				this.scrollCenter(); // 水平滚动到中间
+				// 水平滚动到中间
+				this.initWarpRect(()=>{
+					this.scrollCenter()
+				})
 			},
 			value() {
 				this.scrollCenter(); // 水平滚动到中间
 			}
+		},
+		created() {
+			let sys = uni.getSystemInfoSync();
+			this.windowWidth = sys.windowWidth
+			this.windowTop = sys.windowTop
+		},
+		mounted() {
+			// 滚动到当前下标
+			this.initWarpRect(()=>{
+				this.scrollCenter()
+			})
 		},
 		methods: {
 			getTabName(tab){
@@ -87,38 +112,21 @@
 					this.$emit("change",i);
 				}
 			},
-			async scrollCenter(){
+			scrollCenter(){
 				if(!this.isScroll) return;
-				if(!this.warpWidth){ // tabs容器的宽度
-					let rect = await this.initWarpRect()
-					this.warpWidth = rect ? rect.width : uni.getSystemInfoSync().windowWidth; // 某些情况下取不到宽度,暂时取屏幕宽度
-				}
 				let tabLeft = this.tabWidthPx * this.value + this.tabWidthPx/2; // 当前tab中心点到左边的距离
 				let diff = tabLeft - this.warpWidth/2 // 如果超过tabs容器的一半,则滚动差值
 				this.scrollLeft = diff;
-				// #ifdef MP-TOUTIAO
-				this.scrollTimer && clearTimeout(this.scrollTimer)
-				this.scrollTimer = setTimeout(()=>{ // 字节跳动小程序,需延时再次设置scrollLeft,否则tab切换跨度较大时不生效
-					this.scrollLeft = Math.ceil(diff)
-				},400)
-				// #endif
 			},
-			initWarpRect(){
-				return new Promise(resolve=>{
-					setTimeout(()=>{ // 延时确保dom已渲染, 不使用$nextclick
-						let query = uni.createSelectorQuery();
-						// #ifndef MP-ALIPAY
-						query = query.in(this) // 支付宝小程序不支持in(this),而字节跳动小程序必须写in(this), 否则都取不到值
-						// #endif
-						query.select('#'+this.viewId).boundingClientRect(data => {
-							resolve(data)
-						}).exec();
-					},20)
-				})
+			initWarpRect(success){
+				setTimeout(()=>{ // 延时确保dom已渲染, 不使用$nextclick
+					let query = uni.createSelectorQuery().in(this);
+					query.select('#'+this.viewId).boundingClientRect(rect => {
+						this.warpWidth = rect ? rect.width : this.windowWidth; // 某些情况下取不到宽度,暂时取屏幕宽度
+						success()
+					}).exec();
+				},20)
 			}
-		},
-		mounted() {
-			this.scrollCenter() // 滚动到当前下标
 		}
 	}
 </script>
@@ -135,7 +143,6 @@
 		&.tabs-fixed{
 			z-index: 990;
 			position: fixed;
-			top: var(--window-top);
 			left: 0;
 			width: 100%;
 		}

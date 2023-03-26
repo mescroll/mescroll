@@ -1,19 +1,19 @@
 <template>
 	<!-- 
-	swiper中的transfrom会使fixed失效,此时用height="100%"固定高度; 
+	swiper中的transfrom会使fixed失效,此时用height固定高度; 
 	swiper中无法触发mescroll-mixins.js的onPageScroll和onReachBottom方法,只能用mescroll-uni,不能用mescroll-body
 	-->
-	<!-- ref动态生成: 字节跳动小程序编辑器不支持一个页面存在相同的ref (如不考虑字节跳动小程序可固定值为 ref="mescrollRef") -->
-	 <mescroll-uni :ref="'mescrollRef'+i" @init="mescrollInit" height="100%" top="60" :down="downOption" @down="downCallback" :up="upOption" @up="upCallback" @emptyclick="emptyClick">
+	<!-- top的高度等于悬浮菜单tabs的高度 -->
+	 <mescroll-uni @init="mescrollInit" :height="height" :down="downOption" @down="downCallback" :up="upOption" @up="upCallback" @emptyclick="emptyClick">
 		<!-- 数据列表 -->
 		<good-list :list="goods"></good-list>
 	</mescroll-uni>
 </template>
 
 <script>
-	import MescrollMixin from "@/components/mescroll-uni/mescroll-mixins.js";
-	import MescrollMoreItemMixin from "@/components/mescroll-uni/mixins/mescroll-more-item.js";
-	import {apiSearch} from "@/api/mock.js"
+	import MescrollMixin from "@/uni_modules/mescroll-uni/components/mescroll-uni/mescroll-mixins.js";
+	import MescrollMoreItemMixin from "@/uni_modules/mescroll-uni/components/mescroll-uni/mixins/mescroll-more-item.js";
+	import {apiGoods} from "@/api/mock.js"
 	
 	export default {
 		mixins: [MescrollMixin,MescrollMoreItemMixin], // 注意此处还需使用MescrollMoreItemMixin (必须写在MescrollMixin后面)
@@ -50,7 +50,8 @@
 				default(){
 					return []
 				}
-			}
+			},
+			height: [Number,String] // mescroll的高度
 		},
 		methods: {
 			/*下拉刷新的回调 */
@@ -64,12 +65,12 @@
 			upCallback(page) {
 				//联网加载数据
 				let keyword = this.tabs[this.i].name
-				apiSearch(page.num, page.size, keyword).then(curPageData=>{
+				apiGoods(page.num, page.size, keyword).then(res=>{
 					//联网成功的回调,隐藏下拉刷新和上拉加载的状态;
-					this.mescroll.endSuccess(curPageData.length);
+					this.mescroll.endSuccess(res.list.length);
 					//设置列表数据
 					if(page.num == 1) this.goods = []; //如果是第一页需手动制空列表
-					this.goods=this.goods.concat(curPageData); //追加新数据
+					this.goods=this.goods.concat(res.list); //追加新数据
 				}).catch(()=>{
 					//联网失败, 结束加载
 					this.mescroll.endErr();

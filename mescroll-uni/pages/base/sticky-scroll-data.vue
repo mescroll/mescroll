@@ -32,11 +32,11 @@
 </template>
 
 <script>
-	import MescrollMixin from "@/components/mescroll-uni/mescroll-mixins.js";
-	import {apiSearch} from "@/api/mock.js"
+	import MescrollMixin from "@/uni_modules/mescroll-uni/components/mescroll-uni/mescroll-mixins.js";
+	import {apiGoods} from "@/api/mock.js"
 	
 	export default {
-		mixins: [MescrollMixin], // 使用mixin (在main.js注册全局组件)
+		mixins: [MescrollMixin], // 使用mixin
 		data() {
 			return {
 				upOption: {
@@ -76,7 +76,7 @@
 					uni.showLoading();
 				}
 				let keyword = this.tabs[this.tabIndex].name;
-				apiSearch(page.num, page.size, keyword).then(curPageData=>{
+				apiGoods(page.num, page.size, keyword).then(res=>{
 					//联网成功的回调
 					
 					// 当前tab数据
@@ -84,16 +84,16 @@
 					
 					//设置列表数据
 					if(page.num == 1) curTab.goods = []; //如果是第一页需手动制空列表
-					curTab.goods=curTab.goods.concat(curPageData); //追加新数据
+					curTab.goods=curTab.goods.concat(res.list); //追加新数据
 					
 					// 数据渲染完毕再隐藏加载状态 this.$nextTick在iOS真机不触发,需改成setTimeout
 					// this.$nextTick(()=>{
 					setTimeout(()=>{
 						// 需先隐藏加载状态
-						this.mescroll.endSuccess(curPageData.length);
+						this.mescroll.endSuccess(res.list.length);
 						// 再记录当前页的数据
 						curTab.num = page.num; // 页码
-						curTab.curPageLen = curPageData.length; // 当前页长
+						curTab.curPageLen = res.list.length; // 当前页长
 						curTab.hasNext = this.mescroll.optUp.hasNext; // 是否还有下一页
 						
 						// 设置nav到顶部的距离 (需根据自身的情况获取navTop的值, 这里放到列表数据渲染完毕之后)

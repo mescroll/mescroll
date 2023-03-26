@@ -1,5 +1,5 @@
 <template>
-	<mescroll-body ref="mescrollRef" @init="mescrollInit" :down="downOption" @down="downCallback" @up="upCallback">
+	<mescroll-body @init="mescrollInit" :down="downOption" @down="downCallback" @up="upCallback">
 		<view class="notice">本Demo的下拉刷新: 添加新数据到列表顶部</view>
 		<view class="news-li" v-for="news in dataList" :key="news.id">
 			<view>{{news.title}}</view>
@@ -9,11 +9,11 @@
 </template>
 
 <script>
-	import MescrollMixin from "@/components/mescroll-uni/mescroll-mixins.js";
+	import MescrollMixin from "@/uni_modules/mescroll-uni/components/mescroll-uni/mescroll-mixins.js";
 	import {apiNewList} from "@/api/mock.js"
 	
 	export default {
-		mixins: [MescrollMixin], // 使用mixin (在main.js注册全局组件)
+		mixins: [MescrollMixin], // 使用mixin
 		data() {
 			return {
 				downOption: {

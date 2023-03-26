@@ -24,15 +24,14 @@
 		<mescroll-item ref="mescrollItem7" :i="7" :index="tabIndex" :tabs="tabs"></mescroll-item>
 		<mescroll-item ref="mescrollItem8" :i="8" :index="tabIndex" :tabs="tabs"></mescroll-item>
 		
-		
-		<!-- 如果每个子组件布局一样, 则可使用v-for (注意v-for的ref="mescrollItem"必须是固定值; 另外支付宝小程序不支持此v-for的写法)-->
+		<!-- 如果每个子组件布局一样, 则可使用v-for (注意v-for的ref="mescrollItem"必须是固定值)-->
 		<!-- <mescroll-item ref="mescrollItem" v-for="(tab,i) in tabs" :key="i" :i="i" :index="tabIndex" :tabs="tabs"></mescroll-item> -->
 	</view>
 </template>
 
 <script>
 	import MescrollItem from "./mescroll-more-item.vue";
-	import MescrollMoreMixin from "@/components/mescroll-uni/mixins/mescroll-more.js";
+	import MescrollMoreMixin from "@/uni_modules/mescroll-uni/components/mescroll-uni/mixins/mescroll-more.js";
 	
 	export default {
 		mixins: [MescrollMoreMixin], // 多个mescroll-body写在子组件时, 则使用mescroll-more.js补充子组件的页面生命周期

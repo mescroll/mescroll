@@ -1,0 +1,47 @@
+/*下拉刷新--标语*/
+.mescroll-downwarp .downwarp-slogan{
+	display: block;
+	width: 420rpx;
+	height: 168rpx;
+	margin: auto;
+}
+/*下拉刷新--向下进度动画*/
+.mescroll-downwarp .downwarp-progress{
+	display: inline-block;
+	width: 40rpx;
+	height: 40rpx;
+	border: none;
+	margin: auto;
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-image: url(https://www.mescroll.com/img/beibei/mescroll-progress.png);
+	transition: all 300ms;
+}
+/*下拉刷新--进度条*/
+.mescroll-downwarp .downwarp-loading{
+	display: inline-block;
+	width: 32rpx;
+	height: 32rpx;
+	border-radius: 50%;
+	border: 2rpx solid #FF8095;
+	border-bottom-color: transparent;
+}
+/*下拉刷新--吉祥物*/
+.mescroll-downwarp .downwarp-mascot{
+	position: absolute;
+	right: 16rpx;
+	bottom: 0;
+	width: 100rpx;
+	height: 100rpx;
+	background-size: contain;
+	background-repeat: no-repeat;
+	animation: animMascot .6s steps(1,end) infinite;
+}
+@keyframes animMascot {
+	0% {background-image: url(https://www.mescroll.com/img/beibei/mescroll-bb1.png)}
+	25% {background-image: url(https://www.mescroll.com/img/beibei/mescroll-bb2.png)}
+	50% {background-image: url(https://www.mescroll.com/img/beibei/mescroll-bb3.png)}
+	75% {background-image: url(https://www.mescroll.com/img/beibei/mescroll-bb4.png)}
+	100% {background-image: url(https://www.mescroll.com/img/beibei/mescroll-bb1.png)}
+}

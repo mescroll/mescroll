@@ -1,0 +1,19 @@
+.mescroll-body {
+	position: relative; /* 下拉刷新区域相对自身定位 */
+	height: auto; /* 不可固定高度,否则overflow:hidden导致无法滑动; 同时使设置的最小高生效,实现列表不满屏仍可下拉*/
+	overflow: hidden; /* 当有元素写在mescroll-body标签前面时,可遮住下拉刷新区域 */
+	box-sizing: border-box; /* 避免设置padding出现双滚动条的问题 */
+}
+
+/* 使sticky生效: 父元素不能overflow:hidden或者overflow:auto属性 */
+.mescroll-body.mescorll-sticky{
+	overflow: unset !important
+}
+
+/* 适配 iPhoneX */
+@supports (bottom: constant(safe-area-inset-bottom)) or (bottom: env(safe-area-inset-bottom)) {
+	.mescroll-safearea {
+		padding-bottom: constant(safe-area-inset-bottom);
+		padding-bottom: env(safe-area-inset-bottom);
+	}
+}

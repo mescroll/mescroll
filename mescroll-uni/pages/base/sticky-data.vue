@@ -35,11 +35,11 @@
 </template>
 
 <script>
-	import MescrollMixin from "@/components/mescroll-uni/mescroll-mixins.js";
-	import {apiSearch} from "@/api/mock.js"
+	import MescrollMixin from "@/uni_modules/mescroll-uni/components/mescroll-uni/mescroll-mixins.js";
+	import {apiGoods} from "@/api/mock.js"
 	
 	export default {
-		mixins: [MescrollMixin], // 使用mixin (在main.js注册全局组件)
+		mixins: [MescrollMixin], // 使用mixin
 		data() {
 			return {
 				tabs:[
@@ -67,19 +67,19 @@
 			/*上拉加载的回调: 其中page.num:当前页 从1开始, page.size:每页数据条数,默认10 */
 			upCallback(page) {
 				let keyword = this.tabs[this.tabIndex].name;
-				apiSearch(page.num, page.size, keyword).then(curPageData=>{
+				apiGoods(page.num, page.size, keyword).then(res=>{
 					// 当前tab数据
 					let curTab = this.tabs[this.tabIndex]
 					
 					// 设置列表数据
 					if(page.num == 1) curTab.goods = []; //如果是第一页需手动制空列表
-					curTab.goods = curTab.goods.concat(curPageData); //追加新数据
+					curTab.goods = curTab.goods.concat(res.list); //追加新数据
 					curTab.num = page.num; // 页码
-					curTab.curPageLen = curPageData.length; // 当前页长
+					curTab.curPageLen = res.list.length; // 当前页长
 					curTab.hasNext = this.mescroll.optUp.hasNext; // 是否还有下一页
 					
 					// 需先隐藏加载状态
-					this.mescroll.endSuccess(curPageData.length);
+					this.mescroll.endSuccess(res.list.length);
 				}).catch(()=>{
 					//联网失败, 结束加载
 					this.mescroll.endErr();

@@ -22,4 +22,6 @@
 	textarea {
 		box-sizing: border-box;
 	}
+	
+	image{will-change: transform;}
 </style>

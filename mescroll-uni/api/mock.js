@@ -6,7 +6,6 @@
 
 // 模拟数据
 import goods from "./goods.js";
-import goodsEdit from "./goods-edit.js";
 
 // 获取新闻列表
 export function apiNewList(pageNum, pageSize) {
@@ -47,56 +46,49 @@ export function apiNewList(pageNum, pageSize) {
 	})
 }
 
-// 获取商品列表数据
-export function apiGoods(pageNum, pageSize, isGoodsEdit) {
-	return new Promise((resolute, reject)=>{
-		//延时一秒,模拟联网
-		setTimeout(()=> {
-			try{
-				let data = isGoodsEdit ? goodsEdit : goods;
-				//模拟分页数据
-				let list=[];
-				for (let i = (pageNum-1)*pageSize; i < pageNum*pageSize; i++) {
-					if(i==data.length) break;
-					list.push(data[i]);
-				}
-				//模拟接口请求成功
-				console.log("page.num=" + pageNum + ", page.size=" + pageSize + ", curPageData.length=" + list.length);
-				resolute(list);
-			} catch (e) {
-				//模拟接口请求失败
-				reject(e);
-			}
-		},1000)
-	})
-}
-
 // 搜索商品
-export function apiSearch(pageNum, pageSize, keyword) {
+export function apiGoods(pageNum, pageSize, keyword) {
 	return new Promise((resolute, reject)=>{
 		//延时一秒,模拟联网
 		setTimeout(()=> {
 			try{
-				// 模拟搜索
-				let list = []
+				let data = {
+					list: [], // 数据列表
+					totalCount: 0, // 总数量
+					totalPage: 0, // 总页数
+					hasNext: false // 是否有下一页
+				}
+				
+				// 符合关键词的记录
+				let keywordList = [];
 				if (!keyword || keyword == "全部") {
-					// 模拟搜索全部商品
-					for (let i = (pageNum - 1) * pageSize; i < pageNum * pageSize; i++) {
-						if (i === goods.length) break
-						list.push(goods[i])
-					}
-				} else{
-					// 模拟关键词搜索
+					// 搜索全部商品
+					keywordList = goods;
+				}else{
+					// 关键词搜索
 					if(keyword=="母婴") keyword="婴"; // 为这个关键词展示多几条数据
 					for (let i = 0; i < goods.length; i++) {
-						if (goods[i].goodName.indexOf(keyword) !== -1) {
-							list.push(goods[i])
+						let good = goods[i]
+						if (good.goodName.indexOf(keyword) !== -1) {
+							keywordList.push(good)
 						}
 					}
 				}
+				
+				// 分页
+				for (let i = (pageNum - 1) * pageSize; i < pageNum * pageSize; i++) {
+					if (i >= keywordList.length) break
+					data.list.push(keywordList[i])
+				}
+				
+				// 汇总数据
+				data.totalCount = keywordList.length;
+				data.totalPage = Math.ceil(data.totalCount/pageSize);
+				data.hasNext = pageNum < data.totalPage
+				
 				//模拟接口请求成功
-				console.log("page.num=" + pageNum + ", page.size=" + pageSize + ", curPageData.length=" + list.length+", keyword="+keyword);
-				resolute(list);
+				console.log("pageNum=" + pageNum + ", pageSize=" + pageSize + ", data.list.length=" + data.list.length + ", totalCount=" + data.totalCount + ", totalPage=" + data.totalPage + ", hasNext=" + data.hasNext + (keyword ? ", keyword=" + keyword : ""));
+				resolute(data);
 			} catch (e) {
 				//模拟接口请求失败
 				reject(e);
@@ -165,5 +157,22 @@ export function apiMsgList(pageNum, pageSize) {
 				reject(e);
 			}
 		}, 1000)
+	})
+}
+
+// 获取tabs类目
+export function apiGetTabs() {
+	return new Promise((resolute, reject)=>{
+		//延时,模拟联网
+		setTimeout(function() {
+			try {
+				let tabs = ['全部', '奶粉', '面膜', '图书', '果汁', '奶瓶', '美素', '花王', '韩蜜', '口红', '毛巾', '玩具', '衣服'];
+				//模拟接口请求成功
+				resolute(tabs);
+			} catch (e) {
+				//模拟接口请求失败
+				reject(e);
+			}
+		}, 10)
 	})
 }

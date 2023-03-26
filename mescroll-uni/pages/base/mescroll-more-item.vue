@@ -2,8 +2,7 @@
 	<!-- 不能用v-if (i: 每个tab页的专属下标;  index: 当前tab的下标; 申明在 MescrollMoreItemMixin )-->
 	<view v-show="i === index">
 		<!-- top="120"下拉布局往下偏移,防止被悬浮菜单遮住 -->
-		<!-- ref动态生成: 字节跳动小程序编辑器不支持一个页面存在相同的ref (如不考虑字节跳动小程序可固定值为 ref="mescrollRef") -->
-		<mescroll-body :ref="'mescrollRef'+i" @init="mescrollInit" top="120" :down="downOption" @down="downCallback" :up="upOption" @up="upCallback" @emptyclick="emptyClick">
+		<mescroll-body @init="mescrollInit" top="120" :down="downOption" @down="downCallback" :up="upOption" @up="upCallback" @emptyclick="emptyClick">
 			<!-- 数据列表 -->
 			<good-list :list="goods"></good-list>
 		</mescroll-body>
@@ -11,9 +10,9 @@
 </template>
 
 <script>
-	import MescrollMixin from "@/components/mescroll-uni/mescroll-mixins.js";
-	import MescrollMoreItemMixin from "@/components/mescroll-uni/mixins/mescroll-more-item.js";
-	import {apiSearch} from "@/api/mock.js"
+	import MescrollMixin from "@/uni_modules/mescroll-uni/components/mescroll-uni/mescroll-mixins.js";
+	import MescrollMoreItemMixin from "@/uni_modules/mescroll-uni/components/mescroll-uni/mixins/mescroll-more-item.js";
+	import {apiGoods} from "@/api/mock.js"
 	
 	export default {
 		mixins: [MescrollMixin,MescrollMoreItemMixin], // 注意此处还需使用MescrollMoreItemMixin (必须写在MescrollMixin后面)
@@ -57,13 +56,13 @@
 			upCallback(page) {
 				// this.i: 每个tab页的专属下标
 				// this.index: 当前tab的下标
-				let word = this.tabs[this.i].name
-				apiSearch(page.num, page.size, word).then(curPageData=>{
+				let word = this.tabs[this.i].name // 具体项目中,您可能取的是tab中的type,status等字段
+				apiGoods(page.num, page.size, word).then(res=>{
 					//联网成功的回调,隐藏下拉刷新和上拉加载的状态;
-					this.mescroll.endSuccess(curPageData.length);
+					this.mescroll.endSuccess(res.list.length);
 					//设置列表数据
 					if(page.num == 1) this.goods = []; //如果是第一页需手动制空列表
-					this.goods=this.goods.concat(curPageData); //追加新数据
+					this.goods=this.goods.concat(res.list); //追加新数据
 				}).catch(()=>{
 					//联网失败, 结束加载
 					this.mescroll.endErr();

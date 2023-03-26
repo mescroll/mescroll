@@ -1,6 +1,6 @@
 <template>
 	<!-- 系统自带的下拉刷新，只能配合mescroll-body使用， 在mescroll-uni中无效 -->
-	<mescroll-body ref="mescrollRef" @init="mescrollInit" :down="downOption" @down="downCallback" :up="upOption" @up="upCallback" @emptyclick="emptyClick">
+	<mescroll-body @init="mescrollInit" :down="downOption" @down="downCallback" :up="upOption" @up="upCallback" @emptyclick="emptyClick">
 		<view class="tip">系统自带的下拉刷新,性能最好,支持条件编译</view>
 		<view class="tip">模拟器和真机效果可能不一样,请用真机测试</view>
 		<view class="tip" @click="triggerDownScroll">点此主动触发下拉刷新</view>
@@ -12,8 +12,8 @@
 </template>
 
 <script>
-	import MescrollMixin from "@/components/mescroll-uni/mescroll-mixins.js";
-	import {apiSearch} from "@/api/mock.js"
+	import MescrollMixin from "@/uni_modules/mescroll-uni/components/mescroll-uni/mescroll-mixins.js";
+	import {apiGoods} from "@/api/mock.js"
 	
 	export default {
 		mixins: [MescrollMixin], // 使用mixin (在main.js注册全局组件，内部已注册onPullDownRefresh)
@@ -36,7 +36,7 @@
 					}
 				},
 				goods: [], //列表数据
-				tabs: ['全部', '奶粉', '面膜', '图书'],
+				tabs: [{name:'全部',type:'xx'}, {name:'奶粉',type:'xx'}, {name:'面膜',type:'xx'}, {name:'图书',type:'xx'}],
 				tabIndex: 0 // tab下标
 			}
 		},
@@ -44,13 +44,14 @@
 			/*上拉加载的回调: 其中page.num:当前页 从1开始, page.size:每页数据条数,默认10 */
 			upCallback(page) {
 				//联网加载数据
-				let keyword = this.tabs[this.tabIndex]
-				apiSearch(page.num, page.size, keyword).then(curPageData=>{
+				let curTab = this.tabs[this.tabIndex]
+				let keyword = curTab.name // 具体项目中,您可能取的是tab中的type,status等字段
+				apiGoods(page.num, page.size, keyword).then(res=>{
 					//联网成功的回调,隐藏下拉刷新和上拉加载的状态;
-					this.mescroll.endSuccess(curPageData.length);
+					this.mescroll.endSuccess(res.list.length);
 					//设置列表数据
 					if(page.num == 1) this.goods = []; //如果是第一页需手动制空列表
-					this.goods=this.goods.concat(curPageData); //追加新数据
+					this.goods=this.goods.concat(res.list); //追加新数据
 				}).catch(()=>{
 					//联网失败, 结束加载
 					this.mescroll.endErr();

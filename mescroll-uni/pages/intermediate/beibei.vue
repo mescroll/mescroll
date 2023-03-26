@@ -3,7 +3,7 @@
 		<!-- 模拟的标题 -->
 		<image class="header" src="https://www.mescroll.com/img/beibei/header.jpg" mode="aspectFit"/>
 		
-		<mescroll-body-diy ref="mescrollRef" @init="mescrollInit" top="180" bottom="100" @down="downCallback" @up="upCallback">
+		<mescroll-body-diy @init="mescrollInit" top="180" bottom="100" @down="downCallback" @up="upCallback">
 			<!-- 模拟的内容 -->
 			<image src="https://www.mescroll.com/img/beibei/beibei1.jpg" mode="widthFix"/>
 			<image src="https://www.mescroll.com/img/beibei/beibei2.jpg" mode="widthFix"/>
@@ -17,12 +17,12 @@
 </template>
 
 <script>
-	import MescrollBodyDiy from "@/components/mescroll-diy/beibei/mescroll-body.vue";
-	import MescrollMixin from "@/components/mescroll-uni/mescroll-mixins.js";
+	import MescrollBodyDiy from "@/uni_modules/mescroll-uni/components/mescroll-diy/beibei/mescroll-body.vue";
+	import MescrollMixin from "@/uni_modules/mescroll-uni/components/mescroll-uni/mescroll-mixins.js";
 	import {apiGoods} from "@/api/mock.js"
 	
 	export default {
-		mixins: [MescrollMixin], // 使用mixin (在main.js注册全局组件)
+		mixins: [MescrollMixin], // 使用mixin
 		components: {
 			MescrollBodyDiy // 避免与main.js注册的全局组件名称相同,否则注册组件失效(iOS真机 APP HBuilderX2.7.9)
 		},
@@ -42,13 +42,13 @@
 			/*上拉加载的回调: 其中page.num:当前页 从1开始, page.size:每页数据条数,默认10 */
 			upCallback(page) {
 				//联网加载数据
-				apiGoods(page.num, page.size).then(curPageData=>{
+				apiGoods(page.num, page.size).then(res=>{
 					//联网成功的回调,隐藏下拉刷新和上拉加载的状态;
-					this.mescroll.endSuccess(curPageData.length);
+					this.mescroll.endSuccess(res.list.length);
 
 					//设置列表数据
 					if(page.num == 1) this.goods = []; //如果是第一页需手动制空列表
-					this.goods=this.goods.concat(curPageData); //追加新数据
+					this.goods=this.goods.concat(res.list); //追加新数据
 				}).catch(()=>{
 					//联网失败, 结束加载
 					this.mescroll.endErr();

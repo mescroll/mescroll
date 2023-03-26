@@ -13,7 +13,7 @@
 		</view>
 		
 		<!-- top="xxx"下拉布局往下偏移,防止被悬浮菜单遮住 -->
-		 <mescroll-uni ref="mescrollRef" @init="mescrollInit" top="365" @down="downCallback" :up="upOption" @up="upCallback" @emptyclick="emptyClick">
+		 <mescroll-uni @init="mescrollInit" top="365" @down="downCallback" :up="upOption" @up="upCallback" @emptyclick="emptyClick">
 			<!-- 大海报 -->
 			<image id="anchorPoint" v-if="tabIndex==0" src="https://www.mescroll.com/img/taobao/taobao3.jpg" mode="widthFix" style="width: 100%"/>
 			 
@@ -24,11 +24,11 @@
 </template>
 
 <script>
-	import MescrollMixin from "@/components/mescroll-uni/mescroll-mixins.js";
-	import {apiSearch} from "@/api/mock.js"
+	import MescrollMixin from "@/uni_modules/mescroll-uni/components/mescroll-uni/mescroll-mixins.js";
+	import {apiGoods} from "@/api/mock.js"
 	
 	export default {
-		mixins: [MescrollMixin], // 使用mixin (在main.js注册全局组件)
+		mixins: [MescrollMixin], // 使用mixin
 		data() {
 			return {
 				upOption:{
@@ -42,7 +42,7 @@
 					}
 				},
 				goods: [], //列表数据
-				tabs: ['全部', '奶粉', '面膜', '图书'],
+				tabs: [{name:'全部',type:'xx'}, {name:'奶粉',type:'xx'}, {name:'面膜',type:'xx'}, {name:'图书',type:'xx'}],
 				tabIndex: 0 // tab下标
 			}
 		},
@@ -50,13 +50,14 @@
 			/*上拉加载的回调: 其中page.num:当前页 从1开始, page.size:每页数据条数,默认10 */
 			upCallback(page) {
 				//联网加载数据
-				let keyword = this.tabs[this.tabIndex]
-				apiSearch(page.num, page.size, keyword).then(curPageData=>{
+				let curTab = this.tabs[this.tabIndex]
+				let keyword = curTab.name // 具体项目中,您可能取的是tab中的type,status等字段
+				apiGoods(page.num, page.size, keyword).then(res=>{
 					//联网成功的回调,隐藏下拉刷新和上拉加载的状态;
-					this.mescroll.endSuccess(curPageData.length);
+					this.mescroll.endSuccess(res.list.length);
 					//设置列表数据
 					if(page.num == 1) this.goods = []; //如果是第一页需手动制空列表
-					this.goods=this.goods.concat(curPageData); //追加新数据
+					this.goods=this.goods.concat(res.list); //追加新数据
 				}).catch(()=>{
 					//联网失败, 结束加载
 					this.mescroll.endErr();
