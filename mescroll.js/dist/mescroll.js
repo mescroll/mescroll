@@ -1,5 +1,5 @@
 /* mescroll
- * version 1.4.2
+ * version 1.4.3
  * 2019-08-01 wenju
  * http://www.mescroll.com
  */
@@ -17,7 +17,7 @@
 })('MeScroll', function () {
   var MeScroll = function (mescrollId, options) {
     var me = this;
-    me.version = '1.4.2'; // mescroll版本号
+    me.version = '1.4.3'; // mescroll版本号
     me.isScrollBody = (!mescrollId || mescrollId === 'body'); // 滑动区域是否为body
     me.scrollDom = me.isScrollBody ? document.body : me.getDomById(mescrollId); // MeScroll的滑动区域
     if (!me.scrollDom) return;
@@ -37,6 +37,8 @@
       wx: isWx
     }
 
+    /** 是否已销毁 - @author Qiucl - 2022.04.28 */
+    me.isDestroy = false;
     me.isDownScrolling = false; // 是否在执行下拉刷新的回调
     me.isUpScrolling = false; // 是否在执行上拉加载的回调
     var hasDownCallback = me.options.down && me.options.down.callback; // 是否配置了down的callback
@@ -820,7 +822,7 @@
      此方法最好在列表的数据加载完成之后调用,以便计算列表内容高度的准确性 */
   MeScroll.prototype.loadFull = function () {
     var me = this;
-    if (me.optUp.loadFull.use && !me.optUp.isLock && me.optUp.hasNext && me.optUp.callback && me.getScrollHeight() <= me.getClientHeight()) {
+    if (!me.isDestroy && me.optUp.loadFull.use && !me.optUp.isLock && me.optUp.hasNext && me.optUp.callback && me.getScrollHeight() <= me.getClientHeight()) {
       setTimeout(function () {
         // 延时之后,还需再判断一下高度,因为可能有些图片在延时期间加载完毕撑开高度
         if (me.getScrollHeight() <= me.getClientHeight()) me.triggerUpScroll();
@@ -1138,6 +1140,9 @@
   /* 销毁mescroll */
   MeScroll.prototype.destroy = function () {
     var me = this;
+
+    // 标记实例已执行销毁
+    me.isDestroy = true;
 
     // 移除下拉布局,移除事件
     me.scrollDom.removeEventListener('touchstart', me.touchstartEvent); // 移动端手指事件
