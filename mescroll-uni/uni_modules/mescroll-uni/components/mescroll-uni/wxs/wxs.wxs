@@ -78,6 +78,7 @@ function propObserver(wxsProp) {
  * 监听逻辑层数据的变化 (调用wxs的方法)
  */
 function callObserver(callProp, oldValue, ins) {
+	if(!callProp) return;
 	if (me.disabled()) return;
 	if(callProp.callType){
 		// 逻辑层（App Service）的style已失效,需在视图层（Webview）设置style
